@@ -1,16 +1,9 @@
 import ChatRoomClient from "./ChatRoomClient";
 
-export default async function ChatRoomPage({
+export default function ChatRoomPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const { id } = await params;
-
-  return (
-    <div>
-      <h1>Chat room: {id}</h1>
-      <ChatRoomClient chatId={id} />
-    </div>
-  );
+  return <ChatRoomClient chatId={params.id} />;
 }
