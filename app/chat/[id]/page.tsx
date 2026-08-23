@@ -7,5 +7,10 @@ export default async function ChatRoomPage({
 }) {
   const { id } = await params;
 
-  return <ChatRoomClient chatId={id} />;
+  return (
+    <div>
+      <h1>Chat room: {id}</h1>
+      <ChatRoomClient chatId={id} />
+    </div>
+  );
 }
