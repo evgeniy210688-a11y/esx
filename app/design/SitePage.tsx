@@ -78,7 +78,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
     };
   }, [section]);
   const t=copy[language];
-  function navigationHref(id: string) { return id === 'home' ? '/design' : '/' + id; }
+  function navigationHref(id: string) { return id === 'home' ? '/' : '/' + id; }
   function choose(lang:Language) {setLanguage(lang);try {localStorage.setItem('esx-language',lang);}catch{}}
   return <div ref={siteRef} className="esx-site" lang={language}><div className="cyber-background" aria-hidden="true"><i className="cyber-circuit circuit-left"/><i className="cyber-circuit circuit-right"/><i className="cyber-halo halo-one"/><i className="cyber-halo halo-two"/><i className="cyber-rail"/></div>
     <svg width="0" height="0" aria-hidden="true" style={{ position: "absolute" }}><defs><filter id="esx-remove-black" colorInterpolationFilters="sRGB"><feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  1 1 1 0 0" /></filter></defs></svg>

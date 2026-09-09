@@ -30,7 +30,7 @@ export default function ChatPage() {
         {/* Header */}
         <header className="flex items-center justify-between">
           <a
-            href="/design"
+            href="/"
             className="text-2xl font-bold tracking-tight"
           >
             ESX

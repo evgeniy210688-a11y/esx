@@ -161,7 +161,7 @@ export default function ChatRoomClient({
         {/* Header */}
         <header className="flex items-center justify-between border-b bg-white px-6 py-5">
           <a
-            href="/design"
+            href="/"
             className="text-2xl font-bold"
           >
             ESX
