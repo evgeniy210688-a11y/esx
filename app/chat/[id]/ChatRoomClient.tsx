@@ -1,6 +1,7 @@
 "use client";
 
 import HomeLink from "@/app/components/HomeLink";
+import ChatLanguages from "./ChatLanguages";
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
@@ -178,6 +179,8 @@ export default function ChatRoomClient({
           </div>
         </header>
         <nav aria-label="Home" className="px-6 py-3"><HomeLink /></nav>
+
+        <ChatLanguages key={chatId} chatId={chatId} />
 
         {/* Messages */}
         <section className="flex flex-1 flex-col gap-3 overflow-y-auto px-6 py-6">
