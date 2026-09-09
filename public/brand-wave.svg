@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 800" fill="none">
+  <defs>
+    <linearGradient id="silver" x1="220" y1="80" x2="1000" y2="780" gradientUnits="userSpaceOnUse"><stop stop-color="#edf7ff"/><stop offset=".18" stop-color="#8fa8ce"/><stop offset=".32" stop-color="#fff"/><stop offset=".45" stop-color="#b9cee7"/><stop offset=".52" stop-color="#f6fcff"/><stop offset=".62" stop-color="#617ba6"/><stop offset=".76" stop-color="#fff"/><stop offset="1" stop-color="#b7cee9"/></linearGradient>
+    <linearGradient id="blue" x1="0" y1="180" x2="1440" y2="720" gradientUnits="userSpaceOnUse"><stop stop-color="#add9ff"/><stop offset=".3" stop-color="#1c56db"/><stop offset=".5" stop-color="#071f73"/><stop offset=".67" stop-color="#73c8ff"/><stop offset=".82" stop-color="#174acc"/><stop offset="1" stop-color="#d7efff"/></linearGradient>
+  </defs>
+  <path d="M-180 620C120 150 500 880 800 380S1270 80 1620 330" stroke="url(#silver)" stroke-width="110"/>
+  <path d="M-180 620C120 150 500 880 800 380S1270 80 1620 330" stroke="#fff" stroke-opacity=".7" stroke-width="2" transform="translate(0 -48)"/>
+  <path d="M-160 680C210 100 500 860 830 440S1280 110 1620 270" stroke="url(#blue)" stroke-width="55"/>
+  <path d="M-160 680C210 100 500 860 830 440S1280 110 1620 270" stroke="#c6efff" stroke-width="3" transform="translate(0 -23)"/>
+</svg>

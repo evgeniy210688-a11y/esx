@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <title>ESX</title>
+  <g stroke="#fff" stroke-width="2.5" stroke-linecap="round">
+    <path d="M23 32A32 32 0 0 1 78 28"/>
+    <path d="M23 69A32 32 0 0 0 77 72"/>
+  </g>
+  <g fill="#fff" transform="translate(8 37) skewX(-12)">
+    <path d="M7 0H31V6H10V10H28V16H10V20H31V26H7C3 26 1 24 1 20V6C1 2 3 0 7 0Z"/>
+    <path d="M40 0H64V6H41C39 6 39 10 41 10H55C67 10 67 26 55 26H32V20H55C58 20 58 16 55 16H41C29 16 29 0 40 0Z"/>
+    <path d="M64 0H74L81 8L88 0H98L86 13L98 26H88L81 18L74 26H64L76 13Z"/>
+  </g>
+</svg>

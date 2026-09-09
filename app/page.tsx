@@ -1,5 +1,7 @@
 "use client";
 
+import HomeLink from "@/app/components/HomeLink";
+
 import { useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 
@@ -12,7 +14,7 @@ export default function ChatPage() {
   }, []);
 
   const chatLink =
-    typeof window !== "undefined"
+    roomId && typeof window !== "undefined"
       ? `${window.location.origin}/chat/${roomId}`
       : "";
 
@@ -29,6 +31,7 @@ export default function ChatPage() {
             Private Chat
           </div>
         </header>
+        <nav aria-label="Home" className="px-6 py-3"><HomeLink /></nav>
 
         <section className="flex flex-1 flex-col items-center justify-center text-center">
 
@@ -58,7 +61,14 @@ export default function ChatPage() {
             {roomId || "Creating..."}
           </div>
 
+          {chatLink && (
+            <a href={chatLink} className="mt-6 font-semibold underline">
+              Open chat
+            </a>
+          )}
+
           <button
+            disabled={!chatLink}
             className="mt-8 rounded-full bg-black px-8 py-4 font-semibold text-white transition hover:bg-zinc-800"
             onClick={() => {
               navigator.clipboard.writeText(chatLink);

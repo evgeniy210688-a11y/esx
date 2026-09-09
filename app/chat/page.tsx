@@ -1,5 +1,7 @@
 "use client";
 
+import HomeLink from "@/app/components/HomeLink";
+
 import { useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 
@@ -11,7 +13,7 @@ export default function ChatPage() {
     const id = Math.random().toString(36).substring(2, 10);
 
     setChatId(id);
-    setChatLink(`http://192.168.219.102:3000/chat/${id}`);
+    setChatLink(`${window.location.origin}/chat/${id}`);
   }, []);
 
   const copyLink = async () => {
@@ -28,7 +30,7 @@ export default function ChatPage() {
         {/* Header */}
         <header className="flex items-center justify-between">
           <a
-            href="/"
+            href="/design"
             className="text-2xl font-bold tracking-tight"
           >
             ESX
@@ -38,6 +40,7 @@ export default function ChatPage() {
             Private Chat
           </span>
         </header>
+        <nav aria-label="Home" className="px-6 py-3"><HomeLink /></nav>
 
         {/* Chat creation */}
         <section className="flex flex-1 flex-col items-center justify-center text-center">
@@ -77,6 +80,11 @@ export default function ChatPage() {
           </div>
 
           {/* Copy */}
+          {chatLink && (
+            <a href={chatLink} className="mt-6 font-semibold underline">
+              Open chat
+            </a>
+          )}
           <button
             onClick={copyLink}
             disabled={!chatLink}

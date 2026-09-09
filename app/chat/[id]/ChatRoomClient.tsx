@@ -1,5 +1,7 @@
 "use client";
 
+import HomeLink from "@/app/components/HomeLink";
+
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
@@ -159,22 +161,23 @@ export default function ChatRoomClient({
         {/* Header */}
         <header className="flex items-center justify-between border-b bg-white px-6 py-5">
           <a
-            href="/"
+            href="/design"
             className="text-2xl font-bold"
           >
             ESX
           </a>
 
-          <div className="text-right">
+          <div className="min-w-0 text-right">
             <p className="text-xs text-zinc-400">
               Chat ID
             </p>
 
-            <p className="font-mono text-sm font-semibold">
+            <p className="max-w-[240px] break-all font-mono text-sm font-semibold">
               {chatId}
             </p>
           </div>
         </header>
+        <nav aria-label="Home" className="px-6 py-3"><HomeLink /></nav>
 
         {/* Messages */}
         <section className="flex flex-1 flex-col gap-3 overflow-y-auto px-6 py-6">
