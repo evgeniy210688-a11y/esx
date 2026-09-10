@@ -3,6 +3,7 @@
 import HomeLink from "@/app/components/HomeLink";
 import Image from "next/image";
 import ChatLanguages from "./ChatLanguages";
+import ChatQrCode from "./ChatQrCode";
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
@@ -177,6 +178,7 @@ export default function ChatRoomClient({
             <p className="max-w-[240px] break-all font-mono text-sm font-semibold">
               {chatId}
             </p>
+            <ChatQrCode chatId={chatId} />
           </div>
         </header>
         <nav aria-label="Home" className="px-6 py-3"><HomeLink /></nav>
