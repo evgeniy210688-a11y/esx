@@ -1,6 +1,7 @@
 "use client";
 
 import HomeLink from "@/app/components/HomeLink";
+import Image from "next/image";
 import ChatLanguages from "./ChatLanguages";
 
 import { useEffect, useState } from "react";
@@ -163,9 +164,9 @@ export default function ChatRoomClient({
         <header className="flex items-center justify-between border-b bg-white px-6 py-5">
           <a
             href="/"
-            className="text-2xl font-bold"
+            className="mr-4 shrink-0"
           >
-            ESX
+            <Image src="/esx-logo.png" alt="ESX" width={64} height={64} className="rounded-xl" />
           </a>
 
           <div className="min-w-0 text-right">
