@@ -11,6 +11,7 @@ const labels: Record<Language, string[]> = {
   kk: ['Оңтүстік Корея банктері', 'Шоттар, карталар және банк қызметтері туралы жергілікті банктердің ресми сайттары.', 'Оңтүстік Корея экономикасының көшбасшылары', 'Samsung, Kia, Hyundai және LG — Оңтүстік Корея экономикасының жетекші компаниялары. Олардың электроникасы, көліктері мен технологиялары бүкіл әлемге танымал.', 'Ресми сайт'],
 };
 const banks = [
+  { name: 'NH NongHyup Bank', mark: 'NH', color: '#ffd33d', url: 'https://bank.nonghyup.com/' },
   { name: 'KB Kookmin Bank', mark: 'KB', color: '#ffcc00', url: 'https://www.kbstar.com/' },
   { name: 'Shinhan Bank', mark: 'SH', color: '#78a9ff', url: 'https://www.shinhan.com/' },
   { name: 'Woori Bank', mark: 'W', color: '#69d4ff', url: 'https://www.wooribank.com/' },
