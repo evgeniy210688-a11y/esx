@@ -4,6 +4,7 @@ import HomeLink from "@/app/components/HomeLink";
 import Image from "next/image";
 import ChatLanguages from "./ChatLanguages";
 import ChatQrCode from "./ChatQrCode";
+import useChatInterface from "./useChatInterface";
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
@@ -23,6 +24,7 @@ export default function ChatRoomClient({
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
+  const { language, text: ui } = useChatInterface();
 
   // Загружаем сообщения и подключаем Realtime
   useEffect(() => {
@@ -158,7 +160,7 @@ export default function ChatRoomClient({
   }
 
   return (
-    <main className="min-h-screen bg-zinc-50 text-zinc-900">
+    <main lang={language} className="min-h-screen bg-zinc-50 text-zinc-900">
       <div className="mx-auto flex min-h-screen w-full max-w-2xl flex-col">
 
         {/* Header */}
@@ -190,17 +192,17 @@ export default function ChatRoomClient({
 
           {loading ? (
             <div className="flex flex-1 items-center justify-center text-zinc-400">
-              Loading messages...
+              {ui.loading}
             </div>
           ) : messages.length === 0 ? (
             <div className="flex flex-1 items-center justify-center text-center text-zinc-400">
               <div>
                 <p className="text-lg font-medium">
-                  Your chat is empty
+                  {ui.empty}
                 </p>
 
                 <p className="mt-2 text-sm">
-                  Send your first message.
+                  {ui.first}
                 </p>
               </div>
             </div>
@@ -232,7 +234,8 @@ export default function ChatRoomClient({
                   sendMessage();
                 }
               }}
-              placeholder="Write a message..."
+              placeholder={ui.placeholder}
+              aria-label={ui.placeholder}
               className="min-w-0 flex-1 rounded-full border border-zinc-200 px-5 py-3 outline-none focus:border-black"
             />
 
@@ -247,7 +250,7 @@ export default function ChatRoomClient({
               }}
               className="shrink-0 rounded-full bg-black px-6 py-3 font-semibold text-white hover:bg-zinc-800"
             >
-              Send
+              {ui.send}
             </button>
 
           </div>
