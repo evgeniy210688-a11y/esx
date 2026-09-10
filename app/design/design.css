@@ -434,3 +434,19 @@
 .useful-app-link { display: flex; justify-content: space-between; gap: 8px; margin-top: auto; color: #80dcec; font-size: 12px; }
 @media (max-width: 1100px) { .useful-apps-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (max-width: 600px) { .useful-apps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .useful-apps { padding: 28px 0 32px; } }
+
+.korea-economy { margin: 0 0 54px; }
+.economy-group + .economy-group { margin-top: 36px; }
+.economy-heading { margin-bottom: 20px; max-width: 850px; }
+.economy-heading h2 { font-size: clamp(23px, 2.5vw, 32px); line-height: 1.2; margin-bottom: 12px; }
+.economy-heading p { color: var(--muted); font-size: 14px; line-height: 1.75; }
+.economy-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px; }
+.economy-card { display: flex; flex-direction: column; min-width: 0; padding: 24px; border: 1px solid #5484a947; border-radius: 18px; background: linear-gradient(145deg, #112138, #111426); color: #edf5ff; transition: border-color .2s, transform .2s; }
+.economy-card:hover { border-color: #70d6ed; transform: translateY(-3px); }
+.economy-mark { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 17px; background: #ffffff0d; font-size: 28px; font-weight: 800; }
+.economy-mark.company-mark { width: 100%; justify-content: start; background: none; font-size: clamp(18px, 2vw, 27px); letter-spacing: 1px; }
+.economy-card h3 { margin: 20px 0 8px; font-size: 18px; }
+.economy-domain { color: #afc0d5; font-size: 12px; overflow-wrap: anywhere; }
+.economy-link { display: flex; justify-content: space-between; gap: 10px; margin-top: 22px; color: #80dcec; font-size: 12px; }
+@media (max-width: 760px) { .economy-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .economy-card { padding: 17px; } .economy-card h3 { font-size: 15px; } }
+@media (max-width: 360px) { .economy-grid { grid-template-columns: 1fr; } }
