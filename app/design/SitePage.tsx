@@ -38,21 +38,28 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
   useEffect(()=>{document.documentElement.lang=language;document.title=`ESX — ${copy[language][{ home: 5, korea: 1, about: 2, advertising: 3, contact: 4 }[section]]}`;},[language, section]);
   useEffect(() => {
     const site = siteRef.current;
-    if (!site || !('IntersectionObserver' in window)) return;
+    if (!site) return;
     const elements = site.querySelectorAll<HTMLElement>(
       '.useful-apps-heading, .useful-app, .help-heading, .help-article, .section-heading, .subheading, .holiday, .place, .source-row, .about, .advertising, .contact, .esx-footer, .economy-heading, .economy-card'
     );
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const positions = new WeakMap<HTMLElement, number>();
+    const documentTop = (element: HTMLElement) => {
+      let top = 0;
+      let current: HTMLElement | null = element;
+      while (current) {
+        top += current.offsetTop;
+        current = current.offsetParent as HTMLElement | null;
+      }
+      return top;
+    };
     let frame = 0;
     const update = () => {
       frame = 0;
       elements.forEach(element => {
-        const top = element.getBoundingClientRect().top - (positions.get(element) || 0);
-        const progress = Math.max(0, Math.min(1, (window.innerHeight - top) / (window.innerHeight * .4)));
+        const top = documentTop(element) - window.scrollY;
+        const progress = Math.max(0, Math.min(1, (window.innerHeight - top) / (window.innerHeight * .55)));
         const focused = element.contains(document.activeElement);
         const offset = motion.matches || focused ? 0 : (1 - progress) * 100;
-        positions.set(element, offset);
         element.style.setProperty('--scroll-y', `${offset}px`);
         element.style.setProperty('--scroll-opacity', `${motion.matches || focused ? 1 : .18 + progress * .82}`);
       });
@@ -62,12 +69,18 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
     update();
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
+    window.addEventListener('pageshow', schedule);
+    const resizeObserver = new ResizeObserver(schedule);
+    resizeObserver.observe(site);
+    document.fonts.ready.then(schedule);
     site.addEventListener('focusin', schedule);
     motion.addEventListener('change', schedule);
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
+      window.removeEventListener('pageshow', schedule);
+      resizeObserver.disconnect();
       site.removeEventListener('focusin', schedule);
       motion.removeEventListener('change', schedule);
       elements.forEach(element => {
