@@ -24,6 +24,16 @@ const banks = [
   { name: 'Woori Bank', mark: 'W', color: '#69d4ff', url: 'https://www.wooribank.com/' },
   { name: 'Hana Bank', mark: 'H', color: '#67dcc9', url: 'https://www.kebhana.com/' },
 ];
+const companyDescriptions: Record<Language, string[]> = {
+  ru: ['Смартфоны, телевизоры, бытовая техника и полупроводники — технологии для повседневной жизни и бизнеса.', 'Легковые автомобили, кроссоверы и электромобили с акцентом на дизайн и удобство.', 'Автомобили, электромобили и водородный транспорт — решения для современной мобильности.', 'Бытовая техника, телевизоры и дисплеи — технологии для дома и бизнеса.'],
+  en: ['Smartphones, TVs, home appliances and semiconductors for everyday life and business.', 'Cars, SUVs and electric vehicles with a focus on design and comfort.', 'Cars, electric vehicles and hydrogen-powered transport for modern mobility.', 'Home appliances, TVs and displays for homes and businesses.'],
+  ko: ['스마트폰, TV, 가전제품, 반도체로 일상과 비즈니스를 연결하는 기술 기업입니다.', '디자인과 편의성을 중시하는 승용차, SUV, 전기차를 만듭니다.', '자동차, 전기차, 수소차로 미래 모빌리티를 만들어 갑니다.', '가전제품, TV, 디스플레이로 가정과 비즈니스에 필요한 기술을 제공합니다.'],
+  zh: ['提供智能手机、电视、家用电器和半导体，服务日常生活与商业。', '生产注重设计与舒适性的轿车、SUV和电动汽车。', '通过汽车、电动汽车和氢能汽车提供现代出行方案。', '为家庭和企业提供家用电器、电视和显示器。'],
+  tr: ['Günlük yaşam ve iş dünyası için akıllı telefonlar, televizyonlar, ev aletleri ve yarı iletkenler.', 'Tasarım ve konfora odaklanan otomobiller, SUV’lar ve elektrikli araçlar.', 'Modern ulaşım için otomobiller, elektrikli ve hidrojenle çalışan araçlar.', 'Evler ve işletmeler için ev aletleri, televizyonlar ve ekranlar.'],
+  vi: ['Điện thoại thông minh, TV, thiết bị gia dụng và chất bán dẫn cho cuộc sống và doanh nghiệp.', 'Ô tô, SUV và xe điện chú trọng thiết kế và sự tiện nghi.', 'Ô tô, xe điện và xe chạy bằng hydro phục vụ nhu cầu di chuyển hiện đại.', 'Thiết bị gia dụng, TV và màn hình cho gia đình và doanh nghiệp.'],
+  km: ['ស្មាតហ្វូន ទូរទស្សន៍ គ្រឿងប្រើប្រាស់ក្នុងផ្ទះ និងសារធាតុពាក់កណ្តាលចម្លង សម្រាប់ជីវិតប្រចាំថ្ងៃ និងអាជីវកម្ម។', 'រថយន្ត រថយន្ត SUV និងរថយន្តអគ្គិសនី ដែលផ្តោតលើការរចនា និងផាសុកភាព។', 'រថយន្ត រថយន្តអគ្គិសនី និងរថយន្តអ៊ីដ្រូសែន សម្រាប់ការធ្វើដំណើរទំនើប។', 'គ្រឿងប្រើប្រាស់ក្នុងផ្ទះ ទូរទស្សន៍ និងអេក្រង់ សម្រាប់គេហដ្ឋាន និងអាជីវកម្ម។'],
+  kk: ['Күнделікті өмір мен бизнеске арналған смартфондар, теледидарлар, тұрмыстық техника және жартылай өткізгіштер.', 'Дизайн мен жайлылыққа мән беретін жеңіл көліктер, кроссоверлер және электромобильдер.', 'Заманауи қозғалысқа арналған автомобильдер, электромобильдер және сутегі көліктері.', 'Үй мен бизнеске арналған тұрмыстық техника, теледидарлар және дисплейлер.'],
+};
 const companies = [
   { name: 'Samsung', mark: 'SAMSUNG', color: '#b8cbff', url: 'https://www.samsung.com/' },
   { name: 'Kia', mark: 'KIA', color: '#fff', url: 'https://worldwide.kia.com/' },
@@ -61,9 +71,9 @@ export default function KoreaEconomy({ language }: { language: Language }) {
   return <div className="korea-economy" ref={root}>{[banks, companies].map((items, index) => <section className={`economy-group economy-panel-${index}`} key={index} aria-labelledby={`economy-title-${index}`}>
     <div className="economy-panel-inner">
     <div className="economy-heading"><h2 id={`economy-title-${index}`}>{t[index * 2]}</h2><p>{t[index * 2 + 1]}</p></div>
-    <div className="economy-grid">{items.map(item => <a className="economy-card" key={item.name} href={item.url} target="_blank" rel="noopener noreferrer">
+    <div className="economy-grid">{items.map((item, itemIndex) => <a className="economy-card" key={item.name} href={item.url} target="_blank" rel="noopener noreferrer">
       <span className="company-logo"><Image src={index === 1 ? `/company-logos/${companyLogos[item.name]}` : `/bank-logos/${bankLogos[item.name]}`} alt={item.name} width={200} height={64} style={{ width: '100%', height: '64px', objectFit: 'contain' }} /></span>
-      <h3>{item.name}</h3><span className="economy-domain">{new URL(item.url).hostname.replace(/^www\./, '')}</span><span className="economy-link">{t[4]} <span aria-hidden="true">↗</span></span>
+      <h3>{item.name}</h3>{index === 1 && <p className="economy-description">{companyDescriptions[language][itemIndex]}</p>}<span className="economy-domain">{new URL(item.url).hostname.replace(/^www\./, '')}</span><span className="economy-link">{t[4]} <span aria-hidden="true">↗</span></span>
     </a>)}</div></div>
   </section>)}</div>;
 }
