@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { QRCodeSVG } from 'qrcode.react';
 import { copy, languages, type Language } from './content';
 import './design.css';
@@ -76,6 +77,11 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
       });
     };
   }, [section]);
+  useEffect(() => {
+    const main = siteRef.current?.querySelector('main');
+    const animation = main?.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1200, easing: 'ease-in-out' });
+    return () => animation?.cancel();
+  }, [section]);
   const t=copy[language];
   function navigationHref(id: string) { return id === 'home' ? '/' : '/' + id; }
   function choose(lang:Language) {setLanguage(lang);try {localStorage.setItem('esx-language',lang);}catch{}}
@@ -84,7 +90,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
     <header className={`esx-header ${menuOpen ? "menu-open" : ""}`} ><span aria-hidden="true" className="header-glass" style={{ backdropFilter: "blur(24px) saturate(145%)", WebkitBackdropFilter: "blur(24px) saturate(145%)" }} /><div className="header-inner">
       <a className="header-logo" href={navigationHref('home')} aria-label={`ESX — ${t[0]}`}><Image src="/esx-logo.png" alt="ESX" width={1254} height={1254} sizes="(max-width: 760px) 64px, 80px" preload /></a>
       <button type="button" className="menu-toggle" aria-label={t[44]} aria-expanded={menuOpen} aria-controls="main-navigation" onClick={() => setMenuOpen(!menuOpen)}><span/><span/><span/></button>
-      <nav id="main-navigation" aria-label={t[44]}>{navigation.map(({id,label:i})=><a style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }} onClick={() => setMenuOpen(false)} className={i===4?'nav-contact':''} href={navigationHref(id)} key={id}>{t[i]}{i===4&&<span>↗</span>}</a>)}</nav>
+      <nav id="main-navigation" aria-label={t[44]}>{navigation.map(({id,label:i})=><Link style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }} onClick={() => setMenuOpen(false)} className={i===4?'nav-contact':''} href={navigationHref(id)} key={id}>{t[i]}{i===4&&<span>↗</span>}</Link>)}</nav>
     </div></header>
     <main key={section} className="site-main page-enter">
       <section className="language-panel" aria-label={t[10]}><div className="language-label"><span>◎</span><div><strong>{t[10]}</strong><small>{t[11]}</small></div></div><div className="language-row">{languages.map(l=><button lang={l.code} key={l.code} onClick={()=>choose(l.code)} aria-pressed={language===l.code} className={language===l.code?'selected':''}><span>{l.code.toUpperCase()}</span>{l.name}</button>)}</div></section>
