@@ -601,3 +601,6 @@
     opacity: 1 !important; translate: none !important; animation: none !important;
   }
 }
+
+.esx-site .scroll-driven { translate: 0 var(--scroll-y, 0px); opacity: var(--scroll-opacity, 1); }
+@media print, (prefers-reduced-motion: reduce) { .esx-site .scroll-driven { translate: none !important; opacity: 1 !important; } }

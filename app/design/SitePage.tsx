@@ -41,42 +41,38 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
     const elements = site.querySelectorAll<HTMLElement>(
       '.useful-apps-heading, .useful-app, .help-heading, .help-article, .section-heading, .subheading, .holiday, .place, .source-row, .about, .advertising, .contact, .esx-footer, .economy-heading, .economy-card'
     );
-    const reveal = (element: HTMLElement) => {
-      element.classList.remove('reveal-pending');
-      element.classList.add('reveal-visible');
-    };
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          reveal(entry.target as HTMLElement);
-        } else if (entry.boundingClientRect.top >= window.innerHeight) {
-          entry.target.classList.remove('reveal-visible');
-          entry.target.classList.add('reveal-pending');
-        }
-      });
-    }, { threshold: 0, rootMargin: '0px 0px -60px 0px' });
-    elements.forEach(element => {
-      // Already visible content stays visible, including restored scroll positions.
-      element.classList.add('scroll-reveal');
-      const siblings = element.parentElement ? Array.from(element.parentElement.children) : [];
-      const order = siblings.indexOf(element);
-      element.style.setProperty('--reveal-delay', `${Math.min(Math.max(order, 0) % 5, 4) * 85}ms`);
-      if (element.getBoundingClientRect().top >= window.innerHeight) element.classList.add('reveal-pending');
-      observer.observe(element);
-    });
-    const onFocus = (event: FocusEvent) => {
-      if (event.target instanceof Element) {
-        const element = event.target.closest<HTMLElement>('.reveal-pending');
-        if (element) { reveal(element); observer.unobserve(element); }
-      }
-    };
-    site.addEventListener('focusin', onFocus);
-    return () => {
-      observer.disconnect();
-      site.removeEventListener('focusin', onFocus);
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const positions = new WeakMap<HTMLElement, number>();
+    let frame = 0;
+    const update = () => {
+      frame = 0;
       elements.forEach(element => {
-        element.classList.remove('scroll-reveal', 'reveal-pending', 'reveal-visible');
-        element.style.removeProperty('--reveal-delay');
+        const top = element.getBoundingClientRect().top - (positions.get(element) || 0);
+        const progress = Math.max(0, Math.min(1, (window.innerHeight - top) / (window.innerHeight * .4)));
+        const focused = element.contains(document.activeElement);
+        const offset = motion.matches || focused ? 0 : (1 - progress) * 100;
+        positions.set(element, offset);
+        element.style.setProperty('--scroll-y', `${offset}px`);
+        element.style.setProperty('--scroll-opacity', `${motion.matches || focused ? 1 : .18 + progress * .82}`);
+      });
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    elements.forEach(element => element.classList.add('scroll-driven'));
+    update();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    site.addEventListener('focusin', schedule);
+    motion.addEventListener('change', schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+      site.removeEventListener('focusin', schedule);
+      motion.removeEventListener('change', schedule);
+      elements.forEach(element => {
+        element.classList.remove('scroll-driven');
+        element.style.removeProperty('--scroll-y');
+        element.style.removeProperty('--scroll-opacity');
       });
     };
   }, [section]);
