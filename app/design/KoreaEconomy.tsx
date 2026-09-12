@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
 import type { Language } from './content';
 import Image from 'next/image';
 
@@ -30,11 +33,37 @@ const companies = [
 
 export default function KoreaEconomy({ language }: { language: Language }) {
   const t = labels[language];
-  return <div className="korea-economy">{[banks, companies].map((items, index) => <section className="economy-group" key={index} aria-labelledby={`economy-title-${index}`}>
+  const root = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const panels = root.current?.querySelectorAll<HTMLElement>('.economy-group');
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      panels?.forEach(panel => {
+        const progress = motion.matches ? 1 : Math.max(0, Math.min(1, (window.innerHeight * .85 - panel.getBoundingClientRect().top) / (window.innerHeight * .7)));
+        panel.style.setProperty('--daylight', `${progress}`);
+        panel.style.setProperty('--panel-ink', `rgb(${Math.round(245 - progress * 225)} ${Math.round(247 - progress * 222)} ${Math.round(250 - progress * 220)})`);
+      });
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    motion.addEventListener('change', schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+      motion.removeEventListener('change', schedule);
+    };
+  }, []);
+  return <div className="korea-economy" ref={root}>{[banks, companies].map((items, index) => <section className={`economy-group economy-panel-${index}`} key={index} aria-labelledby={`economy-title-${index}`}>
+    <div className="economy-panel-inner">
     <div className="economy-heading"><h2 id={`economy-title-${index}`}>{t[index * 2]}</h2><p>{t[index * 2 + 1]}</p></div>
     <div className="economy-grid">{items.map(item => <a className="economy-card" key={item.name} href={item.url} target="_blank" rel="noopener noreferrer">
       <span className="company-logo"><Image src={index === 1 ? `/company-logos/${companyLogos[item.name]}` : `/bank-logos/${bankLogos[item.name]}`} alt={item.name} width={200} height={64} style={{ width: '100%', height: '64px', objectFit: 'contain' }} /></span>
       <h3>{item.name}</h3><span className="economy-domain">{new URL(item.url).hostname.replace(/^www\./, '')}</span><span className="economy-link">{t[4]} <span aria-hidden="true">↗</span></span>
-    </a>)}</div>
+    </a>)}</div></div>
   </section>)}</div>;
 }

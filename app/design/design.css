@@ -452,3 +452,69 @@
 @media (max-width: 360px) { .economy-grid { grid-template-columns: 1fr; } }
 
 .company-logo { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 96px; padding: 16px; border-radius: 13px; background: #f7f7f7; }
+
+/* Full-width Korea showcases, with scroll-controlled daylight. */
+.korea-economy {
+  position: relative;
+  width: 100vw;
+  margin: 0 0 64px calc(50% - 50vw);
+  padding: clamp(12px, 1.5vw, 32px);
+  background: #fff;
+}
+.korea-economy .economy-group {
+  --daylight: 1;
+  --panel-ink: #14191e;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: min(900px, 90svh);
+  padding: clamp(40px, 7vw, 120px) clamp(20px, 5vw, 100px);
+  border-radius: clamp(18px, 1.5vw, 32px);
+  background: #080d14;
+  color: var(--panel-ink);
+}
+.korea-economy .economy-group::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: var(--daylight);
+  background: radial-gradient(ellipse at 0% 15%, #efe0d0, transparent 55%), radial-gradient(ellipse at 100% 90%, #b7ced3, transparent 55%), #f4f4f1;
+}
+.korea-economy .economy-panel-1::before {
+  background: radial-gradient(ellipse at 100% 0%, #c3d4da, transparent 60%), radial-gradient(ellipse at 0% 100%, #e5d8cc, transparent 55%), #f7f7f4;
+}
+.korea-economy .economy-group + .economy-group { margin-top: clamp(16px, 2vw, 36px); }
+.economy-panel-inner { width: 100%; min-width: 0; }
+.korea-economy .economy-heading { max-width: 1000px; margin-bottom: clamp(30px, 4vw, 64px); }
+.korea-economy .economy-heading h2 { font-size: clamp(30px, 3.5vw, 64px); font-weight: 500; letter-spacing: -.04em; color: inherit; }
+.korea-economy .economy-heading p { max-width: 760px; color: inherit; font-size: clamp(14px, 1.1vw, 18px); }
+.korea-economy .economy-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 1.5vw, 28px); }
+.korea-economy .economy-panel-0 .economy-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.korea-economy .economy-card { padding: 0 0 28px; border: 1px solid #e0e5e7; border-radius: 12px; background: #fff; color: #172229; overflow: hidden; box-shadow: 0 10px 32px #0b1b2510; }
+.korea-economy .company-logo { min-height: clamp(130px, 12vw, 220px); border-radius: 0; padding: clamp(18px, 2vw, 40px); background: #f9fafb; }
+.korea-economy .economy-card h3 { margin: 26px 22px 10px; font-size: clamp(16px, 1.3vw, 23px); }
+.korea-economy .economy-domain { margin: 0 22px; color: #647078; }
+.korea-economy .economy-link { margin: auto 22px 0; padding-top: 32px; color: #253d49; }
+.korea-economy .economy-card:hover { transform: translateY(-6px); border-color: #819ca8; }
+@media (max-width: 1100px) {
+  .korea-economy .economy-panel-0 .economy-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .korea-economy .economy-panel-1 .economy-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .korea-economy .economy-group { min-height: auto; padding: 38px 16px; }
+  .korea-economy .economy-panel-0 .economy-grid, .korea-economy .economy-panel-1 .economy-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .korea-economy .economy-card h3 { margin: 18px 12px 8px; font-size: 15px; }
+  .korea-economy .economy-domain { margin: 0 12px; font-size: 10px; }
+  .korea-economy .economy-link { margin: auto 12px 0; font-size: 11px; }
+  .korea-economy .company-logo { min-height: 110px; padding: 12px; }
+}
+@media (max-width: 360px) {
+  .korea-economy .economy-panel-0 .economy-grid, .korea-economy .economy-panel-1 .economy-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .korea-economy .economy-card { transition: none; }
+  .korea-economy .economy-card:hover { transform: none; }
+}
