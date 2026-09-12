@@ -2,6 +2,7 @@ import type { Language } from './content';
 import Image from 'next/image';
 
 const companyLogos: Record<string, string> = { Samsung: 'samsung-wordmark.png', Kia: 'kia.svg', Hyundai: 'hyundai.png', LG: 'lg.svg' };
+const bankLogos: Record<string, string> = { 'NH NongHyup Bank': 'nh.png', 'KB Kookmin Bank': 'kb.png', 'Shinhan Bank': 'shinhan.png', 'Woori Bank': 'woori.png', 'Hana Bank': 'hana.png' };
 
 const labels: Record<Language, string[]> = {
   ru: ['Банки Южной Кореи', 'Официальные сайты местных банков — счета, карты и банковские услуги.', 'Лидеры экономики Южной Кореи', 'Samsung, Kia, Hyundai и LG — одни из лидеров экономики Южной Кореи. Их электроника, автомобили и технологии известны во всём мире.', 'Официальный сайт'],
@@ -32,7 +33,7 @@ export default function KoreaEconomy({ language }: { language: Language }) {
   return <div className="korea-economy">{[banks, companies].map((items, index) => <section className="economy-group" key={index} aria-labelledby={`economy-title-${index}`}>
     <div className="economy-heading"><h2 id={`economy-title-${index}`}>{t[index * 2]}</h2><p>{t[index * 2 + 1]}</p></div>
     <div className="economy-grid">{items.map(item => <a className="economy-card" key={item.name} href={item.url} target="_blank" rel="noopener noreferrer">
-      {index === 1 ? <span className="company-logo"><Image src={`/company-logos/${companyLogos[item.name]}`} alt={`${item.name}`} width={200} height={64} style={{ width: '100%', height: '64px', objectFit: 'contain' }} /></span> : <span className="economy-mark" style={{ color: item.color }} aria-hidden="true">{item.mark}</span>}
+      <span className="company-logo" style={item.name === 'NH NongHyup Bank' ? { background: '#0756a3' } : undefined}><Image src={index === 1 ? `/company-logos/${companyLogos[item.name]}` : `/bank-logos/${bankLogos[item.name]}`} alt={item.name} width={200} height={64} style={{ width: '100%', height: '64px', objectFit: 'contain' }} /></span>
       <h3>{item.name}</h3><span className="economy-domain">{new URL(item.url).hostname.replace(/^www\./, '')}</span><span className="economy-link">{t[4]} <span aria-hidden="true">↗</span></span>
     </a>)}</div>
   </section>)}</div>;
