@@ -6,3 +6,7 @@ Official logo sources:
 - LG: https://www.lg.com/content/dam/lge/common/logo/logo-lg-100-44.svg
 
 Downloaded 2026-09-12. Logos identify links to the respective official websites.
+
+Vector replacements added 2026-09-12:
+- Samsung: https://commons.wikimedia.org/wiki/File:Samsung_wordmark.svg
+- Hyundai: https://commons.wikimedia.org/wiki/File:Hyundai_Motor_Company_logo.svg
