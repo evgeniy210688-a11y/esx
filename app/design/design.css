@@ -607,7 +607,7 @@
 
 /* Route entrance stays separate from each section's scroll motion. */
 @media (prefers-reduced-motion: no-preference) {
-  .esx-site .page-enter { animation: esx-page-enter 700ms cubic-bezier(.22, 1, .36, 1) both; }
+  .esx-site .page-enter { animation: esx-page-enter 1200ms cubic-bezier(.22, 1, .36, 1) both; }
   @keyframes esx-page-enter {
     from { opacity: 0; }
     to { opacity: 1; }
