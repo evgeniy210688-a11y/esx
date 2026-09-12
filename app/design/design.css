@@ -450,3 +450,5 @@
 .economy-link { display: flex; justify-content: space-between; gap: 10px; margin-top: 22px; color: #80dcec; font-size: 12px; }
 @media (max-width: 760px) { .economy-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .economy-card { padding: 17px; } .economy-card h3 { font-size: 15px; } }
 @media (max-width: 360px) { .economy-grid { grid-template-columns: 1fr; } }
+
+.company-logo { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 96px; padding: 16px; border-radius: 13px; background: #f7f7f7; }
