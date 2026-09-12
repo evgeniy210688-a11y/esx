@@ -86,7 +86,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
       <button type="button" className="menu-toggle" aria-label={t[44]} aria-expanded={menuOpen} aria-controls="main-navigation" onClick={() => setMenuOpen(!menuOpen)}><span/><span/><span/></button>
       <nav id="main-navigation" aria-label={t[44]}>{navigation.map(({id,label:i})=><a style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }} onClick={() => setMenuOpen(false)} className={i===4?'nav-contact':''} href={navigationHref(id)} key={id}>{t[i]}{i===4&&<span>↗</span>}</a>)}</nav>
     </div></header>
-    <main className="site-main">
+    <main key={section} className="site-main page-enter">
       <section className="language-panel" aria-label={t[10]}><div className="language-label"><span>◎</span><div><strong>{t[10]}</strong><small>{t[11]}</small></div></div><div className="language-row">{languages.map(l=><button lang={l.code} key={l.code} onClick={()=>choose(l.code)} aria-pressed={language===l.code} className={language===l.code?'selected':''}><span>{l.code.toUpperCase()}</span>{l.name}</button>)}</div></section>
       {section === 'korea' && <KoreaSection language={language} />}
       {section === 'advertising' && (

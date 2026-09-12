@@ -604,3 +604,12 @@
 
 .esx-site .scroll-driven { translate: 0 var(--scroll-y, 0px); opacity: var(--scroll-opacity, 1); }
 @media print, (prefers-reduced-motion: reduce) { .esx-site .scroll-driven { translate: none !important; opacity: 1 !important; } }
+
+/* Route entrance stays separate from each section's scroll motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .esx-site .page-enter { animation: esx-page-enter 700ms cubic-bezier(.22, 1, .36, 1) both; }
+  @keyframes esx-page-enter {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
