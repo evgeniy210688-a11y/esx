@@ -39,7 +39,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
     const site = siteRef.current;
     if (!site || !('IntersectionObserver' in window)) return;
     const elements = site.querySelectorAll<HTMLElement>(
-      '.useful-apps-heading, .useful-app, .help-heading, .help-article, .section-heading, .subheading, .holiday, .place, .source-row, .about, .advertising, .contact, .esx-footer'
+      '.useful-apps-heading, .useful-app, .help-heading, .help-article, .section-heading, .subheading, .holiday, .place, .source-row, .about, .advertising, .contact, .esx-footer, .economy-heading, .economy-card'
     );
     const reveal = (element: HTMLElement) => {
       element.classList.remove('reveal-pending');
@@ -54,10 +54,13 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
           entry.target.classList.add('reveal-pending');
         }
       });
-    }, { threshold: 0, rootMargin: '0px 0px -24px 0px' });
+    }, { threshold: 0, rootMargin: '0px 0px -60px 0px' });
     elements.forEach(element => {
       // Already visible content stays visible, including restored scroll positions.
       element.classList.add('scroll-reveal');
+      const siblings = element.parentElement ? Array.from(element.parentElement.children) : [];
+      const order = siblings.indexOf(element);
+      element.style.setProperty('--reveal-delay', `${Math.min(Math.max(order, 0) % 5, 4) * 85}ms`);
       if (element.getBoundingClientRect().top >= window.innerHeight) element.classList.add('reveal-pending');
       observer.observe(element);
     });
