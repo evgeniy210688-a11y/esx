@@ -747,3 +747,14 @@
   }
   .esx-site .language-row button span { margin: 0; font-size: 11px; }
 }
+
+/* Round top menu control, matching the back-to-top button. */
+@media (max-width:760px) {
+  .esx-header .menu-toggle {
+    width: 46px; height: 46px; flex-shrink: 0;
+    border-radius: 50%; border: 1px solid #78d9ee;
+    background: #142b48; box-shadow: 0 6px 24px #0006;
+  }
+  .esx-header .menu-toggle:hover { background: #245178; }
+  .esx-header .menu-toggle span { background: #fff; box-shadow: none; }
+}

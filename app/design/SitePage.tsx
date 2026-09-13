@@ -30,6 +30,14 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
   }, [room]);
   const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
+    if (!menuOpen) return;
+    const closeOutside = (event: PointerEvent) => {
+      if (event.target instanceof Element && !event.target.closest('#main-navigation, .menu-toggle')) setMenuOpen(false);
+    };
+    document.addEventListener('pointerdown', closeOutside);
+    return () => document.removeEventListener('pointerdown', closeOutside);
+  }, [menuOpen]);
+  useEffect(() => {
     const close = (event: KeyboardEvent) => { if (event.key === 'Escape') setMenuOpen(false); };
     window.addEventListener('keydown', close);
     return () => window.removeEventListener('keydown', close);
