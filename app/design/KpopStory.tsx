@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import type { Language } from './content';
 
 const articles: Record<Language, string[]> = {
@@ -12,5 +13,5 @@ const articles: Record<Language, string[]> = {
 };
 export default function KpopStory({ language }: { language: Language }) {
   const t = articles[language];
-  return <article className="korea-story" aria-labelledby="kpop-story-title"><h2 id="kpop-story-title">{t[0]}</h2><p className="korea-story-intro">{t[1]}</p><div className="korea-story-columns">{[2, 4, 6].map((n, i) => <section className="korea-story-part" key={n}><span aria-hidden="true">0{i + 1}</span><h3>{t[n]}</h3><p>{t[n + 1]}</p></section>)}</div></article>;
+  return <article className="korea-story" aria-labelledby="kpop-story-title"><h2 id="kpop-story-title">{t[0]}</h2><p className="korea-story-intro">{t[1]}</p><Image className="korea-story-art" src="/korea-story/kpop-comic.webp" alt={t[0]} width={1800} height={600} sizes="(max-width: 760px) 100vw, 1264px" /><div className="korea-story-columns">{[2, 4, 6].map((n, i) => <section className="korea-story-part" key={n}><span aria-hidden="true">0{i + 1}</span><h3>{t[n]}</h3><p>{t[n + 1]}</p></section>)}</div></article>;
 }
