@@ -60,7 +60,7 @@ export default function BusinessHero({ language, onStart }: { language: Language
 
   return <section ref={heroRef} id="home" className={`hero business-hero ${expanded ? 'is-expanded' : ''}`} aria-label={m[0]} onFocusCapture={() => setFocused(true)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }}>
     {scenes.map((scene, index) => <div className={`business-slide ${index === active ? 'is-active' : ''}`} key={scene} aria-hidden={index !== active}>
-      <Image src={`/banners/${scene}-generated.webp`} alt="" fill preload={index === 0} loading={index === 0 ? undefined : 'eager'} sizes={expanded ? '100vw' : '(max-width: 1328px) 100vw, 1264px'} className="hero-image" />
+      <picture><source media="(max-width: 760px) and (orientation: portrait)" srcSet={`/banners/mobile/${scene}.webp`} /><Image src={`/banners/${scene}-generated.webp`} alt="" fill loading={index === 0 ? 'eager' : 'lazy'} sizes={expanded ? '100vw' : '(max-width: 1328px) 100vw, 1264px'} className="hero-image" /></picture>
       <div className="hero-shade" />
       <div className="business-caption"><div className="eyebrow"><span className="live-dot" />{m[0]} · {labels[index]}</div><h1>{titles[index]}</h1><p>{m[3]}</p></div>
     </div>)}

@@ -689,3 +689,18 @@
   .business-tabs button { background: #142b50ed; }
   .business-tabs button[aria-pressed=true] { background: #e4efff; }
 }
+
+/* Portrait art composed specifically for phones. */
+@media (max-width:760px) and (orientation:portrait) {
+  .esx-site .business-hero { height: max(740px, 170vw); min-height: 740px; max-height: 1040px; }
+  .business-slide .hero-image { object-fit: cover; object-position: center; }
+  .business-slide .hero-shade { background: linear-gradient(180deg, #05133b40 0%, transparent 48%, transparent 68%, #05133ba6 87%, #05133be6 100%); }
+  .business-caption { top: 62px; left: 20px; right: 20px; max-width: none; }
+  .business-caption h1 { font-size: clamp(25px, 6.5vw, 36px); line-height: 1.12; }
+  .business-caption p { font-size: 16px; max-width: 100%; }
+  .business-actions { bottom: 132px; left: 18px; right: 18px; gap: 10px; }
+  .business-actions .button { padding: 12px 16px; }
+  .business-controls { left: 16px; right: 16px; bottom: 16px; }
+  .business-tabs button { min-height: 44px; }
+  .esx-site .business-hero.is-expanded, .esx-site .business-hero:fullscreen { height: 100dvh; min-height: 0; max-height: none; overflow-y: auto; }
+}
