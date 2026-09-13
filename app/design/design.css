@@ -660,3 +660,5 @@
 @media(max-width:480px) {
   .esx-site .holiday-grid, .esx-site .places-grid, .esx-site .useful-apps-grid { grid-template-columns: 1fr; }
 }
+
+.esx-site .help-article-copy > p:not(.help-lead) { font-size: 16px; }
