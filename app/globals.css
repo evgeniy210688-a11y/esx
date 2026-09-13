@@ -19,6 +19,17 @@
   }
 }
 
+/* Keep the layout width unchanged between short and scrollable pages. */
+html {
+  scrollbar-gutter: stable;
+}
+
+@supports not (scrollbar-gutter: stable) {
+  html {
+    overflow-y: scroll;
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
