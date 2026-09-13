@@ -1,0 +1,12 @@
+.chat-theme { position: relative; isolation: isolate; color: #e5eeff; background: #030611; }
+.chat-theme::before { content: ''; position: fixed; inset: 0; z-index: -2; pointer-events: none; background: radial-gradient(ellipse 35% 17% at 29% 44%, #8bafce55, transparent 100%), radial-gradient(ellipse 23% 26% at 64% 37%, #007fd577, transparent 100%), radial-gradient(ellipse 24% 23% at 89% 58%, #9716be66, transparent 100%), radial-gradient(ellipse 21% 37% at 35% 87%, #087fdd77, transparent 100%), radial-gradient(ellipse 23% 34% at 70% 91%, #5828ba66, transparent 100%), #030611; }
+.chat-theme::after { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 20% 9% at 43% 47%, #b3bfd24d, transparent), radial-gradient(ellipse 11% 32% at 38% 86%, #008cdd66, transparent), radial-gradient(ellipse 12% 22% at 77% 72%, #9e0c8f44, transparent); filter: blur(40px); }
+.chat-theme .chat-shell > header { background: #000; border-color: #34466b; color: #f1f5ff; }
+.chat-theme .chat-shell > fieldset { background: #101b30b8; border-color: #45648280; }
+.chat-theme fieldset legend, .chat-theme fieldset label { color: #dce9fa; }
+.chat-theme fieldset select { background: #111d31; border-color: #526582; color: #f1f5ff; color-scheme: dark; }
+.chat-theme .chat-shell > section .text-zinc-400, .chat-theme header .text-zinc-400 { color: #b8c9e0; }
+.chat-theme .chat-composer { background: #080f20e8; border-color: #3f5472; }
+.chat-theme .chat-composer input { background: #172338; color: #f3f7ff; border-color: #617591; }
+.chat-theme .chat-composer input::placeholder { color: #b7c8df; }
+.chat-theme .chat-composer button { background: #245bd1; }

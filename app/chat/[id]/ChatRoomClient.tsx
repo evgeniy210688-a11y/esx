@@ -1,5 +1,6 @@
 "use client";
 import ChatShortcuts from "../ChatShortcuts";
+import "../chat-theme.css";
 
 import HomeLink from "@/app/components/HomeLink";
 import Image from "next/image";
@@ -161,8 +162,8 @@ export default function ChatRoomClient({
   }
 
   return (
-    <main lang={language} className="min-h-screen bg-zinc-50 text-zinc-900">
-      <div className="mx-auto flex min-h-screen w-full max-w-2xl flex-col">
+    <main lang={language} className="chat-theme min-h-screen">
+      <div className="chat-shell mx-auto flex min-h-screen w-full max-w-2xl flex-col">
 
         {/* Header */}
         <header className="flex items-center justify-between border-b bg-white px-6 py-5">
@@ -221,7 +222,7 @@ export default function ChatRoomClient({
         </section>
 
         {/* Input */}
-        <div className="border-t bg-white p-4">
+        <div className="chat-composer border-t p-4">
           <div className="flex gap-3">
 
             <input
