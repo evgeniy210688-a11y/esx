@@ -95,7 +95,7 @@ export default function ChatPage() {
 
         </section>
 
-        <footer className="py-6 text-center text-xs text-zinc-400">
+        <footer className="py-6 text-center text-2xl text-zinc-400">
           ESX · Private communication
         </footer>
 
