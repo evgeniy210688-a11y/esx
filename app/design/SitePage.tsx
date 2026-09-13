@@ -32,7 +32,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
   useEffect(() => {
     if (!menuOpen) return;
     const closeOutside = (event: PointerEvent) => {
-      if (event.target instanceof Element && !event.target.closest('#main-navigation, .menu-toggle')) setMenuOpen(false);
+      if (event.target instanceof Element && !event.target.closest('#main-navigation, .menu-toggle, .floating-menu-toggle')) setMenuOpen(false);
     };
     document.addEventListener('pointerdown', closeOutside);
     return () => document.removeEventListener('pointerdown', closeOutside);
@@ -145,6 +145,9 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
       )}
     </main>
     <footer className="esx-footer"><div><a className="footer-logo" href={navigationHref('home')} aria-label={`ESX — ${t[0]}`}><Image src="/esx-logo-white.svg" alt="ESX" width={100} height={100} unoptimized /></a><p>{t[40]}</p></div><nav aria-label={t[44]}>{navigation.map(({id,label:i})=><a href={navigationHref(id)} key={id}>{t[i]}</a>)}</nav><div className="footer-bottom"><span>© {new Date().getFullYear()} ESX</span><span>{t[5]} ↗</span></div></footer>
+    <button type="button" className="back-to-top floating-menu-toggle" aria-label={t[44]} aria-expanded={menuOpen} aria-controls="main-navigation" onClick={() => setMenuOpen(value => !value)}>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d={menuOpen ? 'M6 6L18 18M18 6L6 18' : 'M4 6H20M4 12H20M4 18H20'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
+    </button>
     <BackToTop language={language} />
   </div>;
 }
