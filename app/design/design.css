@@ -666,3 +666,26 @@
 .business-tabs button { padding: 7px 10px; line-height: 1.25; }
 .business-tabs button span { margin-bottom: 2px; font-size: 12px; line-height: 1.2; }
 @media(max-width:760px) { .business-tabs button { padding: 7px 8px; min-height: 40px; } }
+
+/* Frosted glass on the compact banner scene controls. */
+.business-tabs button {
+  background: linear-gradient(135deg, #eaf3ff26, #13285066);
+  border-color: #ffffff61;
+  backdrop-filter: blur(10px) saturate(135%);
+  -webkit-backdrop-filter: blur(10px) saturate(135%);
+  box-shadow: inset 0 1px 0 #ffffff52, 0 4px 14px #00000018;
+  color: #fff;
+  text-shadow: 0 1px 3px #06133480;
+}
+.business-tabs button:hover { background: linear-gradient(135deg, #ffffff40, #527ab54d); border-color: #ffffffa6; }
+.business-tabs button[aria-pressed=true] {
+  background: linear-gradient(135deg, #f0f6ffe0, #dbeaffb8);
+  border-color: #ffffffe0;
+  color: #123571;
+  text-shadow: none;
+  box-shadow: inset 0 1px 0 #fff, 0 4px 18px #00000020;
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .business-tabs button { background: #142b50ed; }
+  .business-tabs button[aria-pressed=true] { background: #e4efff; }
+}
