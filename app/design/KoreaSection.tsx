@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import KoreaEconomy from './KoreaEconomy';
 import KoreaStory from './KoreaStory';
+import KpopStory from './KpopStory';
 import { copy, placeNames, type Language } from './content';
 import { calendarLabels, getHolidayCalendar } from './holiday-calendar';
 
@@ -11,6 +12,7 @@ export default function KoreaSection({ language }: { language: Language }) {
   return <section id="korea" className="korea-section">
     <div className="section-heading"><div><div className="eyebrow blue-ink">{t[1]}</div><h1 style={{ fontSize: 'clamp(30px, 3.3vw, 43px)', lineHeight: 1.1 }}>{t[18]}</h1></div><p>{t[19]}</p></div>
     <KoreaStory language={language} />
+    <KpopStory language={language} />
     <KoreaEconomy language={language} />
     <div id="holidays" className="subheading"><h2>{t[20]}</h2><span>{calendarLabels[language].subtitle}</span></div>
     <div className="holiday-grid">{getHolidayCalendar(language).map((holiday, i) => <article key={holiday.id} className={`holiday holiday-${i % 6}`}>
