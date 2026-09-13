@@ -174,13 +174,6 @@ export default function ChatRoomClient({
           </a>
 
           <div className="min-w-0 text-right">
-            <p className="text-base text-zinc-400">
-              Chat ID
-            </p>
-
-            <p className="max-w-[240px] break-all font-mono text-sm font-semibold">
-              {chatId}
-            </p>
             <ChatQrCode chatId={chatId} />
           </div>
         </header>
