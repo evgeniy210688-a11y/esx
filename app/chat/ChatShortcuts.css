@@ -6,3 +6,5 @@
 .chat-shortcut-menu a { display: block; padding: 12px 16px; color: white; border-radius: 10px; text-decoration: none; }
 .chat-shortcut-menu a:hover { background: #ffffff20; }
 .chat-shortcuts :focus-visible { outline: 3px solid #42d9ff; outline-offset: 3px; }
+.chat-shortcuts { left: auto; right: max(12px, env(safe-area-inset-right)); }
+.chat-shortcut-menu { left: auto; right: 0; }

@@ -187,7 +187,7 @@ export default function ChatRoomClient({
         </header>
         <nav aria-label="Home" className="px-6 py-3"><HomeLink /></nav>
 
-        <ChatLanguages key={chatId} chatId={chatId} />
+        <details id="chat-language-panel" className="chat-language-panel"><summary>{language === "ru" ? "Языки общения" : language === "ko" ? "대화 언어" : "Languages"}</summary><ChatLanguages key={chatId} chatId={chatId} /></details>
 
         {/* Messages */}
         <section className="flex flex-1 flex-col gap-3 overflow-y-auto px-6 py-6">
