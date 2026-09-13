@@ -1,4 +1,5 @@
 "use client";
+import ChatShortcuts from "../ChatShortcuts";
 
 import HomeLink from "@/app/components/HomeLink";
 import Image from "next/image";
@@ -257,6 +258,7 @@ export default function ChatRoomClient({
         </div>
 
       </div>
+      <ChatShortcuts language={language} />
     </main>
   );
 }
