@@ -649,6 +649,9 @@
   mask-image: linear-gradient(to right, transparent 0%, #000 55%);
 }
 
+/* Compact language buttons with enough room for the full names. */
+.esx-site .language-row button { min-height: 38px; padding: 5px 9px; justify-content: center; }
+
 /* Give enlarged captions enough room at narrow widths. */
 .esx-site .economy-link, .esx-site .useful-app-link { flex-wrap: wrap; }
 .esx-site .language-row button { white-space: normal; }
@@ -735,8 +738,8 @@
   .esx-site .language-row button {
     min-width: 0;
     width: 100%;
-    min-height: 52px;
-    padding: 7px 3px;
+    min-height: 38px;
+    padding: 5px 3px;
     font-size: 13px;
     display: flex;
     flex-direction: column;
