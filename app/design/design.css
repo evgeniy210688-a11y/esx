@@ -622,3 +622,17 @@
 .korea-story-part h3 { font-size: 21px; line-height: 1.3; margin: 12px 0; }
 .korea-story-part p { color: #c5d3e5; line-height: 1.85; font-size: 15px; }
 @media(max-width:760px) { .korea-story-columns { grid-template-columns: 1fr; gap: 26px; } .korea-story-intro { font-size: 15px; } }
+
+/* User-provided satin wave, restricted to the South Korea page. */
+.korea-silk-theme .cyber-background::after {
+  background-image: linear-gradient(90deg, #060c18eb 0%, #071325a6 45%, #05142638 100%), url('/backgrounds/korea-silk.png');
+  background-position: center, right center;
+  background-size: cover, auto 115%;
+  background-repeat: no-repeat;
+  opacity: 1;
+}
+.korea-silk-theme .korea-story { background: linear-gradient(135deg, #081529d9, #0b2032b8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+@media(max-width:760px) {
+  .korea-silk-theme .cyber-background::after { background-size: cover, auto 100%; background-position: center, 70% center; }
+}
+.korea-silk-theme .cyber-background::after { filter: none; inset: 0; }
