@@ -636,3 +636,15 @@
   .korea-silk-theme .cyber-background::after { background-size: cover, auto 100%; background-position: center, 70% center; }
 }
 .korea-silk-theme .cyber-background::after { filter: none; inset: 0; }
+
+/* Blend the image edge into the underlying page instead of exposing its rectangle. */
+.korea-silk-theme .cyber-background::after {
+  background-image: linear-gradient(90deg, #060c18eb 0%, #071325a6 45%, #05142638 100%), url('/backgrounds/korea-silk.png');
+  width: min(100%, 680px);
+  left: auto;
+  right: 0;
+  background-size: cover, cover;
+  background-position: center, right center;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 55%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 55%);
+}
