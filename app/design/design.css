@@ -613,3 +613,12 @@
     to { opacity: 1; }
   }
 }
+.korea-story { margin: 0 0 64px; padding: clamp(22px, 3vw, 44px); border: 1px solid #ffffff45; border-radius: 28px; background: linear-gradient(135deg,#ffffff12,#badbff0a); }
+.korea-story h2 { font-size: clamp(25px, 2.8vw, 38px); line-height: 1.2; margin: 0 0 20px; }
+.korea-story-intro { max-width: 960px; color: #c5d3e5; font-size: 17px; line-height: 1.85; margin-bottom: 28px; }
+.korea-story-art { display: block; width: 100%; height: auto; border-radius: 18px; }
+.korea-story-columns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-top: 32px; }
+.korea-story-part > span { color: #84d8eb; font-size: 12px; letter-spacing: .15em; }
+.korea-story-part h3 { font-size: 21px; line-height: 1.3; margin: 12px 0; }
+.korea-story-part p { color: #c5d3e5; line-height: 1.85; font-size: 15px; }
+@media(max-width:760px) { .korea-story-columns { grid-template-columns: 1fr; gap: 26px; } .korea-story-intro { font-size: 15px; } }
