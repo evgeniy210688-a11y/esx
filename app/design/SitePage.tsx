@@ -15,10 +15,19 @@ import UsefulApps from './UsefulApps';
 const navigation = [{ id: 'home', label: 0 }, { id: 'korea', label: 1 }, { id: 'about', label: 2 }, { id: 'advertising', label: 3 }, { id: 'contact', label: 4 }];
 export default function SitePage({ section = 'home' }: { section?: 'home' | 'korea' | 'about' | 'advertising' | 'contact' }) {
   const siteRef = useRef<HTMLDivElement>(null);
+  const inviteRef = useRef<HTMLElement>(null);
   const [language,setLanguage] = useState<Language>('ru');
   const [draft,setDraft] = useState({name:'',email:'',message:''});
   const [saved,setSaved] = useState<'saved'|'error'|null>(null);
   const [room,setRoom] = useState('');
+  useEffect(() => {
+    if (!room) return;
+    const frame = requestAnimationFrame(() => {
+      inviteRef.current?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'center' });
+      inviteRef.current?.focus({ preventScroll: true });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [room]);
   const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
     const close = (event: KeyboardEvent) => { if (event.key === 'Escape') setMenuOpen(false); };
@@ -113,7 +122,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
       )}
       {section === 'home' && <>
       <BusinessHero language={language} onStart={()=>setRoom(`${window.location.origin}/chat/${crypto.randomUUID()}`)} />
-      {room&&<section className="invite" aria-label={t[12]}><div><h2>{t[12]}</h2><p>{t[13]}</p><a className="button blue" href={room}>{t[8]} ↗</a></div><QRCodeSVG value={room} size={180} title={t[12]}/></section>}
+      {room&&<section ref={inviteRef} tabIndex={-1} className="invite" aria-label={t[12]}><div><h2>{t[12]}</h2><p>{t[13]}</p><a className="button blue" href={room}>{t[8]} ↗</a></div><QRCodeSVG value={room} size={180} title={t[12]}/></section>}
       <UsefulApps language={language} />
 
 
