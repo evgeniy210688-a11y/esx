@@ -173,7 +173,7 @@ export default function ChatRoomClient({
           </a>
 
           <div className="min-w-0 text-right">
-            <p className="text-2xl text-zinc-400">
+            <p className="text-base text-zinc-400">
               Chat ID
             </p>
 

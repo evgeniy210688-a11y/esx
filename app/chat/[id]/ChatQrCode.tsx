@@ -20,7 +20,7 @@ export default function ChatQrCode({ chatId }: { chatId: string }) {
       <h2 id="chat-qr-title" className="text-xl font-bold">Пригласить в этот чат</h2>
       <p className="mt-2 text-sm text-zinc-500">Покажите QR-код собеседнику. Отсканировав его камерой телефона, он сможет открыть этот чат.</p>
       {url && <QRCodeSVG value={url} size={256} level="M" marginSize={4} title="QR-код для подключения к этому чату" className="mx-auto my-5 h-auto w-full max-w-[256px]" />}
-      <p className="break-all text-2xl text-zinc-500">Chat ID: {chatId}</p>
+      <p className="break-all text-base text-zinc-500">Chat ID: {chatId}</p>
       <form method="dialog" className="mt-5"><button autoFocus className="w-full rounded-full bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800">Закрыть</button></form>
     </dialog>
   </>;
