@@ -9,8 +9,15 @@ export default function ChatShortcuts({ language }: { language: Language }) {
   useEffect(() => {
     const panel = document.querySelector<HTMLDetailsElement>('#chat-language-panel');
     const sync = () => setLanguagesOpen(panel?.open ?? false);
+    const closeOutside = (event: PointerEvent) => {
+      if (panel?.open && event.target instanceof Element && !panel.contains(event.target) && !event.target.closest('[aria-controls="chat-language-panel"]')) panel.open = false;
+    };
     panel?.addEventListener('toggle', sync);
-    return () => panel?.removeEventListener('toggle', sync);
+    document.addEventListener('pointerdown', closeOutside);
+    return () => {
+      panel?.removeEventListener('toggle', sync);
+      document.removeEventListener('pointerdown', closeOutside);
+    };
   }, []);
   const root = useRef<HTMLDivElement>(null);
   const toggle = useRef<HTMLButtonElement>(null);
