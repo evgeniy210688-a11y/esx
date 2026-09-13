@@ -148,6 +148,9 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
     <button type="button" className="back-to-top floating-menu-toggle" aria-label={t[44]} aria-expanded={menuOpen} aria-controls="main-navigation" onClick={() => setMenuOpen(value => !value)}>
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d={menuOpen ? 'M6 6L18 18M18 6L6 18' : 'M4 6H20M4 12H20M4 18H20'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
     </button>
+    <button type="button" className="back-to-top floating-chat-toggle" aria-label={t[8]} title={t[8]} onClick={() => { window.location.assign(`/chat/${crypto.randomUUID()}`); }}>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-8 8H5l-3 3v-11a9 9 0 0 1 18 0Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round"/><path d="M7 10h10M7 14h6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/></svg>
+    </button>
     <BackToTop language={language} />
   </div>;
 }

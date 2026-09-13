@@ -752,3 +752,7 @@
 @media (max-width:760px) {
   .floating-menu-toggle { display: grid; bottom: calc(max(16px, env(safe-area-inset-bottom)) + 58px); }
 }
+.floating-chat-toggle { display: none; }
+@media(max-width:760px) {
+  .floating-chat-toggle { display: grid; bottom: calc(max(16px, env(safe-area-inset-bottom)) + 116px); }
+}
