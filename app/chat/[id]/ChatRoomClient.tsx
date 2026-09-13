@@ -2,7 +2,6 @@
 import ChatShortcuts from "../ChatShortcuts";
 import "../chat-theme.css";
 
-import HomeLink from "@/app/components/HomeLink";
 import Image from "next/image";
 import ChatLanguages from "./ChatLanguages";
 import ChatQrCode from "./ChatQrCode";
@@ -185,7 +184,6 @@ export default function ChatRoomClient({
             <ChatQrCode chatId={chatId} />
           </div>
         </header>
-        <nav aria-label="Home" className="px-6 py-3"><HomeLink /></nav>
 
         <details id="chat-language-panel" className="chat-language-panel"><summary>{language === "ru" ? "Языки общения" : language === "ko" ? "대화 언어" : "Languages"}</summary><ChatLanguages key={chatId} chatId={chatId} /></details>
 
