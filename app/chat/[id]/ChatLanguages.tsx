@@ -7,9 +7,8 @@ function validLanguage(value: unknown): value is Language {
   return languages.some((language) => language.code === value);
 }
 
-export default function ChatLanguages({ chatId, onMineChange, onPartnerChange }: { chatId: string; onMineChange: (language: Language) => void; onPartnerChange: (language: Language | "") => void }) {
+export default function ChatLanguages({ chatId, onMineChange }: { chatId: string; onMineChange: (language: Language) => void }) {
   const [mine, setMine] = useState<Language>("ru");
-  const [partner, setPartner] = useState<Language | "">("");
   const storageKey = `esx-chat-languages:${chatId}`;
 
   useEffect(() => {
@@ -20,22 +19,17 @@ export default function ChatLanguages({ chatId, onMineChange, onPartnerChange }:
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setMine(validLanguage(preferred) ? preferred : "ru");
       onMineChange(validLanguage(preferred) ? preferred : "ru");
-      setPartner(validLanguage(saved?.partner) ? saved.partner : "");
-      onPartnerChange(validLanguage(saved?.partner) ? saved.partner : "");
     } catch {
       onMineChange("ru");
-      onPartnerChange("");
       // The selectors still work when browser storage is unavailable.
     }
-  }, [storageKey, onMineChange, onPartnerChange]);
+  }, [storageKey, onMineChange]);
 
-  function save(nextMine: Language, nextPartner: Language | "") {
+  function save(nextMine: Language) {
     setMine(nextMine);
     onMineChange(nextMine);
-    setPartner(nextPartner);
-    onPartnerChange(nextPartner);
     try {
-      localStorage.setItem(storageKey, JSON.stringify({ mine: nextMine, partner: nextPartner }));
+      localStorage.setItem(storageKey, JSON.stringify({ mine: nextMine }));
     } catch {}
   }
 
@@ -44,20 +38,14 @@ export default function ChatLanguages({ chatId, onMineChange, onPartnerChange }:
   return (
     <fieldset className="mx-4 mb-3 rounded-2xl border border-blue-100 bg-blue-50/50 p-4 sm:mx-6">
       <legend className="px-2 text-sm font-semibold text-zinc-900">Языки общения</legend>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4">
         <label className="min-w-0 text-sm font-medium text-zinc-700">
           Ваш язык
-          <select value={mine} onChange={(event) => save(event.target.value as Language, partner)} className={selectStyle}>
+          <select value={mine} onChange={(event) => save(event.target.value as Language)} className={selectStyle}>
             {languages.map((language) => <option key={language.code} value={language.code}>{language.name}</option>)}
           </select>
         </label>
-        <label className="min-w-0 text-sm font-medium text-zinc-700">
-          Язык собеседника
-          <select value={partner} onChange={(event) => save(mine, event.target.value as Language | "")} className={selectStyle}>
-            <option value="" disabled>Выберите язык</option>
-            {languages.map((language) => <option key={language.code} value={language.code}>{language.name}</option>)}
-          </select>
-        </label>
+
       </div>
     </fieldset>
   );

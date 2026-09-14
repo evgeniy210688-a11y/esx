@@ -14,8 +14,8 @@ const labels: Record<Language, [string, string, string]> = {
   kk: ['Аударма', 'Жазып жатыр…', 'Аударма қолжетімсіз. Қайталау'],
 };
 
-export default function MessageTranslation({ chatId, messageId, target, source, language }: {
-  chatId: string; messageId: number | string; target: Language; source: Language | ""; language: Language;
+export default function MessageTranslation({ chatId, messageId, target, language }: {
+  chatId: string; messageId: number | string; target: Language; language: Language;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [translation, setTranslation] = useState('');
@@ -27,7 +27,7 @@ export default function MessageTranslation({ chatId, messageId, target, source, 
     async function translate() {
       try {
         const result = await fetch('/api/translate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chatId, messageId, target, source }), signal: controller.signal });
+          body: JSON.stringify({ chatId, messageId, target }), signal: controller.signal });
         const data = await result.json();
         if (!result.ok || typeof data.translation !== 'string') throw new Error('Unavailable');
         if (!stopped) setTranslation(data.translation);
@@ -38,7 +38,7 @@ export default function MessageTranslation({ chatId, messageId, target, source, 
     });
     if (ref.current) observer.observe(ref.current);
     return () => { stopped = true; observer.disconnect(); controller.abort(); };
-  }, [chatId, messageId, target, source, attempt]);
+  }, [chatId, messageId, target, attempt]);
   const t = labels[language];
   return <div ref={ref} className="message-translation" aria-live="polite">
     {translation ? <div lang={target} dir="auto">{translation}</div>
