@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 type Message = {
-  id: number;
+  id: number | string;
   chat_id: string;
   message: string;
   created_at: string;
@@ -26,20 +26,8 @@ export default function ChatRoomClient({
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
-  const [ownMessageIds, setOwnMessageIds] = useState<Set<number>>(new Set());
+  const [ownMessageIds, setOwnMessageIds] = useState<Set<number | string>>(new Set());
   const { language, text: ui } = useChatInterface();
-
-  useEffect(() => {
-    const syncOwnership = (event: StorageEvent) => {
-      if (event.key !== `esx-own-messages:${chatId}` && event.key !== null) return;
-      try {
-        const stored: unknown = JSON.parse(event.newValue || "[]");
-        setOwnMessageIds(new Set(Array.isArray(stored) ? stored.filter((id): id is number => typeof id === "number") : []));
-      } catch {}
-    };
-    window.addEventListener("storage", syncOwnership);
-    return () => window.removeEventListener("storage", syncOwnership);
-  }, [chatId]);
 
   // Загружаем сообщения и подключаем Realtime
   useEffect(() => {
@@ -48,8 +36,8 @@ export default function ChatRoomClient({
 
     async function startChat() {
       try {
-        const stored: unknown = JSON.parse(localStorage.getItem(`esx-own-messages:${chatId}`) || "[]");
-        setOwnMessageIds(new Set(Array.isArray(stored) ? stored.filter((id): id is number => typeof id === "number") : []));
+        const stored: unknown = JSON.parse(sessionStorage.getItem(`esx-tab-own-messages:${chatId}`) || "[]");
+        setOwnMessageIds(new Set(Array.isArray(stored) ? stored.filter((id): id is number | string => typeof id === "number" || typeof id === "string") : []));
       } catch {
         setOwnMessageIds(new Set());
       }
@@ -159,15 +147,15 @@ export default function ChatRoomClient({
     if (data && data.length > 0) {
       const newMessages = data as Message[];
       // The database has no sender column; remember successful sends locally.
-      // Merge storage first so sends from another tab are retained too.
+      // Keep ownership private to this tab, including after a reload.
       const owned = new Set(ownMessageIds);
       try {
-        const stored: unknown = JSON.parse(localStorage.getItem(`esx-own-messages:${chatId}`) || "[]");
-        if (Array.isArray(stored)) stored.forEach(id => { if (typeof id === "number") owned.add(id); });
+        const stored: unknown = JSON.parse(sessionStorage.getItem(`esx-tab-own-messages:${chatId}`) || "[]");
+        if (Array.isArray(stored)) stored.forEach(id => { if (typeof id === "number" || typeof id === "string") owned.add(id); });
       } catch {}
       newMessages.forEach(item => owned.add(item.id));
       setOwnMessageIds(owned);
-      try { localStorage.setItem(`esx-own-messages:${chatId}`, JSON.stringify([...owned])); } catch {}
+      try { sessionStorage.setItem(`esx-tab-own-messages:${chatId}`, JSON.stringify([...owned])); } catch {}
 
       setMessages((current) => {
         const result = [...current];
