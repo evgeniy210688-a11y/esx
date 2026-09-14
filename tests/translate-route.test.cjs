@@ -25,3 +25,9 @@ test('translates stored text with Luna and caches successful result', async () =
 test('provider rate limit preserves a retryable status', async () => { const s = setup({ providerStatus: 429 }); assert.equal((await s.post(valid)).status, 429); });
 test('incomplete translations are not shown as complete', async () => { const s = setup({ completed: false }); assert.equal((await s.post(valid)).status, 502); });
 test('long messages never reach provider', async () => { const s = setup({ message: 'a'.repeat(4001) }); assert.equal((await s.post(valid)).status, 413); assert.equal(s.calls.length, 0); });
+test('validates the sender language', async () => { const s = setup(); assert.equal((await s.post({ ...valid, source: 'invalid' })).status, 400); assert.equal(s.calls.length, 0); });
+test('sender language reaches the provider and invalidates a previous cache entry', async () => {
+  const s = setup(); await s.post(valid); await s.post({ ...valid, source: 'kk' });
+  assert.equal(s.calls.length, 2);
+  assert.match(JSON.parse(s.calls[1].options.body).instructions, /sender's selected language is Kazakh/);
+});

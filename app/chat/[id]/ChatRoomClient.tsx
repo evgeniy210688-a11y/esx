@@ -28,6 +28,7 @@ export default function ChatRoomClient({
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
+  const [partnerLanguage, setPartnerLanguage] = useState<Language | "">("");
   const [translationLanguage, setTranslationLanguage] = useState<Language | null>(null);
   const [ownMessageIds, setOwnMessageIds] = useState<Set<number | string>>(new Set());
   const { language, text: ui } = useChatInterface();
@@ -198,7 +199,7 @@ export default function ChatRoomClient({
         </header>
 
       <div className="chat-shell mx-auto flex w-full max-w-2xl flex-1 flex-col">
-        <details id="chat-language-panel" className="chat-language-panel"><summary>{language === "ru" ? "Языки общения" : language === "ko" ? "대화 언어" : "Languages"}</summary><ChatLanguages key={chatId} chatId={chatId} onMineChange={setTranslationLanguage} /></details>
+        <details id="chat-language-panel" className="chat-language-panel"><summary>{language === "ru" ? "Языки общения" : language === "ko" ? "대화 언어" : "Languages"}</summary><ChatLanguages key={chatId} chatId={chatId} onMineChange={setTranslationLanguage} onPartnerChange={setPartnerLanguage} /></details>
 
         {/* Messages */}
         <section className="flex flex-1 flex-col gap-3 overflow-y-auto px-6 py-6">
@@ -226,7 +227,7 @@ export default function ChatRoomClient({
                 className={`chat-message ${ownMessageIds.has(msg.id) ? "chat-message-own" : "chat-message-incoming"}`}
               >
                 {ownMessageIds.has(msg.id) ? <span dir="auto">{msg.message}</span>
-                  : translationLanguage ? <MessageTranslation key={`${chatId}:${msg.id}:${translationLanguage}`} chatId={chatId} messageId={msg.id} target={translationLanguage} language={translationLanguage} />
+                  : translationLanguage ? <MessageTranslation key={`${chatId}:${msg.id}:${translationLanguage}:${partnerLanguage}`} chatId={chatId} messageId={msg.id} target={translationLanguage} source={partnerLanguage} language={translationLanguage} />
                   : <span>{ui.loading}</span>}
               </div>
             ))

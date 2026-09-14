@@ -7,7 +7,7 @@ function validLanguage(value: unknown): value is Language {
   return languages.some((language) => language.code === value);
 }
 
-export default function ChatLanguages({ chatId, onMineChange }: { chatId: string; onMineChange: (language: Language) => void }) {
+export default function ChatLanguages({ chatId, onMineChange, onPartnerChange }: { chatId: string; onMineChange: (language: Language) => void; onPartnerChange: (language: Language | "") => void }) {
   const [mine, setMine] = useState<Language>("ru");
   const [partner, setPartner] = useState<Language | "">("");
   const storageKey = `esx-chat-languages:${chatId}`;
@@ -21,16 +21,19 @@ export default function ChatLanguages({ chatId, onMineChange }: { chatId: string
       setMine(validLanguage(preferred) ? preferred : "ru");
       onMineChange(validLanguage(preferred) ? preferred : "ru");
       setPartner(validLanguage(saved?.partner) ? saved.partner : "");
+      onPartnerChange(validLanguage(saved?.partner) ? saved.partner : "");
     } catch {
       onMineChange("ru");
+      onPartnerChange("");
       // The selectors still work when browser storage is unavailable.
     }
-  }, [storageKey, onMineChange]);
+  }, [storageKey, onMineChange, onPartnerChange]);
 
   function save(nextMine: Language, nextPartner: Language | "") {
     setMine(nextMine);
     onMineChange(nextMine);
     setPartner(nextPartner);
+    onPartnerChange(nextPartner);
     try {
       localStorage.setItem(storageKey, JSON.stringify({ mine: nextMine, partner: nextPartner }));
     } catch {}
