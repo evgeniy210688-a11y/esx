@@ -3,6 +3,7 @@ import ChatShortcuts from "../ChatShortcuts";
 import "../chat-theme.css";
 
 import Image from "next/image";
+import Link from "next/link";
 import ChatLanguages from "./ChatLanguages";
 import ChatQrCode from "./ChatQrCode";
 import useChatInterface from "./useChatInterface";
@@ -25,7 +26,20 @@ export default function ChatRoomClient({
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
+  const [ownMessageIds, setOwnMessageIds] = useState<Set<number>>(new Set());
   const { language, text: ui } = useChatInterface();
+
+  useEffect(() => {
+    const syncOwnership = (event: StorageEvent) => {
+      if (event.key !== `esx-own-messages:${chatId}` && event.key !== null) return;
+      try {
+        const stored: unknown = JSON.parse(event.newValue || "[]");
+        setOwnMessageIds(new Set(Array.isArray(stored) ? stored.filter((id): id is number => typeof id === "number") : []));
+      } catch {}
+    };
+    window.addEventListener("storage", syncOwnership);
+    return () => window.removeEventListener("storage", syncOwnership);
+  }, [chatId]);
 
   // Загружаем сообщения и подключаем Realtime
   useEffect(() => {
@@ -33,7 +47,12 @@ export default function ChatRoomClient({
     let cancelled = false;
 
     async function startChat() {
-      console.log("CHAT ID:", chatId);
+      try {
+        const stored: unknown = JSON.parse(localStorage.getItem(`esx-own-messages:${chatId}`) || "[]");
+        setOwnMessageIds(new Set(Array.isArray(stored) ? stored.filter((id): id is number => typeof id === "number") : []));
+      } catch {
+        setOwnMessageIds(new Set());
+      }
 
       // Загружаем существующие сообщения
       const { data, error } = await supabase
@@ -139,6 +158,16 @@ export default function ChatRoomClient({
     // Добавляем сообщение сразу на этом устройстве
     if (data && data.length > 0) {
       const newMessages = data as Message[];
+      // The database has no sender column; remember successful sends locally.
+      // Merge storage first so sends from another tab are retained too.
+      const owned = new Set(ownMessageIds);
+      try {
+        const stored: unknown = JSON.parse(localStorage.getItem(`esx-own-messages:${chatId}`) || "[]");
+        if (Array.isArray(stored)) stored.forEach(id => { if (typeof id === "number") owned.add(id); });
+      } catch {}
+      newMessages.forEach(item => owned.add(item.id));
+      setOwnMessageIds(owned);
+      try { localStorage.setItem(`esx-own-messages:${chatId}`, JSON.stringify([...owned])); } catch {}
 
       setMessages((current) => {
         const result = [...current];
@@ -166,12 +195,12 @@ export default function ChatRoomClient({
 
         {/* Header */}
         <header className="flex items-center justify-between border-b bg-white px-6 py-5">
-          <a
+          <Link
             href="/"
             className="mr-4 shrink-0"
           >
             <Image src="/esx-logo.png" alt="ESX" width={64} height={64} className="rounded-xl" />
-          </a>
+          </Link>
 
           <div className="min-w-0 text-right">
             <ChatQrCode chatId={chatId} />
@@ -203,9 +232,9 @@ export default function ChatRoomClient({
             messages.map((msg) => (
               <div
                 key={msg.id}
-                className="ml-auto max-w-[80%] rounded-2xl bg-black px-4 py-3 text-white"
+                className={`chat-message ${ownMessageIds.has(msg.id) ? "chat-message-own" : "chat-message-incoming"}`}
               >
-                {msg.message}
+                <span dir="auto">{msg.message}</span>
               </div>
             ))
           )}
