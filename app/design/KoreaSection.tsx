@@ -3,6 +3,7 @@ import KoreaEconomy from './KoreaEconomy';
 import KoreaStory from './KoreaStory';
 import KpopStory from './KpopStory';
 import BeautyStory from './BeautyStory';
+import SurgeryStory from './SurgeryStory';
 import { copy, placeNames, type Language } from './content';
 import { calendarLabels, getHolidayCalendar } from './holiday-calendar';
 
@@ -15,6 +16,7 @@ export default function KoreaSection({ language }: { language: Language }) {
     <KoreaStory language={language} />
     <KpopStory language={language} />
     <BeautyStory language={language} />
+    <SurgeryStory language={language} />
     <KoreaEconomy language={language} />
     <div id="holidays" className="subheading"><h2>{t[20]}</h2><span>{calendarLabels[language].subtitle}</span></div>
     <div className="holiday-grid">{getHolidayCalendar(language).map((holiday, i) => <article key={holiday.id} className={`holiday holiday-${i % 6}`}>
