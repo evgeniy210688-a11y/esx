@@ -4,14 +4,14 @@ import { useEffect, useRef, useState } from 'react';
 import { type Language } from '@/app/design/content';
 
 const labels: Record<Language, [string, string, string]> = {
-  ru: ['Перевод', 'Переводим…', 'Перевод недоступен. Повторить'],
-  en: ['Translation', 'Translating…', 'Translation unavailable. Retry'],
-  ko: ['번역', '번역 중…', '번역할 수 없습니다. 다시 시도'],
-  zh: ['翻译', '翻译中…', '翻译不可用。重试'],
-  tr: ['Çeviri', 'Çevriliyor…', 'Çeviri kullanılamıyor. Tekrar dene'],
-  vi: ['Bản dịch', 'Đang dịch…', 'Không thể dịch. Thử lại'],
-  km: ['ការបកប្រែ', 'កំពុងបកប្រែ…', 'មិនអាចបកប្រែបាន។ ព្យាយាមម្តងទៀត'],
-  kk: ['Аударма', 'Аударылуда…', 'Аударма қолжетімсіз. Қайталау'],
+  ru: ['Перевод', 'Пишет…', 'Перевод недоступен. Повторить'],
+  en: ['Translation', 'Typing…', 'Translation unavailable. Retry'],
+  ko: ['번역', '입력 중…', '번역할 수 없습니다. 다시 시도'],
+  zh: ['翻译', '正在输入…', '翻译不可用。重试'],
+  tr: ['Çeviri', 'Yazıyor…', 'Çeviri kullanılamıyor. Tekrar dene'],
+  vi: ['Bản dịch', 'Đang nhập…', 'Không thể dịch. Thử lại'],
+  km: ['ការបកប្រែ', 'កំពុងវាយ…', 'មិនអាចបកប្រែបាន។ ព្យាយាមម្តងទៀត'],
+  kk: ['Аударма', 'Жазып жатыр…', 'Аударма қолжетімсіз. Қайталау'],
 };
 
 export default function MessageTranslation({ chatId, messageId, target, language }: {
