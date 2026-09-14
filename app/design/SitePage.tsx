@@ -11,6 +11,7 @@ import KoreaSection from './KoreaSection';
 import HelpSection from './HelpSection';
 import BackToTop from './BackToTop';
 import UsefulApps from './UsefulApps';
+import AboutDetails from './AboutDetails';
 
 const navigation = [{ id: 'home', label: 0 }, { id: 'korea', label: 1 }, { id: 'about', label: 2 }, { id: 'advertising', label: 3 }, { id: 'contact', label: 4 }];
 export default function SitePage({ section = 'home' }: { section?: 'home' | 'korea' | 'about' | 'advertising' | 'contact' }) {
@@ -141,6 +142,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
       {section === 'about' && (
       <section id="about" className="about"><div className="about-art" aria-hidden="true"><Image src="/about-chat.png" alt="" fill sizes="(max-width: 760px) calc(100vw - 32px), 50vw" style={{ objectFit: "cover", objectPosition: "center" }} /></div><div><div className="eyebrow blue-ink">{t[2]}</div><h1 style={{ fontSize: 'clamp(30px, 3.3vw, 43px)', lineHeight: 1.1 }}>{t[24]}</h1><p>{t[25]}</p><a href="/contact" className="text-link">{t[4]} ↗</a></div></section>
       )}
+      {section === 'about' && <AboutDetails language={language} />}
       {section === 'contact' && (
       <section id="contact" className="contact"><div><div className="eyebrow blue-ink">{t[4]}</div><h1 style={{ fontSize: 'clamp(30px, 3.3vw, 43px)', lineHeight: 1.1 }}>{t[32]}</h1><p>{t[33]}</p><div className="contact-phone" aria-label="English / 한국어"><div className="phone-speaker" aria-hidden="true"/><div className="phone-chat-title">ESX<span>EN ↔ KO</span></div><div className="phone-messages"><div className="phone-message incoming"><span lang="en">Hi! How are you?</span><small lang="ko">안녕하세요! 잘 지내세요?</small></div><div className="phone-message outgoing"><span lang="ko">네, 잘 지내요! 반가워요.</span><small lang="en">I am doing well! Nice to meet you.</small></div></div><div className="phone-compose" aria-hidden="true"><span>···</span><span>↑</span></div><div className="phone-home" aria-hidden="true"/></div></div><form onSubmit={e=>{e.preventDefault();try{localStorage.setItem('esx-contact-draft',JSON.stringify(draft));setSaved('saved');}catch{setSaved('error');}}}><div className="form-row">{(['name','email'] as const).map((key,i)=><label key={key}>{t[34+i]}<input required type={key==='email'?'email':'text'} autoComplete={key} value={draft[key]} onChange={e=>{setDraft({...draft,[key]:e.target.value});setSaved(null);}}/></label>)}</div><label>{t[36]}<textarea required rows={4} value={draft.message} onChange={e=>{setDraft({...draft,message:e.target.value});setSaved(null);}}/></label><p className="form-note">{t[38]}</p><button className="button blue" type="submit">{t[37]} ↗</button><p role="status">{saved?t[saved==='saved'?39:47]:''}</p></form></section>
       )}
