@@ -2,6 +2,24 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+## Chat translation
+
+Set `OPENAI_API_KEY` as a server-only Production environment variable in Vercel.
+`POST /api/translate` uses `gpt-5.6-luna` through the Responses API with
+`store: false`. It accepts `{ chatId, messageId, target }`, loads the original
+message using the existing Supabase publishable key and RLS, and translates
+incoming messages into the recipient's selected "Your language". Original
+messages remain visible if translation fails; the retry button tries again.
+
+Only visible incoming messages are requested. Messages above 4,000 characters
+are not translated. A bounded ten-minute per-instance cache and a 30-request
+per-minute per-IP limit reduce repeated calls; these are not durable/global
+limits across Vercel instances. Configure Vercel Firewall and OpenAI project
+budgets for stronger spending controls. Room links remain the existing chat's
+access mechanism; this feature does not add authenticated room membership.
+
+Run `node --test tests/translate-route.test.cjs` for mocked route checks.
+
 First, run the development server:
 
 ```bash

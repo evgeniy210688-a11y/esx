@@ -5,6 +5,8 @@ import "../chat-theme.css";
 import Image from "next/image";
 import Link from "next/link";
 import ChatLanguages from "./ChatLanguages";
+import MessageTranslation from "./MessageTranslation";
+import type { Language } from "@/app/design/content";
 import ChatQrCode from "./ChatQrCode";
 import useChatInterface from "./useChatInterface";
 
@@ -26,6 +28,7 @@ export default function ChatRoomClient({
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
+  const [translationLanguage, setTranslationLanguage] = useState<Language | null>(null);
   const [ownMessageIds, setOwnMessageIds] = useState<Set<number | string>>(new Set());
   const { language, text: ui } = useChatInterface();
 
@@ -57,7 +60,7 @@ export default function ChatRoomClient({
         console.error("LOAD ERROR:", error);
         alert(`Ошибка загрузки: ${error.message}`);
       } else {
-        console.log("MESSAGES:", data);
+
         setMessages((data || []) as Message[]);
       }
 
@@ -78,7 +81,7 @@ export default function ChatRoomClient({
           filter: `chat_id=eq.${chatId}`,
         },
         (payload) => {
-          console.log("NEW MESSAGE:", payload);
+
 
           const newMessage = payload.new as Message;
 
@@ -123,7 +126,7 @@ export default function ChatRoomClient({
       return;
     }
 
-    console.log("SENDING:", text);
+
 
     const { data, error } = await supabase
       .from("messages")
@@ -141,7 +144,7 @@ export default function ChatRoomClient({
       return;
     }
 
-    console.log("SENT:", data);
+
 
     // Добавляем сообщение сразу на этом устройстве
     if (data && data.length > 0) {
@@ -195,7 +198,7 @@ export default function ChatRoomClient({
         </header>
 
       <div className="chat-shell mx-auto flex w-full max-w-2xl flex-1 flex-col">
-        <details id="chat-language-panel" className="chat-language-panel"><summary>{language === "ru" ? "Языки общения" : language === "ko" ? "대화 언어" : "Languages"}</summary><ChatLanguages key={chatId} chatId={chatId} /></details>
+        <details id="chat-language-panel" className="chat-language-panel"><summary>{language === "ru" ? "Языки общения" : language === "ko" ? "대화 언어" : "Languages"}</summary><ChatLanguages key={chatId} chatId={chatId} onMineChange={setTranslationLanguage} /></details>
 
         {/* Messages */}
         <section className="flex flex-1 flex-col gap-3 overflow-y-auto px-6 py-6">
@@ -223,6 +226,7 @@ export default function ChatRoomClient({
                 className={`chat-message ${ownMessageIds.has(msg.id) ? "chat-message-own" : "chat-message-incoming"}`}
               >
                 <span dir="auto">{msg.message}</span>
+                {!ownMessageIds.has(msg.id) && translationLanguage && <MessageTranslation key={`${chatId}:${msg.id}:${translationLanguage}`} chatId={chatId} messageId={msg.id} target={translationLanguage} language={language} />}
               </div>
             ))
           )}
