@@ -6,6 +6,21 @@
 .chat-theme fieldset legend, .chat-theme fieldset label { color: #dce9fa; }
 .chat-theme fieldset select { background: #111d31; border-color: #526582; color: #f1f5ff; color-scheme: dark; }
 .chat-theme .chat-shell > section .text-zinc-400, .chat-theme header .text-zinc-400 { color: #b8c9e0; }
+.chat-theme .chat-shell > section {
+  position: relative;
+  isolation: isolate;
+  background: #050817;
+}
+.chat-theme .chat-shell > section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(#03061130, #03061150), url('/backgrounds/chat-neon-waves.png') center / cover no-repeat;
+  filter: blur(12px);
+  clip-path: inset(0);
+}
 .chat-theme .chat-composer { background: #080f20e8; border-color: #3f5472; }
 .chat-theme .chat-composer input { background: #172338; color: #f3f7ff; border-color: #617591; }
 .chat-theme .chat-composer input::placeholder { color: #b7c8df; }
