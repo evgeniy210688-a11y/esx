@@ -751,6 +751,21 @@
   .esx-site .language-row button span { margin: 0; font-size: 11px; }
 }
 
+.mobile-menu-backdrop { display: none; }
+@media (max-width: 760px) {
+  .mobile-menu-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    background: #050b1a40;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .esx-header.menu-open,
+  .floating-menu-toggle[aria-expanded="true"] { z-index: 1300; }
+}
+
 .floating-menu-toggle { display: none; }
 @media (max-width:760px) {
   .floating-menu-toggle { display: grid; bottom: calc(max(16px, env(safe-area-inset-bottom)) + 58px); }
