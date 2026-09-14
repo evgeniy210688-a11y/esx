@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
-import { languages, type Language } from '@/app/design/content';
+import { type Language } from '@/app/design/content';
 
 const labels: Record<Language, [string, string, string]> = {
   ru: ['Перевод', 'Переводим…', 'Перевод недоступен. Повторить'],
@@ -41,7 +41,7 @@ export default function MessageTranslation({ chatId, messageId, target, language
   }, [chatId, messageId, target, attempt]);
   const t = labels[language];
   return <div ref={ref} className="message-translation" aria-live="polite">
-    {translation ? <><small>{t[0]} · {languages.find(item => item.code === target)?.name}</small><div lang={target} dir="auto">{translation}</div></>
+    {translation ? <div lang={target} dir="auto">{translation}</div>
       : failed ? <button type="button" onClick={() => { setFailed(false); setAttempt(value => value + 1); }}>{t[2]}</button> : <small>{t[1]}</small>}
   </div>;
 }

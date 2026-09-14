@@ -225,8 +225,9 @@ export default function ChatRoomClient({
                 key={msg.id}
                 className={`chat-message ${ownMessageIds.has(msg.id) ? "chat-message-own" : "chat-message-incoming"}`}
               >
-                <span dir="auto">{msg.message}</span>
-                {!ownMessageIds.has(msg.id) && translationLanguage && <MessageTranslation key={`${chatId}:${msg.id}:${translationLanguage}`} chatId={chatId} messageId={msg.id} target={translationLanguage} language={language} />}
+                {ownMessageIds.has(msg.id) ? <span dir="auto">{msg.message}</span>
+                  : translationLanguage ? <MessageTranslation key={`${chatId}:${msg.id}:${translationLanguage}`} chatId={chatId} messageId={msg.id} target={translationLanguage} language={translationLanguage} />
+                  : <span>{ui.loading}</span>}
               </div>
             ))
           )}
