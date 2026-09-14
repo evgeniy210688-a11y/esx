@@ -31,6 +31,17 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Deploy on Vercel
 
+### Visitor analytics
+
+Vercel Web Analytics is mounted once through `app/SiteAnalytics.tsx`, including
+client-side navigation. Query strings, fragments, and chat room identifiers
+are removed from recorded page URLs.
+
+For `www.88esx.com`, enable **Analytics / Web Analytics** in the site's Vercel
+project, then deploy this version. Visit the public site and navigate between
+pages; confirm page views appear in the Analytics dashboard. Visits before
+activation are not backfilled. Local development uses the SDK's development mode.
+
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
