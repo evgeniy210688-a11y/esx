@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { chatLabels } from "./chatLabels";
 import { languages, type Language } from "@/app/design/content";
 
 function validLanguage(value: unknown): value is Language {
@@ -37,10 +38,10 @@ export default function ChatLanguages({ chatId, onMineChange }: { chatId: string
 
   return (
     <fieldset className="mx-4 mb-3 rounded-2xl border border-blue-100 bg-blue-50/50 p-4 sm:mx-6">
-      <legend className="px-2 text-sm font-semibold text-zinc-900">Языки общения</legend>
+      <legend className="px-2 text-sm font-semibold text-zinc-900">{chatLabels[mine][0]}</legend>
       <div className="grid grid-cols-1 gap-4">
         <label className="min-w-0 text-sm font-medium text-zinc-700">
-          Ваш язык
+          {chatLabels[mine][1]}
           <select value={mine} onChange={(event) => save(event.target.value as Language)} className={selectStyle}>
             {languages.map((language) => <option key={language.code} value={language.code}>{language.name}</option>)}
           </select>

@@ -24,7 +24,8 @@ function getLanguage(): Language {
     return languages.find(language => language.code === value)?.code ?? "ru";
   } catch { return "ru"; }
 }
-export default function useChatInterface() {
-  const language = useSyncExternalStore(subscribe, getLanguage, () => "ru" as Language);
+export default function useChatInterface(selectedLanguage?: Language | null) {
+  const storedLanguage = useSyncExternalStore(subscribe, getLanguage, () => "ru" as Language);
+  const language = selectedLanguage ?? storedLanguage;
   return { language, text: text[language] };
 }

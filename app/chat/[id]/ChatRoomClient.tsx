@@ -5,6 +5,7 @@ import "../chat-theme.css";
 import Image from "next/image";
 import Link from "next/link";
 import ChatLanguages from "./ChatLanguages";
+import { chatLabels } from "./chatLabels";
 import MessageTranslation from "./MessageTranslation";
 import type { Language } from "@/app/design/content";
 import ChatQrCode from "./ChatQrCode";
@@ -30,7 +31,7 @@ export default function ChatRoomClient({
   const [loading, setLoading] = useState(true);
   const [translationLanguage, setTranslationLanguage] = useState<Language | null>(null);
   const [ownMessageIds, setOwnMessageIds] = useState<Set<number | string>>(new Set());
-  const { language, text: ui } = useChatInterface();
+  const { language, text: ui } = useChatInterface(translationLanguage);
 
   // Загружаем сообщения и подключаем Realtime
   useEffect(() => {
@@ -193,12 +194,12 @@ export default function ChatRoomClient({
           </Link>
 
           <div className="min-w-0 text-right">
-            <ChatQrCode chatId={chatId} />
+            <ChatQrCode chatId={chatId} language={language} />
           </div>
         </header>
 
       <div className="chat-shell mx-auto flex w-full max-w-2xl flex-1 flex-col">
-        <details id="chat-language-panel" className="chat-language-panel"><summary>{language === "ru" ? "Языки общения" : language === "ko" ? "대화 언어" : "Languages"}</summary><ChatLanguages key={chatId} chatId={chatId} onMineChange={setTranslationLanguage} /></details>
+        <details id="chat-language-panel" className="chat-language-panel"><summary>{chatLabels[language][0]}</summary><ChatLanguages key={chatId} chatId={chatId} onMineChange={setTranslationLanguage} /></details>
 
         {/* Messages */}
         <section className="flex flex-1 flex-col gap-3 overflow-y-auto px-6 py-6">
