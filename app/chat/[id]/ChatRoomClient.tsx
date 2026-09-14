@@ -178,11 +178,10 @@ export default function ChatRoomClient({
   }
 
   return (
-    <main lang={language} className="chat-theme min-h-screen">
-      <div className="chat-shell mx-auto flex min-h-screen w-full max-w-2xl flex-col">
+    <main lang={language} className="chat-theme flex min-h-screen flex-col">
 
         {/* Header */}
-        <header className="flex items-center justify-between border-b bg-white px-6 py-5">
+        <header className="chat-header flex w-full shrink-0 items-center justify-between border-b px-6 py-5">
           <Link
             href="/"
             className="mr-4 shrink-0"
@@ -195,6 +194,7 @@ export default function ChatRoomClient({
           </div>
         </header>
 
+      <div className="chat-shell mx-auto flex w-full max-w-2xl flex-1 flex-col">
         <details id="chat-language-panel" className="chat-language-panel"><summary>{language === "ru" ? "Языки общения" : language === "ko" ? "대화 언어" : "Languages"}</summary><ChatLanguages key={chatId} chatId={chatId} /></details>
 
         {/* Messages */}
