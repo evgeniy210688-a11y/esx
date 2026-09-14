@@ -38,3 +38,47 @@
   color: #f1f5ff;
   border-bottom-left-radius: 5px;
 }
+
+/* Static neon outlines keep the conversation readable without pulsing. */
+.chat-theme .chat-shell {
+  border-inline: 1px solid #5dbfff80;
+  box-shadow: -5px 0 18px #28baff24, 5px 0 18px #9871ff24;
+}
+.chat-theme > .chat-header {
+  border-bottom-color: #67cfff9c;
+  box-shadow: 0 3px 12px #38bbff33, 0 8px 28px #7855ff1f;
+  position: relative;
+  z-index: 1;
+}
+.chat-theme .chat-language-panel {
+  margin-top: 12px;
+  border-color: #62cfff99;
+  box-shadow: 0 0 7px #51cfff40, 0 0 20px #329dff26;
+}
+.chat-theme .chat-message-incoming {
+  border-color: #83e6ff;
+  box-shadow: 0 0 7px #53dbff66, 0 0 18px #24bfff33;
+}
+.chat-theme .chat-message-own {
+  border-color: #b4a0ff;
+  box-shadow: 0 0 7px #a386ff70, 0 0 18px #7061ff40;
+}
+.chat-theme .chat-composer {
+  border-top-color: #76bfff99;
+  box-shadow: 0 -3px 14px #46baff2e;
+}
+.chat-theme .chat-composer input {
+  border-color: #74caffb3;
+  box-shadow: 0 0 8px #45bfff30;
+}
+.chat-theme .chat-composer input:focus-visible {
+  border-color: #a5efff;
+  box-shadow: 0 0 0 2px #5bd7ff40, 0 0 18px #45bfff55;
+}
+.chat-theme .chat-composer button {
+  border: 1px solid #a9b8ff;
+  box-shadow: 0 0 9px #7a9aff66, 0 0 20px #7463ff33;
+}
+@media (max-width: 760px) {
+  .chat-theme .chat-shell { width: calc(100% - 16px); }
+}
