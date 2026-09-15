@@ -83,12 +83,29 @@ const details: Record<Language, string[]> = {
   ]
 };
 
+const founderLabels: Record<Language, string> = {
+  ru: 'Основатель',
+  en: 'Founder',
+  ko: '설립자',
+  zh: '创始人',
+  tr: 'Kurucu',
+  vi: 'Người sáng lập',
+  km: 'ស្ថាបនិក',
+  kk: 'Негізін қалаушы',
+};
+
 export default function AboutDetails({ language }: { language: Language }) {
   const text = details[language];
-  return <div className="about-details">{[0, 2, 4, 6].map((index) => (
-    <section className="korea-story" key={index}>
-      <h2>{text[index]}</h2>
-      <p>{text[index + 1]}</p>
+  return <div className="about-details">
+    {[0, 2, 4, 6].map((index) => (
+      <section className="korea-story" key={index}>
+        <h2>{text[index]}</h2>
+        <p>{text[index + 1]}</p>
+      </section>
+    ))}
+    <section className="korea-story">
+      <h2>{founderLabels[language]}</h2>
+      <p>SON EVGENIY</p>
     </section>
-  ))}</div>;
+  </div>;
 }
