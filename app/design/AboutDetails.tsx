@@ -84,7 +84,7 @@ const details: Record<Language, string[]> = {
 };
 
 const founderLabels: Record<Language, string> = {
-  ru: 'Основатель',
+  ru: 'основатель',
   en: 'Founder',
   ko: '설립자',
   zh: '创始人',
@@ -103,9 +103,8 @@ export default function AboutDetails({ language }: { language: Language }) {
         <p>{text[index + 1]}</p>
       </section>
     ))}
-    <section className="korea-story">
-      <h2>{founderLabels[language]}</h2>
-      <p>SON EVGENIY</p>
-    </section>
+    <p style={{ gridColumn: '1 / -1', fontSize: '12px', margin: 0 }}>
+      {founderLabels[language]}: SON EVGENIY
+    </p>
   </div>;
 }
