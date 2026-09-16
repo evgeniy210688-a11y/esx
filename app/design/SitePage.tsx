@@ -17,7 +17,7 @@ const navigation = [{ id: 'home', label: 0 }, { id: 'korea', label: 1 }, { id: '
 export default function SitePage({ section = 'home' }: { section?: 'home' | 'korea' | 'about' | 'advertising' | 'contact' }) {
   const siteRef = useRef<HTMLDivElement>(null);
   const inviteRef = useRef<HTMLElement>(null);
-  const [language,setLanguage] = useState<Language>('ru');
+  const [language,setLanguage] = useState<Language>('en');
   const [draft,setDraft] = useState({name:'',email:'',message:''});
   const [saved,setSaved] = useState<'saved'|'error'|null>(null);
   const [room,setRoom] = useState('');
@@ -46,7 +46,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
   useEffect(()=>{
     try {
       const lang = localStorage.getItem('esx-language');
-      // Restore browser-only preferences after hydration; server render uses Russian.
+      // Restore browser-only preferences after hydration; first visits use English.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       if(languages.some(l=>l.code===lang)) setLanguage(lang as Language);
       const stored = localStorage.getItem('esx-contact-draft');
