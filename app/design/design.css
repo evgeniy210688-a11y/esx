@@ -764,6 +764,13 @@
 .about-details p { font-size: 16px; line-height: 1.85; color: var(--muted); }
 @media (max-width: 760px) { .about-details { grid-template-columns: 1fr; gap: 16px; } }
 
+.business-dots { display: flex; align-items: center; justify-content: center; flex: 1; }
+.business-dots button { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: transparent; }
+.business-dots button span { width: 10px; height: 10px; border-radius: 50%; background: #ffffff66; border: 1px solid #ffffffa6; transition: background .2s, transform .2s; }
+.business-dots button[aria-pressed=true] span { background: #fff; transform: scale(1.3); box-shadow: 0 0 10px #b5eaff70; }
+.business-dots button:hover span { background: #fff; }
+@media (max-width: 760px) { .esx-site .business-actions { bottom: 80px; } }
+
 .mobile-menu-backdrop { display: none; }
 @media (max-width: 760px) {
   .mobile-menu-backdrop {
