@@ -432,7 +432,7 @@
 .useful-apps { padding: 38px 0 42px; border-bottom: 1px solid #5282ac33; }
 .useful-apps-heading { max-width: 760px; margin-bottom: 24px; }
 .useful-apps-heading p { color: var(--muted); font-size: 14px; line-height: 1.7; }
-.useful-apps-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 12px; }
+.useful-apps-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .useful-app { display: flex; flex-direction: column; min-width: 0; padding: 20px 15px; border-radius: 17px; border: 1px solid #5484a947; background: linear-gradient(145deg, #112138e8, #111426ed); color: #edf5ff; transition: border-color .2s, background .2s; }
 .useful-app:hover { border-color: #70d6ed; background: #182c44; }
 .useful-app-mark { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 13px; color: #142033; font-size: 15px; font-weight: 800; }

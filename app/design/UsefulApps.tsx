@@ -1,13 +1,15 @@
+import Image from 'next/image';
 import { type Language } from './content';
 
 const apps = [
-  { name: 'KakaoTalk', mark: 'Talk', color: '#fee500', url: 'https://www.kakaocorp.com/page/service/service/KakaoTalk?lang=en' },
-  { name: 'KakaoMap', mark: 'Map', color: '#72caff', url: 'https://play.google.com/store/apps/details?id=net.daum.android.map' },
-  { name: 'KakaoPay', mark: 'Pay', color: '#fee500', url: 'https://kakaopay.com/' },
-  { name: 'NAVER Map', mark: 'N', color: '#5de19d', url: 'https://www.navercorp.com/en/service/map' },
-  { name: 'Kakao T', mark: 'T', color: '#92b4ff', url: 'https://www.kakaomobility.com/service-kakaot/taxi' },
-  { name: 'KakaoMetro', mark: 'M', color: '#ffcf6d', url: 'https://play.google.com/store/apps/details?hl=en-US&id=net.orizinal.subway' },
-  { name: 'KakaoBus', mark: 'Bus', color: '#ff979d', url: 'https://play.google.com/store/apps/details?id=com.astroframe.seoulbus' },
+  { name: 'KakaoTalk', icon: 'kakaotalk', url: 'https://www.kakaocorp.com/page/service/service/KakaoTalk?lang=en' },
+  { name: 'KakaoMap', icon: 'kakaomap', url: 'https://play.google.com/store/apps/details?id=net.daum.android.map' },
+  { name: 'KakaoPay', icon: 'kakaopay', url: 'https://kakaopay.com/' },
+  { name: 'NAVER Map', icon: 'naver-map', url: 'https://www.navercorp.com/en/service/map' },
+  { name: 'Kakao T', icon: 'kakao-t', url: 'https://www.kakaomobility.com/service-kakaot/taxi' },
+  { name: 'KakaoMetro', icon: 'kakaometro', url: 'https://play.google.com/store/apps/details?hl=en-US&id=net.orizinal.subway' },
+  { name: 'KakaoBus', icon: 'kakaobus', url: 'https://play.google.com/store/apps/details?id=com.astroframe.seoulbus' },
+  { name: 'Coupang Eats', icon: 'coupang-eats', url: 'https://apps.apple.com/kr/app/id1445504255' },
 ];
 
 const messages: Record<Language, string> = {
@@ -21,12 +23,14 @@ const messages: Record<Language, string> = {
   kk: 'Оңтүстік Кореяда жайлы өмір сүру үшін|Қарым-қатынас, сапар және күнделікті істерге арналған қолданбалар.|Ашу|Хабарламалар мен қоңыраулар|Карталар, орындар және бағыттар|Төлемдер мен аударымдар|Орын іздеу және навигация|Такси шақыру|Метро желілері мен ауысулар|Автобус аялдамалары мен келу уақыты',
 };
 
+const eatsDescriptions: Record<Language, string> = {"ru":"Доставка еды из ресторанов","en":"Food delivery from restaurants","ko":"음식점 음식 배달","zh":"餐厅美食配送","tr":"Restoranlardan yemek teslimatı","vi":"Giao đồ ăn từ nhà hàng","km":"ដឹកជញ្ជូនអាហារពីភោជនីយដ្ឋាន","kk":"Мейрамханалардан тамақ жеткізу"};
+
 export default function UsefulApps({ language }: { language: Language }) {
-  const t = messages[language].split('|');
+  const t = [...messages[language].split('|'), eatsDescriptions[language]];
   return <section className="useful-apps" aria-labelledby="useful-apps-title">
     <div className="useful-apps-heading"><div className="eyebrow blue-ink">SOUTH KOREA / APPS</div><h2 id="useful-apps-title">{t[0]}</h2><p>{t[1]}</p></div>
     <div className="useful-apps-grid">{apps.map((app, i) => <a className="useful-app" key={app.name} href={app.url} target="_blank" rel="noopener noreferrer">
-      <span className="useful-app-mark" style={{ background: app.color }} aria-hidden="true">{app.mark}</span>
+      <Image className="useful-app-mark" src={`/app-icons/${app.icon}.jpg`} width={46} height={46} alt="" sizes="46px" />
       <h3>{app.name}</h3><p>{t[i + 3]}</p><span className="useful-app-link">{t[2]} <span aria-hidden="true">↗</span></span>
     </a>)}</div>
   </section>;
