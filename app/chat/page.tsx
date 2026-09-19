@@ -4,16 +4,22 @@ import HomeLink from "@/app/components/HomeLink";
 
 import { useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
+import { supabase } from '@/lib/supabase';
 
 export default function ChatPage() {
   const [chatId, setChatId] = useState("");
   const [chatLink, setChatLink] = useState("");
 
   useEffect(() => {
-    const id = Math.random().toString(36).substring(2, 10);
-
-    setChatId(id);
-    setChatLink(`${window.location.origin}/chat/${id}`);
+    let active = true;
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!active) return;
+      if (session) { window.location.replace('/account'); return; }
+      const id = crypto.randomUUID();
+      setChatId(id);
+      setChatLink(`${window.location.origin}/chat/${id}`);
+    });
+    return () => { active = false; };
   }, []);
 
   const copyLink = async () => {

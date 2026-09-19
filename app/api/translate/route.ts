@@ -22,6 +22,9 @@ export async function POST(request: Request) {
     || typeof body.target !== 'string' || !Object.hasOwn(languages, body.target)) return reply({ error: 'invalid_request' }, 400);
   if (body.source !== undefined && body.source !== '' && (typeof body.source !== 'string' || !Object.hasOwn(languages, body.source))) return reply({ error: 'invalid_request' }, 400);
   const source = body.source ? languages[body.source] : 'auto-detected language';
+  if (body.privateChat !== undefined && typeof body.privateChat !== 'boolean') return reply({ error: 'invalid_request' }, 400);
+  const authorization = request.headers.get('authorization');
+  if (body.privateChat && !authorization?.startsWith('Bearer ')) return reply({ error: 'sign_in_required' }, 401);
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return reply({ error: 'translation_not_configured' }, 503);
   const now = Date.now();
@@ -32,14 +35,16 @@ export async function POST(request: Request) {
   limit.count++;
   requests.set(ip, limit);
   try {
-    const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!, { auth: { persistSession: false, autoRefreshToken: false } });
+    const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!, { auth: { persistSession: false, autoRefreshToken: false }, ...(body.privateChat ? { global: { headers: { Authorization: authorization! } } } : {}) });
     // A room URL is the existing chat's access mechanism. Only translate a
     // stored message in that room, never arbitrary client-supplied prompts.
-    const { data, error } = await db.from('messages').select('message').eq('chat_id', body.chatId).eq('id', body.messageId).maybeSingle();
+    // Private messages are authorized by database RLS with the caller's JWT,
+    // before any cache lookup or provider request.
+    const { data, error } = await db.from(body.privateChat ? 'esx_private_messages' : 'messages').select('message').eq('chat_id', body.chatId).eq('id', body.messageId).maybeSingle();
     if (error) return reply({ error: 'message_unavailable' }, 502);
     if (!data) return reply({ error: 'message_not_found' }, 404);
     if (typeof data.message !== 'string' || data.message.length > 4000) return reply({ error: 'message_too_long' }, 413);
-    const key = JSON.stringify([body.chatId, body.messageId, body.target, source, data.message]);
+    const key = JSON.stringify([Boolean(body.privateChat), body.chatId, body.messageId, body.target, source, data.message]);
     for (const [key, value] of cache) if (value.expires < now) cache.delete(key);
     const cached = cache.get(key);
     if (cached) return reply({ translation: cached.text });

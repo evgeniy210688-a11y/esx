@@ -771,6 +771,9 @@
 .business-dots button:hover span { background: #fff; }
 @media (max-width: 760px) { .esx-site .business-actions { bottom: 80px; } }
 
+.esx-header nav .nav-registration { background: #17628b; border-color: #78d9ee; color: #fff; }
+.esx-header nav .nav-registration:hover { background: #247da8; color: #fff; }
+
 .mobile-menu-backdrop { display: none; }
 @media (max-width: 760px) {
   .mobile-menu-backdrop {

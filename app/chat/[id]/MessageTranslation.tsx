@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { type Language } from '@/app/design/content';
+import { supabase } from '@/lib/supabase';
 
 const labels: Record<Language, [string, string, string]> = {
   ru: ['Перевод', 'Пишет…', 'Перевод недоступен. Повторить'],
@@ -14,8 +15,8 @@ const labels: Record<Language, [string, string, string]> = {
   kk: ['Аударма', 'Жазып жатыр…', 'Аударма қолжетімсіз. Қайталау'],
 };
 
-export default function MessageTranslation({ chatId, messageId, target, language }: {
-  chatId: string; messageId: number | string; target: Language; language: Language;
+export default function MessageTranslation({ chatId, messageId, target, language, privateChat = false }: {
+  chatId: string; messageId: number | string; target: Language; language: Language; privateChat?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [translation, setTranslation] = useState('');
@@ -26,8 +27,14 @@ export default function MessageTranslation({ chatId, messageId, target, language
     let stopped = false;
     async function translate() {
       try {
-        const result = await fetch('/api/translate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chatId, messageId, target }), signal: controller.signal });
+        const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+        if (privateChat) {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (!session) throw new Error('Sign in required');
+          headers.Authorization = `Bearer ${session.access_token}`;
+        }
+        const result = await fetch('/api/translate', { method: 'POST', headers,
+          body: JSON.stringify({ chatId, messageId, target, ...(privateChat ? { privateChat: true } : {}) }), signal: controller.signal });
         const data = await result.json();
         if (!result.ok || typeof data.translation !== 'string') throw new Error('Unavailable');
         if (!stopped) setTranslation(data.translation);
@@ -38,7 +45,7 @@ export default function MessageTranslation({ chatId, messageId, target, language
     });
     if (ref.current) observer.observe(ref.current);
     return () => { stopped = true; observer.disconnect(); controller.abort(); };
-  }, [chatId, messageId, target, attempt]);
+  }, [chatId, messageId, target, attempt, privateChat]);
   const t = labels[language];
   return <div ref={ref} className="message-translation" aria-live="polite">
     {translation ? <div lang={target} dir="auto">{translation}</div>

@@ -12,6 +12,8 @@ import HelpSection from './HelpSection';
 import BackToTop from './BackToTop';
 import UsefulApps from './UsefulApps';
 import AboutDetails from './AboutDetails';
+import AccountLink from '../account/AccountLink';
+import { supabase } from '@/lib/supabase';
 
 const navigation = [{ id: 'home', label: 0 }, { id: 'korea', label: 1 }, { id: 'about', label: 2 }, { id: 'advertising', label: 3 }, { id: 'contact', label: 4 }];
 export default function SitePage({ section = 'home' }: { section?: 'home' | 'korea' | 'about' | 'advertising' | 'contact' }) {
@@ -116,12 +118,17 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
   const t=copy[language];
   function navigationHref(id: string) { return id === 'home' ? '/' : '/' + id; }
   function choose(lang:Language) {setLanguage(lang);try {localStorage.setItem('esx-language',lang);}catch{}}
+  async function startConversation() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) window.location.assign('/account');
+    else setRoom(`${window.location.origin}/chat/${crypto.randomUUID()}`);
+  }
   return <div ref={siteRef} className={`esx-site${section === 'korea' ? ' korea-silk-theme' : ''}`} lang={language}><div className="cyber-background" aria-hidden="true"><i className="cyber-circuit circuit-left"/><i className="cyber-circuit circuit-right"/><i className="cyber-halo halo-one"/><i className="cyber-halo halo-two"/><i className="cyber-rail"/></div>
     <svg width="0" height="0" aria-hidden="true" style={{ position: "absolute" }}><defs><filter id="esx-remove-black" colorInterpolationFilters="sRGB"><feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  1 1 1 0 0" /></filter></defs></svg>
     <header className={`esx-header ${menuOpen ? "menu-open" : ""}`} ><span aria-hidden="true" className="header-glass" style={{ backdropFilter: "blur(24px) saturate(145%)", WebkitBackdropFilter: "blur(24px) saturate(145%)" }} /><div className="header-inner">
       <a className="header-logo" href={navigationHref('home')} aria-label={`ESX — ${t[0]}`}><Image src="/esx-logo.png" alt="ESX" width={1254} height={1254} sizes="(max-width: 760px) 64px, 80px" preload /></a>
       <button type="button" className="menu-toggle" aria-label={t[44]} aria-expanded={menuOpen} aria-controls="main-navigation" onClick={() => setMenuOpen(!menuOpen)}><span/><span/><span/></button>
-      <nav id="main-navigation" aria-label={t[44]}>{navigation.map(({id,label:i})=><Link style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }} onClick={() => setMenuOpen(false)} className={i===4?'nav-contact':''} href={navigationHref(id)} key={id}>{t[i]}{i===4&&<span>↗</span>}</Link>)}</nav>
+      <nav id="main-navigation" aria-label={t[44]}>{navigation.map(({id,label:i})=><Link style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }} onClick={() => setMenuOpen(false)} className={i===4?'nav-contact':''} href={navigationHref(id)} key={id}>{t[i]}{i===4&&<span>↗</span>}</Link>)}<AccountLink language={language} onClick={() => setMenuOpen(false)} /></nav>
     </div></header>
     {menuOpen && <div className="mobile-menu-backdrop" style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }} aria-hidden="true" onClick={() => setMenuOpen(false)} />}
     <main key={section} className="site-main page-enter">
@@ -131,7 +138,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
 <section id="advertising" className="advertising"><div><div className="eyebrow">{t[3]}</div><h1 style={{ fontSize: 'clamp(30px, 3.3vw, 43px)', lineHeight: 1.1 }}>{t[26]}</h1><p>{t[27]}</p><a href="/contact" className="button light">{t[31]} ↗</a></div><div className="ad-formats"><small>{t[45]}</small>{[28,29,30].map((n,i)=><div key={n}><span>0{i+1}</span><h3>{t[n]}</h3><span>↗</span></div>)}</div></section>
       )}
       {section === 'home' && <>
-      <BusinessHero language={language} onStart={()=>setRoom(`${window.location.origin}/chat/${crypto.randomUUID()}`)} />
+      <BusinessHero language={language} onStart={startConversation} />
       {room&&<section ref={inviteRef} tabIndex={-1} className="invite" aria-label={t[12]}><div><h2>{t[12]}</h2><p>{t[13]}</p><a className="button blue" href={room}>{t[8]} ↗</a></div><QRCodeSVG value={room} size={180} title={t[12]}/></section>}
       <UsefulApps language={language} />
 
@@ -147,11 +154,11 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
       <section id="contact" className="contact"><div><div className="eyebrow blue-ink">{t[4]}</div><h1 style={{ fontSize: 'clamp(30px, 3.3vw, 43px)', lineHeight: 1.1 }}>{t[32]}</h1><p>{t[33]}</p><div className="contact-phone" aria-label="English / 한국어"><div className="phone-speaker" aria-hidden="true"/><div className="phone-chat-title">ESX<span>EN ↔ KO</span></div><div className="phone-messages"><div className="phone-message incoming"><span lang="en">Hi! How are you?</span><small lang="ko">안녕하세요! 잘 지내세요?</small></div><div className="phone-message outgoing"><span lang="ko">네, 잘 지내요! 반가워요.</span><small lang="en">I am doing well! Nice to meet you.</small></div></div><div className="phone-compose" aria-hidden="true"><span>···</span><span>↑</span></div><div className="phone-home" aria-hidden="true"/></div></div><form onSubmit={e=>{e.preventDefault();try{localStorage.setItem('esx-contact-draft',JSON.stringify(draft));setSaved('saved');}catch{setSaved('error');}}}><div className="form-row">{(['name','email'] as const).map((key,i)=><label key={key}>{t[34+i]}<input required type={key==='email'?'email':'text'} autoComplete={key} value={draft[key]} onChange={e=>{setDraft({...draft,[key]:e.target.value});setSaved(null);}}/></label>)}</div><label>{t[36]}<textarea required rows={4} value={draft.message} onChange={e=>{setDraft({...draft,message:e.target.value});setSaved(null);}}/></label><p className="form-note">{t[38]}</p><button className="button blue" type="submit">{t[37]} ↗</button><p role="status">{saved?t[saved==='saved'?39:47]:''}</p></form></section>
       )}
     </main>
-    <footer className="esx-footer"><div><a className="footer-logo" href={navigationHref('home')} aria-label={`ESX — ${t[0]}`}><Image src="/esx-logo-white.svg" alt="ESX" width={100} height={100} unoptimized /></a><p>{t[40]}</p></div><nav aria-label={t[44]}>{navigation.map(({id,label:i})=><a href={navigationHref(id)} key={id}>{t[i]}</a>)}</nav><div className="footer-bottom"><span>© {new Date().getFullYear()} ESX</span><span>{t[5]} ↗</span></div></footer>
+    <footer className="esx-footer"><div><a className="footer-logo" href={navigationHref('home')} aria-label={`ESX — ${t[0]}`}><Image src="/esx-logo-white.svg" alt="ESX" width={100} height={100} unoptimized /></a><p>{t[40]}</p></div><nav aria-label={t[44]}>{navigation.map(({id,label:i})=><a href={navigationHref(id)} key={id}>{t[i]}</a>)}<AccountLink language={language} /></nav><div className="footer-bottom"><span>© {new Date().getFullYear()} ESX</span><span>{t[5]} ↗</span></div></footer>
     <button type="button" className="back-to-top floating-menu-toggle" aria-label={t[44]} aria-expanded={menuOpen} aria-controls="main-navigation" onClick={() => setMenuOpen(value => !value)}>
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d={menuOpen ? 'M6 6L18 18M18 6L6 18' : 'M4 6H20M4 12H20M4 18H20'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
     </button>
-    <button type="button" className="back-to-top floating-chat-toggle" aria-label={t[8]} title={t[8]} onClick={() => { window.location.assign(`/chat/${crypto.randomUUID()}`); }}>
+    <button type="button" className="back-to-top floating-chat-toggle" aria-label={t[8]} title={t[8]} onClick={async () => { const { data: { session } } = await supabase.auth.getSession(); window.location.assign(session ? '/account' : `/chat/${crypto.randomUUID()}`); }}>
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-8 8H5l-3 3v-11a9 9 0 0 1 18 0Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round"/><path d="M7 10h10M7 14h6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/></svg>
     </button>
     <BackToTop language={language} />

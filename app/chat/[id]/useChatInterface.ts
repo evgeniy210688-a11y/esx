@@ -21,11 +21,11 @@ function subscribe(update: () => void) {
 function getLanguage(): Language {
   try {
     const value = localStorage.getItem("esx-language");
-    return languages.find(language => language.code === value)?.code ?? "ru";
-  } catch { return "ru"; }
+    return languages.find(language => language.code === value)?.code ?? "en";
+  } catch { return "en"; }
 }
 export default function useChatInterface(selectedLanguage?: Language | null) {
-  const storedLanguage = useSyncExternalStore(subscribe, getLanguage, () => "ru" as Language);
+  const storedLanguage = useSyncExternalStore(subscribe, getLanguage, () => "en" as Language);
   const language = selectedLanguage ?? storedLanguage;
   return { language, text: text[language] };
 }
