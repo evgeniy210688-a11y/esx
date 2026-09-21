@@ -1,17 +1,20 @@
 # Email/password registration and permanent account QR
 
-Final owner choice on 2026-09-20: email and password with confirmation by email. Username and SMS registration have been removed. Confirm email was re-enabled in Supabase after this choice.
+Owner choice on 2026-09-21: username, email, password, password confirmation, then a six-digit code sent by email. Successful code verification signs the user in and opens the account. No additional registration fields are required.
 
 ## Flow
 - /account has Register and Sign in tabs. Signup collects username, email, password and password confirmation. Username is normalized and stored as profile display metadata; it is not a unique authentication identifier. Sign-in remains email/password, and authorization never relies on editable metadata.
 - Supabase handles password hashing, confirmation and sessions; the app never stores passwords.
-- Signup and resend use the browser client's PKCE flow and /auth/callback, preserving a validated /connect or /messages destination.
-- Open the confirmation link in the same browser as signup. If the PKCE exchange fails, the account screen shows recovery instructions. A confirmed account can subsequently sign in with its email/password.
+- Signup stores the selected interface language in user metadata for the confirmation email. The form and code screen support all eight site languages.
+- Signup and resend send the confirmation OTP. The app calls `verifyOtp({ email, token, type: 'email' })`; Supabase creates a session and the existing auth listener opens the account. A validated /connect or /messages destination is still preserved when registration began from an invitation.
+- Confirmation requires exactly six digits, including leading zeroes. Invalid/expired codes leave the user on the code screen with a translated error. A confirmed account can subsequently sign in with email/password.
 - Confirmation screen supports resend with 60-second UI cooldown. Supabase rate limits remain the actual enforcement.
 - Photos are added/changed/removed in the cabinet after email confirmation.
 
-## Launch blocker
-Custom SMTP was not configured in the last verified dashboard state. Supabase's default sender is restricted and is not suitable for public signup. Configure an owner-controlled mail provider and verify actual confirmation delivery before claiming signup is live for everyone. Do not commit SMTP credentials.
+## Hosted email configuration
+Verified in the dashboard on 2026-09-21: Confirm email enabled; custom SMTP enabled with smtp.resend.com, port 465, sender name ESX, and a 60-second minimum interval. SMTP credentials were not read or changed.
+Updated and saved the Confirm sign up template to `supabase/templates/confirmation.html`, with subject `ESX · {{ .Token }}`. The template uses the selected language and displays `{{ .Token }}` instead of a confirmation link. Set Email OTP length to 6; expiration remains 3600 seconds.
+Deploy the updated application together with these hosted settings. Actual inbox delivery and live code-to-session verification still require an end-to-end mailbox test. Do not commit SMTP credentials.
 Site URL: https://www.88esx.com/account. Allowed production redirect: https://www.88esx.com/auth/callback**. Local callback must be separately allowlisted for local email tests.
 
 ## Photos and privacy
@@ -26,11 +29,11 @@ JPEG/PNG/WebP files up to 10 MB are cropped and re-encoded as 320px JPEG without
 
 ## Routes
 - /account: email signup/signin, photo, permanent QR and inbox.
-- /auth/callback: code exchange and validated redirect.
+- /auth/callback: legacy email-link code exchange and validated redirect; new registrations use the in-page OTP form.
 - /connect/<token>: authenticated scan opens canonical private conversation for the pair.
 - /messages/<id>: private messages enforced by RLS.
 
 ## Checks
-node --test tests/account-path.test.cjs tests/translate-route.test.cjs
+node --test tests/registration.test.cjs tests/account-path.test.cjs tests/translate-route.test.cjs
 npm run build
-After SMTP setup: test delivered confirmation, invalid/expired link, resend, sign-in before/after confirmation, unchanged QR and invitation continuation.
+With a test mailbox: check delivered six-digit code, invalid/expired code, resend, automatic account entry after verification, password sign-in, unchanged QR and invitation continuation.

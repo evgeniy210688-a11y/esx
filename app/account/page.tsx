@@ -7,6 +7,7 @@ import { safeAccountNext } from '@/lib/account-path';
 import useChatInterface from '@/app/chat/[id]/useChatInterface';
 import useAccount from './useAccount';
 import EmailSignIn from './EmailSignIn';
+import { registrationLabels } from './registrationLabels';
 import ProfilePhoto from './ProfilePhoto';
 
 type Conversation = { id: string; participant_a: string; participant_b: string };
@@ -44,9 +45,9 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
     const timer = window.setInterval(() => { if (!document.hidden) void load(); }, 10000);
     return () => { stopped = true; clearInterval(timer); };
   }, [user, reload]);
-  return <main className="account-page" lang={language === 'ru' ? 'ru' : 'en'}><div className="account-shell">
-    <nav className="account-nav"><Link href="/">{c('← ESX · Главная', '← ESX · Home')}</Link>{user && <button className="account-secondary" onClick={async () => { const { error } = await supabase.auth.signOut(); if (error) setStatus(c('Не удалось выйти. Повторите.', 'Could not sign out. Please retry.')); }}>{c('Выйти', 'Sign out')}</button>}</nav>
-    {!ready ? <p role="status">{c('Загрузка…', 'Loading…')}</p> : !user ? <EmailSignIn russian={language === 'ru'} /> : <>
+  return <main className="account-page" lang={language}><div className="account-shell">
+    <nav className="account-nav"><Link href="/">{registrationLabels[language].home}</Link>{user && <button className="account-secondary" onClick={async () => { const { error } = await supabase.auth.signOut(); if (error) setStatus(c('Не удалось выйти. Повторите.', 'Could not sign out. Please retry.')); }}>{c('Выйти', 'Sign out')}</button>}</nav>
+    {!ready ? <p role="status">{registrationLabels[language].loading}</p> : !user ? <EmailSignIn language={language} /> : <>
       <header className="account-welcome"><h1>{c('Личный кабинет', 'My account')}</h1>{username && <p>{c('Логин', 'Username')}: <strong>{username}</strong></p>}<p className="account-muted">{user.email || user.phone}</p><ProfilePhoto userId={user.id} russian={language === 'ru'} /></header>
       <section className="account-card"><h2>{c('Мой постоянный QR-код', 'My permanent QR code')}</h2><p>{c('Этот QR-код закреплён за вашим аккаунтом и остаётся прежним при повторном входе. Покажите его собеседнику: после входа он откроет отдельную переписку с вами.', 'This QR code stays with your account when you sign in again. Share it with someone: after signing in, they can open a separate private conversation with you.')}</p>
         {!qr && !loadError && <p role="status">{c('Загружаем ваш QR-код…', 'Loading your QR code…')}</p>}

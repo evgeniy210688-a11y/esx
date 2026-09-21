@@ -1,0 +1,22 @@
+<!doctype html>
+<html><body style="font-family:Arial,sans-serif;color:#10243b;padding:24px">
+<h1>ESX</h1>
+{{ if eq .Data.language "ru" }}
+<p>Введите этот код на странице регистрации ESX, чтобы подтвердить почту и открыть личный кабинет.</p>
+{{ else if eq .Data.language "ko" }}
+<p>ESX 회원가입 페이지에 이 코드를 입력하면 이메일 인증 후 내 계정이 열립니다.</p>
+{{ else if eq .Data.language "zh" }}
+<p>在 ESX 注册页面输入此验证码，验证邮箱后即可进入个人账户。</p>
+{{ else if eq .Data.language "tr" }}
+<p>E-postanızı doğrulamak ve hesabınızı açmak için bu kodu ESX kayıt sayfasına girin.</p>
+{{ else if eq .Data.language "vi" }}
+<p>Nhập mã này trên trang đăng ký ESX để xác nhận email và mở tài khoản.</p>
+{{ else if eq .Data.language "km" }}
+<p>បញ្ចូលកូដនេះនៅលើទំព័រចុះឈ្មោះ ESX ដើម្បីបញ្ជាក់អ៊ីមែល និងបើកគណនីរបស់អ្នក។</p>
+{{ else if eq .Data.language "kk" }}
+<p>Поштаңызды растап, жеке кабинетке кіру үшін осы кодты ESX тіркелу бетіне енгізіңіз.</p>
+{{ else }}
+<p>Enter this code on the ESX registration page to confirm your email and open your account.</p>
+{{ end }}
+<p style="font-size:32px;font-weight:bold;letter-spacing:6px">{{ .Token }}</p>
+</body></html>
