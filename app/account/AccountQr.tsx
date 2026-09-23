@@ -1,4 +1,5 @@
 "use client";
+import { accountLabels, type AccountMessage } from './accountLabels';
 
 import { useRef, useState } from 'react';
 import { QRCodeCanvas, QRCodeSVG } from 'qrcode.react';
@@ -18,14 +19,14 @@ async function loadLogo() {
   return logo;
 }
 
-export default function AccountQr({ url, username, russian }: { url: string; username: string; russian: boolean }) {
+export default function AccountQr({ url, username, language }: { url: string; username: string; language: Language }) {
   const qrCanvas = useRef<HTMLCanvasElement>(null);
   const [busy, setBusy] = useState(false);
-  const [status, setStatus] = useState('');
-  const c = (ru: string, en: string) => russian ? ru : en;
-  const title = c('Мой постоянный QR-код', 'My permanent QR code');
-  const instruction = c('Сканируйте, чтобы начать чат', 'Scan to start a chat');
-  const caption = c('Регистрация не нужна', 'No registration needed');
+  const [status, setStatus] = useState<AccountMessage | ''>('');
+  const t = accountLabels[language];
+  const title = t.qrTitle;
+  const instruction = t.scanInstruction;
+  const caption = t.noRegistration;
 
   async function download() {
     if (!qrCanvas.current || busy) return;
@@ -65,7 +66,7 @@ export default function AccountQr({ url, username, russian }: { url: string; use
       document.body.appendChild(link); link.click(); link.remove();
       window.setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
     } catch {
-      setStatus(c('Не удалось скачать PDF. Попробуйте ещё раз или нажмите «Распечатать».', 'Could not download the PDF. Try again or use Print.'));
+      setStatus('pdfError');
     } finally { setBusy(false); }
   }
 
@@ -73,11 +74,11 @@ export default function AccountQr({ url, username, russian }: { url: string; use
     <div className="account-qr"><QRCodeSVG value={url} size={240} level="M" marginSize={4} title={title} /></div>
     <a className="account-link" href={url}>{url}</a>
     <div className="account-actions">
-      <button onClick={async () => { try { await navigator.clipboard.writeText(url); setStatus(c('Ссылка скопирована.', 'Link copied.')); } catch { setStatus(c('Скопируйте ссылку под QR-кодом вручную.', 'Copy the link below the QR code manually.')); } }}>{c('Скопировать ссылку', 'Copy link')}</button>
-      <button onClick={async () => { try { await loadLogo(); window.print(); } catch { setStatus(c('Не удалось загрузить логотип. Попробуйте ещё раз.', 'Could not load the logo. Please try again.')); } }}>{c('Распечатать', 'Print')}</button>
-      <button onClick={download} disabled={busy}>{busy ? c('Создаём PDF…', 'Creating PDF…') : c('Скачать PDF', 'Download PDF')}</button>
+      <button onClick={async () => { try { await navigator.clipboard.writeText(url); setStatus('linkCopied'); } catch { setStatus('copyError'); } }}>{t.copyLink}</button>
+      <button onClick={async () => { try { await loadLogo(); window.print(); } catch { setStatus('logoError'); } }}>{t.print}</button>
+      <button onClick={download} disabled={busy}>{busy ? t.creatingPdf : t.downloadPdf}</button>
     </div>
-    <p role="status" className="account-status">{status}</p>
+    <p role="status" className="account-status">{status ? t[status] : ''}</p>
     <div hidden aria-hidden="true"><QRCodeCanvas ref={qrCanvas} value={url} size={1024} level="M" marginSize={4} /></div>
     <section className="account-qr-print" aria-label={title}>
       <Image className="qr-print-logo" src="/esx-logo.png" alt="ESX" width={140} height={140} loading="eager" unoptimized />
