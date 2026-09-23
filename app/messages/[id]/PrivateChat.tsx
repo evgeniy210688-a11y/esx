@@ -14,6 +14,7 @@ export default function PrivateChat({ chatId }: { chatId: string }) {
 }
 function PrivateChatContent({ chatId, user, ready }: { chatId: string } & ReturnType<typeof useAccount>) {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [names, setNames] = useState<Record<string, string | null>>({});
   const [draft, setDraft] = useState('');
   const [sending, setSending] = useState(false);
   const [allowed, setAllowed] = useState(false);
@@ -43,9 +44,13 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
         const conversation = await supabase.from('esx_conversations').select('id').eq('id', chatId).maybeSingle();
         if (stopped) return;
         if (conversation.error || !conversation.data) { setAllowed(false); setMessages([]); setStatus('Переписка недоступна. Войдите в аккаунт одного из участников.'); return; }
-        const result = await supabase.from('esx_private_messages').select('id,sender_id,message,created_at').eq('chat_id', chatId).order('created_at', { ascending: false }).order('id', { ascending: false }).limit(limit);
+        const [result, participants] = await Promise.all([
+          supabase.from('esx_private_messages').select('id,sender_id,message,created_at').eq('chat_id', chatId).order('created_at', { ascending: false }).order('id', { ascending: false }).limit(limit),
+          supabase.rpc('esx_chat_participants', { conversation_id: chatId }),
+        ]);
         if (stopped) return;
-        if (result.error) { setStatus('Не удалось загрузить сообщения. Повторите.'); return; }
+        if (result.error || participants.error) { setStatus('Не удалось загрузить сообщения. Повторите.'); return; }
+        setNames(Object.fromEntries((participants.data ?? []).map((person: { user_id: string; username: string | null }) => [person.user_id, person.username])));
         setAllowed(true); setMessages((result.data ?? []).reverse()); setOlder(result.data.length === limit); setStatus('');
       } catch { if (!stopped) setStatus('Не удалось загрузить сообщения. Проверьте соединение.'); }
       finally { loading = false; if (!stopped) setLoaded(true); }
@@ -67,11 +72,13 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
     finally { sendLock.current = false; setSending(false); }
   }
   return <main className="account-page" lang="ru"><div className="account-shell"><nav className="account-nav"><Link href="/account">← Мои переписки</Link><Link href="/account">Мой QR-код</Link></nav><h1>Личная переписка</h1>
+    {user?.is_anonymous && <p className="account-muted">Вы общаетесь как гость. Чат доступен в этом браузере, пока сохранена гостевая сессия. <Link href="/account">Зарегистрироваться для постоянного QR-кода</Link></p>}
     {!ready ? <p role="status">Загрузка…</p> : !user ? <Link className="account-button" href={`/account?next=${encodeURIComponent(`/messages/${chatId}`)}`}>Войти / зарегистрироваться</Link> : <>
       <label>Язык входящих сообщений <select value={target} onChange={event => setTarget(event.target.value as Language)}>{languages.map(item => <option key={item.code} value={item.code}>{item.name}</option>)}</select></label>
       {!loaded && <p role="status">Загрузка сообщений…</p>}
       {older && <button className="account-secondary" onClick={() => setLimit(value => value + 100)}>Показать более ранние сообщения</button>}
       <div className="private-list">{messages.map(message => <article key={message.id} className={`private-bubble${message.sender_id === user.id ? ' private-own' : ''}`}>
+        <strong className="chat-sender" dir="auto">{names[message.sender_id] || 'Гость'}</strong>
         {message.sender_id === user.id ? <span dir="auto">{message.message}</span> : <MessageTranslation key={`${message.id}:${target}`} chatId={chatId} messageId={message.id} language={target} target={target} privateChat />}
         <time dateTime={message.created_at}>{new Date(message.created_at).toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' })}</time>
       </article>)}{loaded && allowed && !messages.length && <p className="account-muted">Начните разговор. Сообщения видны только вам и собеседнику.</p>}</div>

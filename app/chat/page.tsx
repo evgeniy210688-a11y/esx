@@ -1,6 +1,7 @@
 "use client";
 
 import HomeLink from "@/app/components/HomeLink";
+import Link from 'next/link';
 
 import { useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
@@ -14,7 +15,7 @@ export default function ChatPage() {
     let active = true;
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!active) return;
-      if (session) { window.location.replace('/account'); return; }
+      if (session && !session.user.is_anonymous) { window.location.replace('/account'); return; }
       const id = crypto.randomUUID();
       setChatId(id);
       setChatLink(`${window.location.origin}/chat/${id}`);
@@ -35,12 +36,12 @@ export default function ChatPage() {
 
         {/* Header */}
         <header className="flex items-center justify-between">
-          <a
+          <Link
             href="/"
             className="text-2xl font-bold tracking-tight"
           >
             ESX
-          </a>
+          </Link>
 
           <span className="text-sm text-zinc-400">
             Private Chat

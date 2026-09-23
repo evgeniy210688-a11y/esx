@@ -19,6 +19,7 @@ type Message = {
   chat_id: string;
   message: string;
   created_at: string;
+  sender_login?: string | null;
 };
 
 export default function ChatRoomClient({
@@ -226,6 +227,7 @@ export default function ChatRoomClient({
                 key={msg.id}
                 className={`chat-message ${ownMessageIds.has(msg.id) ? "chat-message-own" : "chat-message-incoming"}`}
               >
+                {msg.sender_login && <strong className="block text-sm mb-1" dir="auto">{msg.sender_login}</strong>}
                 {ownMessageIds.has(msg.id) ? <span dir="auto">{msg.message}</span>
                   : translationLanguage ? <MessageTranslation key={`${chatId}:${msg.id}:${translationLanguage}`} chatId={chatId} messageId={msg.id} target={translationLanguage} language={translationLanguage} />
                   : <span>{ui.loading}</span>}

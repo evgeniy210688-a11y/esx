@@ -120,7 +120,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
   function choose(lang:Language) {setLanguage(lang);try {localStorage.setItem('esx-language',lang);}catch{}}
   async function startConversation() {
     const { data: { session } } = await supabase.auth.getSession();
-    if (session) window.location.assign('/account');
+    if (session && !session.user.is_anonymous) window.location.assign('/account');
     else setRoom(`${window.location.origin}/chat/${crypto.randomUUID()}`);
   }
   return <div ref={siteRef} className={`esx-site${section === 'korea' ? ' korea-silk-theme' : ''}`} lang={language}><div className="cyber-background" aria-hidden="true"><i className="cyber-circuit circuit-left"/><i className="cyber-circuit circuit-right"/><i className="cyber-halo halo-one"/><i className="cyber-halo halo-two"/><i className="cyber-rail"/></div>
@@ -158,7 +158,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
     <button type="button" className="back-to-top floating-menu-toggle" aria-label={t[44]} aria-expanded={menuOpen} aria-controls="main-navigation" onClick={() => setMenuOpen(value => !value)}>
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d={menuOpen ? 'M6 6L18 18M18 6L6 18' : 'M4 6H20M4 12H20M4 18H20'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
     </button>
-    <button type="button" className="back-to-top floating-chat-toggle" aria-label={t[8]} title={t[8]} onClick={async () => { const { data: { session } } = await supabase.auth.getSession(); window.location.assign(session ? '/account' : `/chat/${crypto.randomUUID()}`); }}>
+    <button type="button" className="back-to-top floating-chat-toggle" aria-label={t[8]} title={t[8]} onClick={async () => { const { data: { session } } = await supabase.auth.getSession(); window.location.assign(session && !session.user.is_anonymous ? '/account' : `/chat/${crypto.randomUUID()}`); }}>
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-8 8H5l-3 3v-11a9 9 0 0 1 18 0Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round"/><path d="M7 10h10M7 14h6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/></svg>
     </button>
     <BackToTop language={language} />

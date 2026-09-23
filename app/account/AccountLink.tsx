@@ -9,5 +9,5 @@ const labels: Record<Language, [string, string]> = {
 };
 export default function AccountLink({ language, onClick }: { language: Language; onClick?: () => void }) {
   const { user } = useAccount();
-  return <Link className="nav-registration" href="/account" onClick={onClick}>{labels[language][user ? 1 : 0]}</Link>;
+  return <Link className="nav-registration" href="/account" onClick={onClick}>{labels[language][user && !user.is_anonymous ? 1 : 0]}</Link>;
 }

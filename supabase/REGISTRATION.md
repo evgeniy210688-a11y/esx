@@ -30,10 +30,21 @@ JPEG/PNG/WebP files up to 10 MB are cropped and re-encoded as 320px JPEG without
 ## Routes
 - /account: email signup/signin, photo, permanent QR and inbox.
 - /auth/callback: legacy email-link code exchange and validated redirect; new registrations use the in-page OTP form.
-- /connect/<token>: authenticated scan opens canonical private conversation for the pair.
+- /connect/<token>: scanning opens a guest session automatically when no session exists, then opens the canonical private conversation for the pair. No registration form is required.
 - /messages/<id>: private messages enforced by RLS.
 
 ## Checks
 node --test tests/registration.test.cjs tests/account-path.test.cjs tests/translate-route.test.cjs
 npm run build
 With a test mailbox: check delivered six-digit code, invalid/expired code, resend, automatic account entry after verification, password sign-in, unchanged QR and invitation continuation.
+
+## Guest scanning (2026-09-22)
+- `migrations/20260922_guest_chat.sql` is already present in the hosted database, verified on 2026-09-23 through its RPC and rolled-back behavioral checks. Do not rerun it. It removes QR tokens from anonymous profiles, preserves existing registered users' QR tokens, and exposes only participant logins through a membership-checked RPC. Profile RLS stays owner-only.
+- Enable **Authentication → Sign In / Providers → Anonymous Sign-Ins** in Supabase. This is required for `signInAnonymously()`; the anonymous session still uses authenticated RLS and can access only its own conversations. No service-role key is needed in the app.
+- Registered participants' logins are displayed above messages. Temporary rooms store the server-assigned login for new messages; old messages have no recoverable sender identity.
+- Guest sessions persist in the current browser. Clearing browser data or signing out loses guest access. Registering a new account uses the existing signup flow and starts separate account history; guest chats are not migrated.
+- The account page offers registration to guests for a permanent QR and links to their current guest conversations.
+- Enabled Anonymous Sign-Ins in the hosted Supabase dashboard on 2026-09-23 with owner approval. Guest sessions use the authenticated role and the participant-only RLS checks described below. Only the public project URL and publishable key are configured locally.
+- Hosted transactional checks passed on 2026-09-23: guest QR is null, repeated scans reuse a conversation, registered login is visible only to participants, guest metadata cannot spoof a registered login, unrelated guests cannot read/write the conversation, upgraded guests receive a QR, and the owner's QR remains unchanged. All synthetic fixtures were rolled back.
+- If guest sign-in fails, the QR screen offers retry and account sign-in with the invitation preserved. A response without a session is treated as a failed sign-in. Guest account loading errors also offer retry.
+- Run `node --test tests/guest-session.test.cjs tests/registration.test.cjs tests/account-path.test.cjs tests/translate-route.test.cjs`, `npx tsc --noEmit`, and `npm run build`. Run `tests/guest-chat.sql` against the migrated database; its synthetic data rolls back.
