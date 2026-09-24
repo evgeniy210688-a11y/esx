@@ -1,12 +1,12 @@
 "use client";
 import { accountLabels, type AccountMessage } from './accountLabels';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Image from 'next/image';
 import type { Language } from '@/app/design/content';
 import { supabase } from '@/lib/supabase';
 import { prepareAccountPhoto } from '@/lib/account-photo';
 
-export default function ProfilePhoto({ userId, language }: { userId: string; language: Language }) {
+export default function ProfilePhoto({ userId, language, children }: { userId: string; language: Language; children?: ReactNode }) {
   const t = accountLabels[language];
   const fileInput = useRef<HTMLInputElement>(null);
   const [photo, setPhoto] = useState('');
@@ -31,7 +31,10 @@ export default function ProfilePhoto({ userId, language }: { userId: string; lan
     setStatus('photoSaved');
   }
   return <div className="account-profile-photo">
+    <div className="account-profile-summary">
     {photo ? <Image unoptimized width={96} height={96} className="account-avatar" src={photo} alt={t.photoAlt} /> : <span className="account-avatar account-avatar-empty" aria-hidden="true">ESX</span>}
+    <div className="account-profile-details">{children}</div>
+    </div>
     <button type="button" disabled={busy} onClick={() => fileInput.current?.click()}>{t.changePhoto}</button>
     <input ref={fileInput} type="file" hidden aria-label={t.changePhoto} accept="image/jpeg,image/png,image/webp" disabled={busy} onChange={async event => {
       const file = event.target.files?.[0]; event.target.value = ''; if (!file) return;
