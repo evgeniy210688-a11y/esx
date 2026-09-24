@@ -13,7 +13,7 @@ const translatorLabels: Record<Language, string> = {
 
 async function loadLogo() {
   const logo = new window.Image();
-  logo.src = '/esx-logo.png';
+  logo.src = '/esx-logo-print.png';
   await logo.decode();
   await document.fonts.ready;
   return logo;
@@ -82,7 +82,7 @@ export default function AccountQr({ url, username, language, children }: { url: 
     <p role="status" className="account-status">{status ? t[status] : ''}</p>
     <div hidden aria-hidden="true"><QRCodeCanvas ref={qrCanvas} value={url} size={1024} level="M" marginSize={4} /></div>
     <section className="account-qr-print" aria-label={title}>
-      <Image className="qr-print-logo" src="/esx-logo.png" alt="ESX" width={140} height={140} loading="eager" unoptimized />
+      <Image className="qr-print-logo" src="/esx-logo-print.png" alt="ESX" width={140} height={140} loading="eager" unoptimized />
       <div className="qr-print-languages">{languages.map(({ code }) => <p key={code} lang={code}>{translatorLabels[code]}</p>)}</div>
       {username && <p className="qr-print-login" dir="auto">{username}</p>}
       <QRCodeSVG value={url} size={400} level="M" marginSize={4} title={title} />
