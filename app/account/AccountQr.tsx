@@ -1,7 +1,7 @@
 "use client";
 import { accountLabels, type AccountMessage } from './accountLabels';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import { QRCodeCanvas, QRCodeSVG } from 'qrcode.react';
 import Image from 'next/image';
 import { languages, type Language } from '@/app/design/content';
@@ -19,7 +19,7 @@ async function loadLogo() {
   return logo;
 }
 
-export default function AccountQr({ url, username, language }: { url: string; username: string; language: Language }) {
+export default function AccountQr({ url, username, language, children }: { url: string; username: string; language: Language; children?: ReactNode }) {
   const qrCanvas = useRef<HTMLCanvasElement>(null);
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState<AccountMessage | ''>('');
@@ -72,6 +72,7 @@ export default function AccountQr({ url, username, language }: { url: string; us
 
   return <>
     <div className="account-qr"><QRCodeSVG value={url} size={240} level="M" marginSize={4} title={title} /></div>
+    {children}
     <a className="account-link" href={url}>{url}</a>
     <div className="account-actions">
       <button onClick={async () => { try { await navigator.clipboard.writeText(url); setStatus('linkCopied'); } catch { setStatus('copyError'); } }}>{t.copyLink}</button>

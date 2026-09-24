@@ -79,11 +79,12 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
       <section className="account-card"><h2>{t.qrTitle}</h2><p>{t.qrHelp}</p>
         <p className="account-muted">{t.guestChatNote}</p>
         {!qr && !loadError && <p role="status">{t.qrLoading}</p>}
-        {qr && <AccountQr url={qr} username={username} language={language} />}
-        <div className="account-actions"><button disabled={waitingForChat} onClick={() => {
+        {qr && <AccountQr url={qr} username={username} language={language}>
+        <div className="account-qr-primary"><button disabled={waitingForChat} onClick={() => {
           if (chats.length) router.push(`/messages/${chats[0].id}`);
           else { setWaitingForChat(true); setReload(value => value + 1); }
         }}>{t.openChat}</button></div>
+        </AccountQr>}
         {waitingForChat && <p role="status">{t.waitingForChat}</p>}
       </section>
       <section className="account-card"><h2>{t.conversations}</h2>{chats.length ? <ul className="account-chats">{chats.map(chat => <li key={chat.id}><Link href={'/messages/' + chat.id}>{t.contact} {(chat.participant_a === user.id ? chat.participant_b : chat.participant_a).slice(0, 8)} →</Link></li>)}</ul> : <p className="account-muted">{t.empty}</p>}</section>
