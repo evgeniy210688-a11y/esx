@@ -71,10 +71,10 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
     </div>
   </div>;
   return <div className="esx-site account-site" lang={language}><SiteHeader language={language} /><main className="account-page"><div className="account-shell">
-    {user && <div className="account-nav"><button className="account-secondary" onClick={async () => { const { error } = await supabase.auth.signOut(); if (error) setStatus('signOutError'); }}>{t.signOut}</button></div>}
+    {user && <div className="account-nav">{ready && !user.is_anonymous && <h1>{t.title}</h1>}<button className="account-secondary" onClick={async () => { const { error } = await supabase.auth.signOut(); if (error) setStatus('signOutError'); }}>{t.signOut}</button></div>}
     {(!ready || !user || user.is_anonymous) && languagePicker}
     {!ready ? <p role="status">{registrationLabels[language].loading}</p> : !user || user.is_anonymous ? <><p className="account-muted">{t.registrationHelp}</p><EmailSignIn language={language} />{user && <section className="account-card"><h2>{t.guestConversations}</h2><p className="account-muted">{t.guestHelp}</p><ul className="account-chats">{chats.map(chat => <li key={chat.id}><Link href={'/messages/' + chat.id}>{t.conversation} {chat.id.slice(0, 8)} →</Link></li>)}</ul></section>}</> : <>
-      <header className="account-welcome"><h1>{t.title}</h1>{username && <p>{t.username}: <strong>{username}</strong></p>}<p className="account-muted">{user.email || user.phone}</p><ProfilePhoto userId={user.id} language={language} />{languagePicker}</header>
+      <header className="account-welcome">{username && <p>{t.username}: <strong>{username}</strong></p>}<p className="account-muted">{user.email || user.phone}</p><ProfilePhoto userId={user.id} language={language} />{languagePicker}</header>
       <section className="account-card"><h2>{t.qrTitle}</h2><p>{t.qrHelp}</p>
         <p className="account-muted">{t.guestChatNote}</p>
         {!qr && !loadError && <p role="status">{t.qrLoading}</p>}
