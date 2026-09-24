@@ -10,6 +10,7 @@ import useAccount from './useAccount';
 import EmailSignIn from './EmailSignIn';
 import { registrationLabels } from './registrationLabels';
 import ProfilePhoto from './ProfilePhoto';
+import SiteHeader from '@/app/design/SiteHeader';
 import { languages, type Language } from '@/app/design/content';
 
 const languageLabels: Record<Language, string> = {
@@ -54,8 +55,8 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
     const timer = window.setInterval(() => { if (!document.hidden) void load(); }, 10000);
     return () => { stopped = true; clearInterval(timer); };
   }, [user, reload]);
-  return <main className="account-page" lang={language}><div className="account-shell">
-    <nav className="account-nav"><Link href="/">{registrationLabels[language].home}</Link>{user && <button className="account-secondary" onClick={async () => { const { error } = await supabase.auth.signOut(); if (error) setStatus('signOutError'); }}>{t.signOut}</button>}</nav>
+  return <div className="esx-site account-site" lang={language}><SiteHeader language={language} /><main className="account-page"><div className="account-shell">
+    {user && <div className="account-nav"><button className="account-secondary" onClick={async () => { const { error } = await supabase.auth.signOut(); if (error) setStatus('signOutError'); }}>{t.signOut}</button></div>}
     <label className="account-language">
       <span>{languageLabels[language]}</span>
       <select value={language} onChange={event => {
@@ -77,5 +78,5 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
     </>}
     {ready && user && loadError && <p role="alert">{t.loadError} <button onClick={() => setReload(value => value + 1)}>{t.retry}</button></p>}
     <p className="account-status" role="status">{status ? t[status] : ''}</p>
-  </div></main>;
+  </div></main></div>;
 }
