@@ -61,21 +61,20 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
     const timer = window.setInterval(() => { if (!document.hidden) void load(); }, 10000);
     return () => { stopped = true; clearInterval(timer); };
   }, [user, reload]);
+  const languagePicker = <div className="account-language" role="group" aria-label={languageLabels[language]}>
+    <span>{languageLabels[language]}</span>
+    <div className="account-language-grid">
+      {languages.map(item => <button type="button" key={item.code} lang={item.code} aria-pressed={language === item.code} onClick={() => {
+        setSelectedLanguage(item.code);
+        try { localStorage.setItem('esx-language', item.code); } catch {}
+      }}>{item.name}</button>)}
+    </div>
+  </div>;
   return <div className="esx-site account-site" lang={language}><SiteHeader language={language} /><main className="account-page"><div className="account-shell">
     {user && <div className="account-nav"><button className="account-secondary" onClick={async () => { const { error } = await supabase.auth.signOut(); if (error) setStatus('signOutError'); }}>{t.signOut}</button></div>}
-    <label className="account-language">
-      <span>{languageLabels[language]}</span>
-      <select value={language} onChange={event => {
-        const next = languages.find(item => item.code === event.target.value)?.code;
-        if (!next) return;
-        setSelectedLanguage(next);
-        try { localStorage.setItem('esx-language', next); } catch {}
-      }}>
-        {languages.map(item => <option key={item.code} value={item.code} lang={item.code}>{item.name}</option>)}
-      </select>
-    </label>
+    {(!ready || !user || user.is_anonymous) && languagePicker}
     {!ready ? <p role="status">{registrationLabels[language].loading}</p> : !user || user.is_anonymous ? <><p className="account-muted">{t.registrationHelp}</p><EmailSignIn language={language} />{user && <section className="account-card"><h2>{t.guestConversations}</h2><p className="account-muted">{t.guestHelp}</p><ul className="account-chats">{chats.map(chat => <li key={chat.id}><Link href={'/messages/' + chat.id}>{t.conversation} {chat.id.slice(0, 8)} →</Link></li>)}</ul></section>}</> : <>
-      <header className="account-welcome"><h1>{t.title}</h1>{username && <p>{t.username}: <strong>{username}</strong></p>}<p className="account-muted">{user.email || user.phone}</p><ProfilePhoto userId={user.id} language={language} /></header>
+      <header className="account-welcome"><h1>{t.title}</h1>{username && <p>{t.username}: <strong>{username}</strong></p>}<p className="account-muted">{user.email || user.phone}</p><ProfilePhoto userId={user.id} language={language} />{languagePicker}</header>
       <section className="account-card"><h2>{t.qrTitle}</h2><p>{t.qrHelp}</p>
         <p className="account-muted">{t.guestChatNote}</p>
         {!qr && !loadError && <p role="status">{t.qrLoading}</p>}

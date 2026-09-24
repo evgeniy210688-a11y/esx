@@ -7,7 +7,10 @@
 .account-site{background:#071426}.account-site .account-page{min-height:calc(100svh - 84px)}.account-site .account-nav{justify-content:flex-end;margin-bottom:20px}
 @media(max-width:760px){.account-site .account-page{min-height:calc(100svh - 68px)}}
 @media print{.account-site>.esx-header{display:none!important}}
-.account-language{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:28px;color:#b0c2d9}.account-language select{font:inherit;border:1px solid #57718f;min-height:44px}
+.account-language{display:grid;gap:12px;margin:20px 0 28px;color:#b0c2d9}
+.account-language-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.account-language-grid button{min-width:0;min-height:44px;padding:10px 4px;font-size:clamp(12px,3vw,16px);background:transparent;overflow-wrap:anywhere}
+.account-language-grid button[aria-pressed=true]{background:#245fc5;border-color:#87d5ff;color:#fff}
 .account-qr,.account-qr-primary{box-sizing:border-box;width:276px;max-width:100%;margin-left:auto;margin-right:auto}
 .account-qr-primary{margin-bottom:20px}
 .account-qr-primary button{box-sizing:border-box;width:100%}
