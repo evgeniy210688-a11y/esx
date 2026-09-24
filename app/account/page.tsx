@@ -2,6 +2,7 @@
 import { accountLabels, type AccountMessage } from './accountLabels';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import AccountQr from './AccountQr';
 import { supabase } from '@/lib/supabase';
 import { safeAccountNext } from '@/lib/account-path';
@@ -25,6 +26,8 @@ export default function AccountPage() {
   return <AccountContent key={user?.id ?? 'guest'} user={user} ready={ready} />;
 }
 function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
+  const router = useRouter();
+  const [waitingForChat, setWaitingForChat] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null);
   const { language } = useChatInterface(selectedLanguage);
   const t = accountLabels[language];
@@ -34,6 +37,9 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
   const [chats, setChats] = useState<Conversation[]>([]);
   const [loadError, setLoadError] = useState(false);
   const [reload, setReload] = useState(0);
+  useEffect(() => {
+    if (waitingForChat && chats.length) router.push(`/messages/${chats[0].id}`);
+  }, [waitingForChat, chats, router]);
   useEffect(() => {
     if (!user) return;
     let stopped = false;
@@ -71,8 +77,14 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
     {!ready ? <p role="status">{registrationLabels[language].loading}</p> : !user || user.is_anonymous ? <><p className="account-muted">{t.registrationHelp}</p><EmailSignIn language={language} />{user && <section className="account-card"><h2>{t.guestConversations}</h2><p className="account-muted">{t.guestHelp}</p><ul className="account-chats">{chats.map(chat => <li key={chat.id}><Link href={'/messages/' + chat.id}>{t.conversation} {chat.id.slice(0, 8)} →</Link></li>)}</ul></section>}</> : <>
       <header className="account-welcome"><h1>{t.title}</h1>{username && <p>{t.username}: <strong>{username}</strong></p>}<p className="account-muted">{user.email || user.phone}</p><ProfilePhoto userId={user.id} language={language} /></header>
       <section className="account-card"><h2>{t.qrTitle}</h2><p>{t.qrHelp}</p>
+        <p className="account-muted">{t.guestChatNote}</p>
         {!qr && !loadError && <p role="status">{t.qrLoading}</p>}
         {qr && <AccountQr url={qr} username={username} language={language} />}
+        <div className="account-actions"><button disabled={waitingForChat} onClick={() => {
+          if (chats.length) router.push(`/messages/${chats[0].id}`);
+          else { setWaitingForChat(true); setReload(value => value + 1); }
+        }}>{t.openChat}</button></div>
+        {waitingForChat && <p role="status">{t.waitingForChat}</p>}
       </section>
       <section className="account-card"><h2>{t.conversations}</h2>{chats.length ? <ul className="account-chats">{chats.map(chat => <li key={chat.id}><Link href={'/messages/' + chat.id}>{t.contact} {(chat.participant_a === user.id ? chat.participant_b : chat.participant_a).slice(0, 8)} →</Link></li>)}</ul> : <p className="account-muted">{t.empty}</p>}</section>
     </>}
