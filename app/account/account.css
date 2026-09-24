@@ -7,6 +7,8 @@
 .account-profile-details{min-width:0}
 .account-profile-details p{margin:0;overflow-wrap:anywhere}
 .account-profile-details p+p{margin-top:4px}
+.account-photo-actions{display:flex;gap:12px;align-items:stretch}
+.account-photo-actions button{min-width:0;overflow-wrap:anywhere}
 .chat-sender{display:block;font-size:13px;margin-bottom:6px}
 .account-site{background:#071426}.account-site .account-page{min-height:calc(100svh - 84px)}.account-site .account-nav{justify-content:flex-end;flex-wrap:nowrap;margin-bottom:20px}.account-site .account-nav button{flex-shrink:0}
 @media(max-width:760px){.account-site .account-page{min-height:calc(100svh - 68px)}}

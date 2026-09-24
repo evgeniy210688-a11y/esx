@@ -35,6 +35,7 @@ export default function ProfilePhoto({ userId, language, children }: { userId: s
     {photo ? <Image unoptimized width={96} height={96} className="account-avatar" src={photo} alt={t.photoAlt} /> : <span className="account-avatar account-avatar-empty" aria-hidden="true">ESX</span>}
     <div className="account-profile-details">{children}</div>
     </div>
+    <div className="account-photo-actions">
     <button type="button" disabled={busy} onClick={() => fileInput.current?.click()}>{t.changePhoto}</button>
     <input ref={fileInput} type="file" hidden aria-label={t.changePhoto} accept="image/jpeg,image/png,image/webp" disabled={busy} onChange={async event => {
       const file = event.target.files?.[0]; event.target.value = ''; if (!file) return;
@@ -45,6 +46,7 @@ export default function ProfilePhoto({ userId, language, children }: { userId: s
     {photo && <button className="account-secondary" disabled={busy} onClick={async () => {
       setBusy(true); try { await save(null); } catch { setStatus('photoRemoveError'); } finally { setBusy(false); }
     }}>{t.removePhoto}</button>}
+    </div>
     <p role="status">{busy ? t.saving : status ? t[status] : ''}</p>
   </div>;
 }
