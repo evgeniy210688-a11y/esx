@@ -10,6 +10,13 @@ import useAccount from './useAccount';
 import EmailSignIn from './EmailSignIn';
 import { registrationLabels } from './registrationLabels';
 import ProfilePhoto from './ProfilePhoto';
+import { languages, type Language } from '@/app/design/content';
+
+const languageLabels: Record<Language, string> = {
+  ru: 'Язык интерфейса', en: 'Interface language', ko: '인터페이스 언어',
+  zh: '界面语言', tr: 'Arayüz dili', vi: 'Ngôn ngữ giao diện',
+  km: 'ភាសាចំណុចប្រទាក់', kk: 'Интерфейс тілі',
+};
 
 type Conversation = { id: string; participant_a: string; participant_b: string };
 export default function AccountPage() {
@@ -17,7 +24,8 @@ export default function AccountPage() {
   return <AccountContent key={user?.id ?? 'guest'} user={user} ready={ready} />;
 }
 function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
-  const { language } = useChatInterface();
+  const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null);
+  const { language } = useChatInterface(selectedLanguage);
   const t = accountLabels[language];
   const username = typeof user?.user_metadata?.username === 'string' ? user.user_metadata.username.slice(0, 24) : '';
   const [status, setStatus] = useState<AccountMessage | ''>('');
@@ -48,6 +56,17 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
   }, [user, reload]);
   return <main className="account-page" lang={language}><div className="account-shell">
     <nav className="account-nav"><Link href="/">{registrationLabels[language].home}</Link>{user && <button className="account-secondary" onClick={async () => { const { error } = await supabase.auth.signOut(); if (error) setStatus('signOutError'); }}>{t.signOut}</button>}</nav>
+    <label className="account-language">
+      <span>{languageLabels[language]}</span>
+      <select value={language} onChange={event => {
+        const next = languages.find(item => item.code === event.target.value)?.code;
+        if (!next) return;
+        setSelectedLanguage(next);
+        try { localStorage.setItem('esx-language', next); } catch {}
+      }}>
+        {languages.map(item => <option key={item.code} value={item.code} lang={item.code}>{item.name}</option>)}
+      </select>
+    </label>
     {!ready ? <p role="status">{registrationLabels[language].loading}</p> : !user || user.is_anonymous ? <><p className="account-muted">{t.registrationHelp}</p><EmailSignIn language={language} />{user && <section className="account-card"><h2>{t.guestConversations}</h2><p className="account-muted">{t.guestHelp}</p><ul className="account-chats">{chats.map(chat => <li key={chat.id}><Link href={'/messages/' + chat.id}>{t.conversation} {chat.id.slice(0, 8)} →</Link></li>)}</ul></section>}</> : <>
       <header className="account-welcome"><h1>{t.title}</h1>{username && <p>{t.username}: <strong>{username}</strong></p>}<p className="account-muted">{user.email || user.phone}</p><ProfilePhoto userId={user.id} language={language} /></header>
       <section className="account-card"><h2>{t.qrTitle}</h2><p>{t.qrHelp}</p>

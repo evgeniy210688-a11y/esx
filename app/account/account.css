@@ -4,6 +4,7 @@
 .account-tabs{display:flex;gap:8px;margin-bottom:26px}.account-tabs button{flex:1;background:transparent}.account-tabs button[aria-pressed=true]{background:#245fc5;border-color:#87d5ff}.account-avatar{display:block;width:96px;height:96px;object-fit:cover;border-radius:50%;border:2px solid #78cce8;background:#10223b}.account-avatar-empty{display:grid;place-items:center;font-size:28px;color:#a9dafa}.account-form .account-checkbox{display:flex;align-items:center;gap:10px}.account-form .account-checkbox input{width:18px;height:18px}.account-photo-picker input,.account-profile-photo input{max-width:100%;font:inherit}.account-profile-photo{display:grid;gap:12px;margin:20px 0}.account-profile-photo label{display:grid;gap:8px}.account-profile-photo button{justify-self:start}.account-profile-photo p:empty,.account-status:empty{display:none}.account-form small{line-height:1.5;color:#b0c2d9}
 
 .chat-sender{display:block;font-size:13px;margin-bottom:6px}
+.account-language{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:28px;color:#b0c2d9}.account-language select{font:inherit;border:1px solid #57718f;min-height:44px}
 .account-qr-print{display:none}
 @media print{
   @page{size:A4 portrait;margin:16mm}

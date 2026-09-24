@@ -14,6 +14,7 @@ import UsefulApps from './UsefulApps';
 import AboutDetails from './AboutDetails';
 import AccountLink from '../account/AccountLink';
 import { supabase } from '@/lib/supabase';
+import { contactLabels, contactEmail } from './contactLabels';
 
 const navigation = [{ id: 'home', label: 0 }, { id: 'korea', label: 1 }, { id: 'about', label: 2 }, { id: 'advertising', label: 3 }, { id: 'contact', label: 4 }];
 export default function SitePage({ section = 'home' }: { section?: 'home' | 'korea' | 'about' | 'advertising' | 'contact' }) {
@@ -21,7 +22,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
   const inviteRef = useRef<HTMLElement>(null);
   const [language,setLanguage] = useState<Language>('en');
   const [draft,setDraft] = useState({name:'',email:'',message:''});
-  const [saved,setSaved] = useState<'saved'|'error'|null>(null);
+  const [saved,setSaved] = useState(false);
   const [room,setRoom] = useState('');
   useEffect(() => {
     if (!room) return;
@@ -151,7 +152,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
       )}
       {section === 'about' && <AboutDetails language={language} />}
       {section === 'contact' && (
-      <section id="contact" className="contact"><div><div className="eyebrow blue-ink">{t[4]}</div><h1 style={{ fontSize: 'clamp(30px, 3.3vw, 43px)', lineHeight: 1.1 }}>{t[32]}</h1><p>{t[33]}</p><div className="contact-phone" aria-label="English / 한국어"><div className="phone-speaker" aria-hidden="true"/><div className="phone-chat-title">ESX<span>EN ↔ KO</span></div><div className="phone-messages"><div className="phone-message incoming"><span lang="en">Hi! How are you?</span><small lang="ko">안녕하세요! 잘 지내세요?</small></div><div className="phone-message outgoing"><span lang="ko">네, 잘 지내요! 반가워요.</span><small lang="en">I am doing well! Nice to meet you.</small></div></div><div className="phone-compose" aria-hidden="true"><span>···</span><span>↑</span></div><div className="phone-home" aria-hidden="true"/></div></div><form onSubmit={e=>{e.preventDefault();try{localStorage.setItem('esx-contact-draft',JSON.stringify(draft));setSaved('saved');}catch{setSaved('error');}}}><div className="form-row">{(['name','email'] as const).map((key,i)=><label key={key}>{t[34+i]}<input required type={key==='email'?'email':'text'} autoComplete={key} value={draft[key]} onChange={e=>{setDraft({...draft,[key]:e.target.value});setSaved(null);}}/></label>)}</div><label>{t[36]}<textarea required rows={4} value={draft.message} onChange={e=>{setDraft({...draft,message:e.target.value});setSaved(null);}}/></label><p className="form-note">{t[38]}</p><button className="button blue" type="submit">{t[37]} ↗</button><p role="status">{saved?t[saved==='saved'?39:47]:''}</p></form></section>
+      <section id="contact" className="contact"><div><div className="eyebrow blue-ink">{t[4]}</div><h1 style={{ fontSize: 'clamp(30px, 3.3vw, 43px)', lineHeight: 1.1 }}>{t[32]}</h1><p>{t[33]}</p><div className="contact-phone" aria-label="English / 한국어"><div className="phone-speaker" aria-hidden="true"/><div className="phone-chat-title">ESX<span>EN ↔ KO</span></div><div className="phone-messages"><div className="phone-message incoming"><span lang="en">Hi! How are you?</span><small lang="ko">안녕하세요! 잘 지내세요?</small></div><div className="phone-message outgoing"><span lang="ko">네, 잘 지내요! 반가워요.</span><small lang="en">I am doing well! Nice to meet you.</small></div></div><div className="phone-compose" aria-hidden="true"><span>···</span><span>↑</span></div><div className="phone-home" aria-hidden="true"/></div></div><form onSubmit={e=>{e.preventDefault();const subject = encodeURIComponent(`ESX — ${draft.name}`); const body = encodeURIComponent(`${t[34]}: ${draft.name}\n${t[35]}: ${draft.email}\n\n${draft.message}`); window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`; setSaved(true);}}><div className="form-row">{(['name','email'] as const).map((key,i)=><label key={key}>{t[34+i]}<input required type={key==='email'?'email':'text'} autoComplete={key} value={draft[key]} onChange={e=>{setDraft({...draft,[key]:e.target.value});setSaved(false);}}/></label>)}</div><label>{t[36]}<textarea required rows={4} value={draft.message} onChange={e=>{setDraft({...draft,message:e.target.value});setSaved(false);}}/></label><p className="form-note">{contactLabels[language].help} <a href={`mailto:${contactEmail}`}>{contactEmail}</a></p><button className="button blue" type="submit">{contactLabels[language].button} ↗</button><p role="status">{saved ? contactLabels[language].status : ''}</p></form></section>
       )}
     </main>
     <footer className="esx-footer"><div><a className="footer-logo" href={navigationHref('home')} aria-label={`ESX — ${t[0]}`}><Image src="/esx-logo-white.svg" alt="ESX" width={100} height={100} unoptimized /></a><p>{t[40]}</p></div><nav aria-label={t[44]}>{navigation.map(({id,label:i})=><a href={navigationHref(id)} key={id}>{t[i]}</a>)}<AccountLink language={language} /></nav><div className="footer-bottom"><span>© {new Date().getFullYear()} ESX</span><span>{t[5]} ↗</span></div></footer>
