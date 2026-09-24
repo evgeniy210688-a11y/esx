@@ -74,7 +74,7 @@ export default function AccountQr({ url, username, language, children }: { url: 
     <div className="account-qr"><QRCodeSVG value={url} size={240} level="M" marginSize={4} title={title} /></div>
     {children}
     <a className="account-link" href={url}>{url}</a>
-    <div className="account-actions">
+    <div className="account-actions account-qr-actions">
       <button onClick={async () => { try { await navigator.clipboard.writeText(url); setStatus('linkCopied'); } catch { setStatus('copyError'); } }}>{t.copyLink}</button>
       <button onClick={async () => { try { await loadLogo(); window.print(); } catch { setStatus('logoError'); } }}>{t.print}</button>
       <button onClick={download} disabled={busy}>{busy ? t.creatingPdf : t.downloadPdf}</button>
