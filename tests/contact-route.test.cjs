@@ -25,8 +25,22 @@ test('provider rejection, malformed success and network errors never report succ
 });
 test('rejects cross-origin and non-JSON requests', async () => { const h=setup(); assert.equal((await h.post(valid,{origin:'https://attacker.example'})).status,403); assert.equal((await h.post(valid,{'content-type':'text/plain'})).status,415); assert.equal(h.calls.length,0); });
 test('rejects bad fields, header injection and oversized messages', async () => {
-  const h=setup(); for(const edit of [{name:' '},{name:'A\r\nB'},{email:'a@b.com\r\nBcc:x@y.com'},{message:' '},{message:'x'.repeat(5001)},{requestId:'bad'}]) assert.equal((await h.post({...valid,...edit})).status,400);
+  const h=setup(); for(const edit of [{name:null},{email:null},{email:'invalid'},{name:'A\r\nB'},{email:'a@b.com\r\nBcc:x@y.com'},{message:' '},{message:'x'.repeat(5001)},{requestId:'bad'}]) assert.equal((await h.post({...valid,...edit})).status,400);
   assert.equal((await h.post(null)).status,400); assert.equal(h.calls.length,0);
 });
 test('caps actual body bytes', async () => { const h=setup(); assert.equal((await h.post({...valid,message:'x'.repeat(25000)})).status,413); assert.equal(h.calls.length,0); });
 test('limits repeated attempts', async () => { const h=setup(); for(let i=0;i<3;i++) assert.equal((await h.post()).status,200); assert.equal((await h.post()).status,429); assert.equal(h.calls.length,3); });
+
+test('accepts message only and omits Reply-To and empty personal details', async () => {
+  for (const identity of [{}, {name:'',email:''}, {name:'  ',email:'  '}]) {
+    const h=setup(); const response=await h.post({message:'Hello',requestId:valid.requestId,...identity});
+    assert.equal(response.status,200); const body=JSON.parse(h.calls[0].options.body);
+    assert.equal(body.reply_to,undefined); assert.equal(body.text,'Hello'); assert.equal(body.subject,'ESX — New message');
+  }
+});
+test('accepts optional email without a name and optional name without email', async () => {
+  const emailOnly=setup(); assert.equal((await emailOnly.post({...valid,name:''})).status,200);
+  assert.equal(JSON.parse(emailOnly.calls[0].options.body).reply_to,valid.email);
+  const nameOnly=setup(); assert.equal((await nameOnly.post({...valid,email:''})).status,200);
+  assert.equal(JSON.parse(nameOnly.calls[0].options.body).reply_to,undefined);
+});

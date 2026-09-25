@@ -23,9 +23,9 @@ export async function POST(request: Request) {
     input = JSON.parse(Buffer.concat(chunks).toString('utf8'));
   } catch { return reply('invalid_request', 400); }
   if (!input || typeof input !== 'object') return reply('invalid_request', 400);
-  const { name, email, message, requestId } = input;
-  if (typeof name !== 'string' || !name.trim() || name.length > 100 || /[\r\n]/.test(name) ||
-      typeof email !== 'string' || email.length > 254 || !/^[^\s<>@]+@[^\s<>@]+\.[^\s<>@]+$/.test(email) ||
+  const { name = '', email = '', message, requestId } = input;
+  if (typeof name !== 'string' || name.length > 100 || /[\r\n]/.test(name) ||
+      typeof email !== 'string' || email.length > 254 || (email.trim() !== '' && !/^[^\s<>@]+@[^\s<>@]+\.[^\s<>@]+$/.test(email.trim())) ||
       typeof message !== 'string' || !message.trim() || message.length > 5000 ||
       typeof requestId !== 'string' || !/^[a-f0-9-]{36}$/i.test(requestId)) return reply('invalid_request', 400);
   const apiKey = process.env.RESEND_API_KEY;
@@ -40,14 +40,15 @@ export async function POST(request: Request) {
   if (bucket.count >= 3 || (!attempts.has(ip) && attempts.size >= 10000)) return reply('rate_limited', 429);
   bucket.count++;
   attempts.set(ip, bucket);
-  const text = `Name: ${name.trim()}\nEmail: ${email.trim()}\n\n${message.trim()}`;
+  const details = [name.trim() ? `Name: ${name.trim()}` : '', email.trim() ? `Email: ${email.trim()}` : ''].filter(Boolean);
+  const text = [...details, ...(details.length ? [''] : []), message.trim()].join('\n');
   // Reusing a retry ID with the same content cannot create a second email.
   const key = createHash('sha256').update(`${requestId}\n${text}`).digest('hex');
   try {
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json', 'Idempotency-Key': `contact-${key}` },
-      body: JSON.stringify({ from, to: ['88esx88@gmail.com'], reply_to: email.trim(), subject: `ESX — ${name.trim()}`, text }),
+      body: JSON.stringify({ from, to: ['88esx88@gmail.com'], ...(email.trim() ? { reply_to: email.trim() } : {}), subject: name.trim() ? `ESX — ${name.trim()}` : 'ESX — New message', text }),
       signal: AbortSignal.timeout(15000),
     });
     if (!response.ok) return reply('send_failed', 502);

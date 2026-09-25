@@ -6,7 +6,8 @@ and .env.local for local testing. CONTACT_FROM_EMAIL must be an allowed Resend
 sender on a verified domain (the existing registration sender can be reused).
 Do not put secrets in NEXT_PUBLIC variables or source control. Redeploy after
 configuring hosting variables. Recipient is fixed to 88esx88@gmail.com; Reply-To
-is the visitor's validated address.
+is the visitor's validated address when provided. Name and email are optional;
+only the message is required. Message-only submissions omit Reply-To and personal details.
 
 Without configuration the form reports unavailability and preserves the draft;
 it never claims a successful send. Provider acceptance is not proof of inbox delivery.
