@@ -797,3 +797,6 @@
 @media(max-width:760px) {
   .floating-chat-toggle { display: grid; bottom: calc(max(16px, env(safe-area-inset-bottom)) + 116px); }
 }
+
+.business-actions .button.light { background: #dc2626; color: #fff; }
+.business-actions .button.light:hover { background: #b91c1c; }
