@@ -21,7 +21,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
   const siteRef = useRef<HTMLDivElement>(null);
   const inviteRef = useRef<HTMLElement>(null);
   const [language,setLanguage] = useState<Language>('en');
-  const [draft,setDraft] = useState({name:'',email:'',message:''});
+  const [draft,setDraft] = useState({name:'',message:''});
   const [saved,setSaved] = useState(false);
   const [sending, setSending] = useState(false);
   const [contactError, setContactError] = useState<'' | 'error' | 'unavailable' | 'limited'>('');
@@ -37,7 +37,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
       submissionId.current ??= crypto.randomUUID();
       const response = await fetch('/api/contact', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...draft, requestId: submissionId.current }),
+        body: JSON.stringify({ name: draft.name, message: draft.message, requestId: submissionId.current }),
         signal: AbortSignal.timeout(20000),
       });
       const result = await response.json();
@@ -80,7 +80,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
       // eslint-disable-next-line react-hooks/set-state-in-effect
       if(languages.some(l=>l.code===lang)) setLanguage(lang as Language);
       const stored = localStorage.getItem('esx-contact-draft');
-      if(stored) {const value=JSON.parse(stored); if(['name','email','message'].every(k=>typeof value[k]==='string')) setDraft(value);}
+      if(stored) {const value=JSON.parse(stored); if(['name','message'].every(k=>typeof value[k]==='string')) setDraft({name:value.name,message:value.message});}
     } catch {}
   },[]);
   useEffect(()=>{document.documentElement.lang=language;document.title=`ESX — ${copy[language][{ home: 5, korea: 1, about: 2, advertising: 3, contact: 4 }[section]]}`;},[language, section]);
@@ -179,7 +179,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
       )}
       {section === 'about' && <AboutDetails language={language} />}
       {section === 'contact' && (
-      <section id="contact" className="contact"><div><div className="eyebrow blue-ink">{t[4]}</div><h1 style={{ fontSize: 'clamp(30px, 3.3vw, 43px)', lineHeight: 1.1 }}>{t[32]}</h1><p>{t[33]}</p><div className="contact-phone" aria-label="English / 한국어"><div className="phone-speaker" aria-hidden="true"/><div className="phone-chat-title">ESX<span>EN ↔ KO</span></div><div className="phone-messages"><div className="phone-message incoming"><span lang="en">Hi! How are you?</span><small lang="ko">안녕하세요! 잘 지내세요?</small></div><div className="phone-message outgoing"><span lang="ko">네, 잘 지내요! 반가워요.</span><small lang="en">I am doing well! Nice to meet you.</small></div></div><div className="phone-compose" aria-hidden="true"><span>···</span><span>↑</span></div><div className="phone-home" aria-hidden="true"/></div></div><form onSubmit={sendContact} aria-busy={sending}><div className="form-row">{(['name','email'] as const).map((key,i)=><label key={key}>{t[34+i]} ({contactLabels[language].optional})<input disabled={sending} maxLength={key==='email'?254:100} type={key==='email'?'email':'text'} autoComplete={key} value={draft[key]} onChange={e=>{setDraft({...draft,[key]:e.target.value});setSaved(false);setContactError('');submissionId.current=null;}}/></label>)}</div><label>{t[36]}<textarea required disabled={sending} maxLength={5000} rows={4} value={draft.message} onChange={e=>{setDraft({...draft,message:e.target.value});setSaved(false);setContactError('');submissionId.current=null;}}/></label><p className="form-note">{contactLabels[language].help} <span>{contactEmail}</span></p><button className="button blue" type="submit" disabled={sending || saved}>{sending ? contactLabels[language].sending : contactLabels[language].button} ↗</button><p role="status" aria-live="polite">{contactError ? contactLabels[language][contactError] : saved ? contactLabels[language].status : ''}</p></form></section>
+      <section id="contact" className="contact"><div><div className="eyebrow blue-ink">{t[4]}</div><h1 style={{ fontSize: 'clamp(30px, 3.3vw, 43px)', lineHeight: 1.1 }}>{t[32]}</h1><p>{t[33]}</p><div className="contact-phone" aria-label="English / 한국어"><div className="phone-speaker" aria-hidden="true"/><div className="phone-chat-title">ESX<span>EN ↔ KO</span></div><div className="phone-messages"><div className="phone-message incoming"><span lang="en">Hi! How are you?</span><small lang="ko">안녕하세요! 잘 지내세요?</small></div><div className="phone-message outgoing"><span lang="ko">네, 잘 지내요! 반가워요.</span><small lang="en">I am doing well! Nice to meet you.</small></div></div><div className="phone-compose" aria-hidden="true"><span>···</span><span>↑</span></div><div className="phone-home" aria-hidden="true"/></div></div><form onSubmit={sendContact} aria-busy={sending}><label><span>{t[34]} <small style={{fontSize:'0.75em',fontWeight:400}}>({contactLabels[language].optional})</small></span><input disabled={sending} maxLength={100} type="text" autoComplete="name" value={draft.name} onChange={e=>{setDraft({...draft,name:e.target.value});setSaved(false);setContactError('');submissionId.current=null;}}/></label><label>{t[36]}<textarea required disabled={sending} maxLength={5000} rows={4} value={draft.message} onChange={e=>{setDraft({...draft,message:e.target.value});setSaved(false);setContactError('');submissionId.current=null;}}/></label><p className="form-note">{contactLabels[language].help} <span>{contactEmail}</span></p><button className="button blue" type="submit" disabled={sending || saved}>{sending ? contactLabels[language].sending : contactLabels[language].button} ↗</button><p role="status" aria-live="polite">{contactError ? contactLabels[language][contactError] : saved ? contactLabels[language].status : ''}</p></form></section>
       )}
     </main>
     <footer className="esx-footer"><div><a className="footer-logo" href={navigationHref('home')} aria-label={`ESX — ${t[0]}`}><Image src="/esx-logo-white.svg" alt="ESX" width={100} height={100} unoptimized /></a><p>{t[40]}</p></div><nav aria-label={t[44]}>{navigation.map(({id,label:i})=><a href={navigationHref(id)} key={id}>{t[i]}</a>)}<AccountLink language={language} /></nav><div className="footer-bottom"><span>© {new Date().getFullYear()} ESX</span><span>{t[5]} ↗</span></div></footer>
