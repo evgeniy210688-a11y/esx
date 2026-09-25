@@ -27,6 +27,7 @@
 .chat-theme .chat-composer button { background: #245bd1; }
 .chat-language-panel { margin: 0 16px 12px; border: 1px solid #45648280; border-radius: 16px; background: #101b30b8; }
 .chat-language-panel summary { cursor: pointer; padding: 14px 18px; color: #dce9fa; }
+.chat-language-icon { display: inline-block; width: 20px; height: 20px; margin-inline-end: 8px; vertical-align: -4px; color: #83e6ff; }
 .chat-theme .chat-language-panel fieldset { background: transparent; border-color: #45648280; }
 
 .chat-message {
