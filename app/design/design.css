@@ -800,3 +800,6 @@
 
 .business-actions .button.light { background: #dc2626; color: #fff; }
 .business-actions .button.light:hover { background: #b91c1c; }
+
+.esx-site .invite .button.blue { background: #dc2626; color: #fff; }
+.esx-site .invite .button.blue:hover { background: #b91c1c; }
