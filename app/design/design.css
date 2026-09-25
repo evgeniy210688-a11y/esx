@@ -803,3 +803,6 @@
 
 .esx-site .invite .button.blue { background: #dc2626; color: #fff; }
 .esx-site .invite .button.blue:hover { background: #b91c1c; }
+
+.esx-site .business-actions { left: 0; right: 0; width: 100%; justify-content: center; }
+.esx-site .business-actions .button { width: 70%; justify-content: center; }

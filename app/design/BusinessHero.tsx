@@ -65,7 +65,7 @@ export default function BusinessHero({ language, onStart }: { language: Language
       <div className="business-caption"><div className="eyebrow"><span className="live-dot" />{m[0]} · {labels[index]}</div><h1>{titles[index]}</h1><p>{m[3]}</p></div>
     </div>)}
     <button className="business-fullscreen" type="button" onClick={toggleFullscreen} aria-label={fullscreenLabels[language][expanded ? 1 : 0]} title={fullscreenLabels[language][expanded ? 1 : 0]}><span aria-hidden="true">{expanded ? '✕' : '⛶'}</span><span>{fullscreenLabels[language][expanded ? 1 : 0]}</span></button>
-    <div className="business-actions"><button className="button light" onClick={async () => { if (expanded) await toggleFullscreen(); onStart(); }}>{language === 'ru' ? 'Начать общение' : copy[language][8]} ↗</button><a href="/contact" className="hero-link" onClick={async () => { if (expanded) await toggleFullscreen(); }}>{copy[language][4]} ↗</a></div>
+    <div className="business-actions"><button className="button light" onClick={async () => { if (expanded) await toggleFullscreen(); onStart(); }}>{language === 'ru' ? 'Начать общение' : copy[language][8]} ↗</button></div>
     <div className="business-controls"><div className="business-dots">{labels.map((label, index) => <button key={scenes[index]} type="button" aria-label={label} title={label} aria-pressed={active === index} onClick={() => setActive(index)}><span aria-hidden="true" /></button>)}</div><button type="button" className="business-pause" aria-label={paused ? m[5] : m[4]} onClick={() => setPaused(value => !value)}>{paused ? '▶' : 'Ⅱ'}</button></div>
   </section>;
 }
