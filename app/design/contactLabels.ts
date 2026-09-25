@@ -1,7 +1,8 @@
 import type { Language } from './content';
 
-export const contactLabels: Record<Language, { optional: string; button: string; help: string; status: string; sending: string; error: string; unavailable: string; limited: string }> = {
+export const contactLabels: Record<Language, { address: string; optional: string; button: string; help: string; status: string; sending: string; error: string; unavailable: string; limited: string }> = {
   "ru": {
+    "address": "Наш адрес:",
     "optional": "необязательно",
     "button": "Отправить",
     "help": "Сообщение будет отправлено команде ESX.",
@@ -12,6 +13,7 @@ export const contactLabels: Record<Language, { optional: string; button: string;
     "limited": "Слишком много попыток. Повторите через минуту."
   },
   "en": {
+    "address": "Our email:",
     "optional": "optional",
     "button": "Send",
     "help": "Your message will be emailed to the ESX team.",
@@ -22,6 +24,7 @@ export const contactLabels: Record<Language, { optional: string; button: string;
     "limited": "Too many attempts. Try again in a minute."
   },
   "ko": {
+    "address": "이메일:",
     "optional": "선택 사항",
     "button": "보내기",
     "help": "메시지를 ESX 팀에 이메일로 보냅니다.",
@@ -32,6 +35,7 @@ export const contactLabels: Record<Language, { optional: string; button: string;
     "limited": "시도가 너무 많습니다. 1분 후 다시 시도해 주세요."
   },
   "zh": {
+    "address": "我们的邮箱：",
     "optional": "选填",
     "button": "发送",
     "help": "留言将通过邮件发送给 ESX 团队。",
@@ -42,6 +46,7 @@ export const contactLabels: Record<Language, { optional: string; button: string;
     "limited": "尝试次数过多，请一分钟后重试。"
   },
   "tr": {
+    "address": "E-posta adresimiz:",
     "optional": "isteğe bağlı",
     "button": "Gönder",
     "help": "Mesajınız ESX ekibine e-posta ile gönderilecek.",
@@ -52,6 +57,7 @@ export const contactLabels: Record<Language, { optional: string; button: string;
     "limited": "Çok fazla deneme. Bir dakika sonra tekrar deneyin."
   },
   "vi": {
+    "address": "Email của chúng tôi:",
     "optional": "không bắt buộc",
     "button": "Gửi",
     "help": "Tin nhắn sẽ được gửi qua email cho nhóm ESX.",
@@ -62,6 +68,7 @@ export const contactLabels: Record<Language, { optional: string; button: string;
     "limited": "Quá nhiều lần thử. Hãy thử lại sau một phút."
   },
   "km": {
+    "address": "អាសយដ្ឋានអ៊ីមែលរបស់យើង៖",
     "optional": "មិនចាំបាច់",
     "button": "ផ្ញើ",
     "help": "សារនឹងត្រូវបានផ្ញើតាមអ៊ីមែលទៅក្រុម ESX។",
@@ -72,6 +79,7 @@ export const contactLabels: Record<Language, { optional: string; button: string;
     "limited": "បានព្យាយាមច្រើនដងពេក។ សូមព្យាយាមម្ដងទៀតក្នុងមួយនាទី។"
   },
   "kk": {
+    "address": "Біздің поштамыз:",
     "optional": "міндетті емес",
     "button": "Жіберу",
     "help": "Хабарлама ESX тобына электрондық пошта арқылы жіберіледі.",
