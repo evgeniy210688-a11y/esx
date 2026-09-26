@@ -96,3 +96,14 @@
 @media (max-width: 760px) {
   .chat-theme .chat-shell { width: calc(100% - 16px); }
 }
+
+/* Local flag images remain visible on platforms without flag emoji support. */
+.chat-language-picker { margin-top: 8px; color: #f1f5ff; font-size: 16px; }
+.chat-language-panel .chat-language-picker > summary { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 12px; border: 1px solid #526582; border-radius: 12px; background: #111d31; color: #f1f5ff; list-style: none; }
+.chat-language-picker > summary::-webkit-details-marker { display: none; }
+.chat-language-picker img { flex-shrink: 0; width: 24px; height: 16px; object-fit: cover; border-radius: 2px; }
+.chat-language-chevron, .chat-language-check { margin-left: auto; }
+.chat-language-picker > ul { list-style: none; margin: 6px 0 0; padding: 4px; border: 1px solid #526582; border-radius: 12px; background: #111d31; max-height: 280px; overflow-y: auto; }
+.chat-language-picker li > button { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 10px 8px; border: 0; border-radius: 8px; background: transparent; color: #f1f5ff; font: inherit; text-align: left; cursor: pointer; }
+.chat-language-picker li > button:hover, .chat-language-picker li > button[aria-pressed="true"] { background: #233956; }
+.chat-language-picker > summary:focus-visible, .chat-language-picker li > button:focus-visible { outline: 2px solid #83e6ff; outline-offset: 2px; }
