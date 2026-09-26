@@ -35,7 +35,7 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
   const [status, setStatus] = useState<AccountMessage | ''>('');
   const [qr, setQr] = useState('');
   const [chats, setChats] = useState<Conversation[]>([]);
-  const [contactNames, setContactNames] = useState<Record<string, string>>({});
+  const [contactNames, setContactNames] = useState<Record<string, string | null>>({});
   const [loadError, setLoadError] = useState(false);
   const [reload, setReload] = useState(0);
   useEffect(() => {
@@ -63,19 +63,42 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
           const names = await Promise.all(conversations.data.map(async (chat: Conversation) => {
             const contactId = chat.participant_a === user!.id ? chat.participant_b : chat.participant_a;
             try {
-              const { data, error } = await supabase.rpc('esx_chat_participants', { conversation_id: chat.id });
-              const contact = error ? null : data?.find((person: { user_id: string; username: string | null }) => person.user_id === contactId);
-              return [chat.id, contact?.username?.trim() || ''] as const;
-            } catch { return [chat.id, ''] as const; }
+              for (let attempt = 0; attempt < 2; attempt++) {
+                const controller = new AbortController();
+                const timeout = window.setTimeout(() => controller.abort(), 10000);
+                const { data, error } = await (async () => {
+                  try { return await supabase.rpc('esx_chat_participants', { conversation_id: chat.id }).abortSignal(controller.signal); }
+                  finally { window.clearTimeout(timeout); }
+                })();
+                const contact = error ? null : data?.find((person: { user_id: string; username: string | null }) => person.user_id === contactId);
+                if (contact) return [chat.id, contact.username?.trim() || ''] as const;
+              }
+              return [chat.id, null] as const;
+            } catch { return [chat.id, null] as const; }
           }));
-          if (!stopped) setContactNames(Object.fromEntries(names));
+          if (!stopped) {
+            setContactNames(previous => Object.fromEntries(names.map(([id, name]) =>
+              [id, name === null ? previous[id] ?? null : name]
+            )));
+            setLoadError(Boolean(profile.error || conversations.error || names.some(([, name]) => name === null)));
+          }
         }
       } catch { if (!stopped) setLoadError(true); }
       finally { loading = false; }
     }
     void load();
     const timer = window.setInterval(() => { if (!document.hidden) void load(); }, 10000);
-    return () => { stopped = true; clearInterval(timer); };
+    const refresh = () => { if (!document.hidden) void load(); };
+    window.addEventListener('focus', refresh);
+    window.addEventListener('online', refresh);
+    document.addEventListener('visibilitychange', refresh);
+    return () => {
+      stopped = true;
+      clearInterval(timer);
+      window.removeEventListener('focus', refresh);
+      window.removeEventListener('online', refresh);
+      document.removeEventListener('visibilitychange', refresh);
+    };
   }, [user, reload]);
   const languagePicker = <div className="account-language" role="group" aria-label={languageLabels[language]}>
     <span>{languageLabels[language]}</span>
@@ -89,7 +112,7 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
   return <div className="esx-site account-site" lang={language}><SiteHeader language={language} /><main className="account-page"><div className="account-shell">
     {user && <div className="account-nav">{ready && !user.is_anonymous && <h1>{t.title}</h1>}<button className="account-secondary" onClick={async () => { const { error } = await supabase.auth.signOut(); if (error) setStatus('signOutError'); }}>{t.signOut}</button></div>}
     {(!ready || !user || user.is_anonymous) && languagePicker}
-    {!ready ? <p role="status">{registrationLabels[language].loading}</p> : !user || user.is_anonymous ? <><p className="account-muted">{t.registrationHelp}</p><EmailSignIn language={language} />{user && <section className="account-card"><h2>{t.guestConversations}</h2><p className="account-muted">{t.guestHelp}</p><ul className="account-chats">{chats.map(chat => <li key={chat.id}><Link href={'/messages/' + chat.id}><span dir="auto">{contactNames[chat.id] || `${t.conversation} ${chat.id.slice(0, 8)}`}</span> →</Link></li>)}</ul></section>}</> : <>
+    {!ready ? <p role="status">{registrationLabels[language].loading}</p> : !user || user.is_anonymous ? <><p className="account-muted">{t.registrationHelp}</p><EmailSignIn language={language} />{user && <section className="account-card"><h2>{t.guestConversations}</h2><p className="account-muted">{t.guestHelp}</p><ul className="account-chats">{chats.map(chat => <li key={chat.id}><Link href={'/messages/' + chat.id}><span dir="auto">{contactNames[chat.id] === undefined ? registrationLabels[language].loading : contactNames[chat.id] === null ? t.loadError : contactNames[chat.id] || `${t.conversation} ${chat.id.slice(0, 8)}`}</span> →</Link></li>)}</ul></section>}</> : <>
       <header className="account-welcome"><ProfilePhoto userId={user.id} language={language}>{username && <p>{t.username}: <strong>{username}</strong></p>}<p className="account-muted">{user.email || user.phone}</p></ProfilePhoto>{languagePicker}</header>
       <section className="account-card"><h2>{t.qrTitle}</h2><p>{t.qrHelp}</p>
         <p className="account-muted">{t.guestChatNote}</p>
@@ -102,7 +125,7 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
         </AccountQr>}
         {waitingForChat && <p role="status">{t.waitingForChat}</p>}
       </section>
-      <section className="account-card"><h2>{t.conversations}</h2>{chats.length ? <ul className="account-chats">{chats.map(chat => <li key={chat.id}><Link href={'/messages/' + chat.id}><span dir="auto">{contactNames[chat.id] || `${t.contact} ${(chat.participant_a === user.id ? chat.participant_b : chat.participant_a).slice(0, 8)}`}</span> →</Link></li>)}</ul> : <p className="account-muted">{t.empty}</p>}</section>
+      <section className="account-card"><h2>{t.conversations}</h2>{chats.length ? <ul className="account-chats">{chats.map(chat => <li key={chat.id}><Link href={'/messages/' + chat.id}><span dir="auto">{contactNames[chat.id] === undefined ? registrationLabels[language].loading : contactNames[chat.id] === null ? t.loadError : contactNames[chat.id] || `${t.contact} ${(chat.participant_a === user.id ? chat.participant_b : chat.participant_a).slice(0, 8)}`}</span> →</Link></li>)}</ul> : <p className="account-muted">{t.empty}</p>}</section>
     </>}
     {ready && user && loadError && <p role="alert">{t.loadError} <button onClick={() => setReload(value => value + 1)}>{t.retry}</button></p>}
     <p className="account-status" role="status">{status ? t[status] : ''}</p>
