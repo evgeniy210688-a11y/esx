@@ -1,4 +1,5 @@
 import { type Language } from './content';
+import AboutMissionArticle from './AboutMissionArticle';
 
 const details: Record<Language, string[]> = {
   "ru": [
@@ -103,6 +104,7 @@ export default function AboutDetails({ language }: { language: Language }) {
         <p>{text[index + 1]}</p>
       </section>
     ))}
+    <AboutMissionArticle language={language} />
     <p style={{ gridColumn: '1 / -1', fontSize: '12px', margin: 0 }}>
       {founderLabels[language]}: SON EVGENIY
     </p>
