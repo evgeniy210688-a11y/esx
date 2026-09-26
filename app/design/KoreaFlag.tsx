@@ -123,7 +123,7 @@ export default function KoreaFlag({ language }: { language: Language }) {
   return <article id="korean-flag" className="korea-story" aria-labelledby="korean-flag-title">
     <h2 id="korean-flag-title">{t.title}</h2>
     <p className="korea-story-intro">{t.intro}</p>
-    <Image src="/flags/kr.svg" alt={t.title} width={900} height={600} className="korea-story-art" style={{ maxWidth: 720, marginInline: 'auto' }} sizes="(max-width: 760px) 100vw, 720px" />
+    <Image src="/korea-story/flag-comic.webp" alt={t.title} width={2172} height={724} className="korea-story-art" sizes="(max-width: 760px) 100vw, 1264px" />
     <div className="korea-story-columns">{t.parts.map(([heading, body], index) =>
       <section className="korea-story-part" key={heading}>
         {index > 1 && <Trigram pattern={lines[index - 2]} />}
