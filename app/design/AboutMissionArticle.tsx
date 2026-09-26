@@ -412,7 +412,7 @@ const article = {
   }
 };
 
-const illustrations = ['', 'clothing', 'electronics', 'salon', 'hospitality', 'ski-rental', 'surf-rental', 'bicycle-rental'];
+const illustrations = ['', 'clothing-red-hair', 'electronics', 'salon', 'hospitality', 'ski-rental', 'surf-rental', 'bicycle-rental'];
 
 export default function AboutMissionArticle({ language }: { language: Language }) {
  const t = article[language];
