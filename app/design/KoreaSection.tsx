@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import KoreaEconomy from './KoreaEconomy';
 import KoreaStory from './KoreaStory';
+import KoreaAnimals from './KoreaAnimals';
 import KpopStory from './KpopStory';
 import BeautyStory from './BeautyStory';
 import SurgeryStory from './SurgeryStory';
@@ -14,6 +15,7 @@ export default function KoreaSection({ language }: { language: Language }) {
   return <section id="korea" className="korea-section">
     <div className="section-heading"><div><div className="eyebrow blue-ink">{t[1]}</div><h1 style={{ fontSize: 'clamp(30px, 3.3vw, 43px)', lineHeight: 1.1 }}>{t[18]}</h1></div><p>{t[19]}</p></div>
     <KoreaStory language={language} />
+    <KoreaAnimals language={language} />
     <KpopStory language={language} />
     <BeautyStory language={language} />
     <SurgeryStory language={language} />
