@@ -42,6 +42,11 @@ const article = {
         "В переписке удобно обсудить длительность аренды, комплект, залог и место возврата. Сотрудник или инструктор объясняет условия и правила на месте, а клиент может задать дополнительные вопросы до оплаты."
       ],
       [
+        "Пример 7. Обращение в полицию",
+        "Путешественник потерял сумку и хочет обратиться к полицейскому, но не знает, как описать её и объяснить, где видел в последний раз. В чате можно спокойно написать: «Я потерял чёрную сумку. Последний раз она была со мной возле станции около трёх часов дня» — и уточнить детали в ответ на вопросы сотрудника.",
+        "ESX может помочь в общении с сотрудником, если тот согласен пользоваться чатом. Сам чат не отправляет заявление в полицию и не вызывает помощь: дальнейшие действия и способ оформления обращения нужно уточнить у полицейского."
+      ],
+      [
         "Что это даёт бизнесу",
         "Языковой барьер может скрывать спрос: рядом есть люди, которым нужен товар или услуга, но они не обращаются, потому что не знают, как начать. Доступный способ общения помогает бизнесу заметить эти запросы, объяснить предложение и обслужить аудиторию, с которой раньше было трудно договориться.",
         "Мы видим в этом возможность для большего числа обращений, покупок и повторных визитов. Это цель сервиса, а не обещание гарантированного роста выручки: результат зависит и от товара, цены, качества обслуживания и других условий. ESX помогает на важном этапе — когда человеку нужно быть понятым, а бизнесу нужно понять его потребность."
@@ -91,6 +96,11 @@ const article = {
         "Example 6. Renting a board by the sea",
         "A beach visitor wants a board but is unsure which suits their experience or what rental costs. They can ask through ESX: “I’m a beginner. Which board do you suggest? Can I book a lesson?”",
         "Messages help clarify duration, included equipment, deposit and return location. Staff or an instructor explain local conditions and rules, while the customer asks questions before paying."
+      ],
+      [
+        "Example 7. Talking to the police",
+        "A traveler has lost a bag but struggles to describe it and explain where they last saw it. They can write: “I lost a black bag. I last had it near the station around three in the afternoon,” then clarify details when the officer asks questions.",
+        "ESX can support communication if the officer agrees to use the chat. It does not submit a police report or dispatch assistance; ask the officer about the next steps and how to register the report."
       ],
       [
         "Opportunities for businesses",
@@ -144,6 +154,11 @@ const article = {
         "대여 시간, 포함 장비, 보증금과 반납 장소를 대화로 확인합니다. 직원이나 강사가 현장 조건과 규칙을 설명하고 고객은 결제 전에 더 물어볼 수 있습니다."
       ],
       [
+        "사례 7. 경찰에게 도움 요청하기",
+        "여행자가 가방을 잃어버렸지만 특징과 마지막으로 본 장소를 설명하기 어렵습니다. 채팅으로 ‘검은 가방을 잃어버렸어요. 오후 세 시쯤 역 근처에서 마지막으로 가지고 있었어요’라고 쓰고 경찰의 질문에 답할 수 있습니다.",
+        "경찰관이 채팅 사용에 동의하면 ESX가 대화를 도울 수 있습니다. 채팅 자체로 신고가 접수되거나 도움이 출동하는 것은 아닙니다. 다음 절차와 접수 방법은 경찰관에게 확인하세요."
+      ],
+      [
         "사업자에게 생기는 기회",
         "언어 장벽 뒤에는 드러나지 않은 수요가 있을 수 있습니다. 쉬운 대화 방식은 문의를 파악하고 제안을 설명하며 외국인 고객을 응대하는 데 도움이 됩니다.",
         "문의와 구매, 재방문 기회를 넓히는 것이 목표이며 매출 증가를 보장하는 것은 아닙니다. 상품, 가격, 서비스도 영향을 줍니다. ESX는 서로의 필요를 이해하는 순간을 돕습니다."
@@ -193,6 +208,11 @@ const article = {
         "例六：在海边租冲浪板",
         "游客想租板，却不了解适合自己的类型与费用。通过ESX可以问：‘我是初学者，推荐哪种板？可以预约课程吗？’",
         "消息交流便于确认时长、配套装备、押金和归还地点。工作人员或教练讲解现场条件与规则，顾客可以在付款前继续提问。"
+      ],
+      [
+        "例七：向警察求助",
+        "旅行者遗失了包，却不知道如何描述外观和最后见到它的地点。可以写：‘我丢了一个黑色的包，最后带着它是在下午三点左右、车站附近。’然后根据警察的问题补充细节。",
+        "如果警察同意使用聊天，ESX可以辅助沟通。聊天本身不会提交报案或派出救援；后续步骤及登记方式应向警察确认。"
       ],
       [
         "商家的机会",
@@ -246,6 +266,11 @@ const article = {
         "Süre, ekipman, depozito ve iade yeri mesajlarla netleştirilir. Görevli veya eğitmen yerel koşulları ve kuralları açıklar; müşteri ödeme öncesinde sorularını sorar."
       ],
       [
+        "Örnek 7. Polisle konuşmak",
+        "Yolcu çantasını kaybetmiştir ama görünüşünü ve son gördüğü yeri anlatmakta zorlanır. ‘Siyah çantamı kaybettim. Öğleden sonra üç civarında istasyon yakınında yanımdaydı’ diye yazıp görevlinin sorularını cevaplayabilir.",
+        "Görevli sohbeti kullanmayı kabul ederse ESX iletişime yardımcı olabilir. Sohbet resmî başvuru yapmaz veya yardım ekibi göndermez; sonraki adımları ve kayıt yöntemini polise sorun."
+      ],
+      [
         "İşletmeler için fırsatlar",
         "Dil engeli talebi görünmez kılabilir. Kolay bir iletişim yolu işletmenin ihtiyacı anlamasını ve yabancı müşterilere hizmet vermesini destekler.",
         "Daha fazla başvuru, alışveriş ve tekrar ziyaret hedefimizdir; gelir artışı garantisi değildir. Ürün, fiyat ve hizmet de sonucu etkiler."
@@ -295,6 +320,11 @@ const article = {
         "Ví dụ 6. Thuê ván ở biển",
         "Khách muốn thuê ván nhưng chưa biết loại phù hợp và giá. Qua ESX có thể hỏi: ‘Tôi mới bắt đầu, nên chọn ván nào? Có thể học một buổi không?’",
         "Tin nhắn giúp làm rõ thời lượng, thiết bị đi kèm, tiền cọc và nơi trả. Nhân viên hoặc hướng dẫn viên giải thích điều kiện và quy tắc tại chỗ trước khi khách thanh toán."
+      ],
+      [
+        "Ví dụ 7. Trao đổi với cảnh sát",
+        "Du khách mất túi nhưng khó mô tả và nói nơi nhìn thấy lần cuối. Có thể viết: ‘Tôi mất một chiếc túi đen. Lần cuối mang theo là gần ga khoảng ba giờ chiều’, rồi trả lời câu hỏi của cảnh sát.",
+        "ESX có thể hỗ trợ giao tiếp nếu cảnh sát đồng ý dùng chat. Chat không tự gửi trình báo hay điều động trợ giúp; hãy hỏi cảnh sát về bước tiếp theo và cách đăng ký vụ việc."
       ],
       [
         "Cơ hội cho doanh nghiệp",
@@ -348,6 +378,11 @@ const article = {
         "សារជួយបញ្ជាក់រយៈពេល ឧបករណ៍ ប្រាក់កក់ និងទីតាំងប្រគល់វិញ។ បុគ្គលិក ឬគ្រូពន្យល់លក្ខខណ្ឌ និងច្បាប់នៅទីនោះ មុនអតិថិជនបង់ប្រាក់។"
       ],
       [
+        "ឧទាហរណ៍ ៧៖ និយាយជាមួយប៉ូលិស",
+        "អ្នកដំណើរបាត់កាបូប តែពិបាកពណ៌នារូបរាង និងកន្លែងឃើញចុងក្រោយ។ អាចសរសេរថា ‘ខ្ញុំបាត់កាបូបខ្មៅ។ ចុងក្រោយនៅជាមួយខ្ញុំក្បែរស្ថានីយប្រហែលម៉ោងបីរសៀល’ ហើយឆ្លើយសំណួរបន្ថែម។",
+        "ESX អាចជួយការសន្ទនា ប្រសិនបើប៉ូលិសយល់ព្រមប្រើការជជែក។ ការជជែកមិនដាក់ពាក្យបណ្តឹង ឬបញ្ជូនក្រុមជំនួយដោយស្វ័យប្រវត្តិទេ។ សូមសួរប៉ូលិសអំពីជំហានបន្ទាប់ និងការចុះបញ្ជី។"
+      ],
+      [
         "ឱកាសសម្រាប់អាជីវកម្ម",
         "ភាសាអាចលាក់តម្រូវការអតិថិជន។ មធ្យោបាយសន្ទនាងាយជួយយល់សំណើ និងបម្រើអតិថិជនបរទេស។",
         "ការសាកសួរ ការទិញ និងការត្រឡប់មកវិញកាន់តែច្រើនជាគោលដៅ មិនមែនការធានាប្រាក់ចំណូលទេ។ ទំនិញ តម្លៃ និងសេវាក៏មានឥទ្ធិពល។"
@@ -399,6 +434,11 @@ const article = {
         "Чатта мерзім, жабдық, кепілақы мен қайтару орнын нақтылауға болады. Қызметкер немесе нұсқаушы жергілікті жағдай мен ережелерді түсіндіреді, клиент төлемге дейін сұрақ қояды."
       ],
       [
+        "7-мысал. Полицияға жүгіну",
+        "Саяхатшы сөмкесін жоғалтып, түрін және соңғы көрген жерін түсіндіре алмай қиналады. ‘Қара сөмкемді жоғалттым. Соңғы рет түстен кейінгі үш шамасында станция маңында жанымда болды’ деп жазып, қызметкердің сұрақтарын нақтылай алады.",
+        "Полиция қызметкері чат қолдануға келіссе, ESX сөйлесуге көмектесе алады. Чаттың өзі полицияға өтініш жібермейді және көмек шақырмайды. Келесі қадамдар мен тіркеу тәртібін қызметкерден нақтылаңыз."
+      ],
+      [
         "Бизнеске мүмкіндік",
         "Тілдік кедергі сұранысты жасыруы мүмкін. Оңай сөйлесу тәсілі өтінішті түсінуге, ұсынысты таныстыруға және шетелдік клиенттерге қызмет көрсетуге көмектеседі.",
         "Көбірек өтініш, сатып алу және қайта келу — мақсатымыз, табыс өсімінің кепілі емес. Тауар, баға мен қызмет те нәтижеге әсер етеді."
@@ -412,7 +452,7 @@ const article = {
   }
 };
 
-const illustrations = ['', 'clothing-red-hair', 'electronics', 'salon', 'hospitality', 'ski-rental', 'surf-rental', 'bicycle-rental'];
+const illustrations = ['', 'clothing-red-hair', 'electronics', 'salon', 'hospitality', 'ski-rental', 'surf-rental', 'police', 'bicycle-rental'];
 
 export default function AboutMissionArticle({ language }: { language: Language }) {
  const t = article[language];
