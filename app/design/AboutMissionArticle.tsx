@@ -32,6 +32,16 @@ const article = {
         "ESX даёт пространство для спокойного обмена сообщениями. Гость может сформулировать запрос, а сотрудник — ответить и уточнить детали. В вопросах состава еды, ограничений и дополнительных платежей важно получить явное подтверждение от сотрудника: понятный разговор помогает сверить условия, но не заменяет проверку."
       ],
       [
+        "Пример 5. Лыжи напрокат в горах",
+        "Человек приехал на курорт и хочет взять лыжи, но не знает, как объяснить размер обуви, свой опыт и желаемое время аренды. В чате он может спросить: «Мне нужен комплект на два часа. Ботинки и шлем входят в стоимость?»",
+        "Сотрудник уточняет запрос, помогает подобрать снаряжение и объясняет время возврата, залог и оплату. Посетителю проще разобраться в предложении, а прокату — обслужить иностранного клиента."
+      ],
+      [
+        "Пример 6. Доска для катания у моря",
+        "На пляже отдыхающий хочет арендовать доску, но не понимает, какая подходит для его опыта и сколько стоит прокат. Через ESX можно уточнить: «Я начинающий. Какую доску вы предлагаете? Можно ли взять урок?»",
+        "В переписке удобно обсудить длительность аренды, комплект, залог и место возврата. Сотрудник или инструктор объясняет условия и правила на месте, а клиент может задать дополнительные вопросы до оплаты."
+      ],
+      [
         "Что это даёт бизнесу",
         "Языковой барьер может скрывать спрос: рядом есть люди, которым нужен товар или услуга, но они не обращаются, потому что не знают, как начать. Доступный способ общения помогает бизнесу заметить эти запросы, объяснить предложение и обслужить аудиторию, с которой раньше было трудно договориться.",
         "Мы видим в этом возможность для большего числа обращений, покупок и повторных визитов. Это цель сервиса, а не обещание гарантированного роста выручки: результат зависит и от товара, цены, качества обслуживания и других условий. ESX помогает на важном этапе — когда человеку нужно быть понятым, а бизнесу нужно понять его потребность."
@@ -71,6 +81,16 @@ const article = {
         "Example 4. Cafés and hotels",
         "A café guest may ask about spice levels, ingredients or takeaway. A hotel guest may need breakfast times, luggage storage or late checkout conditions.",
         "Chat provides time to phrase a request and clarify the answer. Ingredients, restrictions and extra charges should still be explicitly confirmed with staff."
+      ],
+      [
+        "Example 5. Renting skis in the mountains",
+        "A visitor wants skis but needs to explain boot size, experience and rental duration. In chat they can ask: “I need a set for two hours. Are boots and a helmet included?”",
+        "Staff can clarify the request, help choose equipment and explain returns, deposits and payment. The visitor understands the offer and the rental business can serve an international customer."
+      ],
+      [
+        "Example 6. Renting a board by the sea",
+        "A beach visitor wants a board but is unsure which suits their experience or what rental costs. They can ask through ESX: “I’m a beginner. Which board do you suggest? Can I book a lesson?”",
+        "Messages help clarify duration, included equipment, deposit and return location. Staff or an instructor explain local conditions and rules, while the customer asks questions before paying."
       ],
       [
         "Opportunities for businesses",
@@ -114,6 +134,16 @@ const article = {
         "메시지로 요청을 정리하고 답변을 확인할 여유가 생깁니다. 재료나 제한 사항, 추가 요금은 직원에게 명확히 확인하는 것이 중요합니다."
       ],
       [
+        "사례 5. 산에서 스키 빌리기",
+        "방문객은 부츠 사이즈, 경험, 대여 시간을 설명해야 합니다. 채팅으로 ‘두 시간 동안 빌리고 싶어요. 부츠와 헬멧도 포함되나요?’라고 물을 수 있습니다.",
+        "직원은 요청을 확인하고 장비 선택을 도우며 반납 시간, 보증금, 결제 조건을 설명합니다. 방문객은 조건을 이해하고 대여점은 외국인 고객을 응대할 수 있습니다."
+      ],
+      [
+        "사례 6. 바닷가에서 보드 빌리기",
+        "보드를 빌리고 싶지만 자신의 경험에 맞는 종류와 요금을 모를 수 있습니다. ESX로 ‘초보자에게 어떤 보드를 추천하나요? 강습도 받을 수 있나요?’라고 질문할 수 있습니다.",
+        "대여 시간, 포함 장비, 보증금과 반납 장소를 대화로 확인합니다. 직원이나 강사가 현장 조건과 규칙을 설명하고 고객은 결제 전에 더 물어볼 수 있습니다."
+      ],
+      [
         "사업자에게 생기는 기회",
         "언어 장벽 뒤에는 드러나지 않은 수요가 있을 수 있습니다. 쉬운 대화 방식은 문의를 파악하고 제안을 설명하며 외국인 고객을 응대하는 데 도움이 됩니다.",
         "문의와 구매, 재방문 기회를 넓히는 것이 목표이며 매출 증가를 보장하는 것은 아닙니다. 상품, 가격, 서비스도 영향을 줍니다. ESX는 서로의 필요를 이해하는 순간을 돕습니다."
@@ -153,6 +183,16 @@ const article = {
         "例四：咖啡馆与酒店",
         "在餐厅可以问辣度、食材和打包；在酒店可以问早餐、寄存行李和延迟退房条件。",
         "聊天让人有时间组织请求并确认回答。食材、限制事项和额外费用仍应与工作人员明确核实。"
+      ],
+      [
+        "例五：在山上租滑雪装备",
+        "游客需要说明鞋码、经验和租用时长。聊天时可以问：‘我想租两小时，费用包含雪鞋和头盔吗？’",
+        "工作人员可以确认需求，帮助选择装备，并说明归还时间、押金与付款条件。游客更容易理解，租赁商也能接待外国顾客。"
+      ],
+      [
+        "例六：在海边租冲浪板",
+        "游客想租板，却不了解适合自己的类型与费用。通过ESX可以问：‘我是初学者，推荐哪种板？可以预约课程吗？’",
+        "消息交流便于确认时长、配套装备、押金和归还地点。工作人员或教练讲解现场条件与规则，顾客可以在付款前继续提问。"
       ],
       [
         "商家的机会",
@@ -196,6 +236,16 @@ const article = {
         "Mesajlaşma isteği düşünerek yazmaya ve cevabı açıklığa kavuşturmaya yardımcı olur. İçerikler, kısıtlamalar ve ek ücretler personelle açıkça doğrulanmalıdır."
       ],
       [
+        "Örnek 5. Dağda kayak kiralamak",
+        "Ziyaretçinin bot numarasını, deneyimini ve kiralama süresini anlatması gerekir. ‘İki saatlik takım istiyorum. Bot ve kask dahil mi?’ diye sorabilir.",
+        "Görevli ekipman seçiminde yardımcı olur; iade saatini, depozitoyu ve ödeme koşullarını açıklar. Ziyaretçi teklifi daha iyi anlar."
+      ],
+      [
+        "Örnek 6. Deniz kenarında sörf tahtası",
+        "Ziyaretçi hangi tahtanın deneyimine uygun olduğunu ve ücreti merak eder. ESX üzerinden ‘Yeni başlıyorum. Hangisini önerirsiniz? Ders alabilir miyim?’ diye sorabilir.",
+        "Süre, ekipman, depozito ve iade yeri mesajlarla netleştirilir. Görevli veya eğitmen yerel koşulları ve kuralları açıklar; müşteri ödeme öncesinde sorularını sorar."
+      ],
+      [
         "İşletmeler için fırsatlar",
         "Dil engeli talebi görünmez kılabilir. Kolay bir iletişim yolu işletmenin ihtiyacı anlamasını ve yabancı müşterilere hizmet vermesini destekler.",
         "Daha fazla başvuru, alışveriş ve tekrar ziyaret hedefimizdir; gelir artışı garantisi değildir. Ürün, fiyat ve hizmet de sonucu etkiler."
@@ -235,6 +285,16 @@ const article = {
         "Ví dụ 4. Quán ăn và khách sạn",
         "Khách hỏi độ cay, nguyên liệu, mang đi; tại khách sạn hỏi giờ ăn sáng, gửi hành lý hoặc trả phòng muộn.",
         "Chat cho thời gian diễn đạt và làm rõ câu trả lời. Thành phần, hạn chế và phụ phí vẫn cần được nhân viên xác nhận cụ thể."
+      ],
+      [
+        "Ví dụ 5. Thuê ván trượt tuyết",
+        "Khách cần nói cỡ giày, kinh nghiệm và thời gian thuê. Trong chat có thể hỏi: ‘Tôi muốn thuê hai giờ. Đã gồm giày và mũ bảo hiểm chưa?’",
+        "Nhân viên giúp chọn thiết bị, giải thích giờ trả, tiền cọc và thanh toán. Khách hiểu điều kiện hơn, cửa hàng dễ phục vụ khách nước ngoài."
+      ],
+      [
+        "Ví dụ 6. Thuê ván ở biển",
+        "Khách muốn thuê ván nhưng chưa biết loại phù hợp và giá. Qua ESX có thể hỏi: ‘Tôi mới bắt đầu, nên chọn ván nào? Có thể học một buổi không?’",
+        "Tin nhắn giúp làm rõ thời lượng, thiết bị đi kèm, tiền cọc và nơi trả. Nhân viên hoặc hướng dẫn viên giải thích điều kiện và quy tắc tại chỗ trước khi khách thanh toán."
       ],
       [
         "Cơ hội cho doanh nghiệp",
@@ -278,6 +338,16 @@ const article = {
         "សារផ្តល់ពេលគិត និងសួរបញ្ជាក់។ គ្រឿងផ្សំ ការកំណត់ និងថ្លៃបន្ថែមត្រូវបញ្ជាក់ច្បាស់ជាមួយបុគ្គលិក។"
       ],
       [
+        "ឧទាហរណ៍ ៥៖ ជួលស្គីនៅភ្នំ",
+        "ភ្ញៀវត្រូវពន្យល់ទំហំស្បែកជើង បទពិសោធន៍ និងរយៈពេលជួល។ អាចសួរថា ‘ខ្ញុំចង់ជួលពីរម៉ោង។ មានស្បែកជើង និងមួកសុវត្ថិភាពរួមទេ?’។",
+        "បុគ្គលិកជួយជ្រើសឧបករណ៍ ហើយពន្យល់ម៉ោងប្រគល់វិញ ប្រាក់កក់ និងការបង់ប្រាក់។ ភ្ញៀវអាចយល់លក្ខខណ្ឌបានច្បាស់។"
+      ],
+      [
+        "ឧទាហរណ៍ ៦៖ ជួលក្តារជិះរលកនៅសមុទ្រ",
+        "ភ្ញៀវចង់ជួលក្តារ តែមិនដឹងប្រភេទសមនឹងបទពិសោធន៍ និងតម្លៃ។ អាចសួរតាម ESX ថា ‘ខ្ញុំទើបចាប់ផ្តើម។ តើក្តារណាសម? អាចរៀនបានទេ?’។",
+        "សារជួយបញ្ជាក់រយៈពេល ឧបករណ៍ ប្រាក់កក់ និងទីតាំងប្រគល់វិញ។ បុគ្គលិក ឬគ្រូពន្យល់លក្ខខណ្ឌ និងច្បាប់នៅទីនោះ មុនអតិថិជនបង់ប្រាក់។"
+      ],
+      [
         "ឱកាសសម្រាប់អាជីវកម្ម",
         "ភាសាអាចលាក់តម្រូវការអតិថិជន។ មធ្យោបាយសន្ទនាងាយជួយយល់សំណើ និងបម្រើអតិថិជនបរទេស។",
         "ការសាកសួរ ការទិញ និងការត្រឡប់មកវិញកាន់តែច្រើនជាគោលដៅ មិនមែនការធានាប្រាក់ចំណូលទេ។ ទំនិញ តម្លៃ និងសេវាក៏មានឥទ្ធិពល។"
@@ -319,6 +389,16 @@ const article = {
         "Чат сұрақты ойластырып, жауапты нақтылауға уақыт береді. Құрам, шектеулер мен қосымша төлемдерді қызметкермен анық растау қажет."
       ],
       [
+        "5-мысал. Тауда шаңғы жалдау",
+        "Демалушы аяқкиім өлшемін, тәжірибесін және жалдау уақытын түсіндіруі керек. ‘Екі сағатқа жиынтық керек. Аяқкиім мен дулыға бағаға кіре ме?’ деп сұрай алады.",
+        "Қызметкер жабдықты таңдауға көмектесіп, қайтару уақытын, кепілақы мен төлемді түсіндіреді. Клиент шарттарды жақсырақ ұғады."
+      ],
+      [
+        "6-мысал. Теңізде тақта жалдау",
+        "Демалушы қай тақта тәжірибесіне сай келетінін және бағасын білмейді. ESX арқылы ‘Мен жаңадан бастадым. Қайсысын ұсынасыз? Сабақ алуға бола ма?’ деп сұрай алады.",
+        "Чатта мерзім, жабдық, кепілақы мен қайтару орнын нақтылауға болады. Қызметкер немесе нұсқаушы жергілікті жағдай мен ережелерді түсіндіреді, клиент төлемге дейін сұрақ қояды."
+      ],
+      [
         "Бизнеске мүмкіндік",
         "Тілдік кедергі сұранысты жасыруы мүмкін. Оңай сөйлесу тәсілі өтінішті түсінуге, ұсынысты таныстыруға және шетелдік клиенттерге қызмет көрсетуге көмектеседі.",
         "Көбірек өтініш, сатып алу және қайта келу — мақсатымыз, табыс өсімінің кепілі емес. Тауар, баға мен қызмет те нәтижеге әсер етеді."
@@ -332,7 +412,7 @@ const article = {
   }
 };
 
-const illustrations = ['', 'clothing', 'electronics', 'salon', 'hospitality'];
+const illustrations = ['', 'clothing', 'electronics', 'salon', 'hospitality', 'ski-rental', 'surf-rental'];
 
 export default function AboutMissionArticle({ language }: { language: Language }) {
  const t = article[language];
