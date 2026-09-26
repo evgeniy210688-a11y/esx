@@ -109,6 +109,48 @@ const text: Record<Language, FlagText> = {
   },
 };
 
+const history: Record<Language, [string, string][]> = {
+  ru: [
+    ['1882: зачем понадобился флаг', 'Создание тхэгыкки связано с выходом Кореи на международную дипломатическую арену. В 1882 году, при заключении договора с США, понадобился национальный флаг для представления страны. Точный вид флага на церемонии подписания достоверно не установлен.'],
+    ['Кто участвовал в создании', 'По дневнику дипломата Пак Ён Хё, в сентябре 1882 года во время миссии в Японию он подготовил вариант с кругом тхэгык и четырьмя триграммами. Поэтому его связывают с формированием узнаваемого образа флага, но называть его единственным автором всех ранних вариантов было бы неточно.'],
+    ['1883: официальное утверждение', '6 марта 1883 года король Коджон объявил тхэгыкки государственным флагом. Таким образом, 1882 год связан с появлением известного варианта, а 1883 — с официальным утверждением. После основания Республики Корея единые правила построения флага были опубликованы 15 октября 1949 года.'],
+  ],
+  en: [
+    ['1882: why a flag was needed', 'The Taegeukgi emerged as Korea expanded international diplomacy. The 1882 treaty with the United States prompted the need for a national flag to represent the country. The exact flag used at the signing is not conclusively documented.'],
+    ['Who helped create it', 'Diplomat Park Yeong-hyo recorded preparing a version with a taegeuk and four trigrams during his September 1882 mission to Japan. He is associated with its recognizable design, but should not be described as the sole creator of every early version.'],
+    ['1883: official adoption', 'King Gojong proclaimed the Taegeukgi the national flag on March 6, 1883. Thus 1882 marks the familiar early design and 1883 its official adoption. After the Republic of Korea was established, standardized construction guidelines were announced on October 15, 1949.'],
+  ],
+  ko: [
+    ['1882년: 국기가 필요해진 이유', '태극기의 탄생은 조선의 국제 외교 확대와 연결됩니다. 1882년 조미수호통상조약 체결을 계기로 국가를 대표할 국기가 필요해졌습니다. 조인식에서 사용된 국기의 정확한 모습은 확실하게 밝혀지지 않았습니다.'],
+    ['제작에 참여한 인물', '박영효의 사화기략에 따르면 그는 1882년 9월 일본으로 가는 사행 중 태극과 사괘로 된 국기를 만들었습니다. 익숙한 형태의 태극기와 관련된 인물이지만 모든 초기 형태의 유일한 창안자로 단정하는 것은 정확하지 않습니다.'],
+    ['1883년: 공식 국기로 제정', '고종은 1883년 3월 6일 태극기를 국기로 제정했습니다. 1882년은 알려진 초기 형태의 제작, 1883년은 공식 제정과 연결됩니다. 대한민국 수립 이후인 1949년 10월 15일에는 통일된 국기 제작법이 공포되었습니다.'],
+  ],
+  zh: [
+    ['1882年：为什么需要国旗', '太极旗的诞生与朝鲜拓展国际外交有关。1882年与美国缔结条约时，需要一面代表国家的旗帜。签约仪式上所用旗帜的确切样式尚未得到确定。'],
+    ['谁参与了设计', '据外交官朴泳孝的出使日记，他在1882年9月赴日期间制作了带有太极和四卦的版本。他与这一熟悉的旗帜形象密切相关，但不能简单认定他是所有早期版本的唯一创作者。'],
+    ['1883年：正式确立', '高宗于1883年3月6日将太极旗定为国旗。因此，1882年对应这一早期样式的制作，1883年对应正式确立。大韩民国成立后，于1949年10月15日公布了统一的国旗制作规范。'],
+  ],
+  tr: [
+    ['1882: neden bir bayrak gerekti?', 'Taegeukgi, Kore’nin uluslararası diplomasisini genişlettiği dönemde ortaya çıktı. ABD ile 1882’de yapılan antlaşma, ülkeyi temsil edecek bir ulusal bayrağa duyulan ihtiyacı gündeme getirdi. İmza törenindeki bayrağın kesin görünümü bilinmiyor.'],
+    ['Kim katkıda bulundu?', 'Diplomat Park Yeong-hyo, Eylül 1882’de Japonya’ya giderken taegeuk ve dört trigramlı bir bayrak hazırladığını günlüğünde kaydetti. Tanınan tasarımla ilişkilidir; ancak bütün ilk sürümlerin tek yaratıcısı sayılması doğru olmaz.'],
+    ['1883: resmen kabul edilmesi', 'Kral Gojong, 6 Mart 1883’te Taegeukgi’yi ulusal bayrak ilan etti. Böylece 1882 bilinen ilk tasarımla, 1883 resmî kabulle ilişkilidir. Kore Cumhuriyeti kurulduktan sonra, 15 Ekim 1949’da standart yapım kuralları açıklandı.'],
+  ],
+  vi: [
+    ['1882: vì sao cần quốc kỳ?', 'Taegeukgi ra đời khi Hàn Quốc mở rộng quan hệ ngoại giao. Hiệp ước với Hoa Kỳ năm 1882 đặt ra nhu cầu có lá cờ đại diện cho đất nước. Hình dạng chính xác của lá cờ tại lễ ký chưa được xác định chắc chắn.'],
+    ['Ai tham gia tạo nên lá cờ?', 'Theo nhật ký của nhà ngoại giao Park Yeong-hyo, ông chuẩn bị phiên bản có taegeuk và bốn quẻ trong chuyến đi Nhật Bản tháng 9 năm 1882. Ông gắn với thiết kế quen thuộc này, nhưng không nên coi là tác giả duy nhất của mọi phiên bản ban đầu.'],
+    ['1883: chính thức công nhận', 'Vua Gojong công nhận Taegeukgi là quốc kỳ ngày 6 tháng 3 năm 1883. Năm 1882 gắn với mẫu cờ ban đầu quen thuộc, còn 1883 là năm công nhận chính thức. Sau khi Đại Hàn Dân Quốc thành lập, quy chuẩn chế tác thống nhất được công bố ngày 15 tháng 10 năm 1949.'],
+  ],
+  km: [
+    ['1882៖ ហេតុអ្វីត្រូវការទង់ជាតិ?', 'Taegeukgi កើតឡើងនៅពេលកូរ៉េពង្រីកទំនាក់ទំនងការទូតអន្តរជាតិ។ សន្ធិសញ្ញាជាមួយសហរដ្ឋអាមេរិកឆ្នាំ 1882 នាំឱ្យត្រូវការទង់សម្រាប់តំណាងប្រទេស។ រូបរាងពិតប្រាកដនៃទង់នៅពិធីចុះហត្ថលេខាមិនទាន់ត្រូវបានបញ្ជាក់ច្បាស់ទេ។'],
+    ['អ្នកណាបានចូលរួមបង្កើត?', 'តាមកំណត់ហេតុរបស់អ្នកការទូត Park Yeong-hyo គាត់បានរៀបចំទង់មានរង្វង់ taegeuk និងសញ្ញាបួន ក្នុងដំណើរទៅជប៉ុនខែកញ្ញា ឆ្នាំ 1882។ គាត់ទាក់ទងនឹងទម្រង់ដែលគេស្គាល់នេះ ប៉ុន្តែមិនគួរចាត់ទុកថាជាអ្នកបង្កើតតែម្នាក់នៃគ្រប់ទម្រង់ដំបូងទេ។'],
+    ['1883៖ ការទទួលស្គាល់ជាផ្លូវការ', 'ព្រះបាទ Gojong ប្រកាស Taegeukgi ជាទង់ជាតិនៅថ្ងៃទី 6 ខែមីនា ឆ្នាំ 1883។ ឆ្នាំ 1882 ទាក់ទងនឹងទម្រង់ដំបូងដែលគេស្គាល់ ហើយឆ្នាំ 1883 ជាការទទួលស្គាល់ផ្លូវការ។ ក្រោយបង្កើតសាធារណរដ្ឋកូរ៉េ គោលការណ៍ផលិតទង់ឯកភាពត្រូវបានប្រកាសថ្ងៃទី 15 ខែតុលា ឆ្នាំ 1949។'],
+  ],
+  kk: [
+    ['1882: ту не үшін қажет болды?', 'Тхэгыкки Кореяның халықаралық дипломатиясы кеңейген кезде пайда болды. 1882 жылғы АҚШ-пен шарт елді таныстыратын мемлекеттік тудың қажеттілігін туғызды. Қол қою рәсіміндегі тудың нақты бейнесі толық анықталмаған.'],
+    ['Жасауға кім қатысты?', 'Дипломат Пак Ён Хё күнделігінде 1882 жылғы қыркүйекте Жапонияға сапары кезінде тхэгык пен төрт триграммасы бар нұсқаны дайындағанын жазған. Оның есімі таныс үлгімен байланысты, бірақ барлық алғашқы нұсқалардың жалғыз авторы деу дәл емес.'],
+    ['1883: ресми бекітілуі', 'Коджон патша 1883 жылғы 6 наурызда тхэгыккиді мемлекеттік ту деп жариялады. 1882 жыл таныс алғашқы үлгімен, 1883 жыл ресми бекітілуімен байланысты. Корея Республикасы құрылғаннан кейін, 1949 жылғы 15 қазанда туды жасаудың бірыңғай ережелері жарияланды.'],
+  ],
+};
 const lines = [[true, true, true], [false, false, false], [false, true, false], [true, false, true]];
 function Trigram({ pattern }: { pattern: boolean[] }) {
   return <svg width="72" height="48" viewBox="0 0 72 48" aria-hidden="true" focusable="false">
@@ -131,6 +173,9 @@ export default function KoreaFlag({ language }: { language: Language }) {
       </section>
     )}</div>
     <p className="korea-story-intro" style={{ marginTop: 28 }}>{t.note}</p>
+    <div className="korea-story-columns" id="korean-flag-history">{history[language].map(([heading, body]) =>
+      <section className="korea-story-part" key={heading}><h3>{heading}</h3><p>{body}</p></section>
+    )}</div>
     <div className="source-row"><a href="https://www.mois.go.kr/eng/sub/a03/nationalSymbol/screen.do" target="_blank" rel="noreferrer">{copy[language][41]} · Ministry of the Interior and Safety ↗</a></div>
   </article>;
 }
