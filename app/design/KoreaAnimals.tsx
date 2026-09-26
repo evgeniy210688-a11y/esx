@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { copy, type Language } from './content';
 
 type AnimalArticle = [title: string, intro: string, tradition: string, detail: string];
@@ -56,6 +57,7 @@ export default function KoreaAnimals({ language }: { language: Language }) {
     <article className="korea-story" id={ids[index]} key={ids[index]} aria-labelledby={`${ids[index]}-title`}>
       <h2 id={`${ids[index]}-title`}>{title}</h2>
       <p className="korea-story-intro">{intro}</p>
+      <Image className="korea-story-art" src={`/korea-story/${ids[index]}-comic.webp`} alt={title} width={2172} height={724} sizes="(max-width: 760px) 100vw, 1264px" style={{ marginBottom: 28 }} />
       <p className="korea-story-intro">{tradition}</p>
       <p className="korea-story-intro">{detail}</p>
       <div className="source-row"><a href={sources[index][0]} target="_blank" rel="noreferrer">{copy[language][41]} · {sources[index][1]} ↗</a></div>
