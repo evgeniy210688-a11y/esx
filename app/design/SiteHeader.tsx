@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import AccountLink from '../account/AccountLink';
@@ -9,7 +9,7 @@ import './design.css';
 
 const sections = ['/', '/korea', '/about', '/advertising', '/contact'];
 
-export default function SiteHeader({ language }: { language: Language }) {
+export default function SiteHeader({ language, actions }: { language: Language; actions?: ReactNode }) {
   const [open, setOpen] = useState(false);
   const header = useRef<HTMLElement>(null);
   const toggle = useRef<HTMLButtonElement>(null);
@@ -37,6 +37,7 @@ export default function SiteHeader({ language }: { language: Language }) {
       <span aria-hidden="true" className="header-glass" style={{ backdropFilter: 'blur(24px) saturate(145%)', WebkitBackdropFilter: 'blur(24px) saturate(145%)' }} />
       <div className="header-inner">
         <Link className="header-logo" href="/" aria-label={`ESX — ${t[0]}`}><Image src="/esx-logo.png" alt="ESX" width={1254} height={1254} sizes="(max-width: 760px) 64px, 80px" preload /></Link>
+        {actions && <div className="site-header-actions">{actions}</div>}
         <button ref={toggle} type="button" className="menu-toggle" aria-label={t[44]} aria-expanded={open} aria-controls="account-site-navigation" onClick={() => setOpen(!open)}><span /><span /><span /></button>
         <nav id="account-site-navigation" aria-label={t[44]}>
           {sections.map((href, index) => <Link key={href} href={href} className={index === 4 ? 'nav-contact' : ''} style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }} onClick={() => setOpen(false)}>{t[index]}{index === 4 && <span>↗</span>}</Link>)}

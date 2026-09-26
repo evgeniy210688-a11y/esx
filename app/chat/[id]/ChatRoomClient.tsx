@@ -2,8 +2,8 @@
 import ChatShortcuts from "../ChatShortcuts";
 import "../chat-theme.css";
 
-import Image from "next/image";
-import Link from "next/link";
+import SiteHeader from "@/app/design/SiteHeader";
+
 import ChatLanguages from "./ChatLanguages";
 import { chatLabels } from "./chatLabels";
 import MessageTranslation from "./MessageTranslation";
@@ -185,19 +185,7 @@ export default function ChatRoomClient({
   return (
     <main lang={language} className="chat-theme flex min-h-screen flex-col">
 
-        {/* Header */}
-        <header className="chat-header flex w-full shrink-0 items-center justify-between border-b px-6 py-5">
-          <Link
-            href="/"
-            className="mr-4 shrink-0"
-          >
-            <Image src="/esx-logo.png" alt="ESX" width={64} height={64} className="rounded-xl" />
-          </Link>
-
-          <div className="min-w-0 text-right">
-            <ChatQrCode chatId={chatId} language={language} />
-          </div>
-        </header>
+        <div className="esx-site chat-site-header"><SiteHeader language={language} actions={<ChatQrCode chatId={chatId} language={language} />} /></div>
 
       <div className="chat-shell mx-auto flex w-full max-w-2xl flex-1 flex-col">
         <details id="chat-language-panel" className="chat-language-panel"><summary><svg className="chat-language-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" /><ellipse cx="12" cy="12" rx="4" ry="9" /><path d="M3 12h18M5 6.5h14M5 17.5h14" /></svg>{chatLabels[language][0]}</summary><ChatLanguages key={chatId} chatId={chatId} onMineChange={setTranslationLanguage} /></details>

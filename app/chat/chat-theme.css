@@ -107,3 +107,14 @@
 .chat-language-picker li > button { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 10px 8px; border: 0; border-radius: 8px; background: transparent; color: #f1f5ff; font: inherit; text-align: left; cursor: pointer; }
 .chat-language-picker li > button:hover, .chat-language-picker li > button[aria-pressed="true"] { background: #233956; }
 .chat-language-picker > summary:focus-visible, .chat-language-picker li > button:focus-visible { outline: 2px solid #83e6ff; outline-offset: 2px; }
+
+/* Shared site navigation above the chat, with room for the invitation action. */
+.chat-theme > .chat-site-header { position: relative; z-index: 60; flex-shrink: 0; overflow: visible; background: transparent; }
+.chat-site-header .header-inner { flex-wrap: wrap; column-gap: 16px; }
+.chat-site-header .header-logo { order: 0; }
+.chat-site-header .esx-header nav { order: 1; }
+.chat-site-header .site-header-actions { order: 2; flex-shrink: 0; margin-left: auto; }
+.chat-site-header .menu-toggle { order: 3; }
+@media (max-width: 760px) {
+  .chat-site-header .header-inner { flex-wrap: nowrap; }
+}
