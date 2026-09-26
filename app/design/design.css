@@ -811,3 +811,7 @@
   .esx-site .business-actions { left: 48px; right: auto; width: 286px; justify-content: flex-start; }
   .esx-site .business-actions .button { width: 100%; height: 43px; }
 }
+
+/* Dark surfaces improve readability in the About section. */
+.esx-site .about-details .korea-story { background: #081426f5; border-color: #526781; }
+.esx-site .about-details p { color: #d4e3f4; }
