@@ -20,8 +20,8 @@
 .account-qr,.account-qr-primary{box-sizing:border-box;width:276px;max-width:100%;margin-left:auto;margin-right:auto}
 .account-qr-primary{margin-bottom:20px}
 .account-qr-primary button{box-sizing:border-box;width:100%}
-.account-qr-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
-.account-qr-actions button{min-width:0;padding:13px 8px;overflow-wrap:anywhere}
+.account-qr-actions{display:flex;flex-wrap:wrap;gap:12px}
+.account-qr-actions button{flex:1 1 auto;min-width:max-content;padding:13px 16px;white-space:nowrap;overflow-wrap:normal;word-break:normal}
 .account-qr-print{display:none}
 @media print{
   @page{size:A4 portrait;margin:16mm}
