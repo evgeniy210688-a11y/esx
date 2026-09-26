@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import type { Language } from './content';
 
 const article = {
@@ -331,10 +332,12 @@ const article = {
   }
 };
 
+const illustrations = ['', 'clothing', 'electronics', 'salon', 'hospitality'];
+
 export default function AboutMissionArticle({ language }: { language: Language }) {
  const t = article[language];
  return <article id="esx-everyday-stories" className="korea-story" style={{ gridColumn: '1 / -1' }} aria-labelledby="esx-mission-title">
   <h2 id="esx-mission-title">{t.title}</h2><p>{t.intro}</p>
-  {t.sections.map(([heading, ...paragraphs]) => <section key={heading} style={{ marginTop: 32, maxWidth: 960 }}><h3 style={{ fontSize: 'clamp(20px, 2vw, 26px)', lineHeight: 1.35, marginBottom: 16 }}>{heading}</h3>{paragraphs.map((paragraph, i) => <p key={i} style={{ marginTop: i ? 14 : 0 }}>{paragraph}</p>)}</section>)}
+  {t.sections.map(([heading, ...paragraphs], index) => <section key={heading} style={{ marginTop: 32, maxWidth: 960 }}><h3 style={{ fontSize: 'clamp(20px, 2vw, 26px)', lineHeight: 1.35, marginBottom: 16 }}>{heading}</h3>{illustrations[index] && <Image className="korea-story-art" src={`/about/${illustrations[index]}-comic.webp`} alt={heading} width={2172} height={724} sizes="(max-width: 760px) 100vw, 960px" style={{ marginBottom: 22 }} />}{paragraphs.map((paragraph, i) => <p key={i} style={{ marginTop: i ? 14 : 0 }}>{paragraph}</p>)}</section>)}
  </article>;
 }
