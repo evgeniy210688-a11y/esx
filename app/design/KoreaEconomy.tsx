@@ -8,7 +8,7 @@ const companyLogos: Record<string, string> = { Samsung: 'samsung.svg', Kia: 'kia
 const bankLogos: Record<string, string> = { 'NH NongHyup Bank': 'nh.svg', 'KB Kookmin Bank': 'kb.svg', 'Shinhan Bank': 'shinhan.svg', 'Woori Bank': 'woori.svg', 'Hana Bank': 'hana.svg' };
 
 const labels: Record<Language, string[]> = {
-  ru: ['Банки Южной Кореи', 'Официальные сайты местных банков — счета, карты и банковские услуги.', 'Лидеры экономики Южной Кореи', 'Samsung, Kia, Hyundai и LG — одни из лидеров экономики Южной Кореи. Их электроника, автомобили и технологии известны во всём мире.', 'Официальный сайт'],
+  ru: ['Банки Южной Кореи', 'Официальные сайты местных банков — счета, карты и банковские услуги.', 'Гиганты экономики Южной Кореи', 'Samsung, Kia, Hyundai и LG — гиганты экономики Южной Кореи. Их электроника, автомобили и технологии известны во всём мире.', 'Официальный сайт'],
   en: ['South Korean banks', 'Official local bank websites for accounts, cards and banking services.', 'Leaders of South Korea’s economy', 'Samsung, Kia, Hyundai and LG are among the leaders of South Korea’s economy. Their electronics, cars and technologies are known worldwide.', 'Official website'],
   ko: ['대한민국의 은행', '계좌, 카드 및 금융 서비스를 위한 국내 은행 공식 웹사이트입니다.', '대한민국 경제를 이끄는 기업', '삼성, 기아, 현대, LG는 대한민국 경제를 이끄는 대표 기업입니다. 전자제품, 자동차와 기술로 세계에 알려져 있습니다.', '공식 웹사이트'],
   zh: ['韩国银行', '查询账户、银行卡及银行服务的本地银行官方网站。', '韩国经济的领军企业', '三星、起亚、现代和LG是韩国经济的领军企业之一，其电子产品、汽车和技术享誉全球。', '官方网站'],
