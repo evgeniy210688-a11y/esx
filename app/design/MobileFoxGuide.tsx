@@ -11,12 +11,65 @@ const guide: Record<Language, [string, string, string, string, string, string]> 
   kk: ['Әртүрлі тілде сөйлесіңіз', 'ESX — кіріс хабарламаларды таңдаған тіліңізге автоматты аударатын чат. Жаңа таныстармен, қонақтармен, клиенттермен және серіктестермен сөйлесіңіз.', 'Қалай қолдануға болады', 'Сөйлесуді бастау түймесін басыңыз. Чатты немесе аккаунттағы QR-кодыңызды ашыңыз.', 'QR-кодты көрсетіп немесе чат сілтемесін жіберіп, әңгімелесушіні шақырыңыз.', 'Кіріс хабарламалардың тілін таңдап, өз тіліңізде жазыңыз. ESX әңгімелесушінің хабарламаларын аударады.'],
 };
 
+const accountNotes: Record<Language, [string, string, string, string]> = {
+  "ru": [
+    "Без регистрации",
+    "Одноразовый чат для быстрого общения.",
+    "После регистрации",
+    "У вас появится постоянный QR-код, а переписки будут сохраняться в аккаунте."
+  ],
+  "en": [
+    "Without registration",
+    "A one-time chat for quick conversations.",
+    "After registration",
+    "You get a permanent QR code, and your conversations are saved in your account."
+  ],
+  "ko": [
+    "가입 없이",
+    "빠르게 대화할 수 있는 일회용 채팅입니다.",
+    "가입 후",
+    "고정 QR 코드가 생기고 대화가 계정에 저장됩니다."
+  ],
+  "zh": [
+    "无需注册",
+    "适合快速交流的一次性聊天。",
+    "注册后",
+    "您将获得固定二维码，聊天记录会保存在账户中。"
+  ],
+  "tr": [
+    "Kayıt olmadan",
+    "Hızlı iletişim için tek kullanımlık sohbet.",
+    "Kayıt olduktan sonra",
+    "Kalıcı bir QR kodunuz olur ve sohbetleriniz hesabınızda saklanır."
+  ],
+  "vi": [
+    "Không đăng ký",
+    "Cuộc trò chuyện dùng một lần để trao đổi nhanh.",
+    "Sau khi đăng ký",
+    "Bạn có mã QR cố định và các cuộc trò chuyện được lưu trong tài khoản."
+  ],
+  "km": [
+    "ដោយមិនចុះឈ្មោះ",
+    "ការជជែកប្រើម្តងសម្រាប់ទំនាក់ទំនងរហ័ស។",
+    "បន្ទាប់ពីចុះឈ្មោះ",
+    "អ្នកនឹងមានកូដ QR អចិន្ត្រៃយ៍ ហើយការសន្ទនាត្រូវបានរក្សាទុកក្នុងគណនី។"
+  ],
+  "kk": [
+    "Тіркелмей",
+    "Жылдам сөйлесуге арналған бір реттік чат.",
+    "Тіркелгеннен кейін",
+    "Тұрақты QR-кодыңыз пайда болады, ал хат алмасулар аккаунтыңызда сақталады."
+  ]
+};
+
 export default function MobileFoxGuide({ language }: { language: Language }) {
   const text = guide[language];
+  const note = accountNotes[language];
   return <section className="mobile-fox-guide" aria-labelledby="mobile-fox-guide-title" lang={language}>
     <h2 id="mobile-fox-guide-title">{text[0]}</h2>
     <p>{text[1]}</p>
     <h3>{text[2]}</h3>
     <ol>{text.slice(3).map(step => <li key={step}>{step}</li>)}</ol>
+    <div className="mobile-fox-account-note"><h3>{note[0]}</h3><p>{note[1]}</p><h3>{note[2]}</h3><p>{note[3]}</p></div>
   </section>;
 }
