@@ -28,5 +28,26 @@
 
 /* Fixed decorative layer keeps the neon scene stable while messages scroll. */
 .account-page.kakao-chat { position: relative; isolation: isolate; background: #071426; }
-.account-page.kakao-chat::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(180deg, rgba(7,20,38,.72), rgba(7,20,38,.62) 45%, rgba(7,20,38,.82)), url('/backgrounds/chat-korean-neon.webp') center 45% / cover no-repeat; }
+.account-page.kakao-chat::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(180deg, rgba(7,20,38,.38), rgba(7,20,38,.24) 45%, rgba(7,20,38,.58)), url('/backgrounds/chat-korean-neon.webp') center 45% / cover no-repeat; }
 .kakao-chat .chat-sender, .kakao-chat .private-message-line > time { text-shadow: 0 1px 4px #071426; }
+/* Original navy chat surface, frosted against the neon side scenery. */
+.kakao-chat > .account-shell {
+  box-sizing: border-box;
+  max-width: 808px;
+  min-height: calc(100svh - 48px);
+  padding: 24px;
+  border: 1px solid rgba(184,209,238,.14);
+  border-radius: 24px;
+  background: rgba(7,20,38,.9);
+  backdrop-filter: blur(24px) saturate(.65);
+  -webkit-backdrop-filter: blur(24px) saturate(.65);
+  box-shadow: 0 16px 60px rgba(0,0,0,.3), inset 0 1px 0 rgba(239,246,255,.04);
+}
+.kakao-chat .private-compose { background: rgba(7,20,38,.96); border-radius: 12px; }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .kakao-chat > .account-shell { background: #071426; }
+}
+@media (max-width: 600px) {
+  .account-page.kakao-chat { padding: 12px 10px 24px; }
+  .kakao-chat > .account-shell { padding: 18px 14px; border-radius: 18px; min-height: calc(100svh - 36px); }
+}
