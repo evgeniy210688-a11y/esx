@@ -1,6 +1,7 @@
 "use client";
 
 import Image from 'next/image';
+import './mobile-fox.css';
 import { useEffect, useRef, useState } from 'react';
 import { copy, type Language } from './content';
 
@@ -59,6 +60,7 @@ export default function BusinessHero({ language, onStart }: { language: Language
   }, [paused, focused, active]);
 
   return <section ref={heroRef} id="home" className={`hero business-hero ${expanded ? 'is-expanded' : ''}`} aria-label={m[0]} onFocusCapture={() => setFocused(true)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }}>
+    <div className="mobile-fox-art"><Image src="/banners/mobile-fox.webp" alt="ESX" width={852} height={1846} sizes="(max-width: 760px) 100vw, 1px" loading="eager" /></div>
     {scenes.map((scene, index) => <div className={`business-slide ${index === active ? 'is-active' : ''}`} key={scene} aria-hidden={index !== active}>
       <picture><source media="(max-width: 760px) and (orientation: portrait)" srcSet={`/banners/mobile/${scene}.webp`} /><Image src={`/banners/${scene}-generated.webp`} alt="" fill loading={index === 0 ? 'eager' : 'lazy'} sizes={expanded ? '100vw' : '(max-width: 1328px) 100vw, 1264px'} className="hero-image" /></picture>
       <div className="hero-shade" />
