@@ -1,0 +1,23 @@
+/* Message layout uses the existing ESX palette. */
+.kakao-chat .private-list { gap: 20px; }
+.kakao-chat .private-message-row { display: flex; align-items: flex-start; gap: 10px; max-width: 90%; }
+.kakao-chat .private-message-row-own { align-self: flex-end; justify-content: flex-end; }
+.kakao-chat .private-message-avatar { display: grid; place-items: center; flex: 0 0 36px; height: 36px; border-radius: 13px; background: #1a3556; color: #eff6ff; font-size: 16px; font-weight: 600; }
+.kakao-chat .private-message-content { min-width: 0; }
+.kakao-chat .chat-sender { margin: 0 0 7px; font-size: 13px; overflow-wrap: anywhere; }
+.kakao-chat .private-message-line { display: flex; align-items: flex-end; gap: 7px; }
+.kakao-chat .private-message-row-own .private-message-line { flex-direction: row-reverse; }
+.kakao-chat .private-bubble { position: relative; min-width: 0; max-width: none; align-self: auto; border-radius: 10px; padding: 10px 13px; line-height: 1.5; }
+.kakao-chat .private-bubble::before { content: ''; position: absolute; left: -6px; top: 9px; border-bottom: 9px solid transparent; border-right: 8px solid #1a3556; }
+.kakao-chat .private-own::before { left: auto; right: -6px; border-right: 0; border-left: 8px solid #245fc5; }
+.kakao-chat .private-message-line > time { flex-shrink: 0; padding-bottom: 2px; color: #b8d1ee; font-size: 11px; line-height: 1.4; white-space: nowrap; }
+.kakao-chat .private-compose { grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 10px; padding-bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 2; }
+.kakao-chat .private-compose label { grid-column: 1 / -1; }
+.kakao-chat .private-compose textarea { min-height: 56px; max-height: 180px; padding: 10px 12px; }
+.kakao-chat .private-compose button { min-height: 44px; padding: 10px 14px; border-radius: 10px; }
+@media (max-width: 480px) {
+  .kakao-chat .private-message-row { max-width: 96%; gap: 8px; }
+  .kakao-chat .private-message-avatar { flex-basis: 32px; height: 32px; border-radius: 12px; font-size: 14px; }
+  .kakao-chat .private-compose { gap: 8px; }
+  .kakao-chat .private-compose button { padding-inline: 10px; font-size: 13px; }
+}

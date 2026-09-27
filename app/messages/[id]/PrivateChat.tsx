@@ -6,6 +6,7 @@ import { languages, type Language } from '@/app/design/content';
 import MessageTranslation from '@/app/chat/[id]/MessageTranslation';
 import useAccount from '@/app/account/useAccount';
 import '@/app/account/account.css';
+import './private-chat.css';
 
 type Message = { id: string; sender_id: string; message: string; created_at: string };
 export default function PrivateChat({ chatId }: { chatId: string }) {
@@ -71,18 +72,29 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
     } catch { setStatus('Сообщение не отправлено. Проверьте соединение.'); }
     finally { sendLock.current = false; setSending(false); }
   }
-  return <main className="account-page" lang="ru"><div className="account-shell"><nav className="account-nav"><Link href="/account">← Мои переписки</Link><Link href="/account">Мой QR-код</Link></nav><h1>Личная переписка</h1>
+  return <main className="account-page kakao-chat" lang="ru"><div className="account-shell"><nav className="account-nav"><Link href="/account">← Мои переписки</Link><Link href="/account">Мой QR-код</Link></nav><h1>Личная переписка</h1>
     {user?.is_anonymous && <p className="account-muted">Вы общаетесь как гость. Чат доступен в этом браузере, пока сохранена гостевая сессия. <Link href="/account">Зарегистрироваться для постоянного QR-кода</Link></p>}
     {!ready ? <p role="status">Загрузка…</p> : !user ? <Link className="account-button" href={`/account?next=${encodeURIComponent(`/messages/${chatId}`)}`}>Войти / зарегистрироваться</Link> : <>
       <label>Язык входящих сообщений <select value={target} onChange={event => setTarget(event.target.value as Language)}>{languages.map(item => <option key={item.code} value={item.code}>{item.name}</option>)}</select></label>
       {!loaded && <p role="status">Загрузка сообщений…</p>}
       {older && <button className="account-secondary" onClick={() => setLimit(value => value + 100)}>Показать более ранние сообщения</button>}
-      <div className="private-list">{messages.map(message => <article key={message.id} className={`private-bubble${message.sender_id === user.id ? ' private-own' : ''}`}>
-        <strong className="chat-sender" dir="auto">{names[message.sender_id] || 'Гость'}</strong>
-        {message.sender_id === user.id ? <span dir="auto">{message.message}</span> : <MessageTranslation key={`${message.id}:${target}`} chatId={chatId} messageId={message.id} language={target} target={target} privateChat />}
-        <time dateTime={message.created_at}>{new Date(message.created_at).toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' })}</time>
-      </article>)}{loaded && allowed && !messages.length && <p className="account-muted">Начните разговор. Сообщения видны только вам и собеседнику.</p>}</div>
-      {allowed && <form onSubmit={send} className="private-compose"><label htmlFor="private-message">Сообщение</label><textarea id="private-message" value={draft} onChange={event => setDraft(event.target.value)} maxLength={4000} required disabled={sending} /><button disabled={sending || !draft.trim()}>{sending ? 'Отправляем…' : 'Отправить'}</button></form>}
+      <div className="private-list">{messages.map(message => {
+        const own = message.sender_id === user.id;
+        const sender = names[message.sender_id] || 'Гость';
+        return <article key={message.id} className={`private-message-row${own ? ' private-message-row-own' : ''}`}>
+          {!own && <span className="private-message-avatar" aria-hidden="true">{Array.from(sender)[0]?.toLocaleUpperCase()}</span>}
+          <div className="private-message-content">
+            {!own && <strong className="chat-sender" dir="auto">{sender}</strong>}
+            <div className="private-message-line">
+              <div className={`private-bubble${own ? ' private-own' : ''}`}>
+                {own ? <span dir="auto">{message.message}</span> : <MessageTranslation key={`${message.id}:${target}`} chatId={chatId} messageId={message.id} language={target} target={target} privateChat />}
+              </div>
+              <time dateTime={message.created_at}>{new Date(message.created_at).toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' })}</time>
+            </div>
+          </div>
+        </article>;
+      })}{loaded && allowed && !messages.length && <p className="account-muted">Начните разговор. Сообщения видны только вам и собеседнику.</p>}</div>
+      {allowed && <form onSubmit={send} className="private-compose"><label htmlFor="private-message">Сообщение</label><textarea id="private-message" value={draft} onChange={event => setDraft(event.target.value)} placeholder="Написать сообщение…" rows={2} maxLength={4000} required disabled={sending} /><button disabled={sending || !draft.trim()}>{sending ? 'Отправляем…' : 'Отправить'}</button></form>}
       {status && <p role="alert">{status} <button className="account-secondary" onClick={() => setAttempt(value => value + 1)}>Повторить</button></p>}
     </>}
   </div></main>;
