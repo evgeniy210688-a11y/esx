@@ -9,3 +9,14 @@
   .esx-site .business-hero > .business-actions { position: absolute; inset: auto 0 0; width: 100%; padding: 0 20px 16px; margin-top: 0; background: transparent; display: flex; justify-content: center; }
   .esx-site .business-hero > .business-actions .button { width: 100%; max-width: 360px; }
 }
+
+.mobile-fox-guide { display: none; }
+@media (max-width: 760px) {
+  .esx-site .mobile-fox-guide { display: block; padding: 24px 20px; margin-top: 16px; border: 1px solid #5386b43b; border-radius: 20px; background: #0b1728; color: #eff6ff; }
+  .esx-site .mobile-fox-guide h2 { margin: 0 0 12px; font-size: 25px; line-height: 1.2; letter-spacing: -.5px; }
+  .mobile-fox-guide p, .mobile-fox-guide li { font-size: 15px; line-height: 1.65; color: #c8d8ed; overflow-wrap: anywhere; }
+  .mobile-fox-guide h3 { margin: 24px 0 12px; font-size: 18px; font-weight: 600; }
+  .mobile-fox-guide ol { list-style: decimal; padding-left: 23px; margin: 0; }
+  .mobile-fox-guide li { padding-left: 5px; margin-top: 12px; }
+  .mobile-fox-guide li::marker { color: #83e6ff; font-weight: 700; }
+}

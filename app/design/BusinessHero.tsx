@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import './mobile-fox.css';
+import MobileFoxGuide from './MobileFoxGuide';
 import { useEffect, useRef, useState } from 'react';
 import { copy, type Language } from './content';
 
@@ -59,7 +60,7 @@ export default function BusinessHero({ language, onStart }: { language: Language
     return () => window.clearInterval(timer);
   }, [paused, focused, active]);
 
-  return <section ref={heroRef} id="home" className={`hero business-hero ${expanded ? 'is-expanded' : ''}`} aria-label={m[0]} onFocusCapture={() => setFocused(true)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }}>
+  return <><section ref={heroRef} id="home" className={`hero business-hero ${expanded ? 'is-expanded' : ''}`} aria-label={m[0]} onFocusCapture={() => setFocused(true)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }}>
     <div className="mobile-fox-art"><Image src="/banners/mobile-fox.webp" alt="ESX" width={852} height={1846} sizes="(max-width: 760px) 100vw, 1px" loading="eager" /></div>
     {scenes.map((scene, index) => <div className={`business-slide ${index === active ? 'is-active' : ''}`} key={scene} aria-hidden={index !== active}>
       <picture><source media="(max-width: 760px) and (orientation: portrait)" srcSet={`/banners/mobile/${scene}.webp`} /><Image src={`/banners/${scene}-generated.webp`} alt="" fill loading={index === 0 ? 'eager' : 'lazy'} sizes={expanded ? '100vw' : '(max-width: 1328px) 100vw, 1264px'} className="hero-image" /></picture>
@@ -69,5 +70,5 @@ export default function BusinessHero({ language, onStart }: { language: Language
     <button className="business-fullscreen" type="button" onClick={toggleFullscreen} aria-label={fullscreenLabels[language][expanded ? 1 : 0]} title={fullscreenLabels[language][expanded ? 1 : 0]}><span aria-hidden="true">{expanded ? '✕' : '⛶'}</span><span>{fullscreenLabels[language][expanded ? 1 : 0]}</span></button>
     <div className="business-actions"><button className="button light" onClick={async () => { if (expanded) await toggleFullscreen(); onStart(); }}>{language === 'ru' ? 'Начать общение' : copy[language][8]} ↗</button></div>
     <div className="business-controls"><div className="business-dots">{labels.map((label, index) => <button key={scenes[index]} type="button" aria-label={label} title={label} aria-pressed={active === index} onClick={() => setActive(index)}><span aria-hidden="true" /></button>)}</div><button type="button" className="business-pause" aria-label={paused ? m[5] : m[4]} onClick={() => setPaused(value => !value)}>{paused ? '▶' : 'Ⅱ'}</button></div>
-  </section>;
+  </section><MobileFoxGuide language={language} /></>;
 }
