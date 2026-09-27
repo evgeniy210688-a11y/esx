@@ -1,11 +1,11 @@
 .mobile-fox-art { display: none; }
 @media (max-width: 760px) {
   .esx-site .hero.business-hero { height: auto; min-height: 0; max-height: none; aspect-ratio: auto; display: block; background: #030b25; }
-  .esx-site .business-hero .mobile-fox-art { display: block; }
-  .mobile-fox-art img { display: block; width: 100%; height: auto; }
+  .esx-site .business-hero .mobile-fox-art { display: block; overflow: hidden; }
+  .mobile-fox-art img { display: block; width: 100%; height: auto; margin-top: -14%; margin-bottom: -16%; }
   .esx-site .business-hero > .business-slide,
   .esx-site .business-hero > .business-fullscreen,
   .esx-site .business-hero > .business-controls { display: none; }
-  .esx-site .business-hero > .business-actions { position: relative; inset: auto; width: 100%; padding: 0 20px 24px; margin-top: -12px; display: flex; justify-content: center; }
+  .esx-site .business-hero > .business-actions { position: relative; inset: auto; width: 100%; padding: 0 20px 16px; margin-top: -8px; display: flex; justify-content: center; }
   .esx-site .business-hero > .business-actions .button { width: 100%; max-width: 360px; }
 }
