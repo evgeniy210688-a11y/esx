@@ -25,3 +25,8 @@
 .kakao-chat .private-bubble:not(.private-own) { background: #d6e8fa; color: #10243a; }
 .kakao-chat .private-bubble:not(.private-own) .message-translation small { color: #40556b; }
 .kakao-chat .private-bubble:not(.private-own) .message-translation button { color: #10243a; background: transparent; border-color: #40556b; }
+
+/* Fixed decorative layer keeps the neon scene stable while messages scroll. */
+.account-page.kakao-chat { position: relative; isolation: isolate; background: #071426; }
+.account-page.kakao-chat::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(180deg, rgba(7,20,38,.72), rgba(7,20,38,.62) 45%, rgba(7,20,38,.82)), url('/backgrounds/chat-korean-neon.webp') center 45% / cover no-repeat; }
+.kakao-chat .chat-sender, .kakao-chat .private-message-line > time { text-shadow: 0 1px 4px #071426; }
