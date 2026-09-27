@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { languages, type Language } from '@/app/design/content';
 import MessageTranslation from '@/app/chat/[id]/MessageTranslation';
 import useAccount from '@/app/account/useAccount';
+import SiteHeader from '@/app/design/SiteHeader';
 import '@/app/account/account.css';
 import './private-chat.css';
 
@@ -72,7 +73,7 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
     } catch { setStatus('Сообщение не отправлено. Проверьте соединение.'); }
     finally { sendLock.current = false; setSending(false); }
   }
-  return <main className="account-page kakao-chat" lang="ru"><div className="account-shell"><nav className="account-nav"><Link href="/account">← Мои переписки</Link><Link href="/account">Мой QR-код</Link></nav><h1>Личная переписка</h1>
+  return <><div className="esx-site private-chat-site-header"><SiteHeader language={target} /></div><main className="account-page kakao-chat" lang="ru"><div className="account-shell"><nav className="account-nav"><Link href="/account">← Мои переписки</Link><Link href="/account">Мой QR-код</Link></nav><h1>Личная переписка</h1>
     {user?.is_anonymous && <p className="account-muted">Вы общаетесь как гость. Чат доступен в этом браузере, пока сохранена гостевая сессия. <Link href="/account">Зарегистрироваться для постоянного QR-кода</Link></p>}
     {!ready ? <p role="status">Загрузка…</p> : !user ? <Link className="account-button" href={`/account?next=${encodeURIComponent(`/messages/${chatId}`)}`}>Войти / зарегистрироваться</Link> : <>
       <label>Язык входящих сообщений <select value={target} onChange={event => setTarget(event.target.value as Language)}>{languages.map(item => <option key={item.code} value={item.code}>{item.name}</option>)}</select></label>
@@ -97,5 +98,5 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
       {allowed && <form onSubmit={send} className="private-compose"><label htmlFor="private-message">Сообщение</label><textarea id="private-message" value={draft} onChange={event => setDraft(event.target.value)} placeholder="Написать сообщение…" rows={2} maxLength={4000} required disabled={sending} /><button disabled={sending || !draft.trim()}>{sending ? 'Отправляем…' : 'Отправить'}</button></form>}
       {status && <p role="alert">{status} <button className="account-secondary" onClick={() => setAttempt(value => value + 1)}>Повторить</button></p>}
     </>}
-  </div></main>;
+  </div></main></>;
 }
