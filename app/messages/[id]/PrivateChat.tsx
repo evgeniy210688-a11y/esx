@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import Link from 'next/link';
+import FoxStickerPicker, { FoxStickerImage } from '@/app/components/FoxStickers';
+import { getFoxSticker } from '@/lib/fox-stickers';
 import { supabase } from '@/lib/supabase';
 import { languages, type Language } from '@/app/design/content';
 import MessageTranslation from '@/app/chat/[id]/MessageTranslation';
@@ -63,14 +65,18 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
   }, [user, chatId, attempt, limit]);
   async function send(event: FormEvent) {
     event.preventDefault();
-    const message = draft.trim();
-    if (!message || !user || !allowed || sendLock.current) return;
+    await sendMessage(draft.trim());
+  }
+  async function sendMessage(message: string, sticker = false): Promise<boolean> {
+    if (!message || !user || !allowed || sendLock.current) return false;
     sendLock.current = true; setSending(true); setStatus('');
     try {
       const { error } = await supabase.from('esx_private_messages').insert({ chat_id: chatId, message });
-      if (error) setStatus('Сообщение не отправлено. Текст сохранён, попробуйте ещё раз.');
-      else { setDraft(''); setAttempt(value => value + 1); }
-    } catch { setStatus('Сообщение не отправлено. Проверьте соединение.'); }
+      if (error) { setStatus('Сообщение не отправлено. Попробуйте ещё раз.'); return false; }
+      if (!sticker) setDraft('');
+      setAttempt(value => value + 1);
+      return true;
+    } catch { setStatus('Сообщение не отправлено. Проверьте соединение.'); return false; }
     finally { sendLock.current = false; setSending(false); }
   }
   return <><div className="esx-site private-chat-site-header"><SiteHeader language={target} /></div><main className="account-page kakao-chat" lang="ru"><div className="account-shell"><nav className="account-nav"><Link href="/account">← Мои переписки</Link><Link href="/account">Мой QR-код</Link></nav><h1>Личная переписка</h1>
@@ -88,14 +94,14 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
             {!own && <strong className="chat-sender" dir="auto">{sender}</strong>}
             <div className="private-message-line">
               <div className={`private-bubble${own ? ' private-own' : ''}`}>
-                {own ? <span dir="auto">{message.message}</span> : <MessageTranslation key={`${message.id}:${target}`} chatId={chatId} messageId={message.id} language={target} target={target} privateChat />}
+                {getFoxSticker(message.message) ? <FoxStickerImage id={getFoxSticker(message.message)!} language={target} /> : own ? <span dir="auto">{message.message}</span> : <MessageTranslation key={`${message.id}:${target}`} chatId={chatId} messageId={message.id} language={target} target={target} privateChat />}
               </div>
               <time dateTime={message.created_at}>{new Date(message.created_at).toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' })}</time>
             </div>
           </div>
         </article>;
       })}{loaded && allowed && !messages.length && <p className="account-muted">Начните разговор. Сообщения видны только вам и собеседнику.</p>}</div>
-      {allowed && <form onSubmit={send} className="private-compose"><label htmlFor="private-message">Сообщение</label><textarea id="private-message" value={draft} onChange={event => setDraft(event.target.value)} placeholder="Написать сообщение…" rows={2} maxLength={4000} required disabled={sending} /><button disabled={sending || !draft.trim()}>{sending ? 'Отправляем…' : 'Отправить'}</button></form>}
+      {allowed && <form onSubmit={send} className="private-compose"><label htmlFor="private-message">Сообщение</label><FoxStickerPicker language={target} disabled={sending} onSend={message => sendMessage(message, true)} /><textarea id="private-message" value={draft} onChange={event => setDraft(event.target.value)} placeholder="Написать сообщение…" rows={2} maxLength={4000} required disabled={sending} /><button disabled={sending || !draft.trim()}>{sending ? 'Отправляем…' : 'Отправить'}</button></form>}
       {status && <p role="alert">{status} <button className="account-secondary" onClick={() => setAttempt(value => value + 1)}>Повторить</button></p>}
     </>}
   </div></main></>;

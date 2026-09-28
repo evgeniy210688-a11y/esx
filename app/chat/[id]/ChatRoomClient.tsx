@@ -1,4 +1,6 @@
 "use client";
+import FoxStickerPicker, { FoxStickerImage } from '@/app/components/FoxStickers';
+import { getFoxSticker } from '@/lib/fox-stickers';
 import ChatShortcuts from "../ChatShortcuts";
 import "../chat-theme.css";
 
@@ -11,7 +13,7 @@ import type { Language } from "@/app/design/content";
 import ChatQrCode from "./ChatQrCode";
 import useChatInterface from "./useChatInterface";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 type Message = {
@@ -27,12 +29,20 @@ export default function ChatRoomClient({
 }: {
   chatId: string;
 }) {
+  const messageList = useRef<HTMLElement>(null);
+  const sendLock = useRef(false);
+  const [sending, setSending] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [translationLanguage, setTranslationLanguage] = useState<Language | null>(null);
   const [ownMessageIds, setOwnMessageIds] = useState<Set<number | string>>(new Set());
   const { language, text: ui } = useChatInterface(translationLanguage);
+
+  useEffect(() => {
+    const list = messageList.current;
+    if (list) list.scrollTop = list.scrollHeight;
+  }, [messages.length]);
 
   // Загружаем сообщения и подключаем Realtime
   useEffect(() => {
@@ -121,12 +131,12 @@ export default function ChatRoomClient({
   }, [chatId]);
 
   // Отправка сообщения
-  async function sendMessage() {
-    const text = message.trim();
+  async function sendMessage(sticker?: string): Promise<boolean> {
+    const text = sticker ?? message.trim();
 
-    if (!text) {
-      return;
-    }
+    if (!text || sendLock.current) return false;
+    sendLock.current = true; setSending(true);
+    try {
 
 
 
@@ -143,7 +153,7 @@ export default function ChatRoomClient({
 
       alert(`Ошибка отправки:\n${error.message}`);
 
-      return;
+      return false;
     }
 
 
@@ -179,7 +189,10 @@ export default function ChatRoomClient({
       });
     }
 
-    setMessage("");
+    if (!sticker) setMessage("");
+    return true;
+    } catch { alert("Не удалось отправить сообщение. Попробуйте ещё раз."); return false; }
+    finally { sendLock.current = false; setSending(false); }
   }
 
   return (
@@ -191,7 +204,7 @@ export default function ChatRoomClient({
         <details id="chat-language-panel" className="chat-language-panel"><summary><svg className="chat-language-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" /><ellipse cx="12" cy="12" rx="4" ry="9" /><path d="M3 12h18M5 6.5h14M5 17.5h14" /></svg>{chatLabels[language][0]}</summary><ChatLanguages key={chatId} chatId={chatId} onMineChange={setTranslationLanguage} /></details>
 
         {/* Messages */}
-        <section className="flex flex-1 flex-col gap-3 overflow-y-auto px-6 py-6">
+        <section ref={messageList} className="flex flex-1 flex-col gap-3 overflow-y-auto px-6 py-6">
 
           {loading ? (
             <div className="flex flex-1 items-center justify-center text-zinc-400">
@@ -216,7 +229,7 @@ export default function ChatRoomClient({
                 className={`chat-message ${ownMessageIds.has(msg.id) ? "chat-message-own" : "chat-message-incoming"}`}
               >
                 {msg.sender_login && <strong className="block text-sm mb-1" dir="auto">{msg.sender_login}</strong>}
-                {ownMessageIds.has(msg.id) ? <span dir="auto">{msg.message}</span>
+                {getFoxSticker(msg.message) ? <FoxStickerImage id={getFoxSticker(msg.message)!} language={language} /> : ownMessageIds.has(msg.id) ? <span dir="auto">{msg.message}</span>
                   : translationLanguage ? <MessageTranslation key={`${chatId}:${msg.id}:${translationLanguage}`} chatId={chatId} messageId={msg.id} target={translationLanguage} language={translationLanguage} />
                   : <span>{ui.loading}</span>}
               </div>
@@ -228,6 +241,7 @@ export default function ChatRoomClient({
         {/* Input */}
         <div className="chat-composer border-t p-4">
           <div className="flex gap-3">
+            <FoxStickerPicker language={language} disabled={sending} onSend={sendMessage} />
 
             <input
               type="text"
@@ -247,7 +261,8 @@ export default function ChatRoomClient({
 
             <button
               type="button"
-              onClick={sendMessage}
+              disabled={sending || !message.trim()}
+              onClick={() => void sendMessage()}
               style={{
                 position: "relative",
                 zIndex: 9999,

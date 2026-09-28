@@ -1,0 +1,15 @@
+.fox-sticker-picker { position: relative; flex-shrink: 0; align-self: end; }
+.fox-sticker-image { display: block; width: 160px; max-width: 100%; height: auto; }
+.chat-theme .chat-composer .fox-sticker-toggle, .kakao-chat .fox-sticker-toggle { display: grid; place-items: center; width: 46px; height: 48px; padding: 4px; border: 1px solid #74caffb3; border-radius: 14px; background: #172338; cursor: pointer; }
+.fox-sticker-panel { position: absolute; left: 0; bottom: calc(100% + 12px); z-index: 10001; width: min(320px, calc(100vw - 64px)); max-height: 55dvh; overflow-y: auto; padding: 14px; border: 1px solid #74caffb3; border-radius: 18px; background: #101d32; color: #eff6ff; box-shadow: 0 12px 36px #0008; }
+.fox-sticker-panel > strong, .fox-sticker-panel > small { display: block; }
+.fox-sticker-panel > small { margin-top: 4px; color: #b7c8df; font-size: 12px; }
+.fox-sticker-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 12px; }
+.chat-theme .chat-composer .fox-sticker-grid > button, .kakao-chat .fox-sticker-grid > button { display: flex; flex-direction: column; align-items: center; min-width: 0; padding: 5px; border: 1px solid transparent; border-radius: 12px; background: transparent; color: #eff6ff; cursor: pointer; font-size: 12px; }
+.fox-sticker-grid img { max-width: 100%; height: auto; }
+.fox-sticker-grid span { overflow-wrap: anywhere; }
+.chat-theme .chat-composer .fox-sticker-grid > button:hover, .kakao-chat .fox-sticker-grid > button:hover { background: #263c59; border-color: #74caff; }
+.fox-sticker-picker button:disabled { opacity: .5; cursor: wait; }
+.fox-sticker-picker button:focus-visible { outline: 2px solid #83e6ff; outline-offset: 2px; }
+.kakao-chat .private-compose:has(.fox-sticker-picker) { grid-template-columns: auto minmax(0, 1fr) auto; }
+@media (max-width: 480px) { .chat-theme .chat-composer > div { gap: 8px; } .chat-theme .chat-composer > div > button { padding-inline: 12px; } .chat-theme .chat-composer input { padding-inline: 12px; } }
