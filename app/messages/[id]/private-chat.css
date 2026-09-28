@@ -1,5 +1,5 @@
 /* Message layout with light incoming bubbles on the ESX background. */
-.kakao-chat .private-list { gap: 20px; }
+.kakao-chat .private-list { flex: 1; gap: 20px; }
 .kakao-chat .private-message-row { display: flex; align-items: flex-start; gap: 10px; max-width: 90%; }
 .kakao-chat .private-message-row-own { align-self: flex-end; justify-content: flex-end; }
 .kakao-chat .private-message-avatar { display: grid; place-items: center; flex: 0 0 36px; height: 36px; border-radius: 13px; background: #1a3556; color: #eff6ff; font-size: 16px; font-weight: 600; }
@@ -11,7 +11,7 @@
 .kakao-chat .private-bubble::before { content: ''; position: absolute; left: -6px; top: 9px; border-bottom: 9px solid transparent; border-right: 8px solid #d6e8fa; }
 .kakao-chat .private-own::before { left: auto; right: -6px; border-right: 0; border-left: 8px solid #245fc5; }
 .kakao-chat .private-message-line > time { flex-shrink: 0; padding-bottom: 2px; color: #b8d1ee; font-size: 11px; line-height: 1.4; white-space: nowrap; }
-.kakao-chat .private-compose { grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 10px; padding-bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 2; }
+.kakao-chat .private-compose { grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 10px; padding-bottom: env(safe-area-inset-bottom); z-index: 2; }
 .kakao-chat .private-compose label { grid-column: 1 / -1; }
 .kakao-chat .private-compose textarea { min-height: 56px; max-height: 180px; padding: 10px 12px; }
 .kakao-chat .private-compose button { min-height: 44px; padding: 10px 14px; border-radius: 10px; }
@@ -32,6 +32,8 @@
 .kakao-chat .chat-sender, .kakao-chat .private-message-line > time { text-shadow: 0 1px 4px #071426; }
 /* Original navy chat surface, frosted against the neon side scenery. */
 .kakao-chat > .account-shell {
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   max-width: 808px;
   min-height: calc(100svh - 48px);

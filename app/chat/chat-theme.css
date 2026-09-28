@@ -1,4 +1,4 @@
-.chat-theme { position: relative; isolation: isolate; color: #e5eeff; background: #030611; }
+.chat-theme { height: 100dvh; min-height: 0; display: flex; flex-direction: column; position: relative; isolation: isolate; color: #e5eeff; background: #030611; }
 .chat-theme::before { content: ''; position: fixed; inset: 0; z-index: -2; pointer-events: none; background: radial-gradient(ellipse 35% 17% at 29% 44%, #8bafce55, transparent 100%), radial-gradient(ellipse 23% 26% at 64% 37%, #007fd577, transparent 100%), radial-gradient(ellipse 24% 23% at 89% 58%, #9716be66, transparent 100%), radial-gradient(ellipse 21% 37% at 35% 87%, #087fdd77, transparent 100%), radial-gradient(ellipse 23% 34% at 70% 91%, #5828ba66, transparent 100%), #030611; }
 .chat-theme::after { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 20% 9% at 43% 47%, #b3bfd24d, transparent), radial-gradient(ellipse 11% 32% at 38% 86%, #008cdd66, transparent), radial-gradient(ellipse 12% 22% at 77% 72%, #9e0c8f44, transparent); filter: blur(40px); }
 .chat-theme > .chat-header { background: #000; border-color: #34466b; color: #f1f5ff; }
@@ -109,7 +109,7 @@
 .chat-language-picker > summary:focus-visible, .chat-language-picker li > button:focus-visible { outline: 2px solid #83e6ff; outline-offset: 2px; }
 
 /* Shared site navigation above the chat, with room for the invitation action. */
-.chat-theme > .chat-site-header { position: relative; z-index: 60; flex-shrink: 0; overflow: visible; background: transparent; }
+.chat-theme > .chat-site-header { min-height: 0; padding-top: 0; position: relative; z-index: 60; flex-shrink: 0; overflow: visible; background: transparent; }
 .chat-site-header .header-inner { flex-wrap: wrap; column-gap: 16px; }
 .chat-site-header .header-logo { order: 0; }
 .chat-site-header .esx-header nav { order: 1; }
@@ -118,3 +118,10 @@
 @media (max-width: 760px) {
   .chat-site-header .header-inner { flex-wrap: nowrap; }
 }
+
+/* Only the message list grows and scrolls between the toolbar and composer. */
+.chat-theme > .chat-site-header > .esx-header { position: relative; top: auto; }
+.chat-theme > .chat-shell { flex: 1; min-height: 0; }
+.chat-theme .chat-shell > section { min-height: 0; }
+.chat-theme .chat-language-panel { flex-shrink: 0; max-height: 50dvh; overflow-y: auto; }
+.chat-theme .chat-composer { flex-shrink: 0; padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
