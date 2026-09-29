@@ -7,6 +7,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { copy, languages, type Language } from './content';
 import './design.css';
 import BusinessHero from './BusinessHero';
+import MobileFoxGuide from './MobileFoxGuide';
 import KoreaSection from './KoreaSection';
 import HelpSection from './HelpSection';
 import BackToTop from './BackToTop';
@@ -168,6 +169,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
       {section === 'home' && <>
       <BusinessHero language={language} onStart={startConversation} />
       {room&&<section ref={inviteRef} tabIndex={-1} className="invite" aria-label={t[12]}><div><h2>{t[12]}</h2><p>{t[13]}</p><a className="button blue" href={room}>{t[8]} ↗</a></div><QRCodeSVG value={room} size={180} title={t[12]}/></section>}
+      <MobileFoxGuide language={language} />
       <UsefulApps language={language} />
 
 
