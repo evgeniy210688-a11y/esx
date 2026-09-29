@@ -10,8 +10,7 @@
   .esx-site .business-hero > .business-actions .button { width: 100%; max-width: 360px; }
 }
 
-.mobile-fox-guide { display: none; }
-@media (max-width: 760px) {
+
   .esx-site .mobile-fox-guide { display: block; padding: 24px 20px; margin-top: 16px; border: 1px solid #5386b43b; border-radius: 20px; background: #0b1728; color: #eff6ff; }
   .esx-site .mobile-fox-guide h2 { margin: 0 0 12px; font-size: 25px; line-height: 1.2; letter-spacing: -.5px; }
   .mobile-fox-guide p, .mobile-fox-guide li { font-size: 15px; line-height: 1.65; color: #c8d8ed; overflow-wrap: anywhere; }
@@ -19,4 +18,15 @@
   .mobile-fox-guide ol { list-style: decimal; padding-left: 23px; margin: 0; }
   .mobile-fox-guide li { padding-left: 5px; margin-top: 12px; }
   .mobile-fox-guide li::marker { color: #83e6ff; font-weight: 700; }
+@media (min-width: 761px) {
+  .esx-site .mobile-fox-guide { padding: 32px 40px; margin-top: 24px; }
+  .esx-site .mobile-fox-guide h2 { font-size: 30px; }
+  .mobile-fox-guide p, .mobile-fox-guide li { font-size: 17px; }
+  .mobile-fox-guide > p { max-width: 900px; }
+  .mobile-fox-guide ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
+  .mobile-fox-account-note { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; }
+  .mobile-fox-account-note h3:nth-of-type(1) { grid-column: 1; grid-row: 1; }
+  .mobile-fox-account-note p:nth-of-type(1) { grid-column: 1; grid-row: 2; }
+  .mobile-fox-account-note h3:nth-of-type(2) { grid-column: 2; grid-row: 1; }
+  .mobile-fox-account-note p:nth-of-type(2) { grid-column: 2; grid-row: 2; }
 }
