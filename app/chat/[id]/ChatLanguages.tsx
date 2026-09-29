@@ -12,7 +12,7 @@ function validLanguage(value: unknown): value is Language {
 }
 
 export default function ChatLanguages({ chatId, onMineChange }: { chatId: string; onMineChange: (language: Language) => void }) {
-  const [mine, setMine] = useState<Language>("ru");
+  const [mine, setMine] = useState<Language>("en");
   const pickerRef = useRef<HTMLDetailsElement>(null);
   const summaryRef = useRef<HTMLElement>(null);
   const labelId = useId();
@@ -21,14 +21,13 @@ export default function ChatLanguages({ chatId, onMineChange }: { chatId: string
 
   useEffect(() => {
     try {
-      const saved = JSON.parse(localStorage.getItem(storageKey) || "null");
-      const preferred = saved?.mine ?? localStorage.getItem("esx-language");
+      const preferred = localStorage.getItem("esx-language");
       // Restore preferences only after hydration.
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setMine(validLanguage(preferred) ? preferred : "ru");
-      onMineChange(validLanguage(preferred) ? preferred : "ru");
+      setMine(validLanguage(preferred) ? preferred : "en");
+      onMineChange(validLanguage(preferred) ? preferred : "en");
     } catch {
-      onMineChange("ru");
+      onMineChange("en");
       // The selectors still work when browser storage is unavailable.
     }
   }, [storageKey, onMineChange]);

@@ -25,7 +25,7 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
   const [loaded, setLoaded] = useState(false);
   const [status, setStatus] = useState('');
   const [attempt, setAttempt] = useState(0);
-  const [target, setTarget] = useState<Language>('ru');
+  const [target, setTarget] = useState<Language>('en');
   const [older, setOlder] = useState(false);
   const [limit, setLimit] = useState(100);
   const sendLock = useRef(false);

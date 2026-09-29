@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SiteAnalytics from "./SiteAnalytics";
@@ -25,6 +26,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <Script id="initial-site-language" strategy="beforeInteractive">
+          {`try { localStorage.setItem("esx-language", "en"); } catch {}`}
+        </Script>
         {children}
         <SiteAnalytics />
       </body>
