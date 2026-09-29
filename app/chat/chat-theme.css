@@ -125,3 +125,10 @@
 .chat-theme .chat-shell > section { min-height: 0; }
 .chat-theme .chat-language-panel { flex-shrink: 0; max-height: 50dvh; overflow-y: auto; }
 .chat-theme .chat-composer { flex-shrink: 0; padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
+/* Auto space anchors short conversations without clipping long histories. */
+.chat-theme .chat-shell > section > .chat-message:first-child {
+  margin-top: auto;
+}
+.chat-theme .chat-shell > section > .chat-message {
+  flex-shrink: 0;
+}
