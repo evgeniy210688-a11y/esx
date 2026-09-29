@@ -13,3 +13,15 @@
 .fox-sticker-picker button:focus-visible { outline: 2px solid #83e6ff; outline-offset: 2px; }
 .kakao-chat .private-compose:has(.fox-sticker-picker) { grid-template-columns: auto minmax(0, 1fr) auto; }
 @media (max-width: 480px) { .chat-theme .chat-composer > div { gap: 8px; } .chat-theme .chat-composer > div > button { padding-inline: 12px; } .chat-theme .chat-composer input { padding-inline: 12px; } }
+
+/* Stickers sit directly on the chat surface without a message bubble. */
+.chat-theme .chat-message:has(> .fox-sticker-image),
+.kakao-chat .private-bubble:has(> .fox-sticker-image) {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+.kakao-chat .private-bubble:has(> .fox-sticker-image)::before {
+  content: none;
+}

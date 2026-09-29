@@ -6,12 +6,12 @@
 .chat-theme fieldset legend, .chat-theme fieldset label { color: #dce9fa; }
 .chat-theme fieldset select { background: #111d31; border-color: #526582; color: #f1f5ff; color-scheme: dark; }
 .chat-theme .chat-shell > section .text-zinc-400, .chat-theme header .text-zinc-400 { color: #b8c9e0; }
-.chat-theme .chat-shell > section {
+.chat-theme .chat-shell {
   position: relative;
   isolation: isolate;
   background: #050817;
 }
-.chat-theme .chat-shell > section::before {
+.chat-theme .chat-shell::before {
   content: '';
   position: absolute;
   inset: 0;
