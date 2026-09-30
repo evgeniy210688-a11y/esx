@@ -11,7 +11,7 @@ function harness(privateChat=false,fail=false){
  const send=async()=>({data:[{id:99,message:writes.at(-1).message}],error:fail?{message:'offline'}:null});
  const supabase={from:()=>({insert(payload){writes.push(payload);return privateChat?send():{select:send};}})};
  const catalog={getFoxSticker:s=>s==='[esx-fox:tired]'?'tired':null};
- const imports={react,'react/jsx-runtime':{jsx,jsxs:jsx,Fragment:'Fragment'},'@/lib/supabase':{supabase},'@/lib/fox-stickers':catalog,'@/app/components/FoxStickers':{default:'Picker',FoxStickerImage:'Sticker'},'@/app/design/content':{languages:[{code:'ru',name:'Русский'}]},'./useChatInterface':{default:()=>({language:'ru',text:{}})},'./chatLabels':{chatLabels:{ru:['Language']}},'@/app/account/useAccount':{default:()=>({user:{id:'user'},ready:true})}};
+ const imports={'@/lib/guest-session':{ensureChatSession:async()=>{}},react,'react/jsx-runtime':{jsx,jsxs:jsx,Fragment:'Fragment'},'@/lib/supabase':{supabase},'@/lib/fox-stickers':catalog,'@/app/components/FoxStickers':{default:'Picker',FoxStickerImage:'Sticker'},'@/app/design/content':{languages:[{code:'ru',name:'Русский'}]},'./useChatInterface':{default:()=>({language:'ru',text:{}})},'./chatLabels':{chatLabels:{ru:['Language']}},'@/app/account/useAccount':{default:()=>({user:{id:'user'},ready:true})}};
  const context={exports:{},require:p=>imports[p]??{default:p},console,alert(){},sessionStorage:{getItem:()=>null,setItem(){}}};
  const file=privateChat?'app/messages/[id]/PrivateChat.tsx':'app/chat/[id]/ChatRoomClient.tsx';
  let source=fs.readFileSync(file,'utf8');if(privateChat)source+='\nexport const TestPrivate = PrivateChatContent;';

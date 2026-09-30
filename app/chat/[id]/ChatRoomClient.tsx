@@ -15,6 +15,7 @@ import useChatInterface from "./useChatInterface";
 
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { ensureChatSession } from "@/lib/guest-session";
 
 type Message = {
   id: number | string;
@@ -50,6 +51,16 @@ export default function ChatRoomClient({
     let cancelled = false;
 
     async function startChat() {
+      try {
+        await ensureChatSession();
+      } catch {
+        if (!cancelled) {
+          setLoading(false);
+          alert("Не удалось подключиться к чату. Проверьте соединение и повторите отправку.");
+        }
+        return;
+      }
+      if (cancelled) return;
       try {
         const stored: unknown = JSON.parse(sessionStorage.getItem(`esx-tab-own-messages:${chatId}`) || "[]");
         setOwnMessageIds(new Set(Array.isArray(stored) ? stored.filter((id): id is number | string => typeof id === "number" || typeof id === "string") : []));
@@ -140,6 +151,7 @@ export default function ChatRoomClient({
 
 
 
+    await ensureChatSession();
     const { data, error } = await supabase
       .from("messages")
       .insert({
