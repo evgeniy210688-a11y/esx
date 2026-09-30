@@ -141,6 +141,24 @@ export default function ChatRoomClient({
     };
   }, [chatId]);
 
+  useEffect(() => {
+    let stopped = false;
+    let busy = false;
+    async function syncMessages() {
+      if (busy || document.hidden) return;
+      busy = true;
+      try {
+        await ensureChatSession();
+        const { data, error } = await supabase.from('messages').select('*').eq('chat_id', chatId).order('created_at', { ascending: true });
+        if (!stopped && !error) setMessages((data ?? []) as Message[]);
+      } catch { /* Keep the current history on transient connection failures. */ }
+      finally { busy = false; }
+    }
+    const timer = window.setInterval(() => { void syncMessages(); }, 3000);
+    window.addEventListener('focus', syncMessages);
+    document.addEventListener('visibilitychange', syncMessages);
+    return () => { stopped = true; clearInterval(timer); window.removeEventListener('focus', syncMessages); document.removeEventListener('visibilitychange', syncMessages); };
+  }, [chatId]);
   // Отправка сообщения
   async function sendMessage(sticker?: string): Promise<boolean> {
     const text = sticker ?? message.trim();
@@ -152,6 +170,13 @@ export default function ChatRoomClient({
 
 
     await ensureChatSession();
+    if (!sticker && text === '/clear') {
+      const { error } = await supabase.rpc('esx_clear_chat', { room_id: chatId, private_chat: false });
+      if (error) throw error;
+      setMessages([]); setOwnMessageIds(new Set()); setMessage('');
+      try { sessionStorage.removeItem(`esx-tab-own-messages:${chatId}`); } catch {}
+      return true;
+    }
     const { data, error } = await supabase
       .from("messages")
       .insert({

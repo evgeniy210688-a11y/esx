@@ -75,6 +75,13 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
     if (!message || !user || !allowed || sendLock.current) return false;
     sendLock.current = true; setSending(true); setStatus('');
     try {
+      if (!sticker && message.trim() === '/clear') {
+        const { error } = await supabase.rpc('esx_clear_chat', { room_id: chatId, private_chat: true });
+        if (error) { setStatus('sendError'); return false; }
+        setMessages([]); setOlder(false); setDraft('');
+        setAttempt(value => value + 1);
+        return true;
+      }
       const { error } = await supabase.from('esx_private_messages').insert({ chat_id: chatId, message });
       if (error) { setStatus('sendError'); return false; }
       if (!sticker) setDraft('');
