@@ -3,6 +3,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
 const ts=require('typescript');
+function readLabels(file) { const context={exports:{}}; vm.runInNewContext(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText,context); return context.exports; }
 function harness(privateChat=false,fail=false){
  let index=0;const values=[],writes=[],translations=[];
  const state=privateChat?{2:'unsent draft',4:true}: {1:'unsent draft'};
@@ -11,7 +12,7 @@ function harness(privateChat=false,fail=false){
  const send=async()=>({data:[{id:99,message:writes.at(-1).message}],error:fail?{message:'offline'}:null});
  const supabase={from:()=>({insert(payload){writes.push(payload);return privateChat?send():{select:send};}})};
  const catalog={getFoxSticker:s=>s==='[esx-fox:tired]'?'tired':null};
- const imports={'@/lib/guest-session':{ensureChatSession:async()=>{}},react,'react/jsx-runtime':{jsx,jsxs:jsx,Fragment:'Fragment'},'@/lib/supabase':{supabase},'@/lib/fox-stickers':catalog,'@/app/components/FoxStickers':{default:'Picker',FoxStickerImage:'Sticker'},'@/app/design/content':{languages:[{code:'ru',name:'Русский'}]},'./useChatInterface':{default:()=>({language:'ru',text:{}})},'./chatLabels':{chatLabels:{ru:['Language']}},'@/app/account/useAccount':{default:()=>({user:{id:'user'},ready:true})}};
+ const imports={'./privateChatLabels':readLabels('app/messages/[id]/privateChatLabels.ts'),'@/app/account/accountLabels':readLabels('app/account/accountLabels.ts'),'@/lib/guest-session':{ensureChatSession:async()=>{}},react,'react/jsx-runtime':{jsx,jsxs:jsx,Fragment:'Fragment'},'@/lib/supabase':{supabase},'@/lib/fox-stickers':catalog,'@/app/components/FoxStickers':{default:'Picker',FoxStickerImage:'Sticker'},'@/app/design/content':{languages:[{code:'ru',name:'Русский'}]},'./useChatInterface':{default:()=>({language:'ru',text:{}})},'./chatLabels':{chatLabels:{ru:['Language']}},'@/app/account/useAccount':{default:()=>({user:{id:'user'},ready:true})}};
  const context={exports:{},require:p=>imports[p]??{default:p},console,alert(){},sessionStorage:{getItem:()=>null,setItem(){}}};
  const file=privateChat?'app/messages/[id]/PrivateChat.tsx':'app/chat/[id]/ChatRoomClient.tsx';
  let source=fs.readFileSync(file,'utf8');if(privateChat)source+='\nexport const TestPrivate = PrivateChatContent;';
@@ -36,3 +37,14 @@ for(const privateChat of [false,true]){
   assert.ok(h.find(tree,'Sticker'));assert.equal(h.find(tree,privateChat?'@/app/chat/[id]/MessageTranslation':'./MessageTranslation'),null);
  });
 }
+
+test('private chat switches Korean interface and translation together', () => {
+ const h=harness(true);
+ const tree=h.render({8:'ko'});
+ assert.equal(h.find(tree,'main').props.lang,'ko');
+ assert.equal(h.find(tree,'h1').props.children,'개인 대화');
+ assert.equal(h.find(tree,'textarea').props.placeholder,'메시지를 입력하세요…');
+ const picker=h.find(tree,'select');
+ picker.props.onChange({target:{value:'en'}});
+ assert.equal(h.values[8],'en');
+});
