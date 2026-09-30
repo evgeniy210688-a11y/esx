@@ -20,18 +20,20 @@ export default function ChatLanguages({ chatId, onMineChange }: { chatId: string
   const storageKey = `esx-chat-languages:${chatId}`;
 
   useEffect(() => {
+    let restored: Language = "en";
     try {
       const preferred = localStorage.getItem("esx-language");
-      // Restore preferences only after hydration.
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setMine(validLanguage(preferred) ? preferred : "en");
-      onMineChange(validLanguage(preferred) ? preferred : "en");
-    } catch {
-      onMineChange("en");
-      // The selectors still work when browser storage is unavailable.
-    }
+      if (validLanguage(preferred)) restored = preferred;
+    } catch {}
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey) ?? "null");
+      if (validLanguage(saved?.mine)) restored = saved.mine;
+    } catch {}
+    // Restore preferences only after hydration; keep selection usable without storage.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMine(restored);
+    onMineChange(restored);
   }, [storageKey, onMineChange]);
-
   function save(nextMine: Language) {
     setMine(nextMine);
     onMineChange(nextMine);
@@ -49,7 +51,9 @@ export default function ChatLanguages({ chatId, onMineChange }: { chatId: string
         <div className="min-w-0 text-sm font-medium text-zinc-700">
           <span id={labelId}>{chatLabels[mine][1]}</span>
           <details ref={pickerRef} className="chat-language-picker" onBlur={(event) => {
-            if (!event.currentTarget.contains(event.relatedTarget)) event.currentTarget.open = false;
+            // Touch browsers can blur the summary without focusing the tapped option.
+            // Keep options mounted until their click handler applies the language.
+            if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) event.currentTarget.open = false;
           }} onKeyDown={(event) => {
             if (event.key === "Escape") {
               event.preventDefault();
