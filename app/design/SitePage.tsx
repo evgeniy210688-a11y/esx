@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { QRCodeSVG } from 'qrcode.react';
 import { copy, languages, type Language } from './content';
 import './design.css';
+import './mobile-invite.css';
+import { accountLabels } from '../account/accountLabels';
 import BusinessHero from './BusinessHero';
 import MobileFoxGuide from './MobileFoxGuide';
 import KoreaSection from './KoreaSection';
@@ -168,7 +170,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
       )}
       {section === 'home' && <>
       <BusinessHero language={language} onStart={startConversation} />
-      {room&&<section ref={inviteRef} tabIndex={-1} className="invite" aria-label={t[12]}><div><h2>{t[12]}</h2><p>{t[13]}</p><a className="button blue" href={room}>{t[8]} ↗</a></div><QRCodeSVG value={room} size={180} title={t[12]}/></section>}
+      {room&&<section ref={inviteRef} tabIndex={-1} className="invite" aria-label={t[12]}><div className="invite-intro"><div className="invite-desktop-copy"><h2>{t[12]}</h2><p>{t[13]}</p></div><div className="invite-mobile-copy"><h2>{accountLabels[language].qrTitle}</h2><p>{accountLabels[language].qrHelp}</p><p className="invite-note">{accountLabels[language].guestChatNote}</p></div><a className="button blue" href={room}>{t[8]} ↗</a></div><QRCodeSVG value={room} size={180} marginSize={4} title={accountLabels[language].qrTitle}/></section>}
       <MobileFoxGuide language={language} />
       <UsefulApps language={language} />
 

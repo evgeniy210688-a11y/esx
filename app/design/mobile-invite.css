@@ -1,0 +1,12 @@
+.invite-mobile-copy { display: none; }
+@media (max-width: 760px) {
+  .esx-site .invite { background: #10223b; color: #eff6ff; padding: 24px 20px; text-align: left; }
+  .invite-desktop-copy { display: none; }
+  .invite-mobile-copy { display: block; }
+  .invite-intro { width: 100%; }
+  .invite-mobile-copy h2 { margin: 0 0 18px; font-size: clamp(26px, 7vw, 36px); line-height: 1.15; overflow-wrap: anywhere; }
+  .esx-site .invite-mobile-copy p { margin: 0; font-size: 16px; line-height: 1.6; }
+  .invite-mobile-copy .invite-note { color: #b0c2d9; }
+  .invite-intro .button { margin-top: 20px; }
+  .esx-site .invite > svg { box-sizing: border-box; flex-shrink: 0; width: 276px; max-width: 100%; height: auto; padding: 18px; background: #fff; border-radius: 18px; }
+}
