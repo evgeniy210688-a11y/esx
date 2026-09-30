@@ -10,6 +10,7 @@ import useAccount from '@/app/account/useAccount';
 import SiteHeader from '@/app/design/SiteHeader';
 import '@/app/account/account.css';
 import './private-chat.css';
+import LanguagePicker from './LanguagePicker';
 import { privateChatLabels } from './privateChatLabels';
 import { accountLabels } from '@/app/account/accountLabels';
 
@@ -85,7 +86,7 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
   return <><div className="esx-site private-chat-site-header"><SiteHeader language={target} /></div><main className="account-page kakao-chat" lang={target}><div className="account-shell"><nav className="account-nav"><Link href="/account">← {accountLabels[target].conversations}</Link><Link href="/account">{t.qr}</Link></nav><h1>{t.title}</h1>
     {user?.is_anonymous && <p className="account-muted">{t.guestHelp} <Link href="/account">{t.register}</Link></p>}
     {!ready ? <p role="status">{t.loading}</p> : !user ? <Link className="account-button" href={`/account?next=${encodeURIComponent(`/messages/${chatId}`)}`}>{t.signIn}</Link> : <>
-      <label>{t.language} <select value={target} onChange={event => { const next = event.target.value as Language; setTarget(next); try { localStorage.setItem('esx-language', next); } catch {} }}>{languages.map(item => <option key={item.code} value={item.code}>{item.name}</option>)}</select></label>
+      <LanguagePicker label={t.language} value={target} onChange={next => { setTarget(next); try { localStorage.setItem('esx-language', next); } catch {} }} />
       {!loaded && <p role="status">{t.loading}</p>}
       {older && <button className="account-secondary" onClick={() => setLimit(value => value + 100)}>{t.older}</button>}
       <div className="private-list">{messages.map(message => {

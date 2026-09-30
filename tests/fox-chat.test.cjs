@@ -44,7 +44,7 @@ test('private chat switches Korean interface and translation together', () => {
  assert.equal(h.find(tree,'main').props.lang,'ko');
  assert.equal(h.find(tree,'h1').props.children,'개인 대화');
  assert.equal(h.find(tree,'textarea').props.placeholder,'메시지를 입력하세요…');
- const picker=h.find(tree,'select');
- picker.props.onChange({target:{value:'en'}});
+ const picker=h.find(tree,'./LanguagePicker');
+ picker.props.onChange('en');
  assert.equal(h.values[8],'en');
 });

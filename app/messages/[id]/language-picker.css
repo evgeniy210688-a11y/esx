@@ -1,0 +1,8 @@
+.private-language { display:flex; align-items:center; flex-wrap:wrap; gap:10px; }
+.private-language details { position:relative; max-width:100%; }
+.private-language summary { display:flex; align-items:center; gap:10px; padding:10px 14px; min-height:44px; border:1px solid #57718f; border-radius:10px; background:#10223b; cursor:pointer; list-style:none; }
+.private-language summary::-webkit-details-marker { display:none; }
+.private-language img { flex-shrink:0; width:24px; height:16px; object-fit:cover; }
+.private-language ul { position:absolute; z-index:30; top:100%; left:0; min-width:100%; width:max-content; max-width:calc(100vw - 72px); max-height:280px; overflow-y:auto; list-style:none; margin:6px 0 0; padding:4px; border:1px solid #57718f; border-radius:10px; background:#10223b; box-shadow:0 8px 24px #0008; }
+.account-page .private-language li button { display:flex; align-items:center; gap:10px; width:100%; min-height:44px; padding:10px; border:0; background:transparent; text-align:left; }
+.account-page .private-language li button:hover,.account-page .private-language li button[aria-pressed=true] { background:#245fc5; }
