@@ -149,7 +149,12 @@
 }
 
 .chat-theme .chat-expiry-notice {
-  flex-shrink: 0;
+  box-sizing: border-box;
+  flex: 0 1 460px;
+  width: 100%;
+  max-width: 460px;
+  min-width: 0;
+  white-space: normal;
   margin: 0;
   padding: 16px 18px;
   border: 1px solid #e3b76666;
