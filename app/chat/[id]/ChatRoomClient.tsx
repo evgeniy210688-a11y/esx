@@ -7,6 +7,7 @@ import "../chat-theme.css";
 import SiteHeader from "@/app/design/SiteHeader";
 
 import ChatLanguages from "./ChatLanguages";
+import GuestExpiryNotice from "./GuestExpiryNotice";
 import { chatLabels } from "./chatLabels";
 import MessageTranslation from "./MessageTranslation";
 import type { Language } from "@/app/design/content";
@@ -249,15 +250,7 @@ export default function ChatRoomClient({
             </div>
           ) : messages.length === 0 ? (
             <div className="flex flex-1 items-center justify-center text-center text-zinc-400">
-              <div>
-                <p className="text-lg font-medium">
-                  {ui.empty}
-                </p>
-
-                <p className="mt-2 text-sm">
-                  {ui.first}
-                </p>
-              </div>
+              <GuestExpiryNotice language={language} />
             </div>
           ) : (
             messages.map((msg) => (
