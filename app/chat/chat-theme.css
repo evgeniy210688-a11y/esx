@@ -126,10 +126,10 @@
 .chat-theme .chat-language-panel { flex-shrink: 0; max-height: 50dvh; overflow-y: auto; }
 .chat-theme .chat-composer { flex-shrink: 0; padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
 /* Auto space anchors short conversations without clipping long histories. */
-.chat-theme .chat-shell > section > .chat-message:first-child {
+.chat-theme .chat-shell > section > .chat-message-row:first-child {
   margin-top: auto;
 }
-.chat-theme .chat-shell > section > .chat-message {
+.chat-theme .chat-shell > section > .chat-message-row {
   flex-shrink: 0;
 }
 
@@ -165,3 +165,11 @@
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
+
+.chat-message-row { display:flex; align-items:flex-start; gap:8px; max-width:88%; align-self:flex-start; min-width:0; }
+.chat-message-row-own { align-self:flex-end; }
+.chat-message-avatar { display:grid; place-items:center; flex:0 0 40px; height:40px; border-radius:14px; background:#1a3556; overflow:hidden; }
+.chat-message-avatar img { width:100%; height:100%; object-fit:contain; }
+.chat-message-content { min-width:0; }
+.chat-message-content > .chat-sender { display:block; font-size:12px; margin-bottom:5px; overflow-wrap:anywhere; }
+.chat-message-content > .chat-message { max-width:100%; width:fit-content; }

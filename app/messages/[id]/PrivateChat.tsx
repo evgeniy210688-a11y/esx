@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import FoxStickerPicker, { FoxStickerImage } from '@/app/components/FoxStickers';
 import { getFoxSticker } from '@/lib/fox-stickers';
@@ -100,7 +101,7 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
         const own = message.sender_id === user.id;
         const sender = names[message.sender_id] || t.guest;
         return <article key={message.id} className={`private-message-row${own ? ' private-message-row-own' : ''}`}>
-          {!own && <span className="private-message-avatar" aria-hidden="true">{Array.from(sender)[0]?.toLocaleUpperCase()}</span>}
+          {!own && <span className="private-message-avatar" aria-hidden="true">{names[message.sender_id] ? Array.from(sender)[0]?.toLocaleUpperCase() : <Image src="/esx-fox-mascot.webp" alt="" width={36} height={36} />}</span>}
           <div className="private-message-content">
             {!own && <strong className="chat-sender" dir="auto">{sender}</strong>}
             <div className="private-message-line">

@@ -1,4 +1,6 @@
 "use client";
+import Image from 'next/image';
+import { privateChatLabels } from '@/app/messages/[id]/privateChatLabels';
 import FoxStickerPicker, { FoxStickerImage } from '@/app/components/FoxStickers';
 import { getFoxSticker } from '@/lib/fox-stickers';
 import ChatShortcuts from "../ChatShortcuts";
@@ -256,12 +258,15 @@ export default function ChatRoomClient({
             messages.map((msg) => (
               <div
                 key={msg.id}
-                className={`chat-message ${ownMessageIds.has(msg.id) ? "chat-message-own" : "chat-message-incoming"}`}
+                className={`chat-message-row ${ownMessageIds.has(msg.id) ? "chat-message-row-own" : ""}`}
               >
-                {msg.sender_login && <strong className="block text-sm mb-1" dir="auto">{msg.sender_login}</strong>}
+                {!ownMessageIds.has(msg.id) && <span className="chat-message-avatar" aria-hidden="true">{msg.sender_login ? Array.from(msg.sender_login)[0]?.toLocaleUpperCase() : <Image src="/esx-fox-mascot.webp" alt="" width={40} height={40} />}</span>}
+<div className="chat-message-content">
+{!ownMessageIds.has(msg.id) && <strong className="chat-sender" dir="auto">{msg.sender_login || privateChatLabels[language].guest}</strong>}
+<div className={`chat-message ${ownMessageIds.has(msg.id) ? "chat-message-own" : "chat-message-incoming"}`}>
                 {getFoxSticker(msg.message) ? <FoxStickerImage id={getFoxSticker(msg.message)!} language={language} /> : ownMessageIds.has(msg.id) ? <span dir="auto">{msg.message}</span>
                   : translationLanguage ? <MessageTranslation key={`${chatId}:${msg.id}:${translationLanguage}`} chatId={chatId} messageId={msg.id} target={translationLanguage} language={translationLanguage} />
-                  : <span>{ui.loading}</span>}
+                  : <span>{ui.loading}</span>}</div></div>
               </div>
             ))
           )}
