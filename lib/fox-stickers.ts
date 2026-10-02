@@ -4,4 +4,4 @@ export const stickerMessage = (id: FoxSticker) => '[esx-fox:' + id + ']';
 export function getFoxSticker(message: string): FoxSticker | null {
   return foxStickers.find(id => message === stickerMessage(id)) ?? null;
 }
-export const stickerSource = (id: FoxSticker) => '/stickers/fox-' + id + (id === 'congrats' ? '.png' : '.gif');
+export const stickerSource = (id: FoxSticker) => id === 'please' ? '/stickers/fox-please-v2.gif' : '/stickers/fox-' + id + (id === 'congrats' ? '.png' : '.gif');
