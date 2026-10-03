@@ -16,7 +16,7 @@ export default function ChatQrCode({ chatId, language }: { chatId: string; langu
   }
 
   return <>
-    <button type="button" onClick={showCode} className="mt-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100" aria-haspopup="dialog">
+    <button type="button" onClick={showCode} className="rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100" aria-haspopup="dialog">
       {chatLabels[language][2]}
     </button>
     <dialog ref={dialog} aria-labelledby="chat-qr-title" className="fixed inset-0 m-auto max-h-[90dvh] w-[calc(100%_-_32px)] max-w-sm overflow-y-auto rounded-3xl bg-white p-6 text-center text-zinc-900 shadow-xl backdrop:bg-black/50" onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }}>

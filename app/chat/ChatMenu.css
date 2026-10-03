@@ -1,4 +1,4 @@
-.chat-header-menu { position: relative; }
+.chat-header-menu { position: relative; display: flex; align-items: center; }
 .chat-header-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .chat-header-menu-toggle { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex-shrink: 0; padding: 10px; border: 1px solid #78d9ee; border-radius: 22px; background: #142b48; color: #fff; cursor: pointer; font: inherit; font-size: 14px; }
 .chat-header-menu-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
