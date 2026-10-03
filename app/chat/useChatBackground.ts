@@ -20,13 +20,13 @@ function subscribe(callback: () => void) {
     window.removeEventListener(changeEvent, callback);
   };
 }
-let temporaryBackground: ChatBackground | null = null;
-const snapshot = () => temporaryBackground ?? readBackground();
+let temporaryBackground: ChatBackground | null | undefined;
+const snapshot = () => temporaryBackground === undefined ? readBackground() : temporaryBackground;
 const serverSnapshot = () => null;
 export default function useChatBackground() {
   const background = useSyncExternalStore(subscribe, snapshot, serverSnapshot);
-  function setBackground(value: ChatBackground) {
-    try { localStorage.setItem(storageKey, value); temporaryBackground = null; }
+  function setBackground(value: ChatBackground | null) {
+    try { if (value === null) localStorage.removeItem(storageKey); else localStorage.setItem(storageKey, value); temporaryBackground = undefined; }
     catch { temporaryBackground = value; }
     window.dispatchEvent(new Event(changeEvent));
   }

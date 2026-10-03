@@ -7,6 +7,7 @@ import { type Language } from '@/app/design/content';
 import './ChatMenu.css';
 
 const labels: Record<Language, string> = { ru: 'Настройки', ko: '설정', en: 'Settings', zh: '设置', tr: 'Ayarlar', vi: 'Cài đặt', km: 'ការកំណត់', kk: 'Параметрлер' };
+const defaultLabels: Record<Language, string> = { ru: 'Стандартный фон', ko: '기본 배경', en: 'Default background', zh: '默认背景', tr: 'Varsayılan arka plan', vi: 'Nền mặc định', km: 'ផ្ទៃខាងក្រោយលំនាំដើម', kk: 'Әдепкі фон' };
 const colorLabels: Record<Language, [string, string, string, string, string]> = {
   ru: ['Цвет фона', 'Голубой', 'Светло-розовый', 'Серый', 'Чёрный'],
   ko: ['배경색', '하늘색', '연분홍색', '회색', '검은색'],
@@ -18,7 +19,7 @@ const colorLabels: Record<Language, [string, string, string, string, string]> = 
   kk: ['Фон түсі', 'Көгілдір', 'Ашық қызғылт', 'Сұр', 'Қара'],
 };
 
-export default function ChatMenu({ language, background, onBackgroundChange }: { language: Language; background: ChatBackground | null; onBackgroundChange: (value: ChatBackground) => void }) {
+export default function ChatMenu({ language, background, onBackgroundChange }: { language: Language; background: ChatBackground | null; onBackgroundChange: (value: ChatBackground | null) => void }) {
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
   const button = useRef<HTMLButtonElement>(null);
@@ -47,6 +48,11 @@ export default function ChatMenu({ language, background, onBackgroundChange }: {
     {open && <div id={id} role="region" aria-label={labels[language]} className="chat-header-menu-panel">
       <fieldset className="chat-background-options">
         <legend>{colorLabels[language][0]}</legend>
+        <label>
+          <input type="radio" name={`${id}-background`} value="default" checked={background === null} onChange={() => onBackgroundChange(null)} />
+          <span className="chat-background-swatch chat-background-default" aria-hidden="true" />
+          <span>{defaultLabels[language]}</span>
+        </label>
         {backgroundColors.map((color, index) => <label key={color}>
           <input type="radio" name={`${id}-background`} value={color} checked={background === color} onChange={() => onBackgroundChange(color)} />
           <span className={`chat-background-swatch chat-background-${color}`} aria-hidden="true" />

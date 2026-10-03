@@ -16,3 +16,4 @@
 .chat-background-pink { background: #fce1eb; }
 .chat-background-gray { background: #d1d5db; }
 .chat-background-black { background: #000; }
+.chat-background-default { background: #050817 url("/backgrounds/chat-neon-waves.png") center / cover no-repeat; }
