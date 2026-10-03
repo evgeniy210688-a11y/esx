@@ -4,6 +4,7 @@ import { privateChatLabels } from '@/app/messages/[id]/privateChatLabels';
 import FoxStickerPicker, { FoxStickerImage } from '@/app/components/FoxStickers';
 import { getFoxSticker } from '@/lib/fox-stickers';
 import ChatShortcuts from "../ChatShortcuts";
+import ChatMenu from "../ChatMenu";
 import "../chat-theme.css";
 
 import SiteHeader from "@/app/design/SiteHeader";
@@ -238,7 +239,7 @@ export default function ChatRoomClient({
   return (
     <main lang={language} className="chat-theme flex min-h-screen flex-col">
 
-        <div className="esx-site chat-site-header"><SiteHeader language={language} actions={<ChatQrCode chatId={chatId} language={language} />} /></div>
+        <div className="esx-site chat-site-header"><SiteHeader language={language} actions={<div className="chat-header-actions"><ChatQrCode chatId={chatId} language={language} /><ChatMenu language={language} /></div>} /></div>
 
       <div className="chat-shell mx-auto flex w-full max-w-2xl flex-1 flex-col">
         <details id="chat-language-panel" className="chat-language-panel"><summary><svg className="chat-language-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" /><ellipse cx="12" cy="12" rx="4" ry="9" /><path d="M3 12h18M5 6.5h14M5 17.5h14" /></svg>{chatLabels[language][0]}</summary><ChatLanguages key={chatId} chatId={chatId} onMineChange={setTranslationLanguage} /></details>
