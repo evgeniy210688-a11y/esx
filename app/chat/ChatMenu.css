@@ -6,3 +6,13 @@
 .chat-header-menu-panel a { display: block; padding: 12px 16px; border-radius: 10px; color: #fff; text-decoration: none; }
 .chat-header-menu-toggle:hover, .chat-header-menu-panel a:hover { background: #245178; }
 .chat-header-menu :focus-visible { outline: 3px solid #42d9ff; outline-offset: 2px; }
+.chat-background-options { margin: 0; padding: 8px; border: 0; min-width: 0; }
+.chat-background-options legend { padding: 4px 0 8px; font-weight: 600; color: #f1f5ff; }
+.chat-background-options label { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px; border-radius: 10px; cursor: pointer; color: #f1f5ff; }
+.chat-background-options label:hover, .chat-background-options label:has(input:checked) { background: #245178; }
+.chat-background-options input { accent-color: #83e6ff; }
+.chat-background-swatch { width: 24px; height: 24px; flex-shrink: 0; border-radius: 50%; border: 1px solid #ffffff70; }
+.chat-background-blue { background: #cce8ff; }
+.chat-background-pink { background: #fce1eb; }
+.chat-background-gray { background: #d1d5db; }
+.chat-background-black { background: #000; }

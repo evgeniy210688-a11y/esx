@@ -173,3 +173,14 @@
 .chat-message-content { min-width:0; }
 .chat-message-content > .chat-sender { display:block; font-size:12px; margin-bottom:5px; overflow-wrap:anywhere; }
 .chat-message-content > .chat-message { max-width:100%; width:fit-content; }
+
+/* A selected solid background replaces the decorative chat backdrop. */
+.chat-theme[data-chat-background="blue"] { --chat-solid-background: #cce8ff; }
+.chat-theme[data-chat-background="pink"] { --chat-solid-background: #fce1eb; }
+.chat-theme[data-chat-background="gray"] { --chat-solid-background: #d1d5db; }
+.chat-theme[data-chat-background="black"] { --chat-solid-background: #000; }
+.chat-theme[data-chat-background], .chat-theme[data-chat-background] .chat-shell { background: var(--chat-solid-background); }
+.chat-theme[data-chat-background]::before, .chat-theme[data-chat-background]::after, .chat-theme[data-chat-background] .chat-shell::before { display: none; }
+.chat-theme[data-chat-background] .chat-shell { box-shadow: none; border-color: transparent; }
+.chat-theme[data-chat-background]:not([data-chat-background="black"]) .chat-sender,
+.chat-theme[data-chat-background]:not([data-chat-background="black"]) .chat-shell > section .text-zinc-400 { color: #243247; text-shadow: none; }
