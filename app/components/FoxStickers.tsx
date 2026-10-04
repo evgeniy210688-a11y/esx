@@ -6,14 +6,14 @@ import { foxStickers, stickerMessage, stickerSource, type FoxSticker } from '@/l
 import './fox-stickers.css';
 
 const labels: Record<Language, string[]> = {
-  ru: ['Смайлики с лисёнком', 'Нажмите, чтобы отправить', 'Привет', 'Сердечко', 'Сплю', 'Скучаю', 'Устал', "Грусть", "Радость", "Злость", "Тоска", "Испуг", "Удивление", 'Поздравляю', "Спасибо", "Просьба"],
-  en: ['Fox stickers', 'Tap to send', 'Hello', 'Love', 'Sleeping', 'Miss you', 'Tired', "Sadness", "Joy", "Anger", "Longing", "Fear", "Surprise", 'Congratulations', "Thank you", "Please"],
-  ko: ['여우 스티커', '눌러서 보내기', '안녕', '사랑', '자는 중', '보고 싶어', '피곤해', "슬픔", "기쁨", "화남", "그리움", "무서움", "놀람", '축하해요', "고마워요", "부탁해요"],
-  zh: ['狐狸贴纸', '点击发送', '你好', '爱心', '睡觉', '想你了', '累了', "悲伤", "开心", "生气", "思念", "害怕", "惊讶", '恭喜', "谢谢", "拜托"],
-  tr: ['Tilki çıkartmaları', 'Göndermek için dokun', 'Merhaba', 'Sevgi', 'Uyuyorum', 'Özledim', 'Yorgunum', "Üzüntü", "Sevinç", "Öfke", "Hasret", "Korku", "Şaşkınlık", 'Tebrikler', "Teşekkürler", "Lütfen"],
-  vi: ['Nhãn dán cáo', 'Nhấn để gửi', 'Xin chào', 'Yêu thương', 'Đang ngủ', 'Nhớ bạn', 'Mệt', "Buồn", "Vui", "Giận", "Nhung nhớ", "Sợ hãi", "Ngạc nhiên", 'Chúc mừng', "Cảm ơn", "Làm ơn"],
-  km: ['ស្ទីគ័រកញ្ជ្រោង', 'ចុចដើម្បីផ្ញើ', 'សួស្តី', 'ស្រឡាញ់', 'កំពុងគេង', 'នឹកអ្នក', 'ហត់', "សោកសៅ", "រីករាយ", "ខឹង", "អាឡោះអាល័យ", "ភ័យខ្លាច", "ភ្ញាក់ផ្អើល", 'អបអរសាទរ', "អរគុណ", "សូមមេត្តា"],
-  kk: ['Түлкі стикерлері', 'Жіберу үшін басыңыз', 'Сәлем', 'Махаббат', 'Ұйықтап жатырмын', 'Сағындым', 'Шаршадым', "Мұң", "Қуаныш", "Ашу", "Сағыныш", "Қорқыныш", "Таңғалу", 'Құттықтаймын', "Рақмет", "Өтінемін"],
+  ru: ['Смайлики с лисёнком', 'Нажмите, чтобы отправить', 'Привет', 'Сердечко', 'Сплю', 'Скучаю', 'Устал', "Грусть", "Радость", "Злость", "Тоска", "Испуг", "Удивление", 'Поздравляю', "Спасибо", "Просьба", 'Обнимашки'],
+  en: ['Fox stickers', 'Tap to send', 'Hello', 'Love', 'Sleeping', 'Miss you', 'Tired', "Sadness", "Joy", "Anger", "Longing", "Fear", "Surprise", 'Congratulations', "Thank you", "Please", 'Hugs'],
+  ko: ['여우 스티커', '눌러서 보내기', '안녕', '사랑', '자는 중', '보고 싶어', '피곤해', "슬픔", "기쁨", "화남", "그리움", "무서움", "놀람", '축하해요', "고마워요", "부탁해요", '포옹'],
+  zh: ['狐狸贴纸', '点击发送', '你好', '爱心', '睡觉', '想你了', '累了', "悲伤", "开心", "生气", "思念", "害怕", "惊讶", '恭喜', "谢谢", "拜托", '抱抱'],
+  tr: ['Tilki çıkartmaları', 'Göndermek için dokun', 'Merhaba', 'Sevgi', 'Uyuyorum', 'Özledim', 'Yorgunum', "Üzüntü", "Sevinç", "Öfke", "Hasret", "Korku", "Şaşkınlık", 'Tebrikler', "Teşekkürler", "Lütfen", 'Sarılma'],
+  vi: ['Nhãn dán cáo', 'Nhấn để gửi', 'Xin chào', 'Yêu thương', 'Đang ngủ', 'Nhớ bạn', 'Mệt', "Buồn", "Vui", "Giận", "Nhung nhớ", "Sợ hãi", "Ngạc nhiên", 'Chúc mừng', "Cảm ơn", "Làm ơn", 'Ôm nào'],
+  km: ['ស្ទីគ័រកញ្ជ្រោង', 'ចុចដើម្បីផ្ញើ', 'សួស្តី', 'ស្រឡាញ់', 'កំពុងគេង', 'នឹកអ្នក', 'ហត់', "សោកសៅ", "រីករាយ", "ខឹង", "អាឡោះអាល័យ", "ភ័យខ្លាច", "ភ្ញាក់ផ្អើល", 'អបអរសាទរ', "អរគុណ", "សូមមេត្តា", 'ឱប'],
+  kk: ['Түлкі стикерлері', 'Жіберу үшін басыңыз', 'Сәлем', 'Махаббат', 'Ұйықтап жатырмын', 'Сағындым', 'Шаршадым', "Мұң", "Қуаныш", "Ашу", "Сағыныш", "Қорқыныш", "Таңғалу", 'Құттықтаймын', "Рақмет", "Өтінемін", 'Құшақтау'],
 };
 export function FoxStickerImage({ id, language }: { id: FoxSticker; language: Language }) {
   return <Image className="fox-sticker-image" src={stickerSource(id)} alt={labels[language][foxStickers.indexOf(id) + 2]} width={160} height={160} unoptimized />;
