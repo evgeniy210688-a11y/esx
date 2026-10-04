@@ -48,7 +48,7 @@ export default function MessageTranslation({ chatId, messageId, target, language
   }, [chatId, messageId, target, attempt, privateChat]);
   const t = labels[language];
   return <div ref={ref} className="message-translation" aria-live="polite">
-    {translation ? <div lang={target} dir="auto">{translation}</div>
+    {translation ? <div data-message-text lang={target} dir="auto">{translation}</div>
       : failed ? <button type="button" onClick={() => { setFailed(false); setAttempt(value => value + 1); }}>{t[2]}</button> : <small>{t[1]}</small>}
   </div>;
 }

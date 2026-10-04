@@ -1,0 +1,15 @@
+.message-actions-wrap { position: relative; min-width: 0; }
+.message-actions-wrap .chat-message { max-width: 100%; width: fit-content; }
+.message-actions-menu { position: relative; width: fit-content; margin: 2px 0 4px auto; color: #15263e; }
+.message-actions-menu summary { list-style: none; cursor: pointer; font-size: 22px; line-height: 1; padding: 3px 12px; border-radius: 12px; background: #ffffffc9; min-height: 30px; min-width: 40px; text-align: center; }
+.message-actions-menu summary::-webkit-details-marker { display: none; }
+.message-actions-options { position: relative; z-index: 30; min-width: 150px; padding: 6px; background: #fff; border: 1px solid #bac9da; border-radius: 12px; box-shadow: 0 5px 18px #10243830; }
+.message-actions-options button { display: block; width: 100%; padding: 10px 14px; text-align: start; color: #15263e; background: transparent; border: 0; border-radius: 8px; cursor: pointer; }
+.message-actions-options button:hover { background: #e5efff; }
+.message-edit { min-width: min(250px, 60vw); margin-top: 6px; padding: 10px; background: #fff; color: #15263e; border: 1px solid #bac9da; border-radius: 12px; }
+.message-edit textarea { display: block; width: 100%; min-width: 0; padding: 8px; color: #15263e; background: #fff; border: 1px solid #9eb2ca; border-radius: 8px; resize: vertical; font: inherit; }
+.message-edit > div { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.message-edit button { padding: 8px 12px; background: #e5efff; color: #15263e; border: 1px solid #bac9da; border-radius: 8px; cursor: pointer; }
+.message-edit button:disabled { opacity: .5; cursor: wait; }
+.message-action-feedback { display: block; padding: 4px 8px; background: #fff; color: #15263e; border-radius: 8px; }
+.message-actions-wrap :focus-visible { outline: 2px solid #235cdd; outline-offset: 2px; }

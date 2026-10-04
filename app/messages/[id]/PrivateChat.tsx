@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import MessageActions from '@/app/components/MessageActions';
 import Image from 'next/image';
 import Link from 'next/link';
 import FoxStickerPicker, { FoxStickerImage } from '@/app/components/FoxStickers';
@@ -105,9 +106,11 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
           <div className="private-message-content">
             {!own && <strong className="chat-sender" dir="auto">{sender}</strong>}
             <div className="private-message-line">
+              <MessageActions chatId={chatId} messageId={message.id} message={message.message} own={own} sticker={Boolean(getFoxSticker(message.message))} privateChat language={target} onChange={replacement => setMessages(current => replacement === null ? current.filter(item => item.id !== message.id) : current.map(item => item.id === message.id ? { ...item, message: replacement } : item))}>
               <div className={`private-bubble${own ? ' private-own' : ''}`}>
-                {getFoxSticker(message.message) ? <FoxStickerImage id={getFoxSticker(message.message)!} language={target} /> : own ? <span dir="auto">{message.message}</span> : <MessageTranslation key={`${message.id}:${target}`} chatId={chatId} messageId={message.id} language={target} target={target} privateChat />}
+                {getFoxSticker(message.message) ? <FoxStickerImage id={getFoxSticker(message.message)!} language={target} /> : own ? <span data-message-text dir="auto">{message.message}</span> : <MessageTranslation key={JSON.stringify([message.id, target, message.message])} chatId={chatId} messageId={message.id} language={target} target={target} privateChat />}
               </div>
+              </MessageActions>
               <time dateTime={message.created_at}>{new Date(message.created_at).toLocaleTimeString(target, { hour: '2-digit', minute: '2-digit' })}</time>
             </div>
           </div>

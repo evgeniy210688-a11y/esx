@@ -1,4 +1,5 @@
 "use client";
+import MessageActions from '@/app/components/MessageActions';
 import Image from 'next/image';
 import { privateChatLabels } from '@/app/messages/[id]/privateChatLabels';
 import FoxStickerPicker, { FoxStickerImage } from '@/app/components/FoxStickers';
@@ -44,6 +45,7 @@ export default function ChatRoomClient({
   const [loading, setLoading] = useState(true);
   const [translationLanguage, setTranslationLanguage] = useState<Language | null>(null);
   const [ownMessageIds, setOwnMessageIds] = useState<Set<number | string>>(new Set());
+  const [editableIds, setEditableIds] = useState<Set<string>>(new Set());
   const { language, text: ui } = useChatInterface(translationLanguage);
 
   useEffect(() => {
@@ -72,6 +74,14 @@ export default function ChatRoomClient({
         setOwnMessageIds(new Set(Array.isArray(stored) ? stored.filter((id): id is number | string => typeof id === "number" || typeof id === "string") : []));
       } catch {
         setOwnMessageIds(new Set());
+      }
+
+      const ownership = await supabase.rpc('esx_owned_messages', { room_id: chatId });
+      if (cancelled) return;
+      if (!ownership.error) {
+        const ids = (ownership.data ?? []).map((row: { message_id: string }) => String(row.message_id));
+        setEditableIds(new Set(ids));
+        setOwnMessageIds(current => new Set([...current, ...ids, ...ids.filter((id: string) => /^\d+$/.test(id)).map(Number)]));
       }
 
       // Загружаем существующие сообщения
@@ -204,7 +214,7 @@ export default function ChatRoomClient({
     // Добавляем сообщение сразу на этом устройстве
     if (data && data.length > 0) {
       const newMessages = data as Message[];
-      // The database has no sender column; remember successful sends locally.
+      // Remember successful sends for immediate alignment; mutation ownership is checked by the database.
       // Keep ownership private to this tab, including after a reload.
       const owned = new Set(ownMessageIds);
       try {
@@ -212,6 +222,7 @@ export default function ChatRoomClient({
         if (Array.isArray(stored)) stored.forEach(id => { if (typeof id === "number" || typeof id === "string") owned.add(id); });
       } catch {}
       newMessages.forEach(item => owned.add(item.id));
+      setEditableIds(current => new Set([...current, ...newMessages.map(item => String(item.id))]));
       setOwnMessageIds(owned);
       try { sessionStorage.setItem(`esx-tab-own-messages:${chatId}`, JSON.stringify([...owned])); } catch {}
 
@@ -266,10 +277,11 @@ export default function ChatRoomClient({
                 {!ownMessageIds.has(msg.id) && <span className="chat-message-avatar" aria-hidden="true">{msg.sender_login ? Array.from(msg.sender_login)[0]?.toLocaleUpperCase() : <Image src="/esx-fox-mascot.webp" alt="" width={40} height={40} />}</span>}
 <div className="chat-message-content">
 {!ownMessageIds.has(msg.id) && <strong className="chat-sender" dir="auto">{msg.sender_login || privateChatLabels[language].guest}</strong>}
+<MessageActions chatId={chatId} messageId={msg.id} message={msg.message} own={editableIds.has(String(msg.id))} sticker={Boolean(getFoxSticker(msg.message))} language={language} onChange={replacement => setMessages(current => replacement === null ? current.filter(item => item.id !== msg.id) : current.map(item => item.id === msg.id ? { ...item, message: replacement } : item))}>
 <div className={`chat-message ${ownMessageIds.has(msg.id) ? "chat-message-own" : "chat-message-incoming"}`}>
-                {getFoxSticker(msg.message) ? <FoxStickerImage id={getFoxSticker(msg.message)!} language={language} /> : ownMessageIds.has(msg.id) ? <span dir="auto">{msg.message}</span>
-                  : translationLanguage ? <MessageTranslation key={`${chatId}:${msg.id}:${translationLanguage}`} chatId={chatId} messageId={msg.id} target={translationLanguage} language={translationLanguage} />
-                  : <span>{ui.loading}</span>}</div></div>
+                {getFoxSticker(msg.message) ? <FoxStickerImage id={getFoxSticker(msg.message)!} language={language} /> : ownMessageIds.has(msg.id) ? <span data-message-text dir="auto">{msg.message}</span>
+                  : translationLanguage ? <MessageTranslation key={JSON.stringify([chatId, msg.id, translationLanguage, msg.message])} chatId={chatId} messageId={msg.id} target={translationLanguage} language={translationLanguage} />
+                  : <span>{ui.loading}</span>}</div></MessageActions></div>
               </div>
             ))
           )}
