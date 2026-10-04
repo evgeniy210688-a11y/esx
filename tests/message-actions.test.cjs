@@ -19,7 +19,7 @@ function harness({own=true, sticker=false, fail=false, translated='Переве�
 }
 test('incoming text can be copied but never edited or deleted',async()=>{
   const h=harness({own:false});const tree=h.render();
-  assert.equal(h.button(tree,'Изменить'),undefined);assert.equal(h.button(tree,'Удалить'),undefined);
+  assert.equal(h.button(tree,'Изменить'),undefined);assert.equal(h.button(tree,'Убрать'),undefined);
   h.button(tree,'Копировать').props.onClick();await h.flush();
   assert.deepEqual(h.copied,['Переведённый текст']);
 });
@@ -40,11 +40,11 @@ test('failed edit retains draft and leaves displayed message unchanged',async()=
   assert.deepEqual(h.changes,[]);assert.equal(h.state[2],'Keep my draft');assert.equal(h.state[0],true);assert.equal(h.state[4],'error');
 });
 test('delete requires confirmation and duplicate clicks only issue one mutation',async()=>{
-  const h=harness();h.button(h.render(),'Удалить').props.onClick();assert.equal(h.writes.length,0);
-  const button=h.button(h.render(),'Удалить');button.props.onClick();button.props.onClick();await h.flush();
+  const h=harness();h.button(h.render(),'Убрать').props.onClick();assert.equal(h.writes.length,0);
+  const button=h.button(h.render(),'Убрать');button.props.onClick();button.props.onClick();await h.flush();
   assert.equal(h.writes.length,1);assert.deepEqual(h.changes,[null]);
 });
 test('cancel deletion leaves the message untouched; stickers can only be deleted',()=>{
   const h=harness({sticker:true});let tree=h.render();assert.equal(h.button(tree,'Изменить'),undefined);assert.equal(h.button(tree,'Копировать'),undefined);
-  h.button(tree,'Удалить').props.onClick();tree=h.render();h.button(tree,'Отмена').props.onClick();assert.equal(h.writes.length,0);assert.equal(h.state[1],false);
+  h.button(tree,'Убрать').props.onClick();tree=h.render();h.button(tree,'Отмена').props.onClick();assert.equal(h.writes.length,0);assert.equal(h.state[1],false);
 });
