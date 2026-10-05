@@ -10,6 +10,9 @@ import { languages, type Language } from '@/app/design/content';
 import MessageTranslation from '@/app/chat/[id]/MessageTranslation';
 import useAccount from '@/app/account/useAccount';
 import SiteHeader from '@/app/design/SiteHeader';
+import ChatMenu from '@/app/chat/ChatMenu';
+import ChatShortcuts from '@/app/chat/ChatShortcuts';
+import useChatBackground from '@/app/chat/useChatBackground';
 import '@/app/account/account.css';
 import './private-chat.css';
 import LanguagePicker from './LanguagePicker';
@@ -22,6 +25,7 @@ export default function PrivateChat({ chatId }: { chatId: string }) {
   return <PrivateChatContent key={`${chatId}:${user?.id ?? 'guest'}`} chatId={chatId} user={user} ready={ready} />;
 }
 function PrivateChatContent({ chatId, user, ready }: { chatId: string } & ReturnType<typeof useAccount>) {
+  const { background, setBackground } = useChatBackground();
   const [messages, setMessages] = useState<Message[]>([]);
   const [names, setNames] = useState<Record<string, string | null>>({});
   const [draft, setDraft] = useState('');
@@ -92,10 +96,10 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
     } catch { setStatus('sendError'); return false; }
     finally { sendLock.current = false; setSending(false); }
   }
-  return <><div className="esx-site private-chat-site-header"><SiteHeader language={target} /></div><main className="account-page kakao-chat" lang={target}><div className="account-shell"><nav className="account-nav"><Link href="/account">← {accountLabels[target].conversations}</Link><Link href="/account">{t.qr}</Link></nav><h1>{t.title}</h1>
+  return <><div className="esx-site private-chat-site-header"><SiteHeader language={target} actions={<ChatMenu language={target} background={background} onBackgroundChange={setBackground} />} /></div><main className="account-page kakao-chat" lang={target} data-chat-background={background ?? undefined}><div className="account-shell"><nav className="account-nav"><Link href="/account">← {accountLabels[target].conversations}</Link><Link href="/account">{t.qr}</Link></nav><h1>{t.title}</h1>
     {user?.is_anonymous && <p className="account-muted">{t.guestHelp} <Link href="/account">{t.register}</Link></p>}
     {!ready ? <p role="status">{t.loading}</p> : !user ? <Link className="account-button" href={`/account?next=${encodeURIComponent(`/messages/${chatId}`)}`}>{t.signIn}</Link> : <>
-      <LanguagePicker label={t.language} value={target} onChange={next => { setTarget(next); try { localStorage.setItem('esx-language', next); } catch {} }} />
+      <LanguagePicker panelId="chat-language-panel" label={t.language} value={target} onChange={next => { setTarget(next); try { localStorage.setItem('esx-language', next); } catch {} }} />
       {!loaded && <p role="status">{t.loading}</p>}
       {older && <button className="account-secondary" onClick={() => setLimit(value => value + 100)}>{t.older}</button>}
       <div className="private-list">{messages.map(message => {
@@ -119,5 +123,5 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
       {allowed && <form onSubmit={send} className="private-compose"><label htmlFor="private-message">{t.message}</label><FoxStickerPicker language={target} disabled={sending} onSend={message => sendMessage(message, true)} /><textarea id="private-message" value={draft} onChange={event => setDraft(event.target.value)} placeholder={t.placeholder} rows={2} maxLength={4000} required disabled={sending} /><button disabled={sending || !draft.trim()}>{sending ? t.sending : t.send}</button></form>}
       {status && <p role="alert">{t[status]} <button className="account-secondary" onClick={() => setAttempt(value => value + 1)}>{accountLabels[target].retry}</button></p>}
     </>}
-  </div></main></>;
+  </div></main><div className="private-chat-shortcuts"><ChatShortcuts language={target} /></div></>;
 }

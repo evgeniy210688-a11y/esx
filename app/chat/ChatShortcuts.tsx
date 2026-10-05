@@ -38,7 +38,7 @@ export default function ChatShortcuts({ language }: { language: Language }) {
     <button type="button" aria-label={t[10]} title={t[10]} aria-expanded={languagesOpen} aria-controls="chat-language-panel" onClick={() => {
       setOpen(false);
       const panel = document.querySelector<HTMLDetailsElement>('#chat-language-panel');
-      if (panel) { panel.open = !panel.open; if (panel.open) { panel.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'center' }); panel.querySelector('select')?.focus({ preventScroll: true }); } }
+      if (panel) { panel.open = !panel.open; if (panel.open) { panel.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'center' }); panel.querySelector<HTMLElement>('select, summary, button')?.focus({ preventScroll: true }); } }
     }}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12H21M5 6H19M5 18H19"/></svg></button>
   </div>;
 }
