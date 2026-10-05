@@ -6,3 +6,7 @@
 .chat-shortcut-menu a { display: block; padding: 12px 16px; color: white; border-radius: 10px; text-decoration: none; }
 .chat-shortcut-menu a:hover { background: #ffffff20; }
 .chat-shortcuts :focus-visible { outline: 3px solid #42d9ff; outline-offset: 3px; }
+
+.chat-navigation-row { flex-shrink: 0; padding: 12px 0; }
+.chat-navigation-row .chat-shortcuts { position: relative; inset: auto; transform: none; justify-content: center; z-index: 40; }
+.chat-navigation-row .chat-shortcuts > button { display: grid; padding: 0; border-radius: 50%; background: #142b48; border-color: #78d9ee; }

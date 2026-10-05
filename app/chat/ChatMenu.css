@@ -17,3 +17,14 @@
 .chat-background-gray { background: #d1d5db; }
 .chat-background-black { background: #000; }
 .chat-background-default { background: #050817 url("/backgrounds/chat-neon-waves.png") center / cover no-repeat; }
+
+/* Equal side columns keep QR and settings centered on mobile chat headers. */
+@media (max-width: 760px) {
+  .chat-site-header .esx-header .header-inner,
+  .private-chat-site-header .esx-header .header-inner { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 8px; padding-inline: 12px; }
+  .chat-site-header .header-logo, .private-chat-site-header .header-logo { grid-column: 1; grid-row: 1; justify-self: start; }
+  .chat-site-header .site-header-actions, .private-chat-site-header .site-header-actions { grid-column: 2; grid-row: 1; margin: 0; justify-self: center; }
+  .chat-site-header .menu-toggle, .private-chat-site-header .menu-toggle { grid-column: 3; grid-row: 1; margin: 0; justify-self: end; }
+  .chat-site-header .esx-header nav, .private-chat-site-header .esx-header nav { grid-column: 1 / -1; grid-row: 2; }
+  .chat-header-actions { flex-wrap: nowrap; }
+}

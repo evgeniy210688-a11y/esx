@@ -58,10 +58,10 @@
 
 .kakao-chat .private-message-avatar img { width:100%; height:100%; object-fit:contain; }
 
-/* Reserve a separate bottom row for navigation, including iPhone safe areas. */
-.account-page.kakao-chat { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
-.kakao-chat .private-compose { bottom: calc(72px + env(safe-area-inset-bottom)); }
-.private-chat-shortcuts .chat-shortcuts { bottom: calc(16px + env(safe-area-inset-bottom)); }
+/* Keep navigation above the composer as its height changes. */
+.private-chat-dock { position: sticky; bottom: 0; z-index: 3; background: #071426; border-radius: 12px; }
+.kakao-chat .private-compose { position: relative; bottom: auto; }
+.private-header-qr { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 14px; border: 1px solid #bfdbfe; border-radius: 24px; background: #eff6ff; color: #1d4ed8; white-space: nowrap; font-size: 14px; }
 .account-page.kakao-chat[data-chat-background="blue"] { --private-chat-background: #cce8ff; }
 .account-page.kakao-chat[data-chat-background="pink"] { --private-chat-background: #fce1eb; }
 .account-page.kakao-chat[data-chat-background="gray"] { --private-chat-background: #d1d5db; }

@@ -288,6 +288,7 @@ export default function ChatRoomClient({
 
         </section>
 
+        <div className="chat-navigation-row"><ChatShortcuts language={language} /></div>
         {/* Input */}
         <div className="chat-composer border-t p-4">
           <div className="flex gap-3">
