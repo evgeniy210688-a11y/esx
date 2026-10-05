@@ -1,0 +1,2 @@
+[functions.esx-push]
+verify_jwt = false

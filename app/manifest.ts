@@ -1,0 +1,2 @@
+import type { MetadataRoute } from 'next';
+export default function manifest():MetadataRoute.Manifest{return {id:'/',name:'ESX',short_name:'ESX',start_url:'/account',scope:'/',display:'standalone',background_color:'#071426',theme_color:'#071426',icons:[{src:'/esx-icon-192.png',sizes:'192x192',type:'image/png',purpose:'any'},{src:'/esx-icon-512.png',sizes:'512x512',type:'image/png',purpose:'any'}]};}

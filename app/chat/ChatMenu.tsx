@@ -5,6 +5,7 @@ import { backgroundColors, type ChatBackground } from './useChatBackground';
 import { type Language } from '@/app/design/content';
 
 import './ChatMenu.css';
+import PushSettings from './PushSettings';
 
 const labels: Record<Language, string> = { ru: 'Настройки', ko: '설정', en: 'Settings', zh: '设置', tr: 'Ayarlar', vi: 'Cài đặt', km: 'ការកំណត់', kk: 'Параметрлер' };
 const defaultLabels: Record<Language, string> = { ru: 'Стандартный фон', ko: '기본 배경', en: 'Default background', zh: '默认背景', tr: 'Varsayılan arka plan', vi: 'Nền mặc định', km: 'ផ្ទៃខាងក្រោយលំនាំដើម', kk: 'Әдепкі фон' };
@@ -19,7 +20,7 @@ const colorLabels: Record<Language, [string, string, string, string, string]> = 
   kk: ['Фон түсі', 'Көгілдір', 'Ашық қызғылт', 'Сұр', 'Қара'],
 };
 
-export default function ChatMenu({ language, background, onBackgroundChange }: { language: Language; background: ChatBackground | null; onBackgroundChange: (value: ChatBackground | null) => void }) {
+export default function ChatMenu({ language, background, onBackgroundChange, privateChat = false }: { privateChat?: boolean; language: Language; background: ChatBackground | null; onBackgroundChange: (value: ChatBackground | null) => void }) {
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
   const button = useRef<HTMLButtonElement>(null);
@@ -59,6 +60,7 @@ export default function ChatMenu({ language, background, onBackgroundChange }: {
           <span>{colorLabels[language][index + 1]}</span>
         </label>)}
       </fieldset>
+      {privateChat && <PushSettings language={language} />}
 
     </div>}
   </div>;

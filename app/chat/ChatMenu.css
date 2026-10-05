@@ -28,3 +28,7 @@
   .chat-site-header .esx-header nav, .private-chat-site-header .esx-header nav { grid-column: 1 / -1; grid-row: 2; }
   .chat-header-actions { flex-wrap: nowrap; }
 }
+
+.chat-push-settings { padding: 12px; border-top: 1px solid #78d9ee60; color: #f1f5ff; }
+.chat-push-settings button { min-height: 44px; padding: 8px 12px; background: #245fc5; color: white; border-radius: 10px; }
+.chat-push-settings p { font-size: 13px; line-height: 1.5; margin-top: 10px; }
