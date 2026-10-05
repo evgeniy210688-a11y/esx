@@ -10,3 +10,6 @@
 .chat-navigation-row { flex-shrink: 0; padding: 12px 0; }
 .chat-navigation-row .chat-shortcuts { position: relative; inset: auto; transform: none; justify-content: center; z-index: 40; }
 .chat-navigation-row .chat-shortcuts > button { display: grid; padding: 0; border-radius: 50%; background: #142b48; border-color: #78d9ee; }
+
+.chat-shortcut-languages > button { display: block; width: 100%; min-height: 44px; padding: 12px 16px; border: 0; border-radius: 10px; background: transparent; color: white; text-align: start; cursor: pointer; }
+.chat-shortcut-languages > button:hover, .chat-shortcut-languages > button[aria-pressed="true"] { background: #ffffff20; }

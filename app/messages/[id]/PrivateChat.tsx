@@ -10,6 +10,7 @@ import { languages, type Language } from '@/app/design/content';
 import MessageTranslation from '@/app/chat/[id]/MessageTranslation';
 import useAccount from '@/app/account/useAccount';
 import SiteHeader from '@/app/design/SiteHeader';
+import PrivateQrCode from './PrivateQrCode';
 import ChatMenu from '@/app/chat/ChatMenu';
 import ChatShortcuts from '@/app/chat/ChatShortcuts';
 import useChatBackground from '@/app/chat/useChatBackground';
@@ -96,7 +97,7 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
     } catch { setStatus('sendError'); return false; }
     finally { sendLock.current = false; setSending(false); }
   }
-  return <><div className="esx-site private-chat-site-header"><SiteHeader language={target} actions={<div className="chat-header-actions"><Link className="private-header-qr" href="/account">{t.qr}</Link><ChatMenu language={target} background={background} onBackgroundChange={setBackground} /></div>} /></div><main className="account-page kakao-chat" lang={target} data-chat-background={background ?? undefined}><div className="account-shell"><nav className="account-nav"><Link href="/account">← {accountLabels[target].conversations}</Link><Link href="/account">{t.qr}</Link></nav><h1>{t.title}</h1>
+  return <><div className="esx-site private-chat-site-header"><SiteHeader language={target} actions={<div className="chat-header-actions"><PrivateQrCode language={target} userId={user?.id} anonymous={user?.is_anonymous} chatId={chatId} /><ChatMenu language={target} background={background} onBackgroundChange={setBackground} /></div>} /></div><main className="account-page kakao-chat" lang={target} data-chat-background={background ?? undefined}><div className="account-shell"><nav className="account-nav"><Link href="/account">← {accountLabels[target].conversations}</Link><Link href="/account">{t.qr}</Link></nav><h1>{t.title}</h1>
     {user?.is_anonymous && <p className="account-muted">{t.guestHelp} <Link href="/account">{t.register}</Link></p>}
     {!ready ? <p role="status">{t.loading}</p> : !user ? <Link className="account-button" href={`/account?next=${encodeURIComponent(`/messages/${chatId}`)}`}>{t.signIn}</Link> : <>
       <LanguagePicker panelId="chat-language-panel" label={t.language} value={target} onChange={next => { setTarget(next); try { localStorage.setItem('esx-language', next); } catch {} }} />
@@ -120,7 +121,7 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
           </div>
         </article>;
       })}{loaded && allowed && !messages.length && <p className="account-muted">{t.empty}</p>}</div>
-      {allowed && <div className="private-chat-dock"><div className="chat-navigation-row"><ChatShortcuts language={target} /></div><form onSubmit={send} className="private-compose"><FoxStickerPicker language={target} disabled={sending} onSend={message => sendMessage(message, true)} /><textarea id="private-message" aria-label={t.message} value={draft} onChange={event => setDraft(event.target.value)} placeholder={t.placeholder} rows={1} maxLength={4000} required disabled={sending} /><button disabled={sending || !draft.trim()}>{sending ? t.sending : t.send}</button></form></div>}
+      {allowed && <div className="private-chat-dock"><div className="chat-navigation-row"><ChatShortcuts language={target} onLanguageChange={next => { setTarget(next); try { localStorage.setItem("esx-language", next); } catch {} }} /></div><form onSubmit={send} className="private-compose"><FoxStickerPicker language={target} disabled={sending} onSend={message => sendMessage(message, true)} /><textarea id="private-message" aria-label={t.message} value={draft} onChange={event => setDraft(event.target.value)} placeholder={t.placeholder} rows={1} maxLength={4000} required disabled={sending} /><button disabled={sending || !draft.trim()}>{sending ? t.sending : t.send}</button></form></div>}
       {status && <p role="alert">{t[status]} <button className="account-secondary" onClick={() => setAttempt(value => value + 1)}>{accountLabels[target].retry}</button></p>}
     </>}
   </div></main></>;

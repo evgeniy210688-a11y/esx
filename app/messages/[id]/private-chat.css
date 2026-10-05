@@ -74,3 +74,8 @@
 .kakao-chat .private-chat-dock .private-compose { margin: 0; padding: 10px 0 max(4px, env(safe-area-inset-bottom)); border-top: 1px solid #76bfff99; border-radius: 0; align-items: center; }
 .kakao-chat .private-compose textarea { height: 44px; min-height: 44px; max-height: 44px; resize: none; overflow-y: auto; border-radius: 24px; padding: 10px 14px; line-height: 22px; font-size: 16px; }
 .kakao-chat .private-compose > button { height: 44px; padding: 8px 14px; border-radius: 24px; }
+
+.private-qr-dialog { position: fixed; inset: 0; margin: auto; width: min(360px, calc(100vw - 32px)); max-height: 85dvh; overflow: auto; padding: 24px; border: 1px solid #78d9ee; border-radius: 24px; background: #fff; color: #142b48; text-align: center; }
+.private-qr-dialog::backdrop { background: #0009; }
+.private-qr-dialog svg { display: block; width: 100%; height: auto; margin: 16px auto; }
+.private-qr-dialog button { padding: 10px 20px; border-radius: 20px; background: #245fc5; color: white; }
