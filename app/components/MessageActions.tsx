@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { Language } from '@/app/design/content';
 import { changeMessage } from '@/lib/message-actions';
 import './message-actions.css';
@@ -30,6 +30,16 @@ export default function MessageActions({ children, chatId, messageId, message, o
   const [feedback, setFeedback] = useState<'copied' | 'error' | ''>('');
   const t = labels[language];
   function closeMenu() { if (menu.current) menu.current.open = false; setFeedback(''); }
+  useEffect(() => {
+    function handleOutsidePointer(event: PointerEvent) {
+      if (menu.current?.open && !menu.current.contains(event.target as Node)) {
+        menu.current.open = false;
+        setFeedback('');
+      }
+    }
+    document.addEventListener('pointerdown', handleOutsidePointer, true);
+    return () => document.removeEventListener('pointerdown', handleOutsidePointer, true);
+  }, []);
   async function copy() {
     closeMenu();
     // Copy the text the recipient sees, never the loading/error label or hidden original.
@@ -50,7 +60,9 @@ export default function MessageActions({ children, chatId, messageId, message, o
   }
   return <div className="message-actions-wrap">
     <div ref={content}>{children}</div>
-    {(!sticker || own) && !editing && !deleting && <details ref={menu} className="message-actions-menu" onKeyDown={event => { if (event.key === 'Escape') closeMenu(); }} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) closeMenu(); }}>
+    {(!sticker || own) && !editing && !deleting && <details ref={menu} className="message-actions-menu" onKeyDown={event => { if (event.key === 'Escape') closeMenu(); }} onBlur={event => { // Touch browsers can blur with no next focus target before dispatching click.
+      // Outside taps are handled by pointerdown; keep the action visible until click.
+      if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) closeMenu(); }}>
       <summary aria-label={t[0]} title={t[0]}>⋯</summary>
       <div className="message-actions-options">
         {!sticker && <button type="button" onClick={() => void copy()}>{t[3]}</button>}

@@ -7,15 +7,16 @@ const ts = require('typescript');
 function harness({own=true, sticker=false, fail=false, translated='Переведённый текст'}={}) {
   let index=0, refIndex=0;
   const state=[], refs=[], writes=[], copied=[], changes=[];
-  const react={useState(initial){const i=index++;if(!(i in state))state[i]=initial;return[state[i],v=>{state[i]=v;}];},useRef(initial){const i=refIndex++;return refs[i]??=( {current:initial} );}};
+  const listeners = new Map(); const cleanups = [];
+  const react={useEffect(fn){if(!cleanups.length)cleanups.push(fn());},useState(initial){const i=index++;if(!(i in state))state[i]=initial;return[state[i],v=>{state[i]=v;}];},useRef(initial){const i=refIndex++;return refs[i]??=( {current:initial} );}};
   const jsx=(type,props)=>({type,props});
-  const ctx={exports:{},navigator:{clipboard:{writeText:async text=>copied.push(text)}},require:p=>p==='react'?react:p==='react/jsx-runtime'?{jsx,jsxs:jsx}:p==='@/lib/message-actions'?{changeMessage:async(...args)=>{writes.push(args);if(fail)throw Error('denied');}}:{}};
+  const ctx={document:{addEventListener:(name,fn)=>listeners.set(name,fn),removeEventListener:(name)=>listeners.delete(name)},exports:{},navigator:{clipboard:{writeText:async text=>copied.push(text)}},require:p=>p==='react'?react:p==='react/jsx-runtime'?{jsx,jsxs:jsx}:p==='@/lib/message-actions'?{changeMessage:async(...args)=>{writes.push(args);if(fail)throw Error('denied');}}:{}};
   vm.runInNewContext(ts.transpileModule(fs.readFileSync('app/components/MessageActions.tsx','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.ReactJSX}}).outputText,ctx);
   function render(){index=0;refIndex=0;const tree=ctx.exports.default({chatId:'room',messageId:'42',message:'Original',own,sticker,language:'ru',privateChat:true,onChange:v=>changes.push(v),children:null});refs[0].current={querySelector:()=>translated?{innerText:translated}:null};return tree;}
   function nodes(tree,type){if(!tree)return[];if(Array.isArray(tree))return tree.flatMap(n=>nodes(n,type));return[...(tree.type===type?[tree]:[]),...nodes(tree.props?.children,type)];}
   function button(tree,label){return nodes(tree,'button').find(n=>n.props.children===label);}
   const flush=()=>new Promise(resolve=>setImmediate(resolve));
-  return{render,nodes,button,state,writes,copied,changes,flush};
+  return{render,nodes,button,state,writes,copied,changes,flush,listeners,cleanups};
 }
 test('incoming text can be copied but never edited or deleted',async()=>{
   const h=harness({own:false});const tree=h.render();
@@ -47,4 +48,28 @@ test('delete requires confirmation and duplicate clicks only issue one mutation'
 test('cancel deletion leaves the message untouched; stickers can only be deleted',()=>{
   const h=harness({sticker:true});let tree=h.render();assert.equal(h.button(tree,'Изменить'),undefined);assert.equal(h.button(tree,'Копировать'),undefined);
   h.button(tree,'Убрать').props.onClick();tree=h.render();h.button(tree,'Отмена').props.onClick();assert.equal(h.writes.length,0);assert.equal(h.state[1],false);
+});
+
+for (const action of ['Изменить', 'Убрать']) {
+  test('touch blur does not swallow ' + action, () => {
+    const h=harness(); const tree=h.render(); const details=h.nodes(tree,'details')[0];
+    const inside={}; const element={open:true,contains:target=>target===inside};
+    details.props.ref.current=element;
+    h.listeners.get('pointerdown')({target:inside});
+    details.props.onBlur({currentTarget:element,relatedTarget:null});
+    assert.equal(element.open,true,'the button must remain visible until click');
+    h.button(tree,action).props.onClick();
+    const updated=h.render();
+    assert.equal(action==='Изменить' ? h.nodes(updated,'textarea').length : h.nodes(updated,'p').length,1);
+  });
+}
+test('outside pointer, keyboard focus and Escape dismiss the menu',()=>{
+  const h=harness(); const tree=h.render(); const details=h.nodes(tree,'details')[0];
+  const inside={}; const element={open:true,contains:target=>target===inside};
+  details.props.ref.current=element;
+  details.props.onBlur({currentTarget:element,relatedTarget:inside}); assert.equal(element.open,true);
+  details.props.onBlur({currentTarget:element,relatedTarget:{}}); assert.equal(element.open,false);
+  element.open=true; h.listeners.get('pointerdown')({target:{}}); assert.equal(element.open,false);
+  element.open=true; details.props.onKeyDown({key:'Escape'}); assert.equal(element.open,false);
+  h.cleanups[0](); assert.equal(h.listeners.size,0);
 });
