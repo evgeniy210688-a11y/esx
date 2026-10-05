@@ -2,8 +2,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { copy, languages, type Language } from '@/app/design/content';
 import './ChatShortcuts.css';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import AccountLink from '@/app/account/AccountLink';
+
+const languageFlags: Record<Language, string> = { ru: 'ru', en: 'gb', ko: 'kr', zh: 'cn', tr: 'tr', vi: 'vn', km: 'kh', kk: 'kz' };
 
 export default function ChatShortcuts({ language, onLanguageChange }: { language: Language; onLanguageChange?: (value: Language) => void }) {
   const router = useRouter();
@@ -36,7 +39,7 @@ export default function ChatShortcuts({ language, onLanguageChange }: { language
   }, [open, languagesOpen]);
   return <div ref={root} className="chat-shortcuts">
     {open && <nav id="chat-shortcut-menu" className="chat-shortcut-menu" aria-label={t[44]}>{[['/', 0], ['/korea', 1], ['/about', 2], ['/advertising', 3], ['/contact', 4]].map(([url, index]) => <a key={url} href={String(url)}>{t[Number(index)]}</a>)}<AccountLink language={language} /></nav>}
-    {languagesOpen && onLanguageChange && <div id="chat-shortcut-languages" className="chat-shortcut-menu chat-shortcut-languages" role="group" aria-label={t[10]}>{languages.map(item => <button key={item.code} type="button" lang={item.code} aria-pressed={language === item.code} onClick={() => { onLanguageChange(item.code); setLanguagesOpen(false); }}>{item.name}{language === item.code ? ' ✓' : ''}</button>)}</div>}
+    {languagesOpen && onLanguageChange && <div id="chat-shortcut-languages" className="chat-shortcut-menu chat-shortcut-languages" role="group" aria-label={t[10]}>{languages.map(item => <button key={item.code} type="button" lang={item.code} aria-pressed={language === item.code} onClick={() => { onLanguageChange(item.code); setLanguagesOpen(false); }}><Image src={`/flags/${languageFlags[item.code]}.svg`} alt="" width={24} height={16} /><span>{item.name}</span>{language === item.code && <span aria-hidden="true">✓</span>}</button>)}</div>}
     <button type="button" aria-label={language === 'ru' ? 'Назад' : 'Back'} onClick={() => { if (window.history.length > 1) router.back(); else router.push('/'); }}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5L8 12L15 19" /></svg></button>
     <button type="button" aria-label={t[0]} title={t[0]} onClick={() => router.push('/')}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10L12 3L21 10M5 9V21H10V15H14V21H19V9" /></svg></button>
     <button ref={toggle} type="button" aria-label={t[44]} aria-expanded={open} aria-controls="chat-shortcut-menu" onClick={() => { setLanguagesOpen(false); setOpen(value => !value); }}><svg viewBox="0 0 24 24" aria-hidden="true"><path d={open ? 'M6 6L18 18M18 6L6 18' : 'M4 6H20M4 12H20M4 18H20'} /></svg></button>
