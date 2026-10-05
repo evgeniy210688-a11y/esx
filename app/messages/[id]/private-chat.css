@@ -68,3 +68,9 @@
 .account-page.kakao-chat[data-chat-background="black"] { --private-chat-background: #000; }
 .account-page.kakao-chat[data-chat-background] { background: var(--private-chat-background); }
 .account-page.kakao-chat[data-chat-background]::before { background: var(--private-chat-background); }
+
+/* Compact composer matches the guest chat, with navigation directly above it. */
+.kakao-chat .private-chat-dock .chat-navigation-row { padding: 8px 0; }
+.kakao-chat .private-chat-dock .private-compose { margin: 0; padding: 10px 0 max(4px, env(safe-area-inset-bottom)); border-top: 1px solid #76bfff99; border-radius: 0; align-items: center; }
+.kakao-chat .private-compose textarea { height: 44px; min-height: 44px; max-height: 44px; resize: none; overflow-y: auto; border-radius: 24px; padding: 10px 14px; line-height: 22px; font-size: 16px; }
+.kakao-chat .private-compose > button { height: 44px; padding: 8px 14px; border-radius: 24px; }
