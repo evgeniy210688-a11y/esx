@@ -1,0 +1,7 @@
+.back-to-top.floating-scan-toggle { display: none; }
+@media (max-width: 760px) {
+  .back-to-top.floating-scan-toggle {
+    display: grid;
+    bottom: calc(max(16px, env(safe-area-inset-bottom)) + 174px);
+  }
+}

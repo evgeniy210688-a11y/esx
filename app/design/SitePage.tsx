@@ -13,6 +13,7 @@ import MobileFoxGuide from './MobileFoxGuide';
 import KoreaSection from './KoreaSection';
 import HelpSection from './HelpSection';
 import BackToTop from './BackToTop';
+import MobileScanButton from './MobileScanButton';
 import UsefulApps from './UsefulApps';
 import AboutDetails from './AboutDetails';
 import AccountLink from '../account/AccountLink';
@@ -193,6 +194,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
     <button type="button" className="back-to-top floating-chat-toggle" aria-label={t[8]} title={t[8]} onClick={async () => { const { data: { session } } = await supabase.auth.getSession(); window.location.assign(session && !session.user.is_anonymous ? '/account' : `/chat/${crypto.randomUUID()}`); }}>
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-8 8H5l-3 3v-11a9 9 0 0 1 18 0Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round"/><path d="M7 10h10M7 14h6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/></svg>
     </button>
+    <MobileScanButton language={language} />
     <BackToTop language={language} />
   </div>;
 }
