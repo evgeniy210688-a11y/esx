@@ -4,6 +4,7 @@ import jsQR from 'jsqr';
 import { useRouter } from 'next/navigation';
 import SiteHeader from '@/app/design/SiteHeader';
 import { languages, type Language } from '@/app/design/content';
+
 import { qrLink } from '@/lib/qr-link';
 import { scanLabels } from './labels';
 import './scan.css';
@@ -16,7 +17,7 @@ export default function ScanPage() {
   const [active, setActive] = useState(false);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState('');
-  const [error, setError] = useState<'camera' | 'image' | null>(null);
+  const [error, setError] = useState<'camera' | null>(null);
   const video = useRef<HTMLVideoElement>(null);
   const stream = useRef<MediaStream | null>(null);
   const frame = useRef(0);
@@ -35,7 +36,7 @@ export default function ScanPage() {
   useEffect(() => {
     try {
       const saved = localStorage.getItem('esx-language');
-      // Browser preference is restored after hydration.
+      // Restore the site's saved language after hydration.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       if (languages.some(item => item.code === saved)) setLanguage(saved as Language);
     } catch {}
@@ -90,22 +91,6 @@ export default function ScanPage() {
     } catch { if (run === generation.current) { stop(); setError('camera'); } }
   }
 
-  async function readImage(file?: File) {
-    if (!file) return;
-    stop(); setBusy(true); setError(null); setResult('');
-    const run = generation.current;
-    const url = URL.createObjectURL(file);
-    try {
-      const image = new window.Image();
-      image.src = url;
-      await image.decode();
-      if (run !== generation.current) return;
-      const value = decode(image, image.naturalWidth, image.naturalHeight, document.createElement('canvas'));
-      if (value) setResult(value); else setError('image');
-    } catch { if (run === generation.current) setError('image'); }
-    finally { URL.revokeObjectURL(url); if (run === generation.current) setBusy(false); }
-  }
-
   return <div className="esx-site qr-scan-page" lang={language}>
     <SiteHeader language={language} />
     <main className="qr-scan-card">
@@ -114,9 +99,8 @@ export default function ScanPage() {
       <video ref={video} className={active || busy ? 'qr-camera' : 'qr-camera qr-camera-idle'} autoPlay playsInline muted aria-label={t[0]} />
       <div className="qr-scan-actions">
         {active || busy ? <button onClick={stop}>{t[4]}</button> : <button onClick={() => void start()}>{t[1]}</button>}
-        <label className="qr-file-label">{t[2]}<input type="file" accept="image/*" disabled={busy} onChange={event => { void readImage(event.target.files?.[0]); event.target.value = ''; }} /></label>
       </div>
-      {error && <p role="alert">{t[error === 'camera' ? 5 : 6]}</p>}
+      {error && <p role="alert">{t[5]}</p>}
       {result && <section aria-live="polite"><h2>{t[7]}</h2><p className="qr-result">{result}</p>{link && <a className="qr-open-link" href={link}>{t[8]}</a>}<button onClick={() => { setResult(''); void start(); }}>{t[9]}</button></section>}
     </main>
   </div>;
