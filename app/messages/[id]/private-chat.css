@@ -91,3 +91,12 @@
 .private-chat-viewport .private-chat-dock { position: relative; bottom: auto; flex-shrink: 0; }
 .private-chat-viewport .account-nav { margin-bottom: 12px; }
 .private-chat-viewport .private-language { flex-shrink: 0; }
+
+/* Allow flex children to shrink within a narrow mobile viewport. */
+.private-chat-viewport > .kakao-chat,
+.private-chat-viewport .account-shell,
+.private-chat-viewport .private-list,
+.private-chat-viewport .private-chat-dock { min-width: 0; max-width: 100%; }
+.private-chat-viewport .private-list { overflow-x: hidden; padding-inline: 8px; }
+.private-chat-viewport .private-message-line { min-width: 0; }
+.private-chat-viewport .private-compose textarea { min-width: 0; }

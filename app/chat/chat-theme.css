@@ -188,3 +188,7 @@
 /* The message list owns scrolling; the composer stays in the flex layout. */
 .chat-theme { overflow: hidden; }
 .chat-theme .chat-composer input { font-size: 16px; }
+
+/* Keep the message scroller vertical, including long text and bubble tails. */
+.chat-theme .chat-shell > section { overflow-x: hidden; }
+.chat-theme .chat-shell, .chat-theme .chat-composer { min-width: 0; max-width: 100%; }
