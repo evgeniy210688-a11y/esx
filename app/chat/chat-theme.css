@@ -184,3 +184,7 @@
 .chat-theme[data-chat-background] .chat-shell { box-shadow: none; border-color: transparent; }
 .chat-theme[data-chat-background]:not([data-chat-background="black"]) .chat-sender,
 .chat-theme[data-chat-background]:not([data-chat-background="black"]) .chat-shell > section .text-zinc-400 { color: #243247; text-shadow: none; }
+
+/* The message list owns scrolling; the composer stays in the flex layout. */
+.chat-theme { overflow: hidden; }
+.chat-theme .chat-composer input { font-size: 16px; }

@@ -14,6 +14,7 @@ import PrivateQrCode from './PrivateQrCode';
 import ChatMenu from '@/app/chat/ChatMenu';
 import ChatShortcuts from '@/app/chat/ChatShortcuts';
 import useChatBackground from '@/app/chat/useChatBackground';
+import observeChatViewport from '@/app/chat/observeChatViewport';
 import '@/app/account/account.css';
 import './private-chat.css';
 import LanguagePicker from './LanguagePicker';
@@ -38,7 +39,18 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
   const [target, setTarget] = useState<Language>('en');
   const [older, setOlder] = useState(false);
   const [limit, setLimit] = useState(100);
+  const lastMessageId = messages.at(-1)?.id;
   const sendLock = useRef(false);
+  const chatRoot = useRef<HTMLDivElement>(null);
+  const messageList = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (messageList.current) messageList.current.scrollTop = messageList.current.scrollHeight;
+  }, [lastMessageId, ready]);
+  useEffect(() => {
+    if (chatRoot.current && messageList.current) {
+      return observeChatViewport(chatRoot.current, messageList.current);
+    }
+  }, [ready, user?.id]);
   const t = privateChatLabels[target];
   useEffect(() => {
     try {
@@ -97,13 +109,13 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
     } catch { setStatus('sendError'); return false; }
     finally { sendLock.current = false; setSending(false); }
   }
-  return <><div className="esx-site private-chat-site-header"><SiteHeader language={target} actions={<div className="chat-header-actions"><PrivateQrCode language={target} userId={user?.id} anonymous={user?.is_anonymous} chatId={chatId} /><ChatMenu privateChat language={target} background={background} onBackgroundChange={setBackground} /></div>} /></div><main className="account-page kakao-chat" lang={target} data-chat-background={background ?? undefined}><div className="account-shell"><nav className="account-nav"><Link href="/account">← {accountLabels[target].conversations}</Link><Link href="/account">{t.qr}</Link></nav><h1>{t.title}</h1>
+  return <div ref={chatRoot} className="private-chat-viewport"><div className="esx-site private-chat-site-header"><SiteHeader language={target} actions={<div className="chat-header-actions"><PrivateQrCode language={target} userId={user?.id} anonymous={user?.is_anonymous} chatId={chatId} /><ChatMenu privateChat language={target} background={background} onBackgroundChange={setBackground} /></div>} /></div><main className="account-page kakao-chat" lang={target} data-chat-background={background ?? undefined}><div className="account-shell"><nav className="account-nav"><Link href="/account">← {accountLabels[target].conversations}</Link><Link href="/account">{t.qr}</Link></nav><h1>{t.title}</h1>
     {user?.is_anonymous && <p className="account-muted">{t.guestHelp} <Link href="/account">{t.register}</Link></p>}
     {!ready ? <p role="status">{t.loading}</p> : !user ? <Link className="account-button" href={`/account?next=${encodeURIComponent(`/messages/${chatId}`)}`}>{t.signIn}</Link> : <>
       <LanguagePicker panelId="chat-language-panel" label={t.language} value={target} onChange={next => { setTarget(next); try { localStorage.setItem('esx-language', next); } catch {} }} />
       {!loaded && <p role="status">{t.loading}</p>}
       {older && <button className="account-secondary" onClick={() => setLimit(value => value + 100)}>{t.older}</button>}
-      <div className="private-list">{messages.map(message => {
+      <div ref={messageList} className="private-list">{messages.map(message => {
         const own = message.sender_id === user.id;
         const sender = names[message.sender_id] || t.guest;
         return <article key={message.id} className={`private-message-row${own ? ' private-message-row-own' : ''}`}>
@@ -124,5 +136,5 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
       {allowed && <div className="private-chat-dock"><div className="chat-navigation-row"><ChatShortcuts language={target} onLanguageChange={next => { setTarget(next); try { localStorage.setItem("esx-language", next); } catch {} }} /></div><form onSubmit={send} className="private-compose"><FoxStickerPicker language={target} disabled={sending} onSend={message => sendMessage(message, true)} /><textarea id="private-message" aria-label={t.message} value={draft} onChange={event => setDraft(event.target.value)} placeholder={t.placeholder} rows={1} maxLength={4000} required disabled={sending} /><button disabled={sending || !draft.trim()}>{sending ? t.sending : t.send}</button></form></div>}
       {status && <p role="alert">{t[status]} <button className="account-secondary" onClick={() => setAttempt(value => value + 1)}>{accountLabels[target].retry}</button></p>}
     </>}
-  </div></main></>;
+  </div></main></div>;
 }

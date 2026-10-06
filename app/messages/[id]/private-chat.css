@@ -79,3 +79,15 @@
 .private-qr-dialog::backdrop { background: #0009; }
 .private-qr-dialog svg { display: block; width: 100%; height: auto; margin: 16px auto; }
 .private-qr-dialog button { padding: 10px 20px; border-radius: 20px; background: #245fc5; color: white; }
+
+/* Reserve real space for the dock so it cannot cover the latest message. */
+.private-chat-viewport { height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+.private-chat-viewport > .private-chat-site-header { position: relative; flex-shrink: 0; }
+.private-chat-viewport > .kakao-chat { flex: 1; min-height: 0; display: flex; padding-block: 0; }
+.private-chat-viewport .kakao-chat > .account-shell { flex: 1; min-height: 0; height: 100%; margin-block: 0; }
+.private-chat-viewport .private-list { min-height: 0; overflow-y: auto; overscroll-behavior-y: contain; }
+.private-chat-viewport .private-message-row { flex-shrink: 0; }
+.private-chat-viewport .private-list > :first-child { margin-top: auto; }
+.private-chat-viewport .private-chat-dock { position: relative; bottom: auto; flex-shrink: 0; }
+.private-chat-viewport .account-nav { margin-bottom: 12px; }
+.private-chat-viewport .private-language { flex-shrink: 0; }

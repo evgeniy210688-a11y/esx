@@ -8,6 +8,7 @@ import ChatShortcuts from "../ChatShortcuts";
 import ChatMenu from "../ChatMenu";
 import useChatBackground from "../useChatBackground";
 import "../chat-theme.css";
+import observeChatViewport from "../observeChatViewport";
 
 import SiteHeader from "@/app/design/SiteHeader";
 
@@ -37,12 +38,14 @@ export default function ChatRoomClient({
   chatId: string;
 }) {
   const { background, setBackground } = useChatBackground();
+  const chatRoot = useRef<HTMLElement>(null);
   const messageList = useRef<HTMLElement>(null);
   const sendLock = useRef(false);
   const [sending, setSending] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
+  const lastMessageId = messages.at(-1)?.id;
   const [translationLanguage, setTranslationLanguage] = useState<Language | null>(null);
   const [ownMessageIds, setOwnMessageIds] = useState<Set<number | string>>(new Set());
   const [editableIds, setEditableIds] = useState<Set<string>>(new Set());
@@ -51,7 +54,13 @@ export default function ChatRoomClient({
   useEffect(() => {
     const list = messageList.current;
     if (list) list.scrollTop = list.scrollHeight;
-  }, [messages.length]);
+  }, [lastMessageId, loading]);
+
+  useEffect(() => {
+    if (chatRoot.current && messageList.current) {
+      return observeChatViewport(chatRoot.current, messageList.current);
+    }
+  }, []);
 
   // Загружаем сообщения и подключаем Realtime
   useEffect(() => {
@@ -250,7 +259,7 @@ export default function ChatRoomClient({
   }
 
   return (
-    <main lang={language} data-chat-background={background ?? undefined} className="chat-theme flex min-h-screen flex-col">
+    <main ref={chatRoot} lang={language} data-chat-background={background ?? undefined} className="chat-theme flex min-h-screen flex-col">
 
         <div className="esx-site chat-site-header"><SiteHeader language={language} actions={<div className="chat-header-actions"><ChatQrCode chatId={chatId} language={language} /><ChatMenu language={language} background={background} onBackgroundChange={setBackground} /></div>} /></div>
 
@@ -329,7 +338,6 @@ export default function ChatRoomClient({
         </div>
 
       </div>
-      <ChatShortcuts language={language} />
     </main>
   );
 }
