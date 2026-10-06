@@ -1,13 +1,17 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import jsQR from 'jsqr';
+import { useRouter } from 'next/navigation';
 import SiteHeader from '@/app/design/SiteHeader';
 import { languages, type Language } from '@/app/design/content';
 import { qrLink } from '@/lib/qr-link';
 import { scanLabels } from './labels';
 import './scan.css';
 
+const closeLabels: Record<Language, string> = { en: 'Close', ru: 'Закрыть', ko: '닫기', zh: '关闭', tr: 'Kapat', vi: 'Đóng', km: 'បិទ', kk: 'Жабу' };
+
 export default function ScanPage() {
+  const router = useRouter();
   const [language, setLanguage] = useState<Language>('en');
   const [active, setActive] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -105,7 +109,7 @@ export default function ScanPage() {
   return <div className="esx-site qr-scan-page" lang={language}>
     <SiteHeader language={language} />
     <main className="qr-scan-card">
-      <h1>{t[0]}</h1>
+      <div className="qr-scan-heading"><h1>{t[0]}</h1><button type="button" className="qr-close" onClick={() => { stop(); if (window.history.length > 1) router.back(); else router.replace('/'); }}><span aria-hidden="true">×</span> {closeLabels[language]}</button></div>
       <p>{t[3]}</p>
       <video ref={video} className={active || busy ? 'qr-camera' : 'qr-camera qr-camera-idle'} autoPlay playsInline muted aria-label={t[0]} />
       <div className="qr-scan-actions">

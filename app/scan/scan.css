@@ -11,3 +11,6 @@
 .qr-scan-card section button { margin: 10px; }
 .qr-scan-card :focus-visible { outline: 3px solid #83e6ff; outline-offset: 3px; }
 .chat-shortcuts > .qr-scan-shortcut { width: 46px; height: 46px; display: grid; place-items: center; flex-shrink: 0; border: 1px solid #78d9ee; border-radius: 50%; color: white; background: #142b48; }
+
+.qr-scan-heading { display: flex; align-items: start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.qr-scan-card .qr-close { min-height: 44px; flex-shrink: 0; padding: 8px 12px; }
