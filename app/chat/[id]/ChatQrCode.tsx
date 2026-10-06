@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import type { Language } from "@/app/design/content";
 import { chatLabels } from "./chatLabels";
 import { accountLabels } from "@/app/account/accountLabels";
+import ShareChatLink from "@/app/components/ShareChatLink";
 import { QRCodeSVG } from "qrcode.react";
 
 export default function ChatQrCode({ chatId, language }: { chatId: string; language: Language }) {
@@ -24,6 +25,7 @@ export default function ChatQrCode({ chatId, language }: { chatId: string; langu
       <p className="mt-2 text-sm text-zinc-600">{accountLabels[language].qrHelp}</p>
       <p className="mt-2 text-sm text-zinc-500">{accountLabels[language].guestChatNote}</p>
       {url && <QRCodeSVG value={url} size={256} level="M" marginSize={4} title={accountLabels[language].qrTitle} className="mx-auto my-5 h-auto w-full max-w-[256px]" />}
+      {url && <ShareChatLink url={url} language={language} />}
       <form method="dialog" className="mt-5"><button autoFocus className="w-full rounded-full bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800">{chatLabels[language][5]}</button></form>
     </dialog>
   </>;

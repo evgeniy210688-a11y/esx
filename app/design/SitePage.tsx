@@ -14,6 +14,7 @@ import KoreaSection from './KoreaSection';
 import HelpSection from './HelpSection';
 import BackToTop from './BackToTop';
 import MobileScanButton from './MobileScanButton';
+import ShareChatLink from '@/app/components/ShareChatLink';
 import UsefulApps from './UsefulApps';
 import AboutDetails from './AboutDetails';
 import AccountLink from '../account/AccountLink';
@@ -171,7 +172,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
       )}
       {section === 'home' && <>
       <BusinessHero language={language} onStart={startConversation} />
-      {room&&<section ref={inviteRef} tabIndex={-1} className="invite" aria-label={t[12]}><div className="invite-intro"><div className="invite-desktop-copy"><h2>{t[12]}</h2><p>{t[13]}</p></div><div className="invite-mobile-copy"><h2>{accountLabels[language].qrTitle}</h2><p>{accountLabels[language].qrHelp}</p><p className="invite-note">{accountLabels[language].guestChatNote}</p></div><a className="button blue" href={room}>{t[8]} ↗</a></div><QRCodeSVG value={room} size={180} marginSize={4} title={accountLabels[language].qrTitle}/></section>}
+      {room&&<section ref={inviteRef} tabIndex={-1} className="invite" aria-label={t[12]}><div className="invite-intro"><div className="invite-desktop-copy"><h2>{t[12]}</h2><p>{t[13]}</p></div><div className="invite-mobile-copy"><h2>{accountLabels[language].qrTitle}</h2><p>{accountLabels[language].qrHelp}</p><p className="invite-note">{accountLabels[language].guestChatNote}</p></div><a className="button blue" href={room}>{t[8]} ↗</a><ShareChatLink url={room} language={language} /></div><QRCodeSVG value={room} size={180} marginSize={4} title={accountLabels[language].qrTitle}/></section>}
       <MobileFoxGuide language={language} />
       <UsefulApps language={language} />
 

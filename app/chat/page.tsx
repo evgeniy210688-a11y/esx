@@ -1,5 +1,6 @@
 "use client";
 
+import ShareChatLink from "@/app/components/ShareChatLink";
 import HomeLink from "@/app/components/HomeLink";
 import Link from 'next/link';
 
@@ -86,6 +87,7 @@ export default function ChatPage() {
             </p>
           </div>
 
+          {chatLink && <ShareChatLink url={chatLink} language="en" />}
           {/* Copy */}
           {chatLink && (
             <a href={chatLink} className="mt-6 font-semibold underline">
