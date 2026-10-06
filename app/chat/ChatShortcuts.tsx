@@ -5,6 +5,8 @@ import './ChatShortcuts.css';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import AccountLink from '@/app/account/AccountLink';
+import Link from 'next/link';
+import { scanLabels } from '@/app/scan/labels';
 
 const languageFlags: Record<Language, string> = { ru: 'ru', en: 'gb', ko: 'kr', zh: 'cn', tr: 'tr', vi: 'vn', km: 'kh', kk: 'kz' };
 
@@ -48,5 +50,6 @@ export default function ChatShortcuts({ language, onLanguageChange }: { language
       const panel = document.querySelector<HTMLDetailsElement>('#chat-language-panel');
       if (panel) { panel.open = !panel.open; if (panel.open) { panel.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'center' }); panel.querySelector<HTMLElement>('select, summary, button')?.focus({ preventScroll: true }); } }
     }}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12H21M5 6H19M5 18H19"/></svg></button>
+    <Link href="/scan" className="qr-scan-shortcut" aria-label={scanLabels[language][0]} title={scanLabels[language][0]}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5M8 8h3v3H8zM14 8h2M8 15h2M14 13v3h3" /></svg></Link>
   </div>;
 }

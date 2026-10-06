@@ -6,6 +6,7 @@ import Link from 'next/link';
 import AccountLink from '../account/AccountLink';
 import { copy, type Language } from './content';
 import './design.css';
+import { scanLabels } from '@/app/scan/labels';
 
 const sections = ['/', '/korea', '/about', '/advertising', '/contact'];
 
@@ -41,6 +42,7 @@ export default function SiteHeader({ language, actions }: { language: Language; 
         <button ref={toggle} type="button" className="menu-toggle" aria-label={t[44]} aria-expanded={open} aria-controls="account-site-navigation" onClick={() => setOpen(!open)}><span /><span /><span /></button>
         <nav id="account-site-navigation" aria-label={t[44]}>
           {sections.map((href, index) => <Link key={href} href={href} className={index === 4 ? 'nav-contact' : ''} style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }} onClick={() => setOpen(false)}>{t[index]}{index === 4 && <span>↗</span>}</Link>)}
+          <Link href="/scan" onClick={() => setOpen(false)}>{scanLabels[language][0]}</Link>
           <AccountLink language={language} onClick={() => setOpen(false)} />
         </nav>
       </div>

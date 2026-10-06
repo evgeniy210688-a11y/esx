@@ -1,0 +1,13 @@
+.qr-scan-page { min-height: 100dvh; background: #071426; color: #eff6ff; }
+.qr-scan-card { width: min(560px, calc(100% - 32px)); margin: 28px auto; padding: 20px; border: 1px solid #557db0; border-radius: 20px; background: #10223b; }
+.qr-scan-card h1 { font-size: 24px; margin-bottom: 12px; }
+.qr-scan-card p { margin: 12px 0; }
+.qr-camera { display: block; width: 100%; aspect-ratio: 1; max-height: 45dvh; object-fit: cover; background: #030611; border-radius: 14px; }
+.qr-camera-idle { height: 1px; max-height: 1px; opacity: 0; }
+.qr-scan-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-block: 18px; }
+.qr-scan-card button, .qr-file-label, .qr-open-link { display: inline-block; padding: 12px 16px; border: 1px solid #78d9ee; border-radius: 12px; background: #142b48; color: white; cursor: pointer; font: inherit; }
+.qr-file-label input { display: block; max-width: 100%; margin-top: 10px; font-size: 14px; }
+.qr-result { overflow-wrap: anywhere; white-space: pre-wrap; }
+.qr-scan-card section button { margin: 10px; }
+.qr-scan-card :focus-visible { outline: 3px solid #83e6ff; outline-offset: 3px; }
+.chat-shortcuts > .qr-scan-shortcut { width: 46px; height: 46px; display: grid; place-items: center; flex-shrink: 0; border: 1px solid #78d9ee; border-radius: 50%; color: white; background: #142b48; }

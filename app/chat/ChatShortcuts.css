@@ -15,3 +15,5 @@
 .chat-shortcuts .chat-shortcut-languages > button:hover, .chat-shortcuts .chat-shortcut-languages > button[aria-pressed="true"] { background: #ffffff20; }
 
 .chat-shortcut-languages > button img { flex-shrink: 0; width: 24px; height: 16px; object-fit: cover; border-radius: 2px; }
+
+.chat-shortcuts > .qr-scan-shortcut { width:46px; height:46px; display:grid; place-items:center; flex-shrink:0; border:1px solid #78d9ee; border-radius:50%; color:white; background:#142b48; }
