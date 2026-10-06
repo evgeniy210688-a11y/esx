@@ -100,3 +100,8 @@
 .private-chat-viewport .private-list { overflow-x: hidden; padding-inline: 8px; }
 .private-chat-viewport .private-message-line { min-width: 0; }
 .private-chat-viewport .private-compose textarea { min-width: 0; }
+/* Safari keyboard panning must not move the resized chat a second time. */
+.private-chat-viewport { position: fixed; inset: 0 0 auto; width: 100%; }
+/* Override incoming bubble colors regardless of stylesheet load order. */
+.private-chat-viewport .kakao-chat .private-bubble:has(> .fox-sticker-image) { background: transparent; border: 0; box-shadow: none; padding: 0; }
+.private-chat-viewport .kakao-chat .private-bubble:has(> .fox-sticker-image)::before { content: none; }

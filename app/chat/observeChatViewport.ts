@@ -14,8 +14,13 @@ export default function observeChatViewport(root: HTMLElement, list: HTMLElement
   };
   const resizeViewport = () => {
     // Retain CSS dvh sizing during pinch zoom.
-    if (viewport && viewport.scale === 1) root.style.height = viewport.height + 'px';
-    else root.style.removeProperty('height');
+    if (viewport && viewport.scale === 1) {
+      root.style.height = viewport.height + 'px';
+      root.style.top = viewport.offsetTop + 'px';
+    } else {
+      root.style.removeProperty('height');
+      root.style.removeProperty('top');
+    }
     follow();
   };
   const observer = new ResizeObserver(follow);
@@ -29,6 +34,7 @@ export default function observeChatViewport(root: HTMLElement, list: HTMLElement
   mutations.observe(list, { childList: true });
   list.addEventListener('scroll', onScroll, { passive: true });
   viewport?.addEventListener('resize', resizeViewport);
+  viewport?.addEventListener('scroll', resizeViewport);
   window.addEventListener('resize', resizeViewport);
   observeMessages();
   resizeViewport();
@@ -38,7 +44,9 @@ export default function observeChatViewport(root: HTMLElement, list: HTMLElement
     mutations.disconnect();
     list.removeEventListener('scroll', onScroll);
     viewport?.removeEventListener('resize', resizeViewport);
+    viewport?.removeEventListener('scroll', resizeViewport);
     window.removeEventListener('resize', resizeViewport);
     root.style.removeProperty('height');
+    root.style.removeProperty('top');
   };
 }

@@ -6,7 +6,7 @@ const ts = require('typescript');
 
 function harness() {
   const events = () => ({ listeners: {}, addEventListener(k, fn) { this.listeners[k] = fn; }, removeEventListener(k) { delete this.listeners[k]; } });
-  const viewport = Object.assign(events(), { height: 780, scale: 1 });
+  const viewport = Object.assign(events(), { height: 780, scale: 1, offsetTop: 0 });
   const list = Object.assign(events(), { scrollHeight: 1200, clientHeight: 500, scrollTop: 700, children: [{}] });
   const root = { style: { removeProperty(k) { delete this[k]; } } };
   const window = Object.assign(events(), { visualViewport: viewport });
@@ -51,4 +51,21 @@ test('zoom uses CSS sizing and cleanup removes listeners and pending work', () =
   assert.equal(Object.keys(h.viewport.listeners).length, 0);
   assert.equal(Object.keys(h.window.listeners).length, 0);
   assert.equal(Object.keys(h.list.listeners).length, 0);
+});
+
+test('Safari keyboard pan keeps the dock at the visual viewport bottom', () => {
+  const h = harness();
+  h.viewport.height = 380;
+  h.viewport.offsetTop = 240;
+  h.viewport.listeners.resize();
+  h.viewport.listeners.scroll();
+  h.flush();
+  assert.equal(h.root.style.top, '240px');
+  assert.equal(parseFloat(h.root.style.top) + parseFloat(h.root.style.height), 620);
+  h.viewport.offsetTop = 0;
+  h.viewport.height = 780;
+  h.viewport.listeners.scroll();
+  assert.equal(h.root.style.top, '0px');
+  h.cleanup();
+  assert.equal(h.root.style.top, undefined);
 });

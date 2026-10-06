@@ -192,3 +192,5 @@
 /* Keep the message scroller vertical, including long text and bubble tails. */
 .chat-theme .chat-shell > section { overflow-x: hidden; }
 .chat-theme .chat-shell, .chat-theme .chat-composer { min-width: 0; max-width: 100%; }
+/* Anchor to the visible viewport when Safari pans for the keyboard. */
+.chat-theme { position: fixed; inset: 0 0 auto; width: 100%; }
