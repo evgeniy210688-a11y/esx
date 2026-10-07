@@ -314,8 +314,9 @@ export default function ChatRoomClient({
                 setMessage(e.target.value)
               }
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  sendMessage();
+                if (e.key === "Enter" && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey && !e.nativeEvent.isComposing && e.nativeEvent.keyCode !== 229) {
+                  e.preventDefault();
+                  if (!e.repeat) void sendMessage();
                 }
               }}
               placeholder={ui.placeholder}

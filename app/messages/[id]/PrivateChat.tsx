@@ -137,7 +137,12 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
         const sent = await sendMessage(sticker, true);
         if (sent) setDraft(current => current === draft ? '' : current);
         return sent;
-      }} /><textarea id="private-message" aria-label={t.message} value={draft} onChange={event => setDraft(event.target.value)} placeholder={t.placeholder} rows={1} maxLength={4000} required disabled={sending} /><button disabled={sending || !draft.trim()}>{sending ? t.sending : t.send}</button></form></div>}
+      }} /><textarea id="private-message" aria-label={t.message} value={draft} onChange={event => setDraft(event.target.value)} onKeyDown={event => {
+        if (event.key === 'Enter' && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey && !event.nativeEvent.isComposing && event.nativeEvent.keyCode !== 229) {
+          event.preventDefault();
+          if (!event.repeat) void sendMessage(draft.trim());
+        }
+      }} placeholder={t.placeholder} rows={1} maxLength={4000} required disabled={sending} /><button disabled={sending || !draft.trim()}>{sending ? t.sending : t.send}</button></form></div>}
       {status && <p role="alert">{t[status]} <button className="account-secondary" onClick={() => setAttempt(value => value + 1)}>{accountLabels[target].retry}</button></p>}
     </>}
   </div></main></div>;
