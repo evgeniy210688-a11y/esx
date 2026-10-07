@@ -21,6 +21,7 @@ async function loadLogo() {
 }
 
 export default function AccountQr({ url, username, language, children }: { url: string; username: string; language: Language; children?: ReactNode }) {
+  const printSheet = useRef<HTMLElement>(null);
   const qrCanvas = useRef<HTMLCanvasElement>(null);
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState<AccountMessage | ''>('');
@@ -28,6 +29,55 @@ export default function AccountQr({ url, username, language, children }: { url: 
   const title = t.qrTitle;
   const instruction = t.scanInstruction;
   const caption = t.noRegistration;
+
+  async function printQr() {
+    if (!printSheet.current) return;
+    // Open synchronously during the click to avoid popup blocking after awaits.
+    const page = window.open('', '_blank');
+    if (!page) { setStatus('printError'); return; }
+    page.opener = null;
+    setStatus('');
+    const doc = page.document;
+    doc.title = `ESX QR - ${username || 'Chat'}`;
+    doc.documentElement.lang = language;
+    const viewport = doc.createElement('meta');
+    viewport.name = 'viewport';
+    viewport.content = 'width=device-width, initial-scale=1';
+    const style = doc.createElement('style');
+    style.textContent = `
+      @page { size: A4 portrait; margin: 16mm; }
+      body { margin: 0; padding: 20px; background: white; color: #10223b; font-family: Arial, sans-serif; }
+      section { max-width: 178mm; margin: auto; text-align: center; padding: 3mm 0; }
+      .qr-print-logo { display: block; width: 30mm; height: 30mm; margin: 0 auto 6mm; }
+      .qr-print-languages { display: grid; grid-template-columns: 1fr 1fr; gap: 2mm 6mm; margin: 0 auto 5mm; }
+      .qr-print-languages p { font-size: 14pt; line-height: 1.6; margin: 0; }
+      .qr-print-login { font-size: 18pt; font-weight: bold; overflow-wrap: anywhere; }
+      svg { display: block; width: 100mm; max-width: 100%; height: auto; margin: 4mm auto; }
+      h2 { font-size: 19pt; margin: 6mm 0; }
+      p { font-size: 14pt; margin: 5mm 0; }
+      .qr-print-url { font-size: 9pt; overflow-wrap: anywhere; }
+      button { display: block; margin: 0 auto 20px; padding: 12px 20px; cursor: pointer; font: inherit; }
+      @media print { body { padding: 0; } button { display: none; } section { break-inside: avoid; } }
+    `;
+    doc.head.append(viewport, style);
+    const button = doc.createElement('button');
+    button.type = 'button';
+    button.textContent = t.print;
+    button.disabled = true;
+    button.onclick = () => { page.focus(); page.print(); };
+    doc.body.replaceChildren(button, doc.importNode(printSheet.current, true));
+    try {
+      await Promise.all(Array.from(doc.images, image => image.decode()));
+      await doc.fonts.ready;
+      if (page.closed) return;
+      button.disabled = false;
+      page.focus();
+      page.print();
+    } catch {
+      button.disabled = false;
+      setStatus('printError');
+    }
+  }
 
   async function download() {
     if (!qrCanvas.current || busy) return;
@@ -78,12 +128,12 @@ export default function AccountQr({ url, username, language, children }: { url: 
     <ShareChatLink url={url} language={language} />
     <div className="account-actions account-qr-actions">
       <button onClick={async () => { try { await navigator.clipboard.writeText(url); setStatus('linkCopied'); } catch { setStatus('copyError'); } }}>{t.copyLink}</button>
-      <button onClick={async () => { try { await loadLogo(); window.print(); } catch { setStatus('logoError'); } }}>{t.print}</button>
+      <button type="button" onClick={() => void printQr()}>{t.print}</button>
       <button onClick={download} disabled={busy}>{busy ? t.creatingPdf : t.downloadPdf}</button>
     </div>
     <p role="status" className="account-status">{status ? t[status] : ''}</p>
     <div hidden aria-hidden="true"><QRCodeCanvas ref={qrCanvas} value={url} size={1024} level="M" marginSize={4} /></div>
-    <section className="account-qr-print" aria-label={title}>
+    <section ref={printSheet} className="account-qr-print" aria-label={title}>
       <Image className="qr-print-logo" src="/esx-logo-print.png" alt="ESX" width={140} height={140} loading="eager" unoptimized />
       <div className="qr-print-languages">{languages.map(({ code }) => <p key={code} lang={code}>{translatorLabels[code]}</p>)}</div>
       {username && <p className="qr-print-login" dir="auto">{username}</p>}

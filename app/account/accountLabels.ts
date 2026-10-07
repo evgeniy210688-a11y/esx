@@ -35,6 +35,7 @@ const en = {
   "copyLink": "Copy link",
   "logoError": "Could not load the logo. Please try again.",
   "print": "Print",
+  "printError": "Could not prepare the print page. Allow pop-ups and try again.",
   "creatingPdf": "Creating PDF…",
   "downloadPdf": "Download PDF",
   "photoLoadError": "Could not load your photo. Please select it again."
@@ -78,6 +79,7 @@ export const accountLabels: Record<Language, typeof en> = {
   "copyLink": "Скопировать ссылку",
   "logoError": "Не удалось загрузить логотип. Попробуйте ещё раз.",
   "print": "Распечатать",
+  "printError": "Не удалось подготовить страницу печати. Разрешите всплывающие окна и попробуйте ещё раз.",
   "creatingPdf": "Создаём PDF…",
   "downloadPdf": "Скачать PDF",
   "photoLoadError": "Не удалось загрузить фото. Попробуйте выбрать его ещё раз."
@@ -117,6 +119,7 @@ export const accountLabels: Record<Language, typeof en> = {
   "copyLink": "링크 복사",
   "logoError": "로고를 불러오지 못했습니다. 다시 시도해 주세요.",
   "print": "인쇄",
+  "printError": "인쇄 페이지를 준비할 수 없습니다. 팝업을 허용하고 다시 시도해 주세요.",
   "creatingPdf": "PDF 생성 중…",
   "downloadPdf": "PDF 다운로드",
   "photoLoadError": "사진을 불러오지 못했습니다. 다시 선택해 주세요."
@@ -156,6 +159,7 @@ export const accountLabels: Record<Language, typeof en> = {
   "copyLink": "复制链接",
   "logoError": "无法加载标志，请重试。",
   "print": "打印",
+  "printError": "无法准备打印页面。请允许弹出窗口后重试。",
   "creatingPdf": "正在生成PDF…",
   "downloadPdf": "下载PDF",
   "photoLoadError": "无法加载照片，请重新选择。"
@@ -195,6 +199,7 @@ export const accountLabels: Record<Language, typeof en> = {
   "copyLink": "Bağlantıyı kopyala",
   "logoError": "Logo yüklenemedi. Lütfen tekrar deneyin.",
   "print": "Yazdır",
+  "printError": "Yazdırma sayfası hazırlanamadı. Açılır pencerelere izin verip tekrar deneyin.",
   "creatingPdf": "PDF oluşturuluyor…",
   "downloadPdf": "PDF indir",
   "photoLoadError": "Fotoğrafınız yüklenemedi. Lütfen yeniden seçin."
@@ -234,6 +239,7 @@ export const accountLabels: Record<Language, typeof en> = {
   "copyLink": "Sao chép liên kết",
   "logoError": "Không thể tải logo. Vui lòng thử lại.",
   "print": "In",
+  "printError": "Không thể chuẩn bị trang in. Hãy cho phép cửa sổ bật lên và thử lại.",
   "creatingPdf": "Đang tạo PDF…",
   "downloadPdf": "Tải PDF",
   "photoLoadError": "Không thể tải ảnh của bạn. Vui lòng chọn lại."
@@ -273,6 +279,7 @@ export const accountLabels: Record<Language, typeof en> = {
   "copyLink": "ចម្លងតំណ",
   "logoError": "មិនអាចផ្ទុកនិមិត្តសញ្ញាបានទេ។ សូមព្យាយាមម្ដងទៀត។",
   "print": "បោះពុម្ព",
+  "printError": "មិនអាចរៀបចំទំព័របោះពុម្ពបានទេ។ សូមអនុញ្ញាតបង្អួចលេចឡើង ហើយព្យាយាមម្តងទៀត។",
   "creatingPdf": "កំពុងបង្កើត PDF…",
   "downloadPdf": "ទាញយក PDF",
   "photoLoadError": "មិនអាចផ្ទុករូបថតរបស់អ្នកបានទេ។ សូមជ្រើសរើសម្ដងទៀត។"
@@ -312,6 +319,7 @@ export const accountLabels: Record<Language, typeof en> = {
   "copyLink": "Сілтемені көшіру",
   "logoError": "Логотипті жүктеу мүмкін болмады. Қайталап көріңіз.",
   "print": "Басып шығару",
+  "printError": "Басып шығару бетін дайындау мүмкін болмады. Қалқымалы терезелерге рұқсат беріп, қайталап көріңіз.",
   "creatingPdf": "PDF жасалуда…",
   "downloadPdf": "PDF жүктеп алу",
   "photoLoadError": "Фотоңызды жүктеу мүмкін болмады. Оны қайта таңдаңыз."
