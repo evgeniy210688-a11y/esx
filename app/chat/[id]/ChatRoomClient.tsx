@@ -301,7 +301,11 @@ export default function ChatRoomClient({
         {/* Input */}
         <div className="chat-composer border-t p-4">
           <div className="flex gap-3">
-            <FoxStickerPicker language={language} disabled={sending} onSend={sendMessage} />
+            <FoxStickerPicker language={language} disabled={sending} onSend={sendMessage} draft={message} onSendText={() => sendMessage()} onSendSuggestion={async sticker => {
+              const sent = await sendMessage(sticker);
+              if (sent) setMessage(current => current === message ? '' : current);
+              return sent;
+            }} />
 
             <input
               type="text"

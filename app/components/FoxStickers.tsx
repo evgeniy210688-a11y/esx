@@ -4,21 +4,13 @@ import { useEffect, useId, useRef, useState } from 'react';
 import type { Language } from '@/app/design/content';
 import { foxStickers, stickerMessage, stickerSource, type FoxSticker } from '@/lib/fox-stickers';
 import './fox-stickers.css';
+import { foxStickerLabels as labels, suggestFoxStickers } from '@/lib/fox-sticker-labels';
 
-const labels: Record<Language, string[]> = {
-  ru: ['Смайлики с лисёнком', 'Нажмите, чтобы отправить', 'Привет', 'Сердечко', 'Сплю', 'Скучаю', 'Устал', "Грусть", "Радость", "Злость", "Тоска", "Испуг", "Удивление", 'Поздравляю', "Спасибо", "Просьба", 'Обнимашки', "Договорились", "Голодный", "Обещаю", "Занят", "Болею", "Думаю", "Стресс"],
-  en: ['Fox stickers', 'Tap to send', 'Hello', 'Love', 'Sleeping', 'Miss you', 'Tired', "Sadness", "Joy", "Anger", "Longing", "Fear", "Surprise", 'Congratulations', "Thank you", "Please", 'Hugs', "Deal", "Hungry", "I promise", "Busy", "Feeling sick", "Thinking", "Stressed"],
-  ko: ['여우 스티커', '눌러서 보내기', '안녕', '사랑', '자는 중', '보고 싶어', '피곤해', "슬픔", "기쁨", "화남", "그리움", "무서움", "놀람", '축하해요', "고마워요", "부탁해요", '포옹', "좋아요", "배고파요", "약속해요", "바빠요", "아파요", "생각 중", "스트레스"],
-  zh: ['狐狸贴纸', '点击发送', '你好', '爱心', '睡觉', '想你了', '累了', "悲伤", "开心", "生气", "思念", "害怕", "惊讶", '恭喜', "谢谢", "拜托", '抱抱', "说定了", "饿了", "我保证", "忙碌中", "生病了", "思考中", "压力大"],
-  tr: ['Tilki çıkartmaları', 'Göndermek için dokun', 'Merhaba', 'Sevgi', 'Uyuyorum', 'Özledim', 'Yorgunum', "Üzüntü", "Sevinç", "Öfke", "Hasret", "Korku", "Şaşkınlık", 'Tebrikler', "Teşekkürler", "Lütfen", 'Sarılma', "Anlaştık", "Açım", "Söz veriyorum", "Meşgulüm", "Hastayım", "Düşünüyorum", "Stresli"],
-  vi: ['Nhãn dán cáo', 'Nhấn để gửi', 'Xin chào', 'Yêu thương', 'Đang ngủ', 'Nhớ bạn', 'Mệt', "Buồn", "Vui", "Giận", "Nhung nhớ", "Sợ hãi", "Ngạc nhiên", 'Chúc mừng', "Cảm ơn", "Làm ơn", 'Ôm nào', "Đồng ý", "Đói bụng", "Tôi hứa", "Đang bận", "Bị ốm", "Đang suy nghĩ", "Căng thẳng"],
-  km: ['ស្ទីគ័រកញ្ជ្រោង', 'ចុចដើម្បីផ្ញើ', 'សួស្តី', 'ស្រឡាញ់', 'កំពុងគេង', 'នឹកអ្នក', 'ហត់', "សោកសៅ", "រីករាយ", "ខឹង", "អាឡោះអាល័យ", "ភ័យខ្លាច", "ភ្ញាក់ផ្អើល", 'អបអរសាទរ', "អរគុណ", "សូមមេត្តា", 'ឱប', "យល់ព្រម", "ឃ្លាន", "ខ្ញុំសន្យា", "រវល់", "ឈឺ", "កំពុងគិត", "តានតឹង"],
-  kk: ['Түлкі стикерлері', 'Жіберу үшін басыңыз', 'Сәлем', 'Махаббат', 'Ұйықтап жатырмын', 'Сағындым', 'Шаршадым', "Мұң", "Қуаныш", "Ашу", "Сағыныш", "Қорқыныш", "Таңғалу", 'Құттықтаймын', "Рақмет", "Өтінемін", 'Құшақтау', "Келістік", "Қарным ашты", "Уәде беремін", "Қолым бос емес", "Ауырып қалдым", "Ойланып отырмын", "Күйзеліс"],
-};
+
 export function FoxStickerImage({ id, language }: { id: FoxSticker; language: Language }) {
   return <Image className="fox-sticker-image" src={stickerSource(id)} alt={labels[language][foxStickers.indexOf(id) + 2]} width={160} height={160} unoptimized />;
 }
-export default function FoxStickerPicker({ language, disabled, onSend }: { language: Language; disabled?: boolean; onSend: (message: string) => Promise<boolean> }) {
+export default function FoxStickerPicker({ language, disabled, onSend, draft = '', onSendSuggestion, onSendText }: { language: Language; disabled?: boolean; onSend: (message: string) => Promise<boolean>; draft?: string; onSendSuggestion?: (message: string) => Promise<boolean>; onSendText?: () => Promise<boolean> }) {
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const lock = useRef(false);
@@ -26,6 +18,7 @@ export default function FoxStickerPicker({ language, disabled, onSend }: { langu
   const toggle = useRef<HTMLButtonElement>(null);
   const panelId = useId();
   const t = labels[language];
+  const suggestions = suggestFoxStickers(draft);
   useEffect(() => {
     if (!open) return;
     const outside = (e: PointerEvent) => { if (e.target instanceof Node && !root.current?.contains(e.target)) setOpen(false); };
@@ -34,14 +27,23 @@ export default function FoxStickerPicker({ language, disabled, onSend }: { langu
     document.addEventListener('keydown', escape);
     return () => { document.removeEventListener('pointerdown', outside); document.removeEventListener('keydown', escape); };
   }, [open]);
-  async function send(id: FoxSticker) {
+  async function send(id: FoxSticker, suggested = false) {
     if (lock.current || disabled) return;
     lock.current = true; setBusy(true);
-    try { if (await onSend(stickerMessage(id))) { setOpen(false); toggle.current?.focus(); } }
+    try { if (await (suggested && onSendSuggestion ? onSendSuggestion : onSend)(stickerMessage(id))) { setOpen(false); toggle.current?.focus(); } }
     finally { lock.current = false; setBusy(false); }
   }
   return <div className="fox-sticker-picker" ref={root}>
     <button className="fox-sticker-toggle" ref={toggle} type="button" aria-label={t[0]} title={t[0]} aria-expanded={open} aria-controls={panelId} disabled={disabled || busy} onClick={() => setOpen(!open)}><Image src={stickerSource('hello')} alt="" width={36} height={36} unoptimized /></button>
+    {!open && suggestions.length > 0 && <div className="fox-sticker-panel fox-sticker-suggestions" role="group" aria-label={t[0]}>
+      <small>{t[1]}</small>
+      <div className="fox-sticker-grid">{suggestions.map(id => <button type="button" key={id} disabled={disabled || busy} onClick={() => void send(id, true)} aria-label={`${t[0]}: ${t[foxStickers.indexOf(id) + 2]}`}><Image src={stickerSource(id)} alt="" width={80} height={80} unoptimized /><span>{t[foxStickers.indexOf(id) + 2]}</span></button>)}</div>
+      {onSendText && <button className="fox-sticker-word" type="button" disabled={disabled || busy} onClick={async () => {
+        if (lock.current || disabled) return;
+        lock.current = true; setBusy(true);
+        try { await onSendText(); } finally { lock.current = false; setBusy(false); }
+      }}>“{draft.trim()}” →</button>}
+    </div>}
     {open && <div id={panelId} className="fox-sticker-panel" role="group" aria-label={t[0]}><strong>{t[0]}</strong><small>{t[1]}</small><div className="fox-sticker-grid">{foxStickers.map((id, index) => <button type="button" key={id} disabled={disabled || busy} onClick={() => void send(id)} aria-label={t[index + 2]}><Image src={stickerSource(id)} alt="" width={80} height={80} unoptimized /><span>{t[index + 2]}</span></button>)}</div></div>}
   </div>;
 }

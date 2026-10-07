@@ -133,7 +133,11 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
           </div>
         </article>;
       })}{loaded && allowed && !messages.length && <p className="account-muted">{t.empty}</p>}</div>
-      {allowed && <div className="private-chat-dock"><div className="chat-navigation-row"><ChatShortcuts language={target} onLanguageChange={next => { setTarget(next); try { localStorage.setItem("esx-language", next); } catch {} }} /></div><form onSubmit={send} className="private-compose"><FoxStickerPicker language={target} disabled={sending} onSend={message => sendMessage(message, true)} /><textarea id="private-message" aria-label={t.message} value={draft} onChange={event => setDraft(event.target.value)} placeholder={t.placeholder} rows={1} maxLength={4000} required disabled={sending} /><button disabled={sending || !draft.trim()}>{sending ? t.sending : t.send}</button></form></div>}
+      {allowed && <div className="private-chat-dock"><div className="chat-navigation-row"><ChatShortcuts language={target} onLanguageChange={next => { setTarget(next); try { localStorage.setItem("esx-language", next); } catch {} }} /></div><form onSubmit={send} className="private-compose"><FoxStickerPicker language={target} disabled={sending} onSend={message => sendMessage(message, true)} draft={draft} onSendText={() => sendMessage(draft.trim())} onSendSuggestion={async sticker => {
+        const sent = await sendMessage(sticker, true);
+        if (sent) setDraft(current => current === draft ? '' : current);
+        return sent;
+      }} /><textarea id="private-message" aria-label={t.message} value={draft} onChange={event => setDraft(event.target.value)} placeholder={t.placeholder} rows={1} maxLength={4000} required disabled={sending} /><button disabled={sending || !draft.trim()}>{sending ? t.sending : t.send}</button></form></div>}
       {status && <p role="alert">{t[status]} <button className="account-secondary" onClick={() => setAttempt(value => value + 1)}>{accountLabels[target].retry}</button></p>}
     </>}
   </div></main></div>;

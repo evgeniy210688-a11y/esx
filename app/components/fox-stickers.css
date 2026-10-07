@@ -25,3 +25,6 @@
 .kakao-chat .private-bubble:has(> .fox-sticker-image)::before {
   content: none;
 }
+.fox-sticker-suggestions { width: min(240px, calc(100vw - 64px)); }
+.fox-sticker-suggestions .fox-sticker-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.chat-theme .chat-composer .fox-sticker-word, .kakao-chat .fox-sticker-word { display: block; width: 100%; margin-top: 10px; padding: 10px; border: 1px solid #74caff; border-radius: 12px; background: #263c59; color: #eff6ff; font: inherit; cursor: pointer; overflow-wrap: anywhere; }
