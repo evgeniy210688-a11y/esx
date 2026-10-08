@@ -6,5 +6,5 @@ export default async function ChatRoomPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  return <ChatRoomClient chatId={id} />;
+  return <ChatRoomClient key={id} chatId={id} />;
 }

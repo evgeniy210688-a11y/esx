@@ -27,7 +27,7 @@ export default function AccountPage() {
 }
 function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
   const router = useRouter();
-  const [waitingForChat, setWaitingForChat] = useState(false);
+
   const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null);
   const { language } = useChatInterface(selectedLanguage);
   const t = accountLabels[language];
@@ -38,9 +38,7 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
   const [contactNames, setContactNames] = useState<Record<string, string | null>>({});
   const [loadError, setLoadError] = useState(false);
   const [reload, setReload] = useState(0);
-  useEffect(() => {
-    if (waitingForChat && chats.length) router.push(`/messages/${chats[0].id}`);
-  }, [waitingForChat, chats, router]);
+
   useEffect(() => {
     if (!user) return;
     let stopped = false;
@@ -118,12 +116,8 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
         <p className="account-muted">{t.guestChatNote}</p>
         {!qr && !loadError && <p role="status">{t.qrLoading}</p>}
         {qr && <AccountQr url={qr} username={username} language={language}>
-        <div className="account-qr-primary"><button disabled={waitingForChat} onClick={() => {
-          if (chats.length) router.push(`/messages/${chats[0].id}`);
-          else { setWaitingForChat(true); setReload(value => value + 1); }
-        }}>{t.openChat}</button></div>
+        <div className="account-qr-primary"><button onClick={() => router.push(`/chat/${crypto.randomUUID()}`)}>{t.openChat}</button></div>
         </AccountQr>}
-        {waitingForChat && <p role="status">{t.waitingForChat}</p>}
       </section>
       <section className="account-card"><h2>{t.conversations}</h2>{chats.length ? <ul className="account-chats">{chats.map(chat => <li key={chat.id}><Link href={'/messages/' + chat.id}><span dir="auto">{contactNames[chat.id] === undefined ? registrationLabels[language].loading : contactNames[chat.id] === null ? t.loadError : contactNames[chat.id] || `${t.contact} ${(chat.participant_a === user.id ? chat.participant_b : chat.participant_a).slice(0, 8)}`}</span> →</Link></li>)}</ul> : <p className="account-muted">{t.empty}</p>}</section>
     </>}

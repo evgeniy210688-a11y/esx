@@ -5,6 +5,7 @@ import { privateChatLabels } from '@/app/messages/[id]/privateChatLabels';
 import FoxStickerPicker, { FoxStickerImage } from '@/app/components/FoxStickers';
 import { getFoxSticker } from '@/lib/fox-stickers';
 import ChatShortcuts from "../ChatShortcuts";
+import ConversationSidebar from '../ConversationSidebar';
 import ChatMenu from "../ChatMenu";
 import useChatBackground from "../useChatBackground";
 import "../chat-theme.css";
@@ -259,7 +260,7 @@ export default function ChatRoomClient({
   }
 
   return (
-    <main ref={chatRoot} lang={language} data-chat-background={background ?? undefined} className="chat-theme flex min-h-screen flex-col">
+    <main ref={chatRoot} lang={language} data-chat-background={background ?? undefined} className="chat-theme has-conversations flex min-h-screen flex-col">
 
         <div className="esx-site chat-site-header"><SiteHeader language={language} actions={<div className="chat-header-actions"><ChatQrCode chatId={chatId} language={language} /><ChatMenu language={language} background={background} onBackgroundChange={setBackground} /></div>} /></div>
 
@@ -343,6 +344,7 @@ export default function ChatRoomClient({
         </div>
 
       </div>
+      <ConversationSidebar key={chatId} chatId={chatId} language={language} temporary />
     </main>
   );
 }

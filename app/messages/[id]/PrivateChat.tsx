@@ -10,6 +10,7 @@ import { languages, type Language } from '@/app/design/content';
 import MessageTranslation from '@/app/chat/[id]/MessageTranslation';
 import useAccount from '@/app/account/useAccount';
 import SiteHeader from '@/app/design/SiteHeader';
+import ConversationSidebar from '@/app/chat/ConversationSidebar';
 import PrivateQrCode from './PrivateQrCode';
 import ChatMenu from '@/app/chat/ChatMenu';
 import ChatShortcuts from '@/app/chat/ChatShortcuts';
@@ -145,5 +146,5 @@ function PrivateChatContent({ chatId, user, ready }: { chatId: string } & Return
       }} placeholder={t.placeholder} rows={1} maxLength={4000} required disabled={sending} /><button disabled={sending || !draft.trim()}>{sending ? t.sending : t.send}</button></form></div>}
       {status && <p role="alert">{t[status]} <button className="account-secondary" onClick={() => setAttempt(value => value + 1)}>{accountLabels[target].retry}</button></p>}
     </>}
-  </div></main></div>;
+  </div><ConversationSidebar key={chatId} chatId={chatId} language={target} /></main></div>;
 }

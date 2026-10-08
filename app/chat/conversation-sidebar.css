@@ -1,0 +1,28 @@
+.conversation-sidebar { color: #eaf2ff; background: #10233a; border: 1px solid #2c4866; border-radius: 18px; padding: 16px; overflow-y: auto; min-height: 0; min-width: 0; }
+.conversation-panel > summary { cursor: pointer; font-size: 20px; font-weight: 700; padding: 8px 0; }
+.conversation-panel-body { display: grid; gap: 12px; }
+.conversation-sidebar button, .conversation-sidebar input, .conversation-sidebar a { font: inherit; }
+.conversation-sidebar button, .conversation-invite > a { display: block; border: 1px solid #51749c; border-radius: 10px; padding: 10px; background: #1b416f; color: #fff; cursor: pointer; text-align: center; }
+.conversation-sidebar button:disabled { opacity: .5; cursor: wait; }
+.conversation-sidebar ul { list-style: none; margin: 0; padding: 0; }
+.conversation-sidebar li a { display: block; padding: 12px 8px; border-bottom: 1px solid #2c4866; overflow-wrap: anywhere; }
+.conversation-sidebar a[aria-current] { background: #245fc5; border-radius: 8px; }
+.conversation-sidebar h2 { font-size: 15px; margin: 12px 0 0; }
+.conversation-sidebar form, .conversation-sidebar label, .conversation-invite { display: grid; gap: 8px; }
+.conversation-sidebar input { width: 100%; min-width: 0; box-sizing: border-box; color: #fff; background: #071426; padding: 10px; border: 1px solid #51749c; border-radius: 8px; }
+.conversation-sidebar :focus-visible { outline: 2px solid #78d9ee; outline-offset: 3px; }
+.chat-theme.has-conversations { display: grid; grid-template-columns: minmax(0, 1fr) 300px; grid-template-rows: auto minmax(0, 1fr); gap: 0 12px; }
+.chat-theme.has-conversations > .chat-site-header { grid-column: 1 / -1; }
+.chat-theme.has-conversations > .chat-shell { grid-column: 1; grid-row: 2; height: 100%; min-height: 0; }
+.chat-theme.has-conversations > .conversation-sidebar { grid-column: 2; grid-row: 2; }
+.private-chat-viewport > .kakao-chat { gap: 12px; }
+.private-chat-viewport .conversation-sidebar { flex: 0 0 300px; }
+@media (max-width: 760px) {
+  .chat-theme.has-conversations { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr); }
+  .chat-theme.has-conversations > .conversation-sidebar { grid-column: 1; grid-row: 2; max-height: 30dvh; }
+  .chat-theme.has-conversations > .chat-shell { grid-row: 3; }
+  .private-chat-viewport > .kakao-chat { flex-direction: column; gap: 6px; }
+  .private-chat-viewport .conversation-sidebar { order: -1; flex: 0 0 auto; max-height: 30dvh; }
+  .conversation-sidebar { padding: 6px 12px; border-radius: 12px; }
+  .conversation-panel > summary { font-size: 16px; }
+}
