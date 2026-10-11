@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import AdminEntry from '@/app/admin/AdminEntry';
 import { supabase } from '@/lib/supabase';
 import { matchesService, safeServiceWebsite, serviceLanguages, type ServiceListing, type ServiceFilters } from '@/lib/service-directory';
 import './services.css';
@@ -53,6 +54,7 @@ export default function ServicesDirectory() {
   return <div className="services-page" lang={language}>
     <header className="services-top"><Link href="/" aria-label={"ESX — " + t[2]}>ESX<span> / {t[1]}</span></Link><nav aria-label={t[36]}><Link href="/">{t[2]}</Link><Link href="/chat">{t[3]} ↗</Link></nav><label className="services-interface-language">{t[0]}<select value={language} onChange={e => chooseLanguage(e.target.value as InterfaceLanguage)}>{interfaceLanguages.map(l => <option key={l.code} value={l.code}>{l.name}</option>)}</select></label></header>
     <main className="services-main"><section className="services-intro"><p className="services-eyebrow">ESX • {t[4]}</p><h1>{t[5]}</h1><p>{t[6]}</p></section>
+    <AdminEntry language={language} />
     <section className="services-filters" aria-label={t[7]}>
       <label>{t[8]}<select value={filters.city} onChange={e => update('city', e.target.value)}><option value="">{t[9]}</option>{cities.map(city => <option key={city}>{city}</option>)}</select></label>
       <label>{t[10]}<select value={filters.category} onChange={e => update('category', e.target.value)}><option value="">{t[11]}</option>{categories.map(category => <option key={category}>{category}</option>)}</select></label>
