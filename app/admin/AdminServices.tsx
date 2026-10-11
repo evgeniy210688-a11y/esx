@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { companyPhones, validCompanyPhones, prepareCompanyPhoto, safeCompanyPhoto, type CompanyPhone } from '@/lib/service-media';
 import useAccount from '@/app/account/useAccount';
 import { supabase } from '@/lib/supabase';
 import { serviceLanguages, type ServiceListing, type ServiceLanguage } from '@/lib/service-directory';
@@ -9,7 +11,7 @@ import './admin.css';
 import { socialNetworks, validSocialLinks, type SocialLink } from '@/lib/service-socials';
 import { serviceCityGroups, serviceCategories } from '@/lib/service-options';
 type Listing = ServiceListing & { status: 'draft' | 'pending' | 'published' | 'archived' };
-const blank: Listing = { id: '', name: '', description: '', city: '', category: '', address: '', phone: '', website: '', social_links: [], service_languages: [], has_interpreter: false, interpreter_languages: [], status: 'draft' };
+const blank: Listing = { id: '', name: '', description: '', city: '', category: '', address: '', phone: '', phones: [], photo: null, website: '', social_links: [], service_languages: [], has_interpreter: false, interpreter_languages: [], status: 'draft' };
 const statuses = { draft: 'Черновик', pending: 'На проверке', published: 'Опубликовано', archived: 'В архиве' };
 export default function AdminServices() {
   const { user, ready } = useAccount();
@@ -52,7 +54,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
         if (!admin) { if (active) setAccess('denied'); return; }
         const all: Listing[] = [];
         for (let from = 0; ; from += 500) {
-          const result = await supabase.from('esx_service_listings').select('id,name,description,city,category,address,phone,website,social_links,service_languages,has_interpreter,interpreter_languages,status').order('name').order('id').range(from, from + 499);
+          const result = await supabase.from('esx_service_listings').select('id,name,description,city,category,address,phone,phones,photo,website,social_links,service_languages,has_interpreter,interpreter_languages,status').order('name').order('id').range(from, from + 499);
           if (result.error) throw result.error;
           all.push(...result.data as Listing[]);
           if (result.data.length < 500) break;
@@ -70,6 +72,14 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     finally { lock.current = false; setBusy(false); }
   }
   function change<K extends keyof Listing>(key: K, value: Listing[K]) { setDraft(d => ({ ...d, [key]: value })); }
+  async function uploadPhoto(file: File) {
+    if (lock.current) return;
+    lock.current = true; setBusy(true); setMessage('');
+    try { const photo = await prepareCompanyPhoto(file); setDraft(d => ({ ...d, photo })); setMessage('Фото подготовлено. Нажмите «Сохранить карточку».'); }
+    catch { setMessage('Не удалось обработать фото. Выберите JPG, PNG или WebP до 10 МБ.'); }
+    finally { lock.current = false; setBusy(false); }
+  }
+  function changePhones(phones: CompanyPhone[]) { setDraft(d => ({ ...d, phones, phone: phones[0]?.number || null })); }
   function toggle(key: 'service_languages' | 'interpreter_languages', code: ServiceLanguage) {
     setDraft(d => ({ ...d, [key]: d[key].includes(code) ? d[key].filter(l => l !== code) : [...d[key], code] }));
   }
@@ -77,13 +87,15 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     event.preventDefault(); if (lock.current) return;
     if (!draft.service_languages.length || (draft.has_interpreter && !draft.interpreter_languages.length)) { setMessage('Выберите язык обслуживания и, при наличии переводчика, его язык.'); return; }
     if (![draft.name, draft.city, draft.category, draft.address].every(value => value.trim())) { setMessage('Заполните название, город, категорию и адрес.'); return; }
+    const phones = companyPhones(draft).map(p => ({ ...p, number: p.number.trim() }));
+    if (!validCompanyPhones(phones)) { setMessage('Проверьте номера телефонов: от 3 до 30 символов, цифры, +, пробелы, скобки и дефис.'); return; }
     const socials = (draft.social_links ?? []).map(link => ({ ...link, url: link.url.trim() }));
     if (validSocialLinks(socials).length !== socials.length) { setMessage('Для каждой соцсети укажите полную ссылку, начинающуюся с https:// или http://.'); return; }
     lock.current = true; setBusy(true); setMessage('');
-    const values = { name: draft.name.trim(), description: draft.description.trim(), city: draft.city.trim(), category: draft.category.trim(), address: draft.address.trim(), phone: draft.phone?.trim() || null, website: draft.website?.trim() || null, social_links: socials, service_languages: draft.service_languages, has_interpreter: draft.has_interpreter, interpreter_languages: draft.has_interpreter ? draft.interpreter_languages : [], status: draft.status };
+    const values = { name: draft.name.trim(), description: draft.description.trim(), city: draft.city.trim(), category: draft.category.trim(), address: draft.address.trim(), phone: phones[0]?.number || null, phones, photo: safeCompanyPhoto(draft.photo), website: draft.website?.trim() || null, social_links: socials, service_languages: draft.service_languages, has_interpreter: draft.has_interpreter, interpreter_languages: draft.has_interpreter ? draft.interpreter_languages : [], status: draft.status };
     try {
       const query = draft.id ? supabase.from('esx_service_listings').update(values).eq('id', draft.id) : supabase.from('esx_service_listings').insert(values);
-      const { data, error } = await query.select('id,name,description,city,category,address,phone,website,social_links,service_languages,has_interpreter,interpreter_languages,status').single();
+      const { data, error } = await query.select('id,name,description,city,category,address,phone,phones,photo,website,social_links,service_languages,has_interpreter,interpreter_languages,status').single();
       if (error) throw error;
       const saved = data as Listing;
       setDraft(saved); setRows(current => [...current.filter(r => r.id !== saved.id), saved].sort((a,b) => a.name.localeCompare(b.name, 'ru')));
@@ -102,7 +114,8 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
       <label>Город<select required value={draft.city} onChange={e => change('city', e.target.value)}><option value="">Выберите город</option>{draft.city && !serviceCityGroups.some(group => group.cities.some(city => city.value === draft.city)) && <option value={draft.city}>{draft.city} (сохранённое значение)</option>}{serviceCityGroups.map(group => <optgroup key={group.region} label={group.region}>{group.cities.map(city => <option key={city.value} value={city.value}>{city.label}</option>)}</optgroup>)}</select></label>
       <label>Категория<select required value={draft.category} onChange={e => change('category', e.target.value)}><option value="">Выберите категорию</option>{draft.category && !serviceCategories.some(category => category === draft.category) && <option value={draft.category}>{draft.category} (сохранённое значение)</option>}{serviceCategories.map(category => <option key={category} value={category}>{category}</option>)}</select></label>
       <label>Адрес<input required maxLength={500} value={draft.address} onChange={e => change('address', e.target.value)} /></label>
-      <label>Телефон<input type="tel" maxLength={30} value={draft.phone ?? ''} onChange={e => change('phone', e.target.value)} placeholder="+82 10-1234-5678" /></label>
+      <fieldset className="admin-socials"><legend>Телефоны компании</legend>{companyPhones(draft).map((phone,index) => <div className="admin-social-row" key={index}><label>Тип телефона {index + 1}<select value={phone.type} onChange={e => changePhones(companyPhones(draft).map((p,i) => i === index ? { ...p, type: e.target.value as CompanyPhone['type'] } : p))}><option value="office">Офисный</option><option value="mobile">Мобильный</option><option value="other">Другой / не указан</option></select></label><label>Номер телефона {index + 1}<input type="tel" required maxLength={30} value={phone.number} onChange={e => changePhones(companyPhones(draft).map((p,i) => i === index ? { ...p, number: e.target.value } : p))} placeholder="+82 10-1234-5678" /></label><button type="button" onClick={() => changePhones(companyPhones(draft).filter((_,i) => i !== index))}>Убрать телефон {index + 1}</button></div>)}<button type="button" disabled={companyPhones(draft).length >= 5} onClick={() => changePhones([...companyPhones(draft), { type: 'office', number: '' }])}>+ Добавить телефон</button><p>До 5 номеров. Для каждого выберите тип.</p></fieldset>
+      <fieldset className="admin-socials"><legend>Фото компании</legend><p>JPG, PNG или WebP до 10 МБ. Фото появится в опубликованной карточке после сохранения.</p>{safeCompanyPhoto(draft.photo) && <><Image className="company-photo" src={draft.photo!} alt="Фото компании" width={800} height={600} unoptimized /><button type="button" onClick={() => change('photo', null)}>Убрать фото</button></>}<label>Добавить или заменить фото<input type="file" accept="image/jpeg,image/png,image/webp" onChange={e => { const file = e.target.files?.[0]; e.target.value = ''; if (file) void uploadPhoto(file); }} /></label></fieldset>
       <label>Сайт<input type="url" pattern="https?://.*" value={draft.website ?? ''} onChange={e => change('website', e.target.value)} placeholder="https://example.com" /></label>
       <fieldset className="admin-socials"><legend>Социальные сети и мессенджеры</legend><p>Выберите сеть и вставьте полную ссылку на страницу или чат. Можно добавить до 12 ссылок.</p>{(draft.social_links ?? []).map((link,index) => <div key={index} className="admin-social-row"><label>Соцсеть {index + 1}<select value={link.network} onChange={e => change('social_links', (draft.social_links ?? []).map((item,i) => i === index ? { ...item, network: e.target.value as SocialLink['network'] } : item))}>{Object.entries(socialNetworks).map(([code,label]) => <option key={code} value={code}>{label}</option>)}</select></label><label>Ссылка {index + 1}<input type="url" required pattern="https?://.*" maxLength={2000} placeholder="https://…" value={link.url} onChange={e => change('social_links', (draft.social_links ?? []).map((item,i) => i === index ? { ...item, url: e.target.value } : item))} /></label><button type="button" aria-label={'Убрать соцсеть ' + (index + 1)} onClick={() => change('social_links', (draft.social_links ?? []).filter((_,i) => i !== index))}>Убрать</button></div>)}<button type="button" disabled={(draft.social_links?.length ?? 0) >= 12} onClick={() => change('social_links', [...(draft.social_links ?? []), { network: 'telegram', url: '' }])}>+ Добавить соцсеть</button></fieldset>
       <fieldset className="admin-language"><legend>Языки обслуживания</legend>{Object.entries(serviceLanguages).map(([code,label]) => <label key={code}><input type="checkbox" checked={draft.service_languages.includes(code as ServiceLanguage)} onChange={() => toggle('service_languages', code as ServiceLanguage)} />{label}</label>)}</fieldset>
