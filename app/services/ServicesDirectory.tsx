@@ -39,7 +39,7 @@ export default function ServicesDirectory() {
   const categories = [...new Set(listings.map(s => s.category))].sort((a,b) => a.localeCompare(b, 'ru'));
   return <div className="services-page" lang="ru">
     <header className="services-top"><Link href="/" aria-label="ESX — главная">ESX<span> / Южная Корея</span></Link><nav aria-label="Навигация"><Link href="/">Главная</Link><Link href="/chat">Открыть чат ↗</Link></nav></header>
-    <main className="services-main"><section className="services-intro"><p className="services-eyebrow">ESX • СПРАВОЧНИК УСЛУГ</p><h1>Нужная услуга.<br />На понятном языке.</h1><p>Найдите организацию в Южной Корее по городу, направлению и языку обслуживания.</p></section>
+    <main className="services-main"><section className="services-intro"><p className="services-eyebrow">ESX • СПРАВОЧНИК УСЛУГ</p><h1>Справочник услуг компаний где есть переводчик</h1><p>Найдите организацию в Южной Корее по городу, направлению и языку обслуживания.</p></section>
     <section className="services-filters" aria-label="Фильтры услуг">
       <label>Город<select value={filters.city} onChange={e => update('city', e.target.value)}><option value="">Все города</option>{cities.map(city => <option key={city}>{city}</option>)}</select></label>
       <label>Категория<select value={filters.category} onChange={e => update('category', e.target.value)}><option value="">Все категории</option>{categories.map(category => <option key={category}>{category}</option>)}</select></label>
