@@ -4,10 +4,23 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { matchesService, safeServiceWebsite, serviceLanguages, type ServiceListing, type ServiceFilters } from '@/lib/service-directory';
 import './services.css';
+import { interfaceLanguages, serviceLabels, type InterfaceLanguage } from './serviceLabels';
 import { socialNetworks, validSocialLinks } from '@/lib/service-socials';
 const empty: ServiceFilters = { city: '', category: '', language: '', interpreter: false, interpreterLanguage: '' };
-const languageOptions = Object.entries(serviceLanguages).map(([code, name]) => <option key={code} value={code}>{name}</option>);
 export default function ServicesDirectory() {
+  const [language, setLanguage] = useState<InterfaceLanguage>('ru');
+  const t = serviceLabels[language];
+  useEffect(() => {
+    try { const saved = localStorage.getItem('esx-services-language'); if (interfaceLanguages.some(l => l.code === saved)) {
+      // Restore this page's saved preference after hydration.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setLanguage(saved as InterfaceLanguage);
+    } } catch {}
+  }, []);
+  function chooseLanguage(value: InterfaceLanguage) { setLanguage(value); try { localStorage.setItem('esx-services-language', value); } catch {} }
+  const languageName = (code: string) => new Intl.DisplayNames([language], { type: 'language' }).of(code) ?? code;
+  const languageOptions = Object.keys(serviceLanguages).map(code => <option key={code} value={code}>{languageName(code)}</option>);
+
   const [listings, setListings] = useState<ServiceListing[]>([]);
   const [filters, setFilters] = useState(empty);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
@@ -37,21 +50,21 @@ export default function ServicesDirectory() {
   const visible = listings.filter(s => matchesService(s, filters));
   const cities = [...new Set(listings.map(s => s.city))].sort((a,b) => a.localeCompare(b, 'ru'));
   const categories = [...new Set(listings.map(s => s.category))].sort((a,b) => a.localeCompare(b, 'ru'));
-  return <div className="services-page" lang="ru">
-    <header className="services-top"><Link href="/" aria-label="ESX — главная">ESX<span> / Южная Корея</span></Link><nav aria-label="Навигация"><Link href="/">Главная</Link><Link href="/chat">Открыть чат ↗</Link></nav></header>
-    <main className="services-main"><section className="services-intro"><p className="services-eyebrow">ESX • СПРАВОЧНИК УСЛУГ</p><h1>Справочник услуг компаний где есть переводчик</h1><p>Найдите организацию в Южной Корее по городу, направлению и языку обслуживания.</p></section>
-    <section className="services-filters" aria-label="Фильтры услуг">
-      <label>Город<select value={filters.city} onChange={e => update('city', e.target.value)}><option value="">Все города</option>{cities.map(city => <option key={city}>{city}</option>)}</select></label>
-      <label>Категория<select value={filters.category} onChange={e => update('category', e.target.value)}><option value="">Все категории</option>{categories.map(category => <option key={category}>{category}</option>)}</select></label>
-      <label>Язык обслуживания<select value={filters.language} onChange={e => update('language', e.target.value)}><option value="">Любой язык</option>{languageOptions}</select></label>
-      <label>Язык переводчика<select value={filters.interpreterLanguage} onChange={e => update('interpreterLanguage', e.target.value)}><option value="">Любой язык</option>{languageOptions}</select></label>
-      <label className="services-check"><input type="checkbox" checked={filters.interpreter} onChange={e => update('interpreter', e.target.checked)} />Есть переводчик</label>
-      <button type="button" onClick={() => setFilters(empty)}>Сбросить фильтры</button>
+  return <div className="services-page" lang={language}>
+    <header className="services-top"><Link href="/" aria-label={"ESX — " + t[2]}>ESX<span> / {t[1]}</span></Link><nav aria-label={t[36]}><Link href="/">{t[2]}</Link><Link href="/chat">{t[3]} ↗</Link></nav><label className="services-interface-language">{t[0]}<select value={language} onChange={e => chooseLanguage(e.target.value as InterfaceLanguage)}>{interfaceLanguages.map(l => <option key={l.code} value={l.code}>{l.name}</option>)}</select></label></header>
+    <main className="services-main"><section className="services-intro"><p className="services-eyebrow">ESX • {t[4]}</p><h1>{t[5]}</h1><p>{t[6]}</p></section>
+    <section className="services-filters" aria-label={t[7]}>
+      <label>{t[8]}<select value={filters.city} onChange={e => update('city', e.target.value)}><option value="">{t[9]}</option>{cities.map(city => <option key={city}>{city}</option>)}</select></label>
+      <label>{t[10]}<select value={filters.category} onChange={e => update('category', e.target.value)}><option value="">{t[11]}</option>{categories.map(category => <option key={category}>{category}</option>)}</select></label>
+      <label>{t[12]}<select value={filters.language} onChange={e => update('language', e.target.value)}><option value="">{t[13]}</option>{languageOptions}</select></label>
+      <label>{t[14]}<select value={filters.interpreterLanguage} onChange={e => update('interpreterLanguage', e.target.value)}><option value="">{t[13]}</option>{languageOptions}</select></label>
+      <label className="services-check"><input type="checkbox" checked={filters.interpreter} onChange={e => update('interpreter', e.target.checked)} />{t[15]}</label>
+      <button type="button" onClick={() => setFilters(empty)}>{t[16]}</button>
     </section>
-    <p className="services-note">Язык обслуживания и язык переводчика — отдельные параметры. Выбор языка переводчика показывает только организации с переводчиком.</p>
-    <div aria-live="polite" role="status">{status === 'loading' ? <p>Загружаем организации…</p> : status === 'error' ? <div className="services-empty"><h2>Не удалось загрузить справочник</h2><p>Пожалуйста, попробуйте ещё раз позже.</p><button onClick={() => { setStatus('loading'); setAttempt(a => a + 1); }}>Повторить</button></div> : <p>Найдено организаций: {visible.length}</p>}</div>
-    {status === 'ready' && !visible.length && <div className="services-empty"><h2>{listings.length ? 'Нет совпадений' : 'Справочник пополняется'}</h2><p>{listings.length ? 'Попробуйте другой город или измените фильтры.' : 'Организации появятся здесь после добавления администратором.'}</p></div>}
-    {status === 'ready' && <section className="services-grid" aria-label="Организации">{visible.map(s => { const website = safeServiceWebsite(s.website); return <article key={s.id} className="services-card"><p className="services-eyebrow">{s.city} · {s.category}</p><h2>{s.name}</h2><p>{s.description}</p><address>{s.address}</address><div className="services-tags">{s.service_languages.map(l => <span key={l}>{serviceLanguages[l]}</span>)}</div><p className="services-interpreter">{s.has_interpreter ? 'Переводчик: ' + s.interpreter_languages.map(l => serviceLanguages[l]).join(', ') : 'Переводчик не указан'}</p><div className="services-contacts">{s.phone && <a href={'tel:' + s.phone.replace(/[^+0-9]/g, '')}>{s.phone}</a>}{website && <a href={website} target="_blank" rel="noopener noreferrer">Сайт организации ↗</a>}{validSocialLinks(s.social_links).map((link,index) => <a key={index} href={link.url} target="_blank" rel="noopener noreferrer">{socialNetworks[link.network]} ↗</a>)}</div></article>; })}</section>}
-    <aside className="services-business"><h2>Представляете организацию?</h2><p>Сейчас карточки добавляет администратор ESX. Передайте сведения об услугах, адресе и доступных языках.</p><Link href="/contact">Связаться с ESX ↗</Link></aside>
-    </main><footer className="services-footer">ESX · Общение без границ · <Link href="/admin">Вход администратора</Link></footer></div>;
+    <p className="services-note">{t[17]}</p>
+    <div aria-live="polite" role="status">{status === 'loading' ? <p>{t[18]}</p> : status === 'error' ? <div className="services-empty"><h2>{t[19]}</h2><p>{t[20]}</p><button onClick={() => { setStatus('loading'); setAttempt(a => a + 1); }}>{t[21]}</button></div> : <p>{t[22]} {visible.length}</p>}</div>
+    {status === 'ready' && !visible.length && <div className="services-empty"><h2>{listings.length ? t[23] : t[24]}</h2><p>{listings.length ? t[25] : t[26]}</p></div>}
+    {status === 'ready' && <section className="services-grid" aria-label={t[27]}>{visible.map(s => { const website = safeServiceWebsite(s.website); return <article key={s.id} className="services-card"><p className="services-eyebrow">{s.city} · {s.category}</p><h2>{s.name}</h2><p>{s.description}</p><address>{s.address}</address><div className="services-tags">{s.service_languages.map(l => <span key={l}>{languageName(l)}</span>)}</div><p className="services-interpreter">{s.has_interpreter ? t[28] + " " + s.interpreter_languages.map(l => languageName(l)).join(', ') : t[29]}</p><div className="services-contacts">{s.phone && <a href={'tel:' + s.phone.replace(/[^+0-9]/g, '')}>{s.phone}</a>}{website && <a href={website} target="_blank" rel="noopener noreferrer">{t[30]} ↗</a>}{validSocialLinks(s.social_links).map((link,index) => <a key={index} href={link.url} target="_blank" rel="noopener noreferrer">{link.network === "other" ? t[37] : socialNetworks[link.network]} ↗</a>)}</div></article>; })}</section>}
+    <aside className="services-business"><h2>{t[31]}</h2><p>{t[32]}</p><Link href="/contact">{t[33]} ↗</Link></aside>
+    </main><footer className="services-footer">ESX · {t[34]} · <Link href="/admin">{t[35]}</Link></footer></div>;
 }
