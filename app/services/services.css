@@ -18,3 +18,10 @@
 .services-card .services-details-toggle:hover{background:#203e54}
 
 .services-item-list{list-style:disc outside;margin:16px 0;padding-left:22px;color:#b3c7da;line-height:1.65}.services-item-list li{display:list-item;margin:6px 0;padding-left:3px}.services-item-list li::marker{color:#75d6ce}
+
+.services-card-section{border-top:1px solid #294157;margin-top:18px;padding-top:16px}
+.services-card-section h3{margin:0 0 10px;font-size:15px;font-weight:600;color:#edf4fc}
+.services-card-section .services-description{margin:0;line-height:1.65;color:#b3c7da;white-space:pre-line}
+.services-card-section .services-item-list{margin:0}
+.services-card-section .services-tags{margin:0 0 14px}
+.services-card-section .services-interpreter{margin:0}
