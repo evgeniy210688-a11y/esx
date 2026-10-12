@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import useAccount from '@/app/account/useAccount';
@@ -22,6 +22,12 @@ function readRooms(key: string): Entry[] {
 export default function ConversationSidebar({ chatId, language, temporary = false }: { chatId: string; language: Language; temporary?: boolean }) {
   const { user, ready } = useAccount();
   const router = useRouter();
+  const panel = useRef<HTMLDetailsElement>(null);
+  const [panelOpen, setPanelOpen] = useState(true);
+  function closePanel() {
+    if (panel.current) { panel.current.open = false; panel.current.querySelector('summary')?.focus(); }
+    setPanelOpen(false);
+  }
   const [rooms, setRooms] = useState<Entry[]>([]);
   const [chats, setChats] = useState<Entry[]>([]);
   const [error, setError] = useState(false);
@@ -96,8 +102,8 @@ export default function ConversationSidebar({ chatId, language, temporary = fals
       else { await navigator.clipboard.writeText(invite); setNotice(t.linkCopied); }
     } catch (cause) { if ((cause as { name?: string }).name !== 'AbortError') setNotice(t.copyError); }
   }
-  return <aside className="conversation-sidebar" aria-label={title}>
-    <details className="conversation-panel" open><summary>{title}</summary><div className="conversation-panel-body">
+  return <>{panelOpen && <button type="button" className="conversation-backdrop" aria-label={ru ? 'Закрыть список собеседников' : 'Close conversations'} onClick={closePanel} />}<aside className="conversation-sidebar" data-panel-open={panelOpen} aria-label={title} onKeyDown={event => { if (event.key === 'Escape') { event.preventDefault(); closePanel(); } }}>
+    <details ref={panel} className="conversation-panel" open={panelOpen} onToggle={event => setPanelOpen(event.currentTarget.open)}><summary>{title}</summary><div className="conversation-panel-body">
       <button type="button" disabled={!ready} onClick={() => start()}>＋ {newLabel}</button>
       <button type="button" disabled={busy || !ready} onClick={() => void pick()}>{ru ? 'Добавить из контактов телефона' : 'Add from phone contacts'}</button>
       {manual && <form onSubmit={event => { event.preventDefault(); start(name, phone); }}>
@@ -115,5 +121,5 @@ export default function ConversationSidebar({ chatId, language, temporary = fals
       {!!rooms.length && <><h2>{ru ? 'Чаты на этом устройстве' : 'Chats on this device'}</h2><ul>{rooms.map(room => <li key={room.id}><Link href={`/chat/${room.id}`} aria-current={temporary && room.id === chatId ? 'page' : undefined}>{room.name}</Link></li>)}</ul></>}
       {!chats.length && !rooms.length && <p>{t.empty}</p>}
     </div></details>
-  </aside>;
+  </aside></>;
 }
