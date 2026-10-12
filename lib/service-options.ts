@@ -104,10 +104,6 @@ export const serviceCityGroups = [
         "label": "Осан · 오산"
       },
       {
-        "value": "Паран",
-        "label": "Паран · 발안로"
-      },
-      {
         "value": "Пучхон",
         "label": "Пучхон · 부천"
       },
