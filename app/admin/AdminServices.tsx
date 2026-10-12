@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { companyPhones, validCompanyPhones, prepareCompanyPhoto, safeCompanyPhoto, type CompanyPhone } from '@/lib/service-media';
+import { joinServiceDescription, splitServiceDescription } from '@/lib/service-description';
 import useAccount from '@/app/account/useAccount';
 import { supabase } from '@/lib/supabase';
 import { serviceLanguages, type ServiceListing, type ServiceLanguage } from '@/lib/service-directory';
@@ -10,7 +11,7 @@ import '../services/services.css';
 import './admin.css';
 import { socialNetworks, validSocialLinks, type SocialLink } from '@/lib/service-socials';
 import { serviceCityGroups, serviceCategories } from '@/lib/service-options';
-type Listing = ServiceListing & { status: 'draft' | 'pending' | 'published' | 'archived' };
+type Listing = ServiceListing & { services?: string; status: 'draft' | 'pending' | 'published' | 'archived' };
 const blank: Listing = { id: '', name: '', description: '', city: '', category: '', address: '', phone: '', phones: [], photo: null, website: '', social_links: [], service_languages: [], has_interpreter: false, interpreter_languages: [], status: 'draft' };
 const statuses = { draft: 'Черновик', pending: 'На проверке', published: 'Опубликовано', archived: 'В архиве' };
 export default function AdminServices() {
@@ -92,13 +93,15 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     const socials = (draft.social_links ?? []).map(link => ({ ...link, url: link.url.trim() }));
     if (validSocialLinks(socials).length !== socials.length) { setMessage('Для каждой соцсети укажите полную ссылку, начинающуюся с https:// или http://.'); return; }
     lock.current = true; setBusy(true); setMessage('');
-    const values = { name: draft.name.trim(), description: draft.description.trim(), city: draft.city.trim(), category: draft.category.trim(), address: draft.address.trim(), phone: phones[0]?.number || null, phones, photo: safeCompanyPhoto(draft.photo), website: draft.website?.trim() || null, social_links: socials, service_languages: draft.service_languages, has_interpreter: draft.has_interpreter, interpreter_languages: draft.has_interpreter ? draft.interpreter_languages : [], status: draft.status };
+    const description = joinServiceDescription(draft.description, draft.services ?? '');
+    if (description.length > 5000) { lock.current = false; setBusy(false); setMessage('Описание и услуги вместе должны содержать не более 5000 символов.'); return; }
+    const values = { name: draft.name.trim(), description, city: draft.city.trim(), category: draft.category.trim(), address: draft.address.trim(), phone: phones[0]?.number || null, phones, photo: safeCompanyPhoto(draft.photo), website: draft.website?.trim() || null, social_links: socials, service_languages: draft.service_languages, has_interpreter: draft.has_interpreter, interpreter_languages: draft.has_interpreter ? draft.interpreter_languages : [], status: draft.status };
     try {
       const query = draft.id ? supabase.from('esx_service_listings').update(values).eq('id', draft.id) : supabase.from('esx_service_listings').insert(values);
       const { data, error } = await query.select('id,name,description,city,category,address,phone,phones,photo,website,social_links,service_languages,has_interpreter,interpreter_languages,status').single();
       if (error) throw error;
       const saved = data as Listing;
-      setDraft(saved); setRows(current => [...current.filter(r => r.id !== saved.id), saved].sort((a,b) => a.name.localeCompare(b.name, 'ru')));
+      setDraft({ ...saved, ...splitServiceDescription(saved.description) }); setRows(current => [...current.filter(r => r.id !== saved.id), saved].sort((a,b) => a.name.localeCompare(b.name, 'ru')));
       setMessage(saved.status === 'published' ? 'Карточка сохранена и опубликована в справочнике.' : 'Карточка сохранена. Посетители её не видят.');
     } catch { setMessage('Сохранить не удалось. Проверьте поля и права доступа. Введённые данные сохранены в форме.'); }
     finally { lock.current = false; setBusy(false); }
@@ -107,10 +110,11 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     {access === 'loading' && <p role="status">Проверяем права…</p>}
     {access === 'denied' && <section className="services-empty"><h1>Нет доступа администратора</h1><p>Этому аккаунту не назначены права управления услугами. Войдите в аккаунт администратора.</p></section>}
     {access === 'error' && <section className="services-empty"><h1>Не удалось проверить доступ</h1><button onClick={() => { setAccess('loading'); setAttempt(n => n + 1); }}>Повторить</button></section>}
-    {access === 'allowed' && <><h1>Панель управления</h1><div className="admin-summary">{Object.entries(statuses).map(([status, label]) => <div key={status}><strong>{rows.filter(row => row.status === status).length}</strong><span>{label}</span></div>)}</div><h2>Компании и услуги</h2><p>Добавляйте организации, редактируйте карточки и выбирайте, что показывать в справочнике.</p><div className="admin-columns"><section aria-label="Список организаций" className="services-card"><button disabled={busy} onClick={() => { if (draft.name && !window.confirm('Открыть новую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...blank }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}>+ Добавить компанию</button>{!rows.length && <p>Организаций пока нет.</p>}<ul className="admin-list">{rows.map(row => <li key={row.id}><button disabled={busy} aria-pressed={draft.id === row.id} onClick={() => { if (draft.name && !window.confirm('Открыть другую карточку? Несохранённые изменения будут потеряны.')) return; setDraft(row); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}><strong>{row.name}</strong><span>{row.city} · {statuses[row.status]}</span></button></li>)}</ul></section>
+    {access === 'allowed' && <><h1>Панель управления</h1><div className="admin-summary">{Object.entries(statuses).map(([status, label]) => <div key={status}><strong>{rows.filter(row => row.status === status).length}</strong><span>{label}</span></div>)}</div><h2>Компании и услуги</h2><p>Добавляйте организации, редактируйте карточки и выбирайте, что показывать в справочнике.</p><div className="admin-columns"><section aria-label="Список организаций" className="services-card"><button disabled={busy} onClick={() => { if (draft.name && !window.confirm('Открыть новую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...blank }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}>+ Добавить компанию</button>{!rows.length && <p>Организаций пока нет.</p>}<ul className="admin-list">{rows.map(row => <li key={row.id}><button disabled={busy} aria-pressed={draft.id === row.id} onClick={() => { if (draft.name && !window.confirm('Открыть другую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...row, ...splitServiceDescription(row.description) }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}><strong>{row.name}</strong><span>{row.city} · {statuses[row.status]}</span></button></li>)}</ul></section>
     <form id="company-form" ref={form} onSubmit={save} className="services-card admin-form"><h2>{draft.id ? 'Редактирование карточки' : 'Новая организация'}</h2><fieldset disabled={busy} className="admin-fields">
       <label>Название<input required maxLength={200} value={draft.name} onChange={e => change('name', e.target.value)} /></label>
       <label>Описание<textarea maxLength={5000} rows={4} value={draft.description} onChange={e => change('description', e.target.value)} /></label>
+      <label>Услуги<textarea maxLength={5000} rows={6} aria-describedby="services-list-hint" value={draft.services ?? ''} onChange={e => change('services', e.target.value)} placeholder={"Письменные переводы\nУстные переводы\nУслуги юриста"} /></label><p id="services-list-hint">Каждая услуга — с новой строки. Круглые маркеры добавляются автоматически.</p>
       <label>Город<select required value={draft.city} onChange={e => change('city', e.target.value)}><option value="">Выберите город</option>{draft.city && !serviceCityGroups.some(group => group.cities.some(city => city.value === draft.city)) && <option value={draft.city}>{draft.city} (сохранённое значение)</option>}{serviceCityGroups.map(group => <optgroup key={group.region} label={group.region}>{group.cities.map(city => <option key={city.value} value={city.value}>{city.label}</option>)}</optgroup>)}</select></label>
       <label>Категория<select required value={draft.category} onChange={e => change('category', e.target.value)}><option value="">Выберите категорию</option>{draft.category && !serviceCategories.some(category => category === draft.category) && <option value={draft.category}>{draft.category} (сохранённое значение)</option>}{serviceCategories.map(category => <option key={category} value={category}>{category}</option>)}</select></label>
       <label>Адрес<input required maxLength={500} value={draft.address} onChange={e => change('address', e.target.value)} /></label>
