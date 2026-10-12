@@ -50,3 +50,4 @@
 .services-hours p{margin:6px 0;color:#b3c7da;line-height:1.65}
 .services-filters input[type=search]{width:100%;min-width:0;padding:12px;color:#edf4fc;background:#091a2b;border:1px solid #496279;border-radius:8px;font:inherit}
 .services-top .services-brand{display:flex;align-items:center;gap:12px;flex-shrink:0}.services-brand img{display:block;width:80px;height:80px;object-fit:contain}@media(max-width:540px){.services-brand img{width:64px;height:64px}}
+.services-top .services-brand{background:transparent;isolation:auto}.services-brand img{mix-blend-mode:screen}
