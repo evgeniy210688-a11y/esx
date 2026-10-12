@@ -1,0 +1,1 @@
+alter table public.esx_service_listings add column if not exists has_manager boolean not null default false;
