@@ -7,3 +7,12 @@
 .services-top .services-language-picker span{display:inline;font-size:inherit;color:inherit}.services-top .services-interface-language>span{display:inline;font-size:13px;color:#b3c7da}
 
 .company-photo{display:block;width:100%;height:auto;max-height:420px;object-fit:contain;border-radius:12px;margin:12px 0;background:#091a2b}
+
+/* Each listing expands independently without stretching adjacent cards. */
+.services-grid{align-items:start}
+.services-card .company-photo{height:120px;width:120px;max-width:100%;object-fit:contain}
+.services-card[data-expanded=true] .company-photo{width:100%;height:auto;max-height:420px}
+.services-card[data-expanded=false] .services-description{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+.services-card .services-interpreter{line-height:1.65;color:#b3c7da;white-space:pre-line}
+.services-card .services-details-toggle{margin-top:16px;color:#75d6ce;display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%}
+.services-card .services-details-toggle:hover{background:#203e54}

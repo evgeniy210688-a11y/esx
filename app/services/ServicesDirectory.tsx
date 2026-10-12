@@ -9,6 +9,11 @@ import { matchesService, safeServiceWebsite, serviceLanguages, type ServiceListi
 import './services.css';
 import { interfaceLanguages, serviceLabels, type InterfaceLanguage } from './serviceLabels';
 import { socialNetworks, validSocialLinks } from '@/lib/service-socials';
+const detailLabels: Record<InterfaceLanguage, [string, string]> = {
+  ru: ['Подробнее', 'Свернуть'], en: ['More details', 'Show less'],
+  ko: ['자세히 보기', '접기'], uz: ['Batafsil', 'Yig‘ish'],
+  zh: ['查看详情', '收起'], vi: ['Xem thêm', 'Thu gọn'], tr: ['Daha fazla', 'Daralt'],
+};
 const flags = { ru: 'ru', uz: 'uz', zh: 'cn', vi: 'vn', en: 'gb', ko: 'kr', tr: 'tr' } as const;
 const empty: ServiceFilters = { city: '', category: '', language: '', interpreter: false, interpreterLanguage: '' };
 export default function ServicesDirectory() {
@@ -25,6 +30,7 @@ export default function ServicesDirectory() {
   const languageName = (code: string) => new Intl.DisplayNames([language], { type: 'language' }).of(code) ?? code;
   const languageOptions = Object.keys(serviceLanguages).map(code => <option key={code} value={code}>{languageName(code)}</option>);
 
+  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
   const [listings, setListings] = useState<ServiceListing[]>([]);
   const [filters, setFilters] = useState(empty);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
@@ -69,7 +75,7 @@ export default function ServicesDirectory() {
     <p className="services-note">{t[17]}</p>
     <div aria-live="polite" role="status">{status === 'loading' ? <p>{t[18]}</p> : status === 'error' ? <div className="services-empty"><h2>{t[19]}</h2><p>{t[20]}</p><button onClick={() => { setStatus('loading'); setAttempt(a => a + 1); }}>{t[21]}</button></div> : <p>{t[22]} {visible.length}</p>}</div>
     {status === 'ready' && !visible.length && <div className="services-empty"><h2>{listings.length ? t[23] : t[24]}</h2><p>{listings.length ? t[25] : t[26]}</p></div>}
-    {status === 'ready' && <section className="services-grid" aria-label={t[27]}>{visible.map(s => { const website = safeServiceWebsite(s.website); return <article key={s.id} className="services-card"><p className="services-eyebrow">{s.city} · {s.category}</p><h2>{s.name}</h2>{safeCompanyPhoto(s.photo) && <Image className="company-photo" src={s.photo!} alt={s.name} width={800} height={600} unoptimized />}<p>{s.description}</p><address>{s.address}</address><div className="services-tags">{s.service_languages.map(l => <span key={l}>{languageName(l)}</span>)}</div><p className="services-interpreter">{s.has_interpreter ? t[28] + " " + s.interpreter_languages.map(l => languageName(l)).join(', ') : t[29]}</p><div className="services-contacts">{companyPhones(s).map((phone,index) => <a key={index} href={'tel:' + phone.number.replace(/[^+0-9]/g, '')}>{phoneLabels[language][phone.type]}: {phone.number}</a>)}{website && <a href={website} target="_blank" rel="noopener noreferrer">{t[30]} ↗</a>}{validSocialLinks(s.social_links).map((link,index) => <a key={index} href={link.url} target="_blank" rel="noopener noreferrer">{link.network === "other" ? t[37] : socialNetworks[link.network]} ↗</a>)}</div></article>; })}</section>}
+    {status === 'ready' && <section className="services-grid" aria-label={t[27]}>{visible.map(s => { const website = safeServiceWebsite(s.website); const expanded = expandedCards.has(s.id); return <article key={s.id} className="services-card" data-expanded={expanded}><p className="services-eyebrow">{s.city} · {s.category}</p><h2>{s.name}</h2>{safeCompanyPhoto(s.photo) && <Image className="company-photo" src={s.photo!} alt={s.name} width={800} height={600} unoptimized />}<p className="services-description">{s.description}</p><div id={`service-details-${s.id}`} hidden={!expanded}><address>{s.address}</address><div className="services-tags">{s.service_languages.map(l => <span key={l}>{languageName(l)}</span>)}</div><p className="services-interpreter">{s.has_interpreter ? t[28] + " " + s.interpreter_languages.map(l => languageName(l)).join(', ') : t[29]}</p><div className="services-contacts">{companyPhones(s).map((phone,index) => <a key={index} href={'tel:' + phone.number.replace(/[^+0-9]/g, '')}>{phoneLabels[language][phone.type]}: {phone.number}</a>)}{website && <a href={website} target="_blank" rel="noopener noreferrer">{t[30]} ↗</a>}{validSocialLinks(s.social_links).map((link,index) => <a key={index} href={link.url} target="_blank" rel="noopener noreferrer">{link.network === "other" ? t[37] : socialNetworks[link.network]} ↗</a>)}</div></div><button type="button" className="services-details-toggle" aria-expanded={expanded} aria-controls={`service-details-${s.id}`} onClick={() => setExpandedCards(current => { const next = new Set(current); if (next.has(s.id)) next.delete(s.id); else next.add(s.id); return next; })}>{detailLabels[language][expanded ? 1 : 0]} <span aria-hidden="true">{expanded ? '▴' : '▾'}</span></button></article>; })}</section>}
     <aside className="services-business"><h2>{t[31]}</h2><p>{t[32]}</p><Link href="/contact">{t[33]} ↗</Link></aside>
     </main><footer className="services-footer">ESX · {t[34]} · <Link href="/admin">{t[35]}</Link></footer></div>;
 }
