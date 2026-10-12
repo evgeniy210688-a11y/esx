@@ -139,7 +139,9 @@ export default function ServicesDirectory() {
     return () => { active = false; controller.abort(); };
   }, [attempt]);
   function update<K extends keyof ServiceFilters>(key: K, value: ServiceFilters[K]) { setFilters(current => ({ ...current, [key]: value })); }
-  const visible = listings.filter(s => matchesService(s, filters));
+  const categoryLabel = (category: string) => listings.map(s => s.category === category ? translatedCard(s)?.category : undefined).find(Boolean) ?? category;
+  const categoryQuery = filters.category.trim().normalize('NFKC').toLocaleLowerCase();
+  const visible = listings.filter(s => matchesService(s, { ...filters, category: '' }) && (!categoryQuery || [s.category, categoryLabel(s.category)].some(value => value.normalize('NFKC').toLocaleLowerCase().includes(categoryQuery))));
   const cities = [...new Set(listings.map(s => s.city))].sort((a,b) => a.localeCompare(b, 'ru'));
   const categories = [...new Set(listings.map(s => s.category))].sort((a,b) => a.localeCompare(b, 'ru'));
   return <div className="services-page" lang={language}>
@@ -149,7 +151,7 @@ export default function ServicesDirectory() {
     <section className="services-filters" aria-label={t[7]}>
       <label className="services-company-search">{searchLabels[language]}<input type="search" value={filters.query ?? ''} onChange={e => update('query', e.target.value)} placeholder={searchLabels[language]} /></label>
       <label>{t[8]}<select value={filters.city} onChange={e => update('city', e.target.value)}><option value="">{t[9]}</option>{cities.map(city => <option key={city} value={city}>{listings.map(s => s.city === city ? translatedCard(s)?.city : undefined).find(Boolean) ?? city}</option>)}</select></label>
-      <label>{t[10]}<select value={filters.category} onChange={e => update('category', e.target.value)}><option value="">{t[11]}</option>{categories.map(category => <option key={category} value={category}>{listings.map(s => s.category === category ? translatedCard(s)?.category : undefined).find(Boolean) ?? category}</option>)}</select></label>
+      <label>{t[10]}<input type="search" list="directory-category-suggestions" autoComplete="off" value={filters.category} onChange={e => update('category', e.target.value)} placeholder={t[11]} /><datalist id="directory-category-suggestions">{categories.map(category => <option key={category} value={categoryLabel(category)} />)}</datalist></label>
       <label>{t[12]}<select value={filters.language} onChange={e => update('language', e.target.value)}><option value="">{t[13]}</option>{languageOptions}</select></label>
       <label>{t[14]}<select value={filters.interpreterLanguage} onChange={e => update('interpreterLanguage', e.target.value)}><option value="">{t[13]}</option>{languageOptions}</select></label>
       <label className="services-check"><input type="checkbox" checked={filters.interpreter} onChange={e => update('interpreter', e.target.checked)} />{t[15]}</label>

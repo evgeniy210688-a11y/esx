@@ -48,3 +48,4 @@
 .services-filters .services-company-search{grid-column:1 / -1}.services-company-search input{width:100%;min-width:0;padding:12px;color:#edf4fc;background:#091a2b;border:1px solid #496279;border-radius:8px;font:inherit}
 
 .services-hours p{margin:6px 0;color:#b3c7da;line-height:1.65}
+.services-filters input[type=search]{width:100%;min-width:0;padding:12px;color:#edf4fc;background:#091a2b;border:1px solid #496279;border-radius:8px;font:inherit}
