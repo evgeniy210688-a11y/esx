@@ -26,3 +26,12 @@ test('organization website links reject executable and relative URLs', () => {
   for (const url of ['javascript:alert(1)', 'data:text/html,test', '//example.com', null, 'invalid']) assert.equal(safeServiceWebsite(url), null);
   assert.equal(safeServiceWebsite('https://example.com'), 'https://example.com/');
 });
+
+test('company search matches partial names, ignores case and combines with filters', () => {
+  const company = { ...listing, name: 'ACCENT World Partner' };
+  assert.equal(matchesService(company, { ...empty, query: '  world  ' }), true);
+  assert.equal(matchesService(company, { ...empty, query: 'ＡＣＣＥＮＴ' }), true);
+  assert.equal(matchesService(company, { ...empty, query: 'other' }), false);
+  assert.equal(matchesService(company, { ...empty, query: 'accent', city: 'Пусан' }), false);
+  assert.equal(matchesService(company, { ...empty, query: '   ' }), true);
+});

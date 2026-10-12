@@ -61,7 +61,8 @@ const detailLabels: Record<InterfaceLanguage, [string, string]> = {
   zh: ['查看详情', '收起'], vi: ['Xem thêm', 'Thu gọn'], tr: ['Daha fazla', 'Daralt'],
 };
 const flags = { ru: 'ru', uz: 'uz', zh: 'cn', vi: 'vn', en: 'gb', ko: 'kr', tr: 'tr' } as const;
-const empty: ServiceFilters = { city: '', category: '', language: '', interpreter: false, interpreterLanguage: '' };
+const searchLabels: Record<InterfaceLanguage, string> = { ru: 'Поиск по названию компании', en: 'Search by company name', ko: '업체명 검색', uz: 'Kompaniya nomi bo‘yicha qidirish', zh: '按公司名称搜索', vi: 'Tìm theo tên công ty', tr: 'Şirket adına göre ara' };
+const empty: ServiceFilters = { query: '', city: '', category: '', language: '', interpreter: false, interpreterLanguage: '' };
 export default function ServicesDirectory() {
   const [language, setLanguage] = useState<InterfaceLanguage>('ru');
   const t = serviceLabels[language];
@@ -111,6 +112,7 @@ export default function ServicesDirectory() {
     <main className="services-main"><section className="services-intro"><p className="services-eyebrow">ESX • {t[4]}</p><h1>{t[5]}</h1><p>{t[6]}</p></section>
     <AdminEntry language={language} />
     <section className="services-filters" aria-label={t[7]}>
+      <label className="services-company-search">{searchLabels[language]}<input type="search" value={filters.query ?? ''} onChange={e => update('query', e.target.value)} placeholder={searchLabels[language]} /></label>
       <label>{t[8]}<select value={filters.city} onChange={e => update('city', e.target.value)}><option value="">{t[9]}</option>{cities.map(city => <option key={city}>{city}</option>)}</select></label>
       <label>{t[10]}<select value={filters.category} onChange={e => update('category', e.target.value)}><option value="">{t[11]}</option>{categories.map(category => <option key={category}>{category}</option>)}</select></label>
       <label>{t[12]}<select value={filters.language} onChange={e => update('language', e.target.value)}><option value="">{t[13]}</option>{languageOptions}</select></label>
