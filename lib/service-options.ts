@@ -144,6 +144,10 @@ export const serviceCityGroups = [
         "label": "Хвасон · 화성"
       },
       {
+        "value": "Хвасон, паран",
+        "label": "Хвасон, паран · 화성 · 발안"
+      },
+      {
         "value": "Ыйван",
         "label": "Ыйван · 의왕"
       },
