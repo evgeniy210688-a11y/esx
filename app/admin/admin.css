@@ -3,3 +3,5 @@
 .admin-socials{border:1px solid #496279;border-radius:10px;padding:16px;min-width:0}.admin-social-row{display:grid;grid-template-columns:1fr 1.5fr auto;gap:12px;align-items:end;margin-bottom:18px}@media(max-width:750px){.admin-social-row{grid-template-columns:1fr}.admin-social-row button{justify-self:start}}
 
 .admin-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:24px 0}.admin-summary>div{display:grid;gap:8px;padding:20px;background:#102337;border:1px solid #294157;border-radius:16px}.admin-summary strong{font-size:30px;color:#75d6ce}.admin-summary span{color:#b3c7da;font-size:14px}#company-form{scroll-margin-top:24px}@media(max-width:600px){.admin-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.admin-photo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px}.admin-photo-grid>div{min-width:0}

@@ -2,7 +2,7 @@ import type { CompanyPhone } from './service-media';
 import type { SocialLink } from './service-socials';
 export const serviceLanguages = { ru: 'Русский', uz: 'Узбекский', zh: 'Китайский', vi: 'Вьетнамский', en: 'Английский', ko: 'Корейский' } as const;
 export type ServiceLanguage = keyof typeof serviceLanguages;
-export type ServiceListing = { id: string; name: string; description: string; city: string; category: string; address: string; phone: string | null; phones?: CompanyPhone[]; photo?: string | null; website: string | null; social_links?: SocialLink[]; service_languages: ServiceLanguage[]; has_interpreter: boolean; interpreter_languages: ServiceLanguage[] };
+export type ServiceListing = { id: string; name: string; description: string; city: string; category: string; address: string; phone: string | null; phones?: CompanyPhone[]; photo?: string | null; photos?: string[]; website: string | null; social_links?: SocialLink[]; service_languages: ServiceLanguage[]; has_interpreter: boolean; interpreter_languages: ServiceLanguage[] };
 export type ServiceFilters = { city: string; category: string; language: string; interpreter: boolean; interpreterLanguage: string };
 export function matchesService(s: ServiceListing, f: ServiceFilters) {
   return (!f.city || s.city === f.city) && (!f.category || s.category === f.category)

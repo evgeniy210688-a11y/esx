@@ -31,3 +31,8 @@ export const phoneLabels: Record<string, Record<CompanyPhone['type'], string>> =
   vi: { office: 'Văn phòng', mobile: 'Di động', other: 'Điện thoại' },
   tr: { office: 'Ofis', mobile: 'Cep telefonu', other: 'Telefon' },
 };
+
+export function companyPhotos(value: { photos?: string[]; photo?: string | null }): string[] {
+  const photos = (value.photos ?? []).filter((photo): photo is string => !!safeCompanyPhoto(photo)).slice(0, 3);
+  return photos.length ? photos : safeCompanyPhoto(value.photo) ? [value.photo!] : [];
+}

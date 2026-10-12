@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { companyPhones, validCompanyPhones, prepareCompanyPhoto, safeCompanyPhoto, type CompanyPhone } from '@/lib/service-media';
+import { companyPhones, validCompanyPhones, prepareCompanyPhoto, companyPhotos, type CompanyPhone } from '@/lib/service-media';
 import { joinServiceDescription, splitServiceDescription } from '@/lib/service-description';
 import useAccount from '@/app/account/useAccount';
 import { supabase } from '@/lib/supabase';
@@ -55,7 +55,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
         if (!admin) { if (active) setAccess('denied'); return; }
         const all: Listing[] = [];
         for (let from = 0; ; from += 500) {
-          const result = await supabase.from('esx_service_listings').select('id,name,description,city,category,address,phone,phones,photo,website,social_links,service_languages,has_interpreter,interpreter_languages,status').order('name').order('id').range(from, from + 499);
+          const result = await supabase.from('esx_service_listings').select('id,name,description,city,category,address,phone,phones,photo,photos,website,social_links,service_languages,has_interpreter,interpreter_languages,status').order('name').order('id').range(from, from + 499);
           if (result.error) throw result.error;
           all.push(...result.data as Listing[]);
           if (result.data.length < 500) break;
@@ -73,10 +73,10 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     finally { lock.current = false; setBusy(false); }
   }
   function change<K extends keyof Listing>(key: K, value: Listing[K]) { setDraft(d => ({ ...d, [key]: value })); }
-  async function uploadPhoto(file: File) {
+  async function uploadPhoto(files: File[]) {
     if (lock.current) return;
     lock.current = true; setBusy(true); setMessage('');
-    try { const photo = await prepareCompanyPhoto(file); setDraft(d => ({ ...d, photo })); setMessage('Фото подготовлено. Нажмите «Сохранить карточку».'); }
+    try { const existing = companyPhotos(draft); if (files.length + existing.length > 3) { setMessage('Можно добавить не более 3 фото всего.'); return; } const added: string[] = []; for (const file of files) added.push(await prepareCompanyPhoto(file)); const photos = [...existing, ...added]; setDraft(d => ({ ...d, photos, photo: photos[0] ?? null })); setMessage('Фото подготовлены. Нажмите «Сохранить карточку».'); }
     catch { setMessage('Не удалось обработать фото. Выберите JPG, PNG или WebP до 10 МБ.'); }
     finally { lock.current = false; setBusy(false); }
   }
@@ -95,10 +95,10 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     lock.current = true; setBusy(true); setMessage('');
     const description = joinServiceDescription(draft.description, draft.services ?? '');
     if (description.length > 5000) { lock.current = false; setBusy(false); setMessage('Описание и услуги вместе должны содержать не более 5000 символов.'); return; }
-    const values = { name: draft.name.trim(), description, city: draft.city.trim(), category: draft.category.trim(), address: draft.address.trim(), phone: phones[0]?.number || null, phones, photo: safeCompanyPhoto(draft.photo), website: draft.website?.trim() || null, social_links: socials, service_languages: draft.service_languages, has_interpreter: draft.has_interpreter, interpreter_languages: draft.has_interpreter ? draft.interpreter_languages : [], status: draft.status };
+    const values = { name: draft.name.trim(), description, city: draft.city.trim(), category: draft.category.trim(), address: draft.address.trim(), phone: phones[0]?.number || null, phones, photo: companyPhotos(draft)[0] ?? null, photos: companyPhotos(draft), website: draft.website?.trim() || null, social_links: socials, service_languages: draft.service_languages, has_interpreter: draft.has_interpreter, interpreter_languages: draft.has_interpreter ? draft.interpreter_languages : [], status: draft.status };
     try {
       const query = draft.id ? supabase.from('esx_service_listings').update(values).eq('id', draft.id) : supabase.from('esx_service_listings').insert(values);
-      const { data, error } = await query.select('id,name,description,city,category,address,phone,phones,photo,website,social_links,service_languages,has_interpreter,interpreter_languages,status').single();
+      const { data, error } = await query.select('id,name,description,city,category,address,phone,phones,photo,photos,website,social_links,service_languages,has_interpreter,interpreter_languages,status').single();
       if (error) throw error;
       const saved = data as Listing;
       setDraft({ ...saved, ...splitServiceDescription(saved.description) }); setRows(current => [...current.filter(r => r.id !== saved.id), saved].sort((a,b) => a.name.localeCompare(b.name, 'ru')));
@@ -119,7 +119,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
       <label>Категория<input required list="service-category-options" autoComplete="off" value={draft.category} onChange={e => change('category', e.target.value)} placeholder="Начните вводить услугу или категорию" /><datalist id="service-category-options">{serviceCategories.map(category => <option key={category} value={category} />)}</datalist></label>
       <label>Адрес<input required maxLength={500} value={draft.address} onChange={e => change('address', e.target.value)} /></label>
       <fieldset className="admin-socials"><legend>Телефоны компании</legend>{companyPhones(draft).map((phone,index) => <div className="admin-social-row" key={index}><label>Тип телефона {index + 1}<select value={phone.type} onChange={e => changePhones(companyPhones(draft).map((p,i) => i === index ? { ...p, type: e.target.value as CompanyPhone['type'] } : p))}><option value="office">Офисный</option><option value="mobile">Мобильный</option><option value="other">Другой / не указан</option></select></label><label>Номер телефона {index + 1}<input type="tel" required maxLength={30} value={phone.number} onChange={e => changePhones(companyPhones(draft).map((p,i) => i === index ? { ...p, number: e.target.value } : p))} placeholder="+82 10-1234-5678" /></label><button type="button" onClick={() => changePhones(companyPhones(draft).filter((_,i) => i !== index))}>Убрать телефон {index + 1}</button></div>)}<button type="button" disabled={companyPhones(draft).length >= 5} onClick={() => changePhones([...companyPhones(draft), { type: 'office', number: '' }])}>+ Добавить телефон</button><p>До 5 номеров. Для каждого выберите тип.</p></fieldset>
-      <fieldset className="admin-socials"><legend>Фото компании</legend><p>JPG, PNG или WebP до 10 МБ. Фото появится в опубликованной карточке после сохранения.</p>{safeCompanyPhoto(draft.photo) && <><Image className="company-photo" src={draft.photo!} alt="Фото компании" width={800} height={600} unoptimized /><button type="button" onClick={() => change('photo', null)}>Убрать фото</button></>}<label>Добавить или заменить фото<input type="file" accept="image/jpeg,image/png,image/webp" onChange={e => { const file = e.target.files?.[0]; e.target.value = ''; if (file) void uploadPhoto(file); }} /></label></fieldset>
+      <fieldset className="admin-socials"><legend>Фото компании ({companyPhotos(draft).length}/3)</legend><p>До 3 фото: JPG, PNG или WebP, до 10 МБ каждое. Первое фото — обложка карточки.</p><div className="admin-photo-grid">{companyPhotos(draft).map((photo, index) => <div key={index}><Image className="company-photo" src={photo} alt={"Фото компании " + (index + 1)} width={800} height={600} unoptimized /><button type="button" onClick={() => { const photos = companyPhotos(draft).filter((_, i) => i !== index); setDraft(d => ({ ...d, photos, photo: photos[0] ?? null })); }}>Убрать фото {index + 1}</button></div>)}</div><label>Добавить фото<input type="file" multiple disabled={companyPhotos(draft).length >= 3} accept="image/jpeg,image/png,image/webp" onChange={e => { const files = Array.from(e.target.files ?? []); e.target.value = ''; if (files.length) void uploadPhoto(files); }} /></label></fieldset>
       <label>Сайт<input type="url" pattern="https?://.*" value={draft.website ?? ''} onChange={e => change('website', e.target.value)} placeholder="https://example.com" /></label>
       <fieldset className="admin-socials"><legend>Социальные сети и мессенджеры</legend><p>Выберите сеть и вставьте полную ссылку на страницу или чат. Можно добавить до 12 ссылок.</p>{(draft.social_links ?? []).map((link,index) => <div key={index} className="admin-social-row"><label>Соцсеть {index + 1}<select value={link.network} onChange={e => change('social_links', (draft.social_links ?? []).map((item,i) => i === index ? { ...item, network: e.target.value as SocialLink['network'] } : item))}>{Object.entries(socialNetworks).map(([code,label]) => <option key={code} value={code}>{label}</option>)}</select></label><label>Ссылка {index + 1}<input type="url" required pattern="https?://.*" maxLength={2000} placeholder="https://…" value={link.url} onChange={e => change('social_links', (draft.social_links ?? []).map((item,i) => i === index ? { ...item, url: e.target.value } : item))} /></label><button type="button" aria-label={'Убрать соцсеть ' + (index + 1)} onClick={() => change('social_links', (draft.social_links ?? []).filter((_,i) => i !== index))}>Убрать</button></div>)}<button type="button" disabled={(draft.social_links?.length ?? 0) >= 12} onClick={() => change('social_links', [...(draft.social_links ?? []), { network: 'telegram', url: '' }])}>+ Добавить соцсеть</button></fieldset>
       <fieldset className="admin-language"><legend>Языки обслуживания</legend>{Object.entries(serviceLanguages).map(([code,label]) => <label key={code}><input type="checkbox" checked={draft.service_languages.includes(code as ServiceLanguage)} onChange={() => toggle('service_languages', code as ServiceLanguage)} />{label}</label>)}</fieldset>
