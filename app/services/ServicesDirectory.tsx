@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { companyPhones, safeCompanyPhoto, phoneLabels } from '@/lib/service-media';
@@ -10,6 +10,36 @@ import { matchesService, safeServiceWebsite, serviceLanguages, type ServiceListi
 import './services.css';
 import { interfaceLanguages, serviceLabels, type InterfaceLanguage } from './serviceLabels';
 import { socialNetworks, validSocialLinks } from '@/lib/service-socials';
+const copyLabels: Record<InterfaceLanguage, [string, string]> = {
+ru: ['Адрес скопирован', 'Не удалось скопировать адрес. Выделите его и скопируйте вручную.'],
+en: ['Address copied', 'Could not copy. Select and copy the address manually.'],
+ko: ['주소가 복사되었습니다', '주소를 선택하여 직접 복사해 주세요.'],
+uz: ['Manzil nusxalandi', 'Manzilni qo‘lda nusxalang.'],
+zh: ['地址已复制', '请手动选择并复制地址。'],
+vi: ['Đã sao chép địa chỉ', 'Vui lòng sao chép địa chỉ thủ công.'],
+tr: ['Adres kopyalandı', 'Lütfen adresi elle kopyalayın.'],
+};
+function SmoothDescription({ text, expanded }: { text: string; expanded: boolean }) {
+  const content = useRef<HTMLParagraphElement>(null);
+  const [height, setHeight] = useState<number | null>(null);
+  useEffect(() => {
+    const node = content.current;
+    if (!node) return;
+    const observer = new ResizeObserver(() => setHeight(node.getBoundingClientRect().height));
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+  return <div className="services-description-wrap" style={{ height: height === null ? undefined : expanded ? height : Math.min(height, 79.2) }}><p ref={content} className="services-description">{text}</p></div>;
+}
+function MapAddress({ address, language }: { address: string; language: InterfaceLanguage }) {
+  const [status, setStatus] = useState<'copied' | 'error' | null>(null);
+  async function copyAddress() {
+    try { await navigator.clipboard.writeText(address); setStatus('copied'); }
+    catch { setStatus('error'); }
+  }
+  const query = encodeURIComponent(address.trim());
+  return <><address><a className="services-map-address" href={'https://map.kakao.com/link/search/' + query} target="_blank" rel="noopener noreferrer" onClick={() => { void copyAddress(); }}>{address} ↗</a></address><div className="services-map-links"><a href={'https://map.kakao.com/link/search/' + query} target="_blank" rel="noopener noreferrer" onClick={() => { void copyAddress(); }}>Kakao Map ↗</a><a href={'https://map.naver.com/p/search/' + query} target="_blank" rel="noopener noreferrer" onClick={() => { void copyAddress(); }}>Naver Map ↗</a></div><p className="services-copy-status" role="status">{status && copyLabels[language][status === 'copied' ? 0 : 1]}</p></>;
+}
 const sectionLabels: Record<InterfaceLanguage, [string, string, string]> = {
   ru: ['Описание', 'Услуги', 'Наш адрес:'], en: ['Description', 'Services', 'Our address:'],
   ko: ['소개', '서비스', '주소:'], uz: ['Tavsif', 'Xizmatlar', 'Bizning manzil:'],
@@ -91,7 +121,7 @@ export default function ServicesDirectory() {
     <p className="services-note">{t[17]}</p>
     <div aria-live="polite" role="status">{status === 'loading' ? <p>{t[18]}</p> : status === 'error' ? <div className="services-empty"><h2>{t[19]}</h2><p>{t[20]}</p><button onClick={() => { setStatus('loading'); setAttempt(a => a + 1); }}>{t[21]}</button></div> : <p>{t[22]} {visible.length}</p>}</div>
     {status === 'ready' && !visible.length && <div className="services-empty"><h2>{listings.length ? t[23] : t[24]}</h2><p>{listings.length ? t[25] : t[26]}</p></div>}
-    {status === 'ready' && <section className="services-grid" aria-label={t[27]}>{visible.map(s => { const website = safeServiceWebsite(s.website); const expanded = expandedCards.has(s.id); const content = cardContent(s.description); const items = serviceItems(content.services); return <article key={s.id} className="services-card" data-expanded={expanded}><p className="services-eyebrow">{s.city} · {s.category}</p><h2>{s.name}</h2>{safeCompanyPhoto(s.photo) && <Image className="company-photo" src={s.photo!} alt={s.name} width={800} height={600} unoptimized />}<section className="services-card-section"><h3>{sectionLabels[language][0]}</h3><p className="services-description">{content.description}</p></section><div id={`service-details-${s.id}`} hidden={!expanded}>{items.length > 0 && <section className="services-card-section"><h3>{sectionLabels[language][1]}</h3><ul className="services-item-list">{items.map((item, index) => <li key={index}>{item}</li>)}</ul></section>}<section className="services-card-section"><h3>{sectionLabels[language][2]}</h3><address>{s.address}</address></section><div className="services-card-section"><div className="services-tags">{s.service_languages.map(l => <span key={l}>{languageName(l)}</span>)}</div><p className="services-interpreter">{s.has_interpreter ? t[28] + " " + s.interpreter_languages.map(l => languageName(l)).join(', ') : t[29]}</p></div><div className="services-contacts services-card-section">{companyPhones(s).map((phone,index) => <a key={index} href={'tel:' + phone.number.replace(/[^+0-9]/g, '')}>{phoneLabels[language][phone.type]}: {phone.number}</a>)}{website && <a href={website} target="_blank" rel="noopener noreferrer">{t[30]} ↗</a>}{validSocialLinks(s.social_links).map((link,index) => <a key={index} href={link.url} target="_blank" rel="noopener noreferrer">{link.network === "other" ? t[37] : socialNetworks[link.network]} ↗</a>)}</div></div><button type="button" className="services-details-toggle" aria-expanded={expanded} aria-controls={`service-details-${s.id}`} onClick={() => setExpandedCards(current => { const next = new Set(current); if (next.has(s.id)) next.delete(s.id); else next.add(s.id); return next; })}>{detailLabels[language][expanded ? 1 : 0]} <span aria-hidden="true">{expanded ? '▴' : '▾'}</span></button></article>; })}</section>}
+    {status === 'ready' && <section className="services-grid" aria-label={t[27]}>{visible.map(s => { const website = safeServiceWebsite(s.website); const expanded = expandedCards.has(s.id); const content = cardContent(s.description); const items = serviceItems(content.services); return <article key={s.id} className="services-card" data-expanded={expanded}><p className="services-eyebrow">{s.city} · {s.category}</p><h2>{s.name}</h2>{safeCompanyPhoto(s.photo) && <Image className="company-photo" src={s.photo!} alt={s.name} width={800} height={600} unoptimized />}<section className="services-card-section"><h3>{sectionLabels[language][0]}</h3><SmoothDescription text={content.description} expanded={expanded} /></section><div id={`service-details-${s.id}`} className="services-reveal" aria-hidden={!expanded} inert={!expanded}><div className="services-reveal-inner">{items.length > 0 && <section className="services-card-section"><h3>{sectionLabels[language][1]}</h3><ul className="services-item-list">{items.map((item, index) => <li key={index}>{item}</li>)}</ul></section>}<section className="services-card-section"><h3>{sectionLabels[language][2]}</h3><MapAddress address={s.address} language={language} /></section><div className="services-card-section"><div className="services-tags">{s.service_languages.map(l => <span key={l}>{languageName(l)}</span>)}</div><p className="services-interpreter">{s.has_interpreter ? t[28] + " " + s.interpreter_languages.map(l => languageName(l)).join(', ') : t[29]}</p></div><div className="services-contacts services-card-section">{companyPhones(s).map((phone,index) => <a key={index} href={'tel:' + phone.number.replace(/[^+0-9]/g, '')}>{phoneLabels[language][phone.type]}: {phone.number}</a>)}{website && <a href={website} target="_blank" rel="noopener noreferrer">{t[30]} ↗</a>}{validSocialLinks(s.social_links).map((link,index) => <a key={index} href={link.url} target="_blank" rel="noopener noreferrer">{link.network === "other" ? t[37] : socialNetworks[link.network]} ↗</a>)}</div></div></div><button type="button" className="services-details-toggle" aria-expanded={expanded} aria-controls={`service-details-${s.id}`} onClick={() => setExpandedCards(current => { const next = new Set(current); if (next.has(s.id)) next.delete(s.id); else next.add(s.id); return next; })}>{detailLabels[language][expanded ? 1 : 0]} <span aria-hidden="true">{expanded ? '▴' : '▾'}</span></button></article>; })}</section>}
     <aside className="services-business"><h2>{t[31]}</h2><p>{t[32]}</p><Link href="/contact">{t[33]} ↗</Link></aside>
     </main><footer className="services-footer">ESX · {t[34]} · <Link href="/admin">{t[35]}</Link></footer></div>;
 }
