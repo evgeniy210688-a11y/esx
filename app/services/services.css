@@ -28,10 +28,10 @@
 
 /* Keep the logo stable while the details expand smoothly. */
 .services-card[data-expanded=true] .company-photo{width:120px;height:120px}
-.services-reveal{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows 700ms cubic-bezier(.22,1,.36,1),opacity 500ms ease}
+.services-reveal{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows 1400ms cubic-bezier(.45,0,.2,1),opacity 1000ms ease-in-out}
 .services-card[data-expanded=true] .services-reveal{grid-template-rows:1fr;opacity:1}
 .services-reveal-inner{min-height:0;overflow:hidden}
-.services-card .services-description{display:block;-webkit-line-clamp:unset;max-height:4.95em;overflow:hidden;transition:max-height 700ms cubic-bezier(.22,1,.36,1)}
+.services-card .services-description{display:block;-webkit-line-clamp:unset;max-height:4.95em;overflow:hidden;transition:max-height 1400ms cubic-bezier(.45,0,.2,1)}
 .services-card[data-expanded=true] .services-description{max-height:10000px}
 .services-map-address{color:#75d6ce!important;text-decoration:underline!important;text-underline-offset:4px}
 .services-map-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}
@@ -39,6 +39,6 @@
 .services-copy-status{font-size:13px;color:#75d6ce;margin:8px 0 0}
 .services-copy-status:empty{display:none}
 @media(prefers-reduced-motion:reduce){.services-reveal,.services-card .services-description{transition:none}}
-.services-card .services-description-wrap{overflow:hidden;height:4.95em;transition:height 700ms cubic-bezier(.22,1,.36,1)}
+.services-card .services-description-wrap{overflow:hidden;height:4.95em;transition:height 1400ms cubic-bezier(.45,0,.2,1)}
 .services-card[data-expanded] .services-description{display:block;max-height:none;-webkit-line-clamp:unset;overflow:visible;transition:none}
 @media(prefers-reduced-motion:reduce){.services-card .services-description-wrap{transition:none}}
