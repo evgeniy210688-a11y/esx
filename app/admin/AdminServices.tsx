@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { companyPhones, validCompanyPhones, prepareCompanyPhoto, companyPhotos, type CompanyPhone } from '@/lib/service-media';
 import { joinServiceDescription, splitServiceDescription } from '@/lib/service-description';
+import { newBusinessHours, validBusinessHours, weekdayName } from '@/lib/service-hours';
 import useAccount from '@/app/account/useAccount';
 import { supabase } from '@/lib/supabase';
 import { serviceLanguages, type ServiceListing, type ServiceLanguage } from '@/lib/service-directory';
@@ -55,7 +56,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
         if (!admin) { if (active) setAccess('denied'); return; }
         const all: Listing[] = [];
         for (let from = 0; ; from += 500) {
-          const result = await supabase.from('esx_service_listings').select('id,name,description,city,category,address,phone,phones,photo,photos,website,social_links,service_languages,has_interpreter,interpreter_languages,status').order('name').order('id').range(from, from + 499);
+          const result = await supabase.from('esx_service_listings').select('id,name,description,city,category,address,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_interpreter,interpreter_languages,status').order('name').order('id').range(from, from + 499);
           if (result.error) throw result.error;
           all.push(...result.data as Listing[]);
           if (result.data.length < 500) break;
@@ -88,6 +89,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     event.preventDefault(); if (lock.current) return;
     if (!draft.service_languages.length || (draft.has_interpreter && !draft.interpreter_languages.length)) { setMessage('Выберите язык обслуживания и, при наличии переводчика, его язык.'); return; }
     if (![draft.name, draft.city, draft.category, draft.address].every(value => value.trim())) { setMessage('Заполните название, город, категорию и адрес.'); return; }
+    if (!validBusinessHours(draft.business_hours)) { setMessage('Проверьте режим работы: выберите дни, укажите часы работы и полный обеденный перерыв внутри рабочего времени.'); return; }
     const phones = companyPhones(draft).map(p => ({ ...p, number: p.number.trim() }));
     if (!validCompanyPhones(phones)) { setMessage('Проверьте номера телефонов: от 3 до 30 символов, цифры, +, пробелы, скобки и дефис.'); return; }
     const socials = (draft.social_links ?? []).map(link => ({ ...link, url: link.url.trim() }));
@@ -95,10 +97,10 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     lock.current = true; setBusy(true); setMessage('');
     const description = joinServiceDescription(draft.description, draft.services ?? '');
     if (description.length > 5000) { lock.current = false; setBusy(false); setMessage('Описание и услуги вместе должны содержать не более 5000 символов.'); return; }
-    const values = { name: draft.name.trim(), description, city: draft.city.trim(), category: draft.category.trim(), address: draft.address.trim(), phone: phones[0]?.number || null, phones, photo: companyPhotos(draft)[0] ?? null, photos: companyPhotos(draft), website: draft.website?.trim() || null, social_links: socials, service_languages: draft.service_languages, has_interpreter: draft.has_interpreter, interpreter_languages: draft.has_interpreter ? draft.interpreter_languages : [], status: draft.status };
+    const values = { business_hours: draft.business_hours ?? null, name: draft.name.trim(), description, city: draft.city.trim(), category: draft.category.trim(), address: draft.address.trim(), phone: phones[0]?.number || null, phones, photo: companyPhotos(draft)[0] ?? null, photos: companyPhotos(draft), website: draft.website?.trim() || null, social_links: socials, service_languages: draft.service_languages, has_interpreter: draft.has_interpreter, interpreter_languages: draft.has_interpreter ? draft.interpreter_languages : [], status: draft.status };
     try {
       const query = draft.id ? supabase.from('esx_service_listings').update(values).eq('id', draft.id) : supabase.from('esx_service_listings').insert(values);
-      const { data, error } = await query.select('id,name,description,city,category,address,phone,phones,photo,photos,website,social_links,service_languages,has_interpreter,interpreter_languages,status').single();
+      const { data, error } = await query.select('id,name,description,city,category,address,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_interpreter,interpreter_languages,status').single();
       if (error) throw error;
       const saved = data as Listing;
       setDraft({ ...saved, ...splitServiceDescription(saved.description) }); setRows(current => [...current.filter(r => r.id !== saved.id), saved].sort((a,b) => a.name.localeCompare(b.name, 'ru')));
@@ -115,6 +117,12 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
       <label>Название<input required maxLength={200} value={draft.name} onChange={e => change('name', e.target.value)} /></label>
       <label>Описание<textarea maxLength={5000} rows={4} value={draft.description} onChange={e => change('description', e.target.value)} /></label>
       <label>Услуги<textarea maxLength={5000} rows={6} aria-describedby="services-list-hint" value={draft.services ?? ''} onChange={e => change('services', e.target.value)} placeholder={"Письменные переводы\nУстные переводы\nУслуги юриста"} /></label><p id="services-list-hint">Каждая услуга — с новой строки. Круглые маркеры добавляются автоматически.</p>
+      <fieldset className="admin-socials"><legend>Режим работы</legend><label className="admin-check"><input type="checkbox" checked={!!draft.business_hours} onChange={e=>change('business_hours',e.target.checked?newBusinessHours():null)} />Указать режим работы</label>{draft.business_hours && <>
+      <div className="admin-weekdays">{Array.from({length:7},(_,day)=><label key={day}><input type="checkbox" checked={draft.business_hours!.days.includes(day)} onChange={e=>{const h=draft.business_hours!;change('business_hours',{...h,days:e.target.checked?[...h.days,day].sort():h.days.filter(d=>d!==day)})}} />{weekdayName(day,'ru')}</label>)}</div>
+      <div className="admin-hours-row"><label>Открытие<input type="time" required value={draft.business_hours.opens} onChange={e=>change('business_hours',{...draft.business_hours!,opens:e.target.value})} /></label><label>Закрытие<input type="time" required value={draft.business_hours.closes} onChange={e=>change('business_hours',{...draft.business_hours!,closes:e.target.value})} /></label></div>
+      <label className="admin-check"><input type="checkbox" checked={!!(draft.business_hours.lunchStart||draft.business_hours.lunchEnd)} onChange={e=>change('business_hours',{...draft.business_hours!,lunchStart:e.target.checked?'12:00':'',lunchEnd:e.target.checked?'13:00':''})} />Есть обеденный перерыв</label>
+      {(draft.business_hours.lunchStart||draft.business_hours.lunchEnd) && <div className="admin-hours-row"><label>Начало обеда<input type="time" required value={draft.business_hours.lunchStart} onChange={e=>change('business_hours',{...draft.business_hours!,lunchStart:e.target.value})} /></label><label>Конец обеда<input type="time" required value={draft.business_hours.lunchEnd} onChange={e=>change('business_hours',{...draft.business_hours!,lunchEnd:e.target.value})} /></label></div>}
+      <p>Часы одинаковые для выбранных дней. Остальные дни — выходные. Если закрытие раньше открытия, работа заканчивается на следующий день. Время местное, корейское.</p></>}</fieldset>
       <label>Город<input required list="service-city-options" autoComplete="off" value={draft.city} onChange={e => change('city', e.target.value)} placeholder="Начните вводить город" /><datalist id="service-city-options">{serviceCityGroups.flatMap(group => group.cities.map(city => <option key={city.value} value={city.value}>{city.label} · {group.region}</option>))}</datalist></label>
       <label>Категория<input required list="service-category-options" autoComplete="off" value={draft.category} onChange={e => change('category', e.target.value)} placeholder="Начните вводить услугу или категорию" /><datalist id="service-category-options">{serviceCategories.map(category => <option key={category} value={category} />)}</datalist></label>
       <label>Адрес<input required maxLength={500} value={draft.address} onChange={e => change('address', e.target.value)} /></label>
