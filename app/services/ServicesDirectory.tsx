@@ -120,7 +120,7 @@ export default function ServicesDirectory() {
     const track = categoryCarousel.current;
     const region = track?.closest('.services-category-carousel');
     if (!track || !region) return;
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
     let pointer: number | null = null;
     let startX = 0;
     let startScroll = 0;
@@ -170,7 +170,7 @@ export default function ServicesDirectory() {
       const elapsed = previous ? Math.min(now - previous, 50) : 0;
       previous = now;
       const maxScroll = track.scrollWidth - track.clientWidth;
-      if (!reducedMotion.matches && !document.hidden && !region.matches(':hover') && !region.querySelector(':focus-visible') && pointer === null && now > resumeAt && maxScroll > 1) {
+      if (!document.hidden && !region.matches(':hover') && !region.querySelector(':focus-visible') && pointer === null && now > resumeAt && maxScroll > 1) {
         if (track.scrollLeft >= maxScroll - 1) direction = -1;
         else if (track.scrollLeft <= 1) direction = 1;
         autoPosition = Math.max(0, Math.min(maxScroll, (autoPosition ?? track.scrollLeft) + direction * elapsed * 0.035));
