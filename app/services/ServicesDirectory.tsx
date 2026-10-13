@@ -125,20 +125,20 @@ export default function ServicesDirectory() {
     let startX = 0;
     let startScroll = 0;
     let dragged = false;
-    let hovering = false;
-    let focused = false;
+
+
     let direction = 1;
     let resumeAt = performance.now() + 2500;
     let previous = 0;
     let frame = 0;
     const pause = () => { resumeAt = performance.now() + 4000; };
-    const enter = () => { hovering = true; };
-    const leave = () => { hovering = false; pause(); };
-    const focus = (event: Event) => { focused = (event.target as HTMLElement).matches(':focus-visible'); };
-    const blur = (event: Event) => { focused = region.contains((event as FocusEvent).relatedTarget as Node | null); pause(); };
+
+    const leave = () => { pause(); };
+
+    const blur = () => { pause(); };
     const down = (event: PointerEvent) => {
       pause();
-      focused = false;
+
       dragged = false;
       if (event.pointerType !== 'mouse' || event.button !== 0) return;
       pointer = event.pointerId;
@@ -169,16 +169,16 @@ export default function ServicesDirectory() {
       const elapsed = previous ? Math.min(now - previous, 50) : 0;
       previous = now;
       const maxScroll = track.scrollWidth - track.clientWidth;
-      if (!reducedMotion.matches && !document.hidden && !hovering && !focused && pointer === null && now > resumeAt && maxScroll > 1) {
+      if (!reducedMotion.matches && !document.hidden && !region.matches(':hover') && !region.querySelector(':focus-visible') && pointer === null && now > resumeAt && maxScroll > 1) {
         if (track.scrollLeft >= maxScroll - 1) direction = -1;
         else if (track.scrollLeft <= 1) direction = 1;
         track.scrollLeft += direction * elapsed * 0.035;
       }
       frame = requestAnimationFrame(animate);
     };
-    region.addEventListener('mouseenter', enter);
+
     region.addEventListener('mouseleave', leave);
-    region.addEventListener('focusin', focus);
+
     region.addEventListener('focusout', blur);
     region.addEventListener('pointerdown', pause);
     track.addEventListener('pointerdown', down);
@@ -191,9 +191,9 @@ export default function ServicesDirectory() {
     frame = requestAnimationFrame(animate);
     return () => {
       cancelAnimationFrame(frame);
-      region.removeEventListener('mouseenter', enter);
+
       region.removeEventListener('mouseleave', leave);
-      region.removeEventListener('focusin', focus);
+
       region.removeEventListener('focusout', blur);
       region.removeEventListener('pointerdown', pause);
       track.removeEventListener('pointerdown', down);
