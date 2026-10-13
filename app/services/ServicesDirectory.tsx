@@ -127,7 +127,7 @@ export default function ServicesDirectory() {
     let dragged = false;
 
 
-    let direction = 1;
+    let cycleWidth = 0;
     let resumeAt = performance.now() + 2500;
     let previous = 0;
     let autoPosition: number | null = null;
@@ -169,11 +169,26 @@ export default function ServicesDirectory() {
     const animate = (now: number) => {
       const elapsed = previous ? Math.min(now - previous, 50) : 0;
       previous = now;
-      const maxScroll = track.scrollWidth - track.clientWidth;
-      if (!document.hidden && !region.matches(':hover') && !region.querySelector(':focus-visible') && pointer === null && now > resumeAt && maxScroll > 1) {
-        if (track.scrollLeft >= maxScroll - 1) direction = -1;
-        else if (track.scrollLeft <= 1) direction = 1;
-        autoPosition = Math.max(0, Math.min(maxScroll, (autoPosition ?? track.scrollLeft) + direction * elapsed * 0.035));
+      const groups = track.querySelectorAll<HTMLElement>('.services-category-group');
+      const measured = groups.length > 1 ? groups[1].offsetLeft - groups[0].offsetLeft : 0;
+      if (measured > 0 && measured !== cycleWidth) {
+        const relative = cycleWidth ? track.scrollLeft % cycleWidth : 0;
+        cycleWidth = measured;
+        track.scrollLeft = cycleWidth + relative;
+        autoPosition = null;
+      }
+      if (cycleWidth > 0) {
+        const offset = track.scrollLeft < cycleWidth ? cycleWidth : track.scrollLeft >= cycleWidth * 2 ? -cycleWidth : 0;
+        if (offset) {
+          track.scrollLeft += offset;
+          startScroll += offset;
+          if (autoPosition !== null) autoPosition += offset;
+        }
+      }
+      if (!document.hidden && !region.matches(':hover') && !region.querySelector(':focus-visible') && pointer === null && now > resumeAt && cycleWidth > 0) {
+
+
+        autoPosition = (autoPosition ?? track.scrollLeft) + elapsed * 0.035;
         track.scrollLeft = autoPosition;
       }
       else { autoPosition = null; }
@@ -244,7 +259,7 @@ export default function ServicesDirectory() {
     {categories.length > 0 && <section className="services-category-carousel" aria-label={t[10]}>
       <div className="services-category-heading"><h2>{t[10]}</h2><div className="services-category-arrows"><button type="button" aria-label={t[10] + ' ←'} onClick={() => categoryCarousel.current?.scrollBy({ left: -360, behavior: 'smooth' })}>←</button><button type="button" aria-label={t[10] + ' →'} onClick={() => categoryCarousel.current?.scrollBy({ left: 360, behavior: 'smooth' })}>→</button></div></div>
       <div className="services-category-track" ref={categoryCarousel}>
-        {[{ value: '', label: t[11], count: listings.length }, ...categories.map(category => ({ value: category, label: categoryLabel(category), count: listings.filter(s => s.category === category).length }))].map((category, index) => <button type="button" key={category.value} className="services-category-tile" aria-pressed={filters.category === category.value} onClick={() => update('category', category.value)}><span className="services-category-icon" aria-hidden="true">{index === 0 ? '▦' : '◇'}</span><span className="services-category-name">{category.label}</span><span className="services-category-count">{category.count}</span></button>)}
+        {[0, 1, 2].map(copy => <div key={copy} className="services-category-group" aria-hidden={copy !== 1 ? true : undefined}>{[{ value: '', label: t[11], count: listings.length }, ...categories.map(category => ({ value: category, label: categoryLabel(category), count: listings.filter(s => s.category === category).length }))].map((category, index) => <button type="button" key={category.value} tabIndex={copy === 1 ? 0 : -1} className="services-category-tile" aria-pressed={filters.category === category.value} onClick={() => update('category', category.value)}><span className="services-category-icon" aria-hidden="true">{index === 0 ? '▦' : '◇'}</span><span className="services-category-name">{category.label}</span><span className="services-category-count">{category.count}</span></button>)}</div>)}
       </div>
     </section>}
     <section className="services-filters" aria-label={t[7]}>

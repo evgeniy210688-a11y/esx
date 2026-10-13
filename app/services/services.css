@@ -92,3 +92,7 @@
 .services-category-track{scroll-snap-type:none;cursor:grab;touch-action:pan-x pan-y;user-select:none}
 .services-category-track .services-category-tile{cursor:grab}
 .services-category-track[data-dragging=true],.services-category-track[data-dragging=true] .services-category-tile{cursor:grabbing}
+
+.services-category-group{display:flex;flex:0 0 auto;min-width:100%;gap:12px;justify-content:space-around}
+.services-category-track{position:relative;scrollbar-width:none}
+.services-category-track::-webkit-scrollbar{display:none}
