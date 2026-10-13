@@ -88,3 +88,7 @@
 .services-category-track .services-category-tile[aria-pressed=true]{border-color:#75d6ce;background:linear-gradient(145deg,#1b464d,#12333e);box-shadow:inset 0 0 0 1px #75d6ce}
 @media(max-width:540px){.services-category-track .services-category-tile{flex-basis:156px;min-height:126px}}
 @media(prefers-reduced-motion:reduce){.services-category-track{scroll-behavior:auto}.services-category-track .services-category-tile{transition:none}}
+
+.services-category-track{scroll-snap-type:none;cursor:grab;touch-action:pan-x pan-y;user-select:none}
+.services-category-track .services-category-tile{cursor:grab}
+.services-category-track[data-dragging=true],.services-category-track[data-dragging=true] .services-category-tile{cursor:grabbing}

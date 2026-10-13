@@ -116,6 +116,95 @@ export default function ServicesDirectory() {
   const translatedCard = (s: ServiceListing) => translations[JSON.stringify([language,s.id,s.description,s.city,s.category])];
   const [filters, setFilters] = useState(empty);
   const categoryCarousel = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const track = categoryCarousel.current;
+    const region = track?.closest('.services-category-carousel');
+    if (!track || !region) return;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let pointer: number | null = null;
+    let startX = 0;
+    let startScroll = 0;
+    let dragged = false;
+    let hovering = false;
+    let focused = false;
+    let direction = 1;
+    let resumeAt = performance.now() + 2500;
+    let previous = 0;
+    let frame = 0;
+    const pause = () => { resumeAt = performance.now() + 4000; };
+    const enter = () => { hovering = true; };
+    const leave = () => { hovering = false; pause(); };
+    const focus = (event: Event) => { focused = (event.target as HTMLElement).matches(':focus-visible'); };
+    const blur = (event: Event) => { focused = region.contains((event as FocusEvent).relatedTarget as Node | null); pause(); };
+    const down = (event: PointerEvent) => {
+      pause();
+      focused = false;
+      dragged = false;
+      if (event.pointerType !== 'mouse' || event.button !== 0) return;
+      pointer = event.pointerId;
+      startX = event.clientX;
+      startScroll = track.scrollLeft;
+    };
+    const move = (event: PointerEvent) => {
+      if (pointer !== event.pointerId) return;
+      const distance = event.clientX - startX;
+      if (!dragged && Math.abs(distance) < 5) return;
+      dragged = true;
+      track.setPointerCapture(event.pointerId);
+      track.dataset.dragging = 'true';
+      track.scrollLeft = startScroll - distance;
+      event.preventDefault();
+    };
+    const end = (event: PointerEvent) => {
+      if (pointer !== event.pointerId) return;
+      pointer = null;
+      delete track.dataset.dragging;
+      if (track.hasPointerCapture(event.pointerId)) track.releasePointerCapture(event.pointerId);
+      pause();
+    };
+    const click = (event: MouseEvent) => {
+      if (dragged && event.detail !== 0) { event.preventDefault(); event.stopPropagation(); dragged = false; }
+    };
+    const animate = (now: number) => {
+      const elapsed = previous ? Math.min(now - previous, 50) : 0;
+      previous = now;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      if (!reducedMotion.matches && !document.hidden && !hovering && !focused && pointer === null && now > resumeAt && maxScroll > 1) {
+        if (track.scrollLeft >= maxScroll - 1) direction = -1;
+        else if (track.scrollLeft <= 1) direction = 1;
+        track.scrollLeft += direction * elapsed * 0.035;
+      }
+      frame = requestAnimationFrame(animate);
+    };
+    region.addEventListener('mouseenter', enter);
+    region.addEventListener('mouseleave', leave);
+    region.addEventListener('focusin', focus);
+    region.addEventListener('focusout', blur);
+    region.addEventListener('pointerdown', pause);
+    track.addEventListener('pointerdown', down);
+    track.addEventListener('pointermove', move);
+    track.addEventListener('pointerup', end);
+    track.addEventListener('pointercancel', end);
+    track.addEventListener('lostpointercapture', end);
+    track.addEventListener('click', click, true);
+    track.addEventListener('wheel', pause, { passive: true });
+    frame = requestAnimationFrame(animate);
+    return () => {
+      cancelAnimationFrame(frame);
+      region.removeEventListener('mouseenter', enter);
+      region.removeEventListener('mouseleave', leave);
+      region.removeEventListener('focusin', focus);
+      region.removeEventListener('focusout', blur);
+      region.removeEventListener('pointerdown', pause);
+      track.removeEventListener('pointerdown', down);
+      track.removeEventListener('pointermove', move);
+      track.removeEventListener('pointerup', end);
+      track.removeEventListener('pointercancel', end);
+      track.removeEventListener('lostpointercapture', end);
+      track.removeEventListener('click', click, true);
+      track.removeEventListener('wheel', pause);
+    };
+  }, [listings.length]);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
