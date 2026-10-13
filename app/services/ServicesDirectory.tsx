@@ -66,6 +66,17 @@ type CardTranslation = {description:string;city:string;category:string};
 const managerLabels: Record<InterfaceLanguage,string> = {ru:"Есть менеджер",en:"Manager available",ko:"매니저 있음",uz:"Menejer bor",zh:"有经理",vi:"Có quản lý",tr:"Yönetici mevcut"};
 const flags = { ru: 'ru', uz: 'uz', zh: 'cn', vi: 'vn', en: 'gb', ko: 'kr', tr: 'tr' } as const;
 const searchLabels: Record<InterfaceLanguage, string> = { ru: 'Поиск по названию компании', en: 'Search by company name', ko: '업체명 검색', uz: 'Kompaniya nomi bo‘yicha qidirish', zh: '按公司名称搜索', vi: 'Tìm theo tên công ty', tr: 'Şirket adına göre ara' };
+function categoryArt(category: string): number {
+  if (!category) return 0;
+  const value = category.toLocaleLowerCase();
+  if (/виз|иммигра|visa|immig/.test(value)) return 1;
+  if (/достав|груз|логист|deliver|logist/.test(value)) return 2;
+  if (/массаж|спа|massage|spa/.test(value)) return 3;
+  if (/стомат|dent/.test(value)) return 6;
+  if (/медицин|клиник|medic|clinic/.test(value)) return 4;
+  if (/связ|интернет|internet|communicat/.test(value)) return 5;
+  return 7;
+}
 const empty: ServiceFilters = { query: '', city: '', category: '', language: '', interpreter: false, interpreterLanguage: '' };
 export default function ServicesDirectory() {
   const [language, setLanguage] = useState<InterfaceLanguage>('ru');
@@ -259,7 +270,7 @@ export default function ServicesDirectory() {
     {categories.length > 0 && <section className="services-category-carousel" aria-label={t[10]}>
       <div className="services-category-heading"><h2>{t[10]}</h2><div className="services-category-arrows"><button type="button" aria-label={t[10] + ' ←'} onClick={() => categoryCarousel.current?.scrollBy({ left: -360, behavior: 'smooth' })}>←</button><button type="button" aria-label={t[10] + ' →'} onClick={() => categoryCarousel.current?.scrollBy({ left: 360, behavior: 'smooth' })}>→</button></div></div>
       <div className="services-category-track" ref={categoryCarousel}>
-        {[0, 1, 2].map(copy => <div key={copy} className="services-category-group" aria-hidden={copy !== 1 ? true : undefined}>{[{ value: '', label: t[11], count: listings.length }, ...categories.map(category => ({ value: category, label: categoryLabel(category), count: listings.filter(s => s.category === category).length }))].map((category, index) => <button type="button" key={category.value} tabIndex={copy === 1 ? 0 : -1} className="services-category-tile" aria-pressed={filters.category === category.value} onClick={() => update('category', category.value)}><span className="services-category-icon" aria-hidden="true">{index === 0 ? '▦' : '◇'}</span><span className="services-category-name">{category.label}</span><span className="services-category-count">{category.count}</span></button>)}</div>)}
+        {[0, 1, 2].map(copy => <div key={copy} className="services-category-group" aria-hidden={copy !== 1 ? true : undefined}>{[{ value: '', label: t[11], count: listings.length }, ...categories.map(category => ({ value: category, label: categoryLabel(category), count: listings.filter(s => s.category === category).length }))].map(category => <button type="button" key={category.value} tabIndex={copy === 1 ? 0 : -1} className="services-category-tile" aria-pressed={filters.category === category.value} onClick={() => update('category', category.value)}><span className="services-category-art" aria-hidden="true" style={{ backgroundPosition: `${(categoryArt(category.value) % 4) * 100 / 3}% ${Math.floor(categoryArt(category.value) / 4) * 100}%` }} /><span className="services-category-name">{category.label}</span><span className="services-category-count">{category.count}</span></button>)}</div>)}
       </div>
     </section>}
     <section className="services-filters" aria-label={t[7]}>

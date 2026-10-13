@@ -96,3 +96,15 @@
 .services-category-group{display:flex;flex:0 0 auto;min-width:100%;gap:12px;justify-content:space-around}
 .services-category-track{position:relative;scrollbar-width:none}
 .services-category-track::-webkit-scrollbar{display:none}
+
+/* Illustrated comic panels for service categories. */
+.services-category-track{padding:6px 6px 16px}
+.services-category-track .services-category-tile{position:relative;display:flex;flex-direction:column;gap:0;padding:0;overflow:hidden;min-height:0;border:3px solid #06121e;border-radius:12px;background:#fff3d8;box-shadow:4px 5px 0 #0008;color:#102337;transition:transform .18s,border-color .18s}
+.services-category-art{display:block;width:100%;aspect-ratio:1;background-image:url('/services/category-comics.webp');background-size:400% 200%;background-repeat:no-repeat;border-bottom:3px solid #06121e;flex-shrink:0;pointer-events:none}
+.services-category-tile .services-category-name{display:flex;align-items:center;min-height:66px;padding:10px 12px;font-size:14px;font-weight:800;line-height:1.3;color:#102337;background:#fff3d8;width:100%}
+.services-category-tile .services-category-count{position:absolute;right:8px;top:8px;min-width:30px;text-align:center;background:#ffe267;color:#102337;border:2px solid #06121e;box-shadow:2px 2px 0 #06121e;padding:4px 7px;font-weight:800;transform:rotate(7deg)}
+.services-category-track .services-category-tile:hover{border-color:#75d6ce;transform:translateY(-2px)}
+.services-category-track .services-category-tile[aria-pressed=true]{background:#ffe267;border-color:#75d6ce;box-shadow:4px 5px 0 #75d6ce}
+.services-category-tile[aria-pressed=true] .services-category-name{background:#ffe267}
+.services-category-track[data-dragging=true] .services-category-tile{transform:none}
+@media(prefers-reduced-motion:reduce){.services-category-track .services-category-tile{transition:none}}
