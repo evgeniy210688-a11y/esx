@@ -130,6 +130,7 @@ export default function ServicesDirectory() {
     let direction = 1;
     let resumeAt = performance.now() + 2500;
     let previous = 0;
+    let autoPosition: number | null = null;
     let frame = 0;
     const pause = () => { resumeAt = performance.now() + 4000; };
 
@@ -172,8 +173,10 @@ export default function ServicesDirectory() {
       if (!reducedMotion.matches && !document.hidden && !region.matches(':hover') && !region.querySelector(':focus-visible') && pointer === null && now > resumeAt && maxScroll > 1) {
         if (track.scrollLeft >= maxScroll - 1) direction = -1;
         else if (track.scrollLeft <= 1) direction = 1;
-        track.scrollLeft += direction * elapsed * 0.035;
+        autoPosition = Math.max(0, Math.min(maxScroll, (autoPosition ?? track.scrollLeft) + direction * elapsed * 0.035));
+        track.scrollLeft = autoPosition;
       }
+      else { autoPosition = null; }
       frame = requestAnimationFrame(animate);
     };
 
