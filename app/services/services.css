@@ -52,12 +52,18 @@
 .services-top .services-brand{display:flex;align-items:center;gap:12px;flex-shrink:0}.services-brand img{display:block;width:80px;height:80px;object-fit:contain}@media(max-width:540px){.services-brand img{width:64px;height:64px}}
 .services-top .services-brand{background:transparent;isolation:auto}.services-brand img{mix-blend-mode:screen}
 
-/* Reserve equal preview slots, including listings without a photo or long text. */
-.services-card{font-size:16px}
-.services-card>.services-eyebrow{line-height:1.5;margin:12px 0}
-.services-card>h2{margin:18px 0;line-height:1.3}
-.services-card[data-expanded=false]>.services-eyebrow{height:3em}
-.services-card[data-expanded=false]>h2{height:2.6em}
-.services-card[data-expanded=false]>.services-eyebrow,.services-card[data-expanded=false]>h2{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
-.services-card-photo{height:144px;display:flow-root}
+/* Compact, equal-height previews with the logo beside the heading. */
+.services-card{font-size:16px;padding:22px}
+.services-card-header{display:grid;grid-template-columns:80px minmax(0,1fr);align-items:center;gap:16px;min-height:104px}
+.services-card-heading{min-width:0}
+.services-card-heading>.services-eyebrow{font-size:11px;letter-spacing:.035em;line-height:1.5;margin:0 0 8px}
+.services-card-heading>h2{font-size:20px;line-height:1.3;margin:0}
+.services-card[data-expanded=false] .services-card-header{height:104px}
+.services-card[data-expanded=false] .services-card-heading>.services-eyebrow,.services-card[data-expanded=false] .services-card-heading>h2{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.services-card-photo{width:80px;height:80px;display:flex;align-items:center;justify-content:center;border:1px solid #294157;border-radius:14px;overflow:hidden;background:#091a2b}
+.services-card .services-card-photo .company-photo{width:80px;height:80px;max-height:80px;margin:0;border-radius:0;object-fit:contain}
+.services-card-initial{font-size:32px;font-weight:700;color:#75d6ce}
 .services-card .services-description-wrap{min-height:4.95em}
+.services-card>.services-card-section{margin-top:16px;padding-top:16px}
+.services-card .services-details-toggle{margin-top:18px}
+@media(max-width:540px){.services-card{padding:20px}.services-card-header{gap:14px}}
