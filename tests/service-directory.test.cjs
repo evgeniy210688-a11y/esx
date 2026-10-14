@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const ts = require('typescript');
 const context = { exports: {}, URL };
-vm.runInNewContext(ts.transpileModule(fs.readFileSync('lib/service-directory.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText, context);
+vm.runInNewContext(ts.transpileModule(fs.readFileSync('lib/service-directory.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText, context);
 const { matchesService, safeServiceWebsite } = context.exports;
 const listing = { city: 'Сеул', category: 'Медицина', service_languages: ['ko', 'en'], has_interpreter: true, interpreter_languages: ['ru', 'uz'] };
 const empty = { city: '', category: '', language: '', interpreter: false, interpreterLanguage: '' };
@@ -34,4 +34,32 @@ test('company search matches partial names, ignores case and combines with filte
   assert.equal(matchesService(company, { ...empty, query: 'other' }), false);
   assert.equal(matchesService(company, { ...empty, query: 'accent', city: 'Пусан' }), false);
   assert.equal(matchesService(company, { ...empty, query: '   ' }), true);
+});
+
+test('a company is found by any branch city without duplicating it', () => {
+  const company = { ...listing, name: 'Company', branches: [{city: 'Пусан'}, {city: 'Сеул'}] };
+  assert.equal(matchesService(company, {...empty, city: 'Пусан'}), true);
+  assert.equal(matchesService(company, {...empty, city: 'Пусан', language: 'ru'}), false);
+  assert.equal(matchesService(company, {...empty, city: 'Инчхон'}), false);
+  assert.deepEqual(Array.from(context.exports.serviceCities(company)), ['Сеул', 'Пусан']);
+});
+test('branches require location, unique IDs and a valid optional phone', () => {
+  const valid = context.exports.validServiceBranches;
+  const branch = {id: '12345678-1234-1234-1234-123456789abc', name: 'Филиал', city: 'Пусан', address: 'Адрес 1', phone: ''};
+  assert.equal(valid([]), true);
+  assert.equal(valid([branch]), true);
+  assert.equal(valid([branch, branch]), false);
+  for (const field of ['name', 'city', 'address']) assert.equal(valid([{...branch, [field]: '  '}]), false);
+  assert.equal(valid([{...branch, phone: '+82 10-1234-5678'}]), true);
+  assert.equal(valid([{...branch, phone: '---'}]), false);
+  assert.equal(valid([{...branch, name: 'x'.repeat(201)}]), false);
+});
+
+test('Hwaseong companies and branches share one city filter', () => {
+  for (const city of ['Хвасон', 'Хвасонг', 'Хвасон, паран', 'Хвасонг, Паран', '  ХВАСОН  ']) {
+    assert.equal(context.exports.normalizeServiceCity(city), 'Хвасонг, Паран');
+    assert.equal(matchesService({...listing, city}, {...empty, city: 'Хвасонг, Паран'}), true);
+  }
+  assert.deepEqual(Array.from(context.exports.serviceCities({city: 'Хвасон', branches: [{city: 'Хвасон, паран'}]})), ['Хвасонг, Паран']);
+  assert.equal(context.exports.normalizeServiceCity('Сеул'), 'Сеул');
 });

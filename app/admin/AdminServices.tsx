@@ -7,13 +7,14 @@ import { joinServiceDescription, splitServiceDescription } from '@/lib/service-d
 import { newBusinessHours, validBusinessHours, weekdayName } from '@/lib/service-hours';
 import useAccount from '@/app/account/useAccount';
 import { supabase } from '@/lib/supabase';
-import { serviceLanguages, type ServiceListing, type ServiceLanguage } from '@/lib/service-directory';
+import BranchEditor from './BranchEditor';
+import { normalizeServiceCity, validServiceBranches, serviceLanguages, type ServiceListing, type ServiceLanguage } from '@/lib/service-directory';
 import '../services/services.css';
 import './admin.css';
 import { socialNetworks, validSocialLinks, type SocialLink } from '@/lib/service-socials';
 import { serviceCityGroups, serviceCategories } from '@/lib/service-options';
 type Listing = ServiceListing & { services?: string; status: 'draft' | 'pending' | 'published' | 'archived' };
-const blank: Listing = { id: '', name: '', description: '', city: '', category: '', address: '', phone: '', phones: [], photo: null, website: '', social_links: [], service_languages: [], has_interpreter: false, interpreter_languages: [], status: 'draft' };
+const blank: Listing = { branches: [], id: '', name: '', description: '', city: '', category: '', address: '', phone: '', phones: [], photo: null, website: '', social_links: [], service_languages: [], has_interpreter: false, interpreter_languages: [], status: 'draft' };
 const statuses = { draft: 'Черновик', pending: 'На проверке', published: 'Опубликовано', archived: 'В архиве' };
 export default function AdminServices() {
   const { user, ready } = useAccount();
@@ -56,7 +57,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
         if (!admin) { if (active) setAccess('denied'); return; }
         const all: Listing[] = [];
         for (let from = 0; ; from += 500) {
-          const result = await supabase.from('esx_service_listings').select('id,name,description,city,category,address,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages,status').order('name').order('id').range(from, from + 499);
+          const result = await supabase.from('esx_service_listings').select('id,name,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages,status').order('name').order('id').range(from, from + 499);
           if (result.error) throw result.error;
           all.push(...result.data as Listing[]);
           if (result.data.length < 500) break;
@@ -90,6 +91,8 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     if (!draft.service_languages.length || (draft.has_interpreter && !draft.interpreter_languages.length)) { setMessage('Выберите язык обслуживания и, при наличии переводчика, его язык.'); return; }
     if (![draft.name, draft.city, draft.category, draft.address].every(value => value.trim())) { setMessage('Заполните название, город, категорию и адрес.'); return; }
     if (!validBusinessHours(draft.business_hours)) { setMessage('Проверьте режим работы: выберите дни, укажите часы работы и полный обеденный перерыв внутри рабочего времени.'); return; }
+    const branches = (draft.branches ?? []).map(branch => ({ ...branch, name: branch.name.trim(), city: normalizeServiceCity(branch.city), address: branch.address.trim(), phone: branch.phone.trim() }));
+    if (!validServiceBranches(branches)) { setMessage('Для каждого филиала заполните название, город и адрес. Проверьте номер телефона.'); return; }
     const phones = companyPhones(draft).map(p => ({ ...p, number: p.number.trim() }));
     if (!validCompanyPhones(phones)) { setMessage('Проверьте номера телефонов: от 3 до 30 символов, цифры, +, пробелы, скобки и дефис.'); return; }
     const socials = (draft.social_links ?? []).map(link => ({ ...link, url: link.url.trim() }));
@@ -97,10 +100,10 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     lock.current = true; setBusy(true); setMessage('');
     const description = joinServiceDescription(draft.description, draft.services ?? '');
     if (description.length > 5000) { lock.current = false; setBusy(false); setMessage('Описание и услуги вместе должны содержать не более 5000 символов.'); return; }
-    const values = { has_manager: !!draft.has_manager, business_hours: draft.business_hours ?? null, name: draft.name.trim(), description, city: draft.city.trim(), category: draft.category.trim(), address: draft.address.trim(), phone: phones[0]?.number || null, phones, photo: companyPhotos(draft)[0] ?? null, photos: companyPhotos(draft), website: draft.website?.trim() || null, social_links: socials, service_languages: draft.service_languages, has_interpreter: draft.has_interpreter, interpreter_languages: draft.has_interpreter ? draft.interpreter_languages : [], status: draft.status };
+    const values = { branches, has_manager: !!draft.has_manager, business_hours: draft.business_hours ?? null, name: draft.name.trim(), description, city: normalizeServiceCity(draft.city), category: draft.category.trim(), address: draft.address.trim(), phone: phones[0]?.number || null, phones, photo: companyPhotos(draft)[0] ?? null, photos: companyPhotos(draft), website: draft.website?.trim() || null, social_links: socials, service_languages: draft.service_languages, has_interpreter: draft.has_interpreter, interpreter_languages: draft.has_interpreter ? draft.interpreter_languages : [], status: draft.status };
     try {
       const query = draft.id ? supabase.from('esx_service_listings').update(values).eq('id', draft.id) : supabase.from('esx_service_listings').insert(values);
-      const { data, error } = await query.select('id,name,description,city,category,address,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages,status').single();
+      const { data, error } = await query.select('id,name,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages,status').single();
       if (error) throw error;
       const saved = data as Listing;
       setDraft({ ...saved, ...splitServiceDescription(saved.description) }); setRows(current => [...current.filter(r => r.id !== saved.id), saved].sort((a,b) => a.name.localeCompare(b.name, 'ru')));
@@ -113,7 +116,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     {access === 'denied' && <section className="services-empty"><h1>Нет доступа администратора</h1><p>Этому аккаунту не назначены права управления услугами. Войдите в аккаунт администратора.</p></section>}
     {access === 'error' && <section className="services-empty"><h1>Не удалось проверить доступ</h1><button onClick={() => { setAccess('loading'); setAttempt(n => n + 1); }}>Повторить</button></section>}
     {access === 'allowed' && <><h1>Панель управления</h1><div className="admin-summary">{Object.entries(statuses).map(([status, label]) => <div key={status}><strong>{rows.filter(row => row.status === status).length}</strong><span>{label}</span></div>)}</div><h2>Компании и услуги</h2><p>Добавляйте организации, редактируйте карточки и выбирайте, что показывать в справочнике.</p><div className="admin-columns"><section aria-label="Список организаций" className="services-card"><button disabled={busy} onClick={() => { if (draft.name && !window.confirm('Открыть новую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...blank }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}>+ Добавить компанию</button>{!rows.length && <p>Организаций пока нет.</p>}<ul className="admin-list">{rows.map(row => <li key={row.id}><button disabled={busy} aria-pressed={draft.id === row.id} onClick={() => { if (draft.name && !window.confirm('Открыть другую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...row, ...splitServiceDescription(row.description) }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}><strong>{row.name}</strong><span>{row.city} · {statuses[row.status]}</span></button></li>)}</ul></section>
-    <form id="company-form" ref={form} onSubmit={save} className="services-card admin-form"><h2>{draft.id ? 'Редактирование карточки' : 'Новая организация'}</h2><fieldset disabled={busy} className="admin-fields">
+    <form id="company-form" ref={form} onSubmit={save} className="services-card admin-form"><h2>{draft.id ? 'Редактирование карточки' : 'Новая организация'}</h2><nav aria-label="Разделы настроек компании"><a href="#company-branches">Филиалы</a></nav><fieldset disabled={busy} className="admin-fields">
       <label>Название<input required maxLength={200} value={draft.name} onChange={e => change('name', e.target.value)} /></label>
       <label>Описание<textarea maxLength={5000} rows={4} value={draft.description} onChange={e => change('description', e.target.value)} /></label>
       <label>Услуги<textarea maxLength={5000} rows={6} aria-describedby="services-list-hint" value={draft.services ?? ''} onChange={e => change('services', e.target.value)} placeholder={"Письменные переводы\nУстные переводы\nУслуги юриста"} /></label><p id="services-list-hint">Каждая услуга — с новой строки. Круглые маркеры добавляются автоматически.</p>
@@ -126,6 +129,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
       <label>Город<input required list="service-city-options" autoComplete="off" value={draft.city} onChange={e => change('city', e.target.value)} placeholder="Начните вводить город" /><datalist id="service-city-options">{serviceCityGroups.flatMap(group => group.cities.map(city => <option key={city.value} value={city.value}>{city.label} · {group.region}</option>))}</datalist></label>
       <label>Категория<input required list="service-category-options" autoComplete="off" value={draft.category} onChange={e => change('category', e.target.value)} placeholder="Начните вводить услугу или категорию" /><datalist id="service-category-options">{serviceCategories.map(category => <option key={category} value={category} />)}</datalist></label>
       <label>Адрес<input required maxLength={500} value={draft.address} onChange={e => change('address', e.target.value)} /></label>
+      <BranchEditor branches={draft.branches ?? []} onChange={branches => change('branches', branches)} />
       <fieldset className="admin-socials"><legend>Телефоны компании</legend>{companyPhones(draft).map((phone,index) => <div className="admin-social-row" key={index}><label>Тип телефона {index + 1}<select value={phone.type} onChange={e => changePhones(companyPhones(draft).map((p,i) => i === index ? { ...p, type: e.target.value as CompanyPhone['type'] } : p))}><option value="office">Офисный</option><option value="mobile">Мобильный</option><option value="other">Другой / не указан</option></select></label><label>Номер телефона {index + 1}<input type="tel" required maxLength={30} value={phone.number} onChange={e => changePhones(companyPhones(draft).map((p,i) => i === index ? { ...p, number: e.target.value } : p))} placeholder="+82 10-1234-5678" /></label><button type="button" onClick={() => changePhones(companyPhones(draft).filter((_,i) => i !== index))}>Убрать телефон {index + 1}</button></div>)}<button type="button" disabled={companyPhones(draft).length >= 5} onClick={() => changePhones([...companyPhones(draft), { type: 'office', number: '' }])}>+ Добавить телефон</button><p>До 5 номеров. Для каждого выберите тип.</p></fieldset>
       <fieldset className="admin-socials"><legend>Фото компании ({companyPhotos(draft).length}/3)</legend><p>До 3 фото: JPG, PNG или WebP, до 10 МБ каждое. Первое фото — обложка карточки.</p><div className="admin-photo-grid">{companyPhotos(draft).map((photo, index) => <div key={index}><Image className="company-photo" src={photo} alt={"Фото компании " + (index + 1)} width={800} height={600} unoptimized /><button type="button" onClick={() => { const photos = companyPhotos(draft).filter((_, i) => i !== index); setDraft(d => ({ ...d, photos, photo: photos[0] ?? null })); }}>Убрать фото {index + 1}</button></div>)}</div><label>Добавить фото<input type="file" multiple disabled={companyPhotos(draft).length >= 3} accept="image/jpeg,image/png,image/webp" onChange={e => { const files = Array.from(e.target.files ?? []); e.target.value = ''; if (files.length) void uploadPhoto(files); }} /></label></fieldset>
       <label>Сайт<input type="url" pattern="https?://.*" value={draft.website ?? ''} onChange={e => change('website', e.target.value)} placeholder="https://example.com" /></label>

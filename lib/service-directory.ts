@@ -3,10 +3,26 @@ import type { CompanyPhone } from './service-media';
 import type { SocialLink } from './service-socials';
 export const serviceLanguages = { ru: 'Русский', uz: 'Узбекский', zh: 'Китайский', vi: 'Вьетнамский', en: 'Английский', ko: 'Корейский' } as const;
 export type ServiceLanguage = keyof typeof serviceLanguages;
-export type ServiceListing = { has_manager?: boolean; business_hours?: BusinessHours | null; id: string; name: string; description: string; city: string; category: string; address: string; phone: string | null; phones?: CompanyPhone[]; photo?: string | null; photos?: string[]; website: string | null; social_links?: SocialLink[]; service_languages: ServiceLanguage[]; has_interpreter: boolean; interpreter_languages: ServiceLanguage[] };
+export type ServiceBranch = { id: string; name: string; city: string; address: string; phone: string };
+export function validServiceBranches(branches: ServiceBranch[]) {
+  return new Set(branches.map(b => b.id)).size === branches.length && branches.every(b =>
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(b.id) &&
+    b.name.trim().length > 0 && b.name.trim().length <= 200 &&
+    b.city.trim().length > 0 && b.city.trim().length <= 100 &&
+    b.address.trim().length > 0 && b.address.trim().length <= 500 &&
+    (!b.phone.trim() || (/^\+?[0-9 ()-]{3,30}$/.test(b.phone.trim()) && b.phone.replace(/\D/g, '').length >= 3)));
+}
+export function normalizeServiceCity(value: string) {
+  const city = value.normalize('NFKC').trim().replace(/\s+/g, ' ');
+  return /^хвасонг?(?:\s*,\s*паран)?$/i.test(city) ? 'Хвасонг, Паран' : city;
+}
+export function serviceCities(listing: { city: string; branches?: ServiceBranch[] }) {
+  return [...new Set([listing.city, ...(listing.branches ?? []).map(branch => branch.city)].map(normalizeServiceCity))];
+}
+export type ServiceListing = { branches?: ServiceBranch[]; has_manager?: boolean; business_hours?: BusinessHours | null; id: string; name: string; description: string; city: string; category: string; address: string; phone: string | null; phones?: CompanyPhone[]; photo?: string | null; photos?: string[]; website: string | null; social_links?: SocialLink[]; service_languages: ServiceLanguage[]; has_interpreter: boolean; interpreter_languages: ServiceLanguage[] };
 export type ServiceFilters = { query?: string; city: string; category: string; language: string; interpreter: boolean; interpreterLanguage: string };
 export function matchesService(s: ServiceListing, f: ServiceFilters) {
-  return (!f.query?.trim() || s.name.normalize('NFKC').toLowerCase().includes(f.query.trim().normalize('NFKC').toLowerCase())) && (!f.city || s.city === f.city) && (!f.category || s.category === f.category)
+  return (!f.query?.trim() || s.name.normalize('NFKC').toLowerCase().includes(f.query.trim().normalize('NFKC').toLowerCase())) && (!f.city || serviceCities(s).includes(normalizeServiceCity(f.city))) && (!f.category || s.category === f.category)
     && (!f.language || s.service_languages.some(l => l === f.language))
     && (!f.interpreter || s.has_interpreter)
     && (!f.interpreterLanguage || (s.has_interpreter && s.interpreter_languages.some(l => l === f.interpreterLanguage)));
