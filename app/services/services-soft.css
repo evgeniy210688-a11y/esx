@@ -53,3 +53,7 @@
 .services-directory .services-city-menu button:hover,.services-directory .services-city-menu button:focus-visible{background:#cedff8;outline-offset:-2px}
 .services-directory .services-city-menu button[aria-checked=true]{background:linear-gradient(120deg,#128fff,#1554e9,#1738c7);color:white;box-shadow:0 3px 9px #275de933,inset 0 1px 2px #ffffff80}
 .services-directory .services-main>.services-category-carousel{width:100%;max-width:none}
+/* Keep repeated category groups tightly packed at every viewport width. */
+.services-directory .services-category-group{min-width:0;width:max-content;flex:0 0 auto}
+.services-directory .services-category-track{gap:18px}
+@media(max-width:600px){.services-directory .services-category-track{gap:14px}}
