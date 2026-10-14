@@ -11,6 +11,7 @@ import { normalizeServiceCity, serviceCities, matchesService, safeServiceWebsite
 import './services.css';
 import './services-light.css';
 import './services-soft.css';
+import ServiceFilterPicker from './ServiceFilterPicker';
 import { interfaceLanguages, serviceLabels, type InterfaceLanguage } from './serviceLabels';
 import { socialNetworks, validSocialLinks } from '@/lib/service-socials';
 const copyLabels: Record<InterfaceLanguage, [string, string]> = {
@@ -93,7 +94,7 @@ export default function ServicesDirectory() {
   }, []);
   function chooseLanguage(value: InterfaceLanguage) { setLanguage(value); try { localStorage.setItem('esx-services-language', value); } catch {} }
   const languageName = (code: string) => new Intl.DisplayNames([language], { type: 'language' }).of(code) ?? code;
-  const languageOptions = Object.keys(serviceLanguages).map(code => <option key={code} value={code}>{languageName(code)}</option>);
+  const languageOptions = Object.keys(serviceLanguages).map(code => ({value: code, label: languageName(code)}));
 
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
   const expandedCard = useRef<HTMLElement>(null);
@@ -289,10 +290,10 @@ export default function ServicesDirectory() {
     </section>}
     <section className="services-filters" aria-label={t[7]}>
       <label className="services-company-search">{searchLabels[language]}<input type="search" value={filters.query ?? ''} onChange={e => update('query', e.target.value)} placeholder={searchLabels[language]} /></label>
-      <label>{t[8]}<select value={filters.city} onChange={e => update('city', e.target.value)}><option value="">{t[9]}</option>{cities.map(city => <option key={city} value={city}>{city === 'Хвасонг, Паран' ? city : listings.map(s => s.city === city ? translatedCard(s)?.city : undefined).find(Boolean) ?? city}</option>)}</select></label>
-      <label>{t[10]}<input type="search" list="directory-category-suggestions" autoComplete="off" value={filters.category} onChange={e => update('category', e.target.value)} placeholder={t[11]} /><datalist id="directory-category-suggestions">{categories.map(category => <option key={category} value={categoryLabel(category)} />)}</datalist></label>
-      <label>{t[12]}<select value={filters.language} onChange={e => update('language', e.target.value)}><option value="">{t[13]}</option>{languageOptions}</select></label>
-      <label>{t[14]}<select value={filters.interpreterLanguage} onChange={e => update('interpreterLanguage', e.target.value)}><option value="">{t[13]}</option>{languageOptions}</select></label>
+      <ServiceFilterPicker label={t[8]} value={filters.city} onChange={value => update('city', value)} options={[{value: '', label: t[9]}, ...cities.map(city => ({value: city, label: city === 'Хвасонг, Паран' ? city : listings.map(s => s.city === city ? translatedCard(s)?.city : undefined).find(Boolean) ?? city}))]} />
+      <ServiceFilterPicker label={t[10]} value={filters.category} onChange={value => update('category', value)} options={[{value: '', label: t[11]}, ...categories.map(category => ({value: category, label: categoryLabel(category)}))]} />
+      <ServiceFilterPicker label={t[12]} value={filters.language} onChange={value => update('language', value)} options={[{value: '', label: t[13]}, ...languageOptions]} />
+      <ServiceFilterPicker label={t[14]} value={filters.interpreterLanguage} onChange={value => update('interpreterLanguage', value)} options={[{value: '', label: t[13]}, ...languageOptions]} />
       <label className="services-check"><input type="checkbox" checked={filters.interpreter} onChange={e => update('interpreter', e.target.checked)} />{t[15]}</label>
       <button type="button" onClick={() => setFilters(empty)}>{t[16]}</button>
     </section>

@@ -38,3 +38,18 @@
 .services-directory .services-check input{accent-color:#1554e9}
 .services-directory :focus-visible{outline:3px solid #1554e9;outline-offset:4px}
 @media(max-width:600px){.services-directory .services-filters{padding:22px;gap:20px}.services-directory .services-card{padding:24px}.services-directory .services-category-group{gap:14px}.services-directory .services-intro h1{font-size:36px}}
+/* Fill the available screen width with responsive company columns. */
+.services-directory .services-main{max-width:none;width:100%}
+.services-directory .services-main>.services-intro{margin-left:auto;margin-right:auto}
+.services-directory .services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:22px;max-width:none;width:100%;margin:24px auto;align-items:start}
+.services-directory .services-grid>.services-card{width:100%;min-width:0}
+.services-directory .services-city-picker{position:relative;display:flex;flex-direction:column;gap:9px;min-width:0;font-size:13px;color:#445d7f}
+.services-directory .services-city-picker:has(.services-city-menu){z-index:30}
+.services-directory .services-city-picker button{grid-column:auto;justify-self:stretch;display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;font:inherit;color:#243f64;border-radius:18px}
+.services-directory .services-city-picker .services-city-trigger{min-height:52px;background:linear-gradient(140deg,#e8f0fe,#e0e9f8);border:1px solid #ffffffa0;box-shadow:inset 3px 3px 7px #adbed748,inset -3px -3px 7px #ffffffb3,3px 4px 9px #b0c0d833;padding:12px 18px;font-weight:600}
+.services-directory .services-city-dismiss{position:fixed;inset:0;z-index:1}
+.services-directory .services-city-menu{position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:2;padding:8px;border:1px solid #fff;border-radius:22px;background:linear-gradient(145deg,#f0f5ff,#dde8fa);box-shadow:8px 12px 28px #819bc15c,inset 1px 1px 2px #fff;max-height:280px;overflow-y:auto}
+.services-directory .services-city-menu button{min-height:42px;padding:10px 14px;border:0;background:transparent;box-shadow:none;border-radius:14px;margin:2px 0}
+.services-directory .services-city-menu button:hover,.services-directory .services-city-menu button:focus-visible{background:#cedff8;outline-offset:-2px}
+.services-directory .services-city-menu button[aria-checked=true]{background:linear-gradient(120deg,#128fff,#1554e9,#1738c7);color:white;box-shadow:0 3px 9px #275de933,inset 0 1px 2px #ffffff80}
+.services-directory .services-main>.services-category-carousel{width:100%;max-width:none}
