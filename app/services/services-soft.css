@@ -1,0 +1,40 @@
+/* Sculpted ice-blue surfaces inspired by the approved visual reference. */
+.services-directory{--soft-surface:#e4ecfa;--soft-ink:#182f53;--soft-muted:#526889;--soft-shadow:10px 10px 24px #a9bbd766,-10px -10px 24px #ffffffb3;background:#e4ecfa;background-image:radial-gradient(ellipse at 15% 0,#f5f8ff 0,transparent 45%),radial-gradient(ellipse at 95% 45%,#d5e3fc 0,transparent 48%);color:var(--soft-ink)}
+.services-directory .services-intro:before{background:linear-gradient(135deg,#eef4ff,#d4e2fa);border:2px solid #ffffffbb;box-shadow:inset 2px 3px 6px #fff,12px 18px 35px #9aaed14d}
+.services-directory .services-intro:after{background:linear-gradient(135deg,#f2f6ff,#dce8fc);border:1px solid #ffffffcc;box-shadow:inset 2px 3px 8px #fff,8px 14px 24px #9aaed140}
+.services-directory .services-intro>.services-eyebrow{background:#e8effb;border:1px solid #ffffffd0;box-shadow:5px 5px 12px #a9bbd755,-5px -5px 12px #ffffffa0;color:#526889}
+.services-directory .services-intro h1{font-weight:600;color:#142744}
+.services-directory .services-intro>p:last-child{color:var(--soft-muted)}
+.services-directory .services-filters,.services-directory .services-card,.services-directory .services-business{background:linear-gradient(140deg,#edf3ff,#dfe8f8);border:1px solid #ffffffb3;box-shadow:var(--soft-shadow),inset 1px 1px 2px #fff;border-radius:30px}
+.services-directory .services-filters{padding:30px;gap:24px}
+.services-directory .services-filters label{color:#445d7f}
+.services-directory .services-filters input[type=search],.services-directory .services-filters select{background:linear-gradient(140deg,#e8f0fe,#e0e9f8);border:1px solid #ffffffa0;border-radius:18px;min-height:52px;box-shadow:inset 3px 3px 7px #adbed748,inset -3px -3px 7px #ffffffb3,3px 4px 9px #b0c0d833;color:#243f64}
+.services-directory .services-filters input::placeholder{color:#607595}
+.services-directory .services-language-picker summary,.services-directory .services-category-arrows button{background:linear-gradient(145deg,#f0f5ff,#dce6f7);border:1px solid #ffffffc7;box-shadow:5px 5px 12px #a6b9d55c,-4px -4px 10px #ffffffb3,inset 1px 1px 2px #fff;color:#294d7c}
+.services-directory .services-category-arrows button{border-radius:14px;width:42px;height:42px}
+.services-directory .services-category-track{padding:12px 10px 24px}
+.services-directory .services-category-group{gap:18px}
+.services-directory .services-category-track .services-category-tile{background:linear-gradient(145deg,#eef4ff,#dce6f7);border:1px solid #ffffffc7;border-radius:26px;box-shadow:6px 8px 16px #a2b5d355,-4px -4px 12px #ffffffa6,inset 1px 1px 2px #fff}
+.services-directory .services-category-art{border-color:#ffffff8c}
+.services-directory .services-category-tile .services-category-count{background:#eef4ff;color:#294d7c;border:1px solid #ffffffcf;box-shadow:2px 3px 7px #7d97bd40}
+.services-directory .services-category-track .services-category-tile[aria-pressed=true],.services-directory .services-filters button,.services-directory .services-business a{background:linear-gradient(120deg,#128fff 0%,#1554e9 48%,#1738c7 100%);border:1px solid #83bbff;color:#fff;box-shadow:0 8px 18px #275de94d,inset 0 2px 3px #ffffff80,inset 0 -2px 4px #12389666}
+.services-directory .services-filters button,.services-directory .services-business a{min-height:48px;border-radius:26px;font-weight:600}
+.services-directory .services-category-tile[aria-pressed=true] .services-category-count{background:#2555de;color:#fff}
+.services-directory .services-card{padding:26px}
+.services-directory .services-card-photo{background:#e7effc;border:1px solid #fff;box-shadow:5px 5px 12px #a9bbd75c,-4px -4px 10px #ffffffa0;border-radius:19px}
+.services-directory .services-card .services-card-photo .company-photo{background:#edf3fc}
+.services-directory .services-card-heading>h2{color:#203757}
+.services-directory .services-card-heading>.services-eyebrow{color:#536f98}
+.services-directory .services-card-section{border-color:#bccce366;box-shadow:0 -1px 0 #ffffff80}
+.services-directory .services-card-section h3{color:#2e486a}
+.services-directory .services-card-section .services-description,.services-directory .services-item-list,.services-directory .services-card .services-interpreter,.services-directory .services-hours p,.services-directory .services-card address{color:#526889}
+.services-directory .services-card .services-details-toggle{background:linear-gradient(145deg,#f0f5ff,#d9e4f7);border:1px solid #ffffffbf;box-shadow:4px 5px 11px #a4b7d359,-4px -4px 10px #ffffffa0,inset 1px 1px 2px #fff;color:#1d4d9c;border-radius:18px;min-height:48px;font-weight:600}
+.services-directory .services-card .services-details-toggle:hover{background:linear-gradient(145deg,#e7f0ff,#cfdef6);box-shadow:inset 3px 3px 7px #9eb4d44d,inset -3px -3px 7px #fff}
+.services-directory .services-tags span{background:#e0eafb;color:#355b8f;box-shadow:inset 2px 2px 4px #acbdd63b,inset -2px -2px 4px #ffffffa0}
+.services-directory .services-note,.services-directory .services-footer{color:#587092}
+.services-directory .services-business h2{color:#203757}
+.services-directory .services-top{border-bottom-color:#b8c9e34d}
+.services-directory .services-map-links a{background:#e8f0fe;border-color:#fff;box-shadow:3px 4px 8px #a4b7d34d;color:#24589e}
+.services-directory .services-check input{accent-color:#1554e9}
+.services-directory :focus-visible{outline:3px solid #1554e9;outline-offset:4px}
+@media(max-width:600px){.services-directory .services-filters{padding:22px;gap:20px}.services-directory .services-card{padding:24px}.services-directory .services-category-group{gap:14px}.services-directory .services-intro h1{font-size:36px}}
