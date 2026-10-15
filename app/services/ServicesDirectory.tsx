@@ -290,7 +290,7 @@ export default function ServicesDirectory() {
     </section>}
     <section className="services-filters" aria-label={t[7]}>
       <label className="services-company-search">{searchLabels[language]}<input type="search" value={filters.query ?? ''} onChange={e => update('query', e.target.value)} placeholder={searchLabels[language]} /></label>
-      <ServiceFilterPicker label={t[8]} value={filters.city} onChange={value => update('city', value)} options={[{value: '', label: t[9]}, ...cities.map(city => ({value: city, label: city === 'Хвасонг, Паран' ? city : listings.map(s => s.city === city ? translatedCard(s)?.city : undefined).find(Boolean) ?? city}))]} />
+      <ServiceFilterPicker label={t[8]} value={filters.city} onChange={value => update('city', value)} options={[{value: '', label: t[9]}, ...cities.map(city => ({value: city, label: city === 'Хвасонг, Паран' ? (language === 'ko' ? '화성, 발안' : city) : listings.map(s => s.city === city ? translatedCard(s)?.city : undefined).find(Boolean) ?? city}))]} />
       <ServiceFilterPicker label={t[10]} value={filters.category} onChange={value => update('category', value)} options={[{value: '', label: t[11]}, ...categories.map(category => ({value: category, label: categoryLabel(category)}))]} />
       <ServiceFilterPicker label={t[12]} value={filters.language} onChange={value => update('language', value)} options={[{value: '', label: t[13]}, ...languageOptions]} />
       <ServiceFilterPicker label={t[14]} value={filters.interpreterLanguage} onChange={value => update('interpreterLanguage', value)} options={[{value: '', label: t[13]}, ...languageOptions]} />
