@@ -1,10 +1,13 @@
-export type BusinessHours = { days: number[]; opens: string; closes: string; lunchStart: string; lunchEnd: string };
+export type BusinessHours = { alwaysOpen?: boolean; days: number[]; opens: string; closes: string; lunchStart: string; lunchEnd: string };
 export function newBusinessHours(): BusinessHours { return {days:[0,1,2,3,4],opens:'09:00',closes:'18:00',lunchStart:'',lunchEnd:''}; }
+export function roundTheClockHours(): BusinessHours { return { alwaysOpen: true, days: [0,1,2,3,4,5,6], opens: '00:00', closes: '00:00', lunchStart: '', lunchEnd: '' }; }
+export const alwaysOpenLabels: Record<string,string> = { ru: 'Круглосуточно, без выходных', en: 'Open 24/7', ko: '연중무휴 24시간 영업', uz: 'Har kuni, 24 soat', zh: '全天24小时营业，全年无休', vi: 'Mở cửa 24/7', tr: '7/24 açık' };
 const time=/^([01]\d|2[0-3]):[0-5]\d$/;
 const minutes=(s:string)=>Number(s.slice(0,2))*60+Number(s.slice(3));
 export function validBusinessHours(h: BusinessHours | null | undefined): boolean {
  if(h==null)return true;
  if(!Array.isArray(h.days)||!h.days.length||h.days.length>7||new Set(h.days).size!==h.days.length||!h.days.every(d=>Number.isInteger(d)&&d>=0&&d<7))return false;
+ if(h.alwaysOpen === true)return h.days.length===7 && h.opens==='00:00' && h.closes==='00:00' && h.lunchStart==='' && h.lunchEnd==='';
  if(!time.test(h.opens)||!time.test(h.closes)||h.opens===h.closes)return false;
  if(h.lunchStart===''&&h.lunchEnd==='')return true;
  if(!time.test(h.lunchStart)||!time.test(h.lunchEnd))return false;
