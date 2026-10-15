@@ -17,9 +17,17 @@ export function normalizeServiceCity(value: string) {
   return /^хвасонг?(?:\s*,\s*паран)?$/i.test(city) ? 'Хвасонг, Паран' : city;
 }
 export function serviceCities(listing: { city: string; branches?: ServiceBranch[] }) {
-  return [...new Set([listing.city, ...(listing.branches ?? []).map(branch => branch.city)].map(normalizeServiceCity))];
+  return [...new Set([listing.city, ...(listing.branches ?? []).map(branch => branch.city)].map(normalizeServiceCity).filter(Boolean))];
 }
-export type ServiceListing = { branches?: ServiceBranch[]; has_manager?: boolean; business_hours?: BusinessHours | null; id: string; name: string; description: string; city: string; category: string; address: string; phone: string | null; phones?: CompanyPhone[]; photo?: string | null; photos?: string[]; website: string | null; social_links?: SocialLink[]; service_languages: ServiceLanguage[]; has_interpreter: boolean; interpreter_languages: ServiceLanguage[] };
+export type ListingKind = 'company' | 'manager' | 'interpreter';
+export const listingKindLabels = { company: 'Компания', manager: 'Менеджер', interpreter: 'Переводчик' } as const;
+export function isPersonalListing(listing: { listing_kind?: ListingKind }) {
+  return listing.listing_kind === 'manager' || listing.listing_kind === 'interpreter';
+}
+export type ServiceListing = { listing_kind?: ListingKind; branches?: ServiceBranch[]; has_manager?: boolean; business_hours?: BusinessHours | null; id: string; name: string; description: string; city: string; category: string; address: string; phone: string | null; phones?: CompanyPhone[]; photo?: string | null; photos?: string[]; website: string | null; social_links?: SocialLink[]; service_languages: ServiceLanguage[]; has_interpreter: boolean; interpreter_languages: ServiceLanguage[] };
+export function validListingIdentity(listing: Pick<ServiceListing, 'listing_kind' | 'name' | 'city' | 'category' | 'address'>) {
+  return (isPersonalListing(listing) ? [listing.name] : [listing.name, listing.city, listing.category, listing.address]).every(value => value.trim().length > 0);
+}
 export type ServiceFilters = { query?: string; city: string; category: string; language: string; interpreter: boolean; interpreterLanguage: string };
 export function matchesService(s: ServiceListing, f: ServiceFilters) {
   return (!f.query?.trim() || s.name.normalize('NFKC').toLowerCase().includes(f.query.trim().normalize('NFKC').toLowerCase())) && (!f.city || serviceCities(s).includes(normalizeServiceCity(f.city))) && (!f.category || s.category === f.category)

@@ -63,3 +63,23 @@ test('Hwaseong companies and branches share one city filter', () => {
   assert.deepEqual(Array.from(context.exports.serviceCities({city: 'Хвасон', branches: [{city: 'Хвасон, паран'}]})), ['Хвасонг, Паран']);
   assert.equal(context.exports.normalizeServiceCity('Сеул'), 'Сеул');
 });
+
+test('personal cards need a name but not a company location or category', () => {
+  const minimal = { name: 'Анна', city: '', category: '', address: '' };
+  for (const listing_kind of ['manager', 'interpreter']) {
+    assert.equal(context.exports.validListingIdentity({...minimal, listing_kind}), true);
+    assert.equal(context.exports.validListingIdentity({...minimal, listing_kind, name: '  '}), false);
+  }
+  assert.equal(context.exports.validListingIdentity(minimal), false);
+  assert.equal(context.exports.validListingIdentity({...minimal, listing_kind: 'company'}), false);
+  assert.equal(context.exports.validListingIdentity({...minimal, city: 'Сеул', category: 'Услуги', address: 'Адрес'}), true);
+});
+test('personal cards without a city do not create an empty city filter', () => {
+  const person = {...listing, listing_kind: 'interpreter', name: 'Анна', city: '', service_languages: [], interpreter_languages: []};
+  assert.deepEqual(Array.from(context.exports.serviceCities(person)), []);
+  assert.equal(matchesService(person, empty), true);
+  assert.equal(matchesService(person, {...empty, interpreter: true}), true);
+  assert.equal(matchesService(person, {...empty, city: 'Сеул'}), false);
+  assert.equal(matchesService(person, {...empty, interpreterLanguage: 'ru'}), false);
+  assert.equal(context.exports.isPersonalListing({has_manager: true}), false);
+});
