@@ -288,6 +288,44 @@ export default function ServicesDirectory() {
   const categoryLabel = (category: string) => listings.map(s => s.category === category ? translatedCard(s)?.category : undefined).find(Boolean) ?? category;
   const categoryQuery = filters.category.trim().normalize('NFKC').toLocaleLowerCase();
   const visible = listings.filter(s => matchesService(s, { ...filters, category: '' }) && (!categoryQuery || [s.category, categoryLabel(s.category)].some(value => value.normalize('NFKC').toLocaleLowerCase().includes(categoryQuery))));
+  const specialistIds = visible.filter(isPersonalListing).map(s => s.id).join(',');
+  useEffect(() => {
+    const track = specialistCarousel.current;
+    const region = track?.closest('.services-listing-group');
+    if (!track || !region) return;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let pauseUntil = performance.now() + 3500;
+    let touching = false;
+    const pause = () => { pauseUntil = performance.now() + 5000; };
+    const down = () => { touching = true; pause(); };
+    const up = () => { touching = false; pause(); };
+    const timer = window.setInterval(() => {
+      if (document.hidden || reducedMotion.matches || touching || performance.now() < pauseUntil || region.matches(':hover') || region.querySelector(':focus-visible') || track.querySelector('[data-expanded="true"]')) return;
+      const max = track.scrollWidth - track.clientWidth;
+      if (max <= 1) return;
+      const card = track.querySelector<HTMLElement>('.services-card');
+      const step = (card?.getBoundingClientRect().width ?? 320) + 22;
+      track.scrollTo({ left: track.scrollLeft >= max - 2 ? 0 : Math.min(max, track.scrollLeft + step), behavior: 'smooth' });
+      pauseUntil = performance.now() + 3500;
+    }, 500);
+    region.addEventListener('pointerdown', down);
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
+    region.addEventListener('wheel', pause, { passive: true });
+    region.addEventListener('keydown', pause);
+    region.addEventListener('mouseleave', pause);
+    region.addEventListener('focusout', pause);
+    return () => {
+      clearInterval(timer);
+      region.removeEventListener('pointerdown', down);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
+      region.removeEventListener('wheel', pause);
+      region.removeEventListener('keydown', pause);
+      region.removeEventListener('mouseleave', pause);
+      region.removeEventListener('focusout', pause);
+    };
+  }, [specialistIds, status]);
   const cities = [...new Set(listings.flatMap(s => serviceCities(s)))].sort((a,b) => a.localeCompare(b, 'ru'));
   const categories = [...new Set(listings.map(s => s.category))].sort((a,b) => a.localeCompare(b, 'ru'));
   return <div className="services-page services-directory" lang={language}>
