@@ -57,3 +57,21 @@
 .services-directory .services-category-group{display:grid;grid-auto-flow:column;grid-auto-columns:184px;justify-content:start;min-width:0;width:max-content;flex:0 0 auto}
 .services-directory .services-category-track{gap:18px}
 @media(max-width:600px){.services-directory .services-category-track{gap:14px}}
+
+/* Begin with the site's dark surface and gently reveal the light directory. */
+.services-directory::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #091a2b;
+  pointer-events: none;
+  animation: services-light-reveal 1.4s ease-in-out both;
+}
+@keyframes services-light-reveal {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .services-directory::after { display: none; animation: none; }
+}
