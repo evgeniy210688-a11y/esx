@@ -300,14 +300,15 @@ export default function ServicesDirectory() {
     const down = () => { touching = true; pause(); };
     const up = () => { touching = false; pause(); };
     const timer = window.setInterval(() => {
-      if (document.hidden || reducedMotion.matches || touching || performance.now() < pauseUntil || region.matches(':hover') || region.querySelector(':focus-visible') || track.querySelector('[data-expanded="true"]')) return;
+      if (document.hidden || touching || performance.now() < pauseUntil || region.querySelector(':focus-visible') || track.querySelector('[data-expanded="true"]')) return;
       const max = track.scrollWidth - track.clientWidth;
       if (max <= 1) return;
       const card = track.querySelector<HTMLElement>('.services-card');
       const step = (card?.getBoundingClientRect().width ?? 320) + 22;
-      track.scrollTo({ left: track.scrollLeft >= max - 2 ? 0 : Math.min(max, track.scrollLeft + step), behavior: 'smooth' });
+      track.scrollTo({ left: track.scrollLeft >= max - 2 ? 0 : Math.min(max, track.scrollLeft + step), behavior: reducedMotion.matches ? 'instant' : 'smooth' });
       pauseUntil = performance.now() + 3500;
     }, 500);
+    region.addEventListener('pointerenter', pause);
     region.addEventListener('pointerdown', down);
     window.addEventListener('pointerup', up);
     window.addEventListener('pointercancel', up);
@@ -317,6 +318,7 @@ export default function ServicesDirectory() {
     region.addEventListener('focusout', pause);
     return () => {
       clearInterval(timer);
+      region.removeEventListener('pointerenter', pause);
       region.removeEventListener('pointerdown', down);
       window.removeEventListener('pointerup', up);
       window.removeEventListener('pointercancel', up);
