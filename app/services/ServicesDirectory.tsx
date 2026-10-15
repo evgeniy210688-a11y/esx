@@ -144,6 +144,7 @@ export default function ServicesDirectory() {
   const translatedCard = (s: ServiceListing) => translations[JSON.stringify([language,s.id,s.description,s.city,s.category])];
   const [filters, setFilters] = useState(empty);
   const specialistCarousel = useRef<HTMLDivElement>(null);
+  const [specialistCopies, setSpecialistCopies] = useState(3);
   function scrollSpecialists(direction: number) {
     const track = specialistCarousel.current;
     if (!track) return;
@@ -293,21 +294,39 @@ export default function ServicesDirectory() {
     const track = specialistCarousel.current;
     const region = track?.closest('.services-listing-group');
     if (!track || !region) return;
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let pauseUntil = performance.now() + 3500;
+    let pauseUntil = performance.now() + 1000;
     let touching = false;
-    const pause = () => { pauseUntil = performance.now() + 5000; };
+    let previous = 0;
+    let position: number | null = null;
+    const count = specialistIds ? specialistIds.split(',').length : 0;
+    let cycle = 0;
+    const measure = () => {
+      const cards = track.querySelectorAll<HTMLElement>(':scope > .services-card');
+      cycle = count > 1 && cards[count] ? cards[count].offsetLeft - cards[0].offsetLeft : 0;
+      if (cycle > 0) setSpecialistCopies(Math.max(3, Math.ceil(track.clientWidth / cycle) + 2));
+    };
+    const observer = new ResizeObserver(measure);
+    observer.observe(track);
+    measure();
+    let frame = 0;
+    const pause = () => { pauseUntil = performance.now() + 2000; position = null; };
     const down = () => { touching = true; pause(); };
     const up = () => { touching = false; pause(); };
-    const timer = window.setInterval(() => {
-      if (document.hidden || touching || performance.now() < pauseUntil || region.querySelector(':focus-visible') || track.querySelector('[data-expanded="true"]')) return;
-      const max = track.scrollWidth - track.clientWidth;
-      if (max <= 1) return;
-      const card = track.querySelector<HTMLElement>('.services-card');
-      const step = (card?.getBoundingClientRect().width ?? 320) + 22;
-      track.scrollTo({ left: track.scrollLeft >= max - 2 ? 0 : Math.min(max, track.scrollLeft + step), behavior: reducedMotion.matches ? 'instant' : 'smooth' });
-      pauseUntil = performance.now() + 3500;
-    }, 500);
+    const animate = (now: number) => {
+      const elapsed = previous ? Math.min(now - previous, 50) : 0;
+      previous = now;
+      if (cycle > 0 && track.scrollLeft >= cycle && !touching && !track.querySelector('[data-expanded="true"]') && !region.querySelector(':focus-visible')) {
+        track.scrollLeft -= cycle;
+        if (position !== null) position -= cycle;
+      }
+      if (!document.hidden && !touching && now >= pauseUntil && !region.querySelector(':focus-visible') && !track.querySelector('[data-expanded="true"]') && cycle > 0) {
+        position = (position ?? track.scrollLeft) + elapsed * 0.035;
+        if (position >= cycle) position -= cycle;
+        track.scrollLeft = position;
+      } else { position = null; }
+      frame = requestAnimationFrame(animate);
+    };
+    frame = requestAnimationFrame(animate);
     region.addEventListener('pointerenter', pause);
     region.addEventListener('pointerdown', down);
     window.addEventListener('pointerup', up);
@@ -317,7 +336,8 @@ export default function ServicesDirectory() {
     region.addEventListener('mouseleave', pause);
     region.addEventListener('focusout', pause);
     return () => {
-      clearInterval(timer);
+      cancelAnimationFrame(frame);
+      observer.disconnect();
       region.removeEventListener('pointerenter', pause);
       region.removeEventListener('pointerdown', down);
       window.removeEventListener('pointerup', up);
@@ -327,7 +347,7 @@ export default function ServicesDirectory() {
       region.removeEventListener('mouseleave', pause);
       region.removeEventListener('focusout', pause);
     };
-  }, [specialistIds, status]);
+  }, [specialistIds, status, specialistCopies]);
   const cities = [...new Set(listings.flatMap(s => serviceCities(s)))].sort((a,b) => a.localeCompare(b, 'ru'));
   const categories = [...new Set(listings.map(s => s.category))].sort((a,b) => a.localeCompare(b, 'ru'));
   return <div className="services-page services-directory" lang={language}>
@@ -359,7 +379,7 @@ export default function ServicesDirectory() {
       const headingId = personalGroup ? 'specialists-heading' : 'companies-heading';
       return <section key={headingId} className="services-listing-group" aria-labelledby={headingId}>
         <div className="services-category-heading"><h2 id={headingId}>{title} <span className="services-group-count">{group.length}</span></h2>{personalGroup && group.length > 1 && <div className="services-category-arrows"><button type="button" aria-label={title + ' ←'} aria-controls="specialists-track" onClick={() => scrollSpecialists(-1)}>←</button><button type="button" aria-label={title + ' →'} aria-controls="specialists-track" onClick={() => scrollSpecialists(1)}>→</button></div>}</div>
-        <div id={personalGroup ? 'specialists-track' : undefined} ref={personalGroup ? specialistCarousel : undefined} className={personalGroup ? 'services-specialist-track' : 'services-grid'} tabIndex={personalGroup ? 0 : undefined} role={personalGroup ? 'region' : undefined} aria-label={personalGroup ? title : undefined}>{group.map(s => { const website = safeServiceWebsite(s.website); const expanded = expandedCardId === s.id; const photos = companyPhotos(s); const translated = translatedCard(s); const content = cardContent(translated?.description ?? s.description); const items = serviceItems(content.services); const personal = isPersonalListing(s); const subtitle = [normalizeServiceCity(translated?.city ?? s.city), personal ? '' : translated?.category ?? s.category].filter(Boolean).join(' · '); return <article key={s.id} ref={expanded ? expandedCard : null} className="services-card" data-expanded={expanded}><div className="services-card-header"><div className="services-card-photo">{photos.length > 0 ? <Image className="company-photo" src={photos[0]} alt={s.name} width={800} height={600} unoptimized /> : <span className="services-card-initial" aria-hidden="true">{s.name.trim().slice(0, 1)}</span>}</div><div className="services-card-heading"><p className="services-eyebrow" title={subtitle}>{subtitle}</p><h2 title={s.name}>{s.name}</h2>{personal && <p className="services-person-role">{translated?.category?.trim() || s.category.trim() || personRoleLabels[language][s.listing_kind as 'manager' | 'interpreter']}</p>}</div></div>{(!personal || content.description.trim()) && <section className="services-card-section"><h3>{sectionLabels[language][0]}</h3><SmoothDescription text={content.description} expanded={expanded} />{!translated && <p role="status">{translationLabels[language][translationStatus === 'error' ? 1 : 0]}</p>}</section>}<div id={`service-details-${s.id}`} className="services-reveal" aria-hidden={!expanded} inert={!expanded}><div className="services-reveal-inner">{photos.length > 1 && <div className="services-photo-gallery">{photos.slice(1).map((photo, index) => <Image key={index} src={photo} alt={s.name + " — " + (index + 2)} width={800} height={600} unoptimized />)}</div>}{items.length > 0 && <section className="services-card-section"><h3>{sectionLabels[language][1]}</h3><ul className="services-item-list">{items.map((item, index) => <li key={index}>{item}</li>)}</ul></section>}{s.address.trim() && <section className="services-card-section"><h3>{sectionLabels[language][2]}</h3><MapAddress address={s.address} language={language} /></section>}{!!s.branches?.length && <section className="services-card-section"><h3>{branchLabels[language]}</h3>{s.branches.map(branch => <section key={branch.id} className="services-card-section"><h4>{branch.name}</h4><p>{normalizeServiceCity(branch.city)}</p><MapAddress address={branch.address} language={language} />{branch.phone && <a href={'tel:' + branch.phone.replace(/[^+0-9]/g, '')}>{phoneLabels[language].other}: {branch.phone}</a>}</section>)}</section>}{s.business_hours && validBusinessHours(s.business_hours) && <section className="services-card-section services-hours"><h3>{hoursLabels[language][0]}</h3><>{s.business_hours.alwaysOpen ? <p>{alwaysOpenLabels[language]}</p> : <><p>{s.business_hours.days.map(day=>weekdayName(day,language)).join(', ')}</p><p>{s.business_hours.opens} – {s.business_hours.closes}{s.business_hours.closes < s.business_hours.opens && ' ('+hoursLabels[language][4]+')'}</p><p>{s.business_hours.lunchStart ? hoursLabels[language][2]+': '+s.business_hours.lunchStart+' – '+s.business_hours.lunchEnd : hoursLabels[language][3]}</p></>}</></section>}<div className="services-card-section"><div className="services-tags">{s.service_languages.map(l => <span key={l}>{languageName(l)}</span>)}</div>{(!personal || s.interpreter_languages.length > 0) && <p className="services-interpreter">{s.has_interpreter ? t[28] + " " + s.interpreter_languages.map(l => languageName(l)).join(', ') : t[29]}</p>}{!personal && s.has_manager && <p className="services-interpreter"><span aria-hidden="true">✓ </span>{managerLabels[language]}</p>}</div><div className="services-contacts services-card-section">{companyPhones(s).map((phone,index) => <a key={index} href={'tel:' + phone.number.replace(/[^+0-9]/g, '')}>{phoneLabels[language][phone.type]}: {phone.number}</a>)}{website && <a href={website} target="_blank" rel="noopener noreferrer">{t[30]} ↗</a>}{validSocialLinks(s.social_links).map((link,index) => <a key={index} href={link.url} target="_blank" rel="noopener noreferrer">{link.network === "other" ? t[37] : socialNetworks[link.network]} ↗</a>)}</div></div></div><button type="button" className="services-details-toggle" aria-expanded={expanded} aria-controls={`service-details-${s.id}`} onClick={() => setExpandedCardId(current => current === s.id ? null : s.id)}>{detailLabels[language][expanded ? 1 : 0]} <span aria-hidden="true">{expanded ? '▴' : '▾'}</span></button></article>; })}</div></section>; })}
+        <div id={personalGroup ? 'specialists-track' : undefined} ref={personalGroup ? specialistCarousel : undefined} className={personalGroup ? 'services-specialist-track' : 'services-grid'} tabIndex={personalGroup ? 0 : undefined} role={personalGroup ? 'region' : undefined} aria-label={personalGroup ? title : undefined}>{(personalGroup && group.length > 1 ? Array.from({ length: specialistCopies }, () => group).flat() : group).map((s, cardIndex) => { const cardId = personalGroup ? `${s.id}-copy-${Math.floor(cardIndex / group.length)}` : s.id; const website = safeServiceWebsite(s.website); const expanded = expandedCardId === cardId; const photos = companyPhotos(s); const translated = translatedCard(s); const content = cardContent(translated?.description ?? s.description); const items = serviceItems(content.services); const personal = isPersonalListing(s); const subtitle = [normalizeServiceCity(translated?.city ?? s.city), personal ? '' : translated?.category ?? s.category].filter(Boolean).join(' · '); return <article key={cardId} ref={expanded ? expandedCard : null} className="services-card" data-expanded={expanded}><div className="services-card-header"><div className="services-card-photo">{photos.length > 0 ? <Image className="company-photo" src={photos[0]} alt={s.name} width={800} height={600} unoptimized /> : <span className="services-card-initial" aria-hidden="true">{s.name.trim().slice(0, 1)}</span>}</div><div className="services-card-heading"><p className="services-eyebrow" title={subtitle}>{subtitle}</p><h2 title={s.name}>{s.name}</h2>{personal && <p className="services-person-role">{translated?.category?.trim() || s.category.trim() || personRoleLabels[language][s.listing_kind as 'manager' | 'interpreter']}</p>}</div></div>{(!personal || content.description.trim()) && <section className="services-card-section"><h3>{sectionLabels[language][0]}</h3><SmoothDescription text={content.description} expanded={expanded} />{!translated && <p role="status">{translationLabels[language][translationStatus === 'error' ? 1 : 0]}</p>}</section>}<div id={`service-details-${cardId}`} className="services-reveal" aria-hidden={!expanded} inert={!expanded}><div className="services-reveal-inner">{photos.length > 1 && <div className="services-photo-gallery">{photos.slice(1).map((photo, index) => <Image key={index} src={photo} alt={s.name + " — " + (index + 2)} width={800} height={600} unoptimized />)}</div>}{items.length > 0 && <section className="services-card-section"><h3>{sectionLabels[language][1]}</h3><ul className="services-item-list">{items.map((item, index) => <li key={index}>{item}</li>)}</ul></section>}{s.address.trim() && <section className="services-card-section"><h3>{sectionLabels[language][2]}</h3><MapAddress address={s.address} language={language} /></section>}{!!s.branches?.length && <section className="services-card-section"><h3>{branchLabels[language]}</h3>{s.branches.map(branch => <section key={branch.id} className="services-card-section"><h4>{branch.name}</h4><p>{normalizeServiceCity(branch.city)}</p><MapAddress address={branch.address} language={language} />{branch.phone && <a href={'tel:' + branch.phone.replace(/[^+0-9]/g, '')}>{phoneLabels[language].other}: {branch.phone}</a>}</section>)}</section>}{s.business_hours && validBusinessHours(s.business_hours) && <section className="services-card-section services-hours"><h3>{hoursLabels[language][0]}</h3><>{s.business_hours.alwaysOpen ? <p>{alwaysOpenLabels[language]}</p> : <><p>{s.business_hours.days.map(day=>weekdayName(day,language)).join(', ')}</p><p>{s.business_hours.opens} – {s.business_hours.closes}{s.business_hours.closes < s.business_hours.opens && ' ('+hoursLabels[language][4]+')'}</p><p>{s.business_hours.lunchStart ? hoursLabels[language][2]+': '+s.business_hours.lunchStart+' – '+s.business_hours.lunchEnd : hoursLabels[language][3]}</p></>}</></section>}<div className="services-card-section"><div className="services-tags">{s.service_languages.map(l => <span key={l}>{languageName(l)}</span>)}</div>{(!personal || s.interpreter_languages.length > 0) && <p className="services-interpreter">{s.has_interpreter ? t[28] + " " + s.interpreter_languages.map(l => languageName(l)).join(', ') : t[29]}</p>}{!personal && s.has_manager && <p className="services-interpreter"><span aria-hidden="true">✓ </span>{managerLabels[language]}</p>}</div><div className="services-contacts services-card-section">{companyPhones(s).map((phone,index) => <a key={index} href={'tel:' + phone.number.replace(/[^+0-9]/g, '')}>{phoneLabels[language][phone.type]}: {phone.number}</a>)}{website && <a href={website} target="_blank" rel="noopener noreferrer">{t[30]} ↗</a>}{validSocialLinks(s.social_links).map((link,index) => <a key={index} href={link.url} target="_blank" rel="noopener noreferrer">{link.network === "other" ? t[37] : socialNetworks[link.network]} ↗</a>)}</div></div></div><button type="button" className="services-details-toggle" aria-expanded={expanded} aria-controls={`service-details-${s.id}`} onClick={() => setExpandedCardId(current => current === cardId ? null : cardId)}>{detailLabels[language][expanded ? 1 : 0]} <span aria-hidden="true">{expanded ? '▴' : '▾'}</span></button></article>; })}</div></section>; })}
     <aside className="services-business"><h2>{t[31]}</h2><p>{t[32]}</p><Link href="/contact">{t[33]} ↗</Link></aside>
     </main><footer className="services-footer">ESX · {t[34]} · <Link href="/admin">{t[35]}</Link></footer></div>;
 }
