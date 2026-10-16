@@ -71,7 +71,7 @@ const personRoleLabels: Record<InterfaceLanguage, { manager: string; interpreter
 const managerLabels: Record<InterfaceLanguage,string> = {ru:"Есть менеджер",en:"Manager available",ko:"매니저 있음",uz:"Menejer bor",zh:"有经理",vi:"Có quản lý",tr:"Yönetici mevcut"};
 const directoryGroupLabels: Record<InterfaceLanguage, [string, string]> = { ru: ['Специалисты', 'Компании'], en: ['Specialists', 'Companies'], ko: ['전문가', '업체'], uz: ['Mutaxassislar', 'Kompaniyalar'], zh: ['专业人士', '公司'], vi: ['Chuyên gia', 'Công ty'], tr: ['Uzmanlar', 'Şirketler'] };
 const flags = { ru: 'ru', uz: 'uz', zh: 'cn', vi: 'vn', en: 'gb', ko: 'kr', tr: 'tr' } as const;
-const searchLabels: Record<InterfaceLanguage, string> = { ru: 'Поиск по названию компании', en: 'Search by company name', ko: '업체명 검색', uz: 'Kompaniya nomi bo‘yicha qidirish', zh: '按公司名称搜索', vi: 'Tìm theo tên công ty', tr: 'Şirket adına göre ara' };
+const searchLabels: Record<InterfaceLanguage, string> = { ru: 'Поиск компании, услуги или специалиста', en: 'Search companies, services or specialists', ko: '업체, 서비스 또는 전문가 검색', uz: 'Kompaniya, xizmat yoki mutaxassisni qidirish', zh: '搜索公司、服务或专业人士', vi: 'Tìm công ty, dịch vụ hoặc chuyên gia', tr: 'Şirket, hizmet veya uzman ara' };
 function isShoppingCategory(category: string): boolean {
   return /магазин|продукт|shop|grocer/i.test(category);
 }
@@ -163,6 +163,7 @@ export default function ServicesDirectory() {
     track.scrollBy({ left: direction * ((card?.getBoundingClientRect().width ?? 320) + 22), behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }
   const categoryCarousel = useRef<HTMLDivElement>(null);
+  const [categoryCopies, setCategoryCopies] = useState(3);
   useEffect(() => {
     const track = categoryCarousel.current;
     const region = track?.closest('.services-category-carousel');
@@ -179,6 +180,35 @@ export default function ServicesDirectory() {
     let previous = 0;
     let autoPosition: number | null = null;
     let frame = 0;
+    const wrapPosition = (value: number) => cycleWidth > 0
+      ? cycleWidth + ((value - cycleWidth) % cycleWidth + cycleWidth) % cycleWidth
+      : value;
+    const normalizeScroll = () => {
+      if (cycleWidth <= 0) return;
+      const offset = wrapPosition(track.scrollLeft) - track.scrollLeft;
+      if (Math.abs(offset) < 0.5) return;
+      track.scrollLeft += offset;
+      startScroll += offset;
+      if (autoPosition !== null) autoPosition += offset;
+    };
+    const measure = () => {
+      const groups = track.querySelectorAll<HTMLElement>('.services-category-group');
+      const measured = groups.length > 1 ? groups[1].offsetLeft - groups[0].offsetLeft : 0;
+      if (measured <= 0) return;
+      // Keep a full viewport of repeated tiles beyond either wrap boundary.
+      setCategoryCopies(Math.max(3, Math.ceil(track.clientWidth / measured) + 2));
+      if (measured !== cycleWidth) {
+        const relative = cycleWidth ? track.scrollLeft % cycleWidth : 0;
+        cycleWidth = measured;
+        track.scrollLeft = cycleWidth + relative;
+        autoPosition = null;
+      }
+    };
+    const observer = new ResizeObserver(measure);
+    observer.observe(track);
+    const firstGroup = track.querySelector('.services-category-group');
+    if (firstGroup) observer.observe(firstGroup);
+    measure();
     const pause = () => { resumeAt = performance.now() + 1000; };
 
     const leave = () => { pause(); };
@@ -200,7 +230,10 @@ export default function ServicesDirectory() {
       dragged = true;
       track.setPointerCapture(event.pointerId);
       track.dataset.dragging = 'true';
-      track.scrollLeft = startScroll - distance;
+      const desired = startScroll - distance;
+      const wrapped = wrapPosition(desired);
+      startScroll += wrapped - desired;
+      track.scrollLeft = wrapped;
       event.preventDefault();
     };
     const end = (event: PointerEvent) => {
@@ -216,26 +249,11 @@ export default function ServicesDirectory() {
     const animate = (now: number) => {
       const elapsed = previous ? Math.min(now - previous, 50) : 0;
       previous = now;
-      const groups = track.querySelectorAll<HTMLElement>('.services-category-group');
-      const measured = groups.length > 1 ? groups[1].offsetLeft - groups[0].offsetLeft : 0;
-      if (measured > 0 && measured !== cycleWidth) {
-        const relative = cycleWidth ? track.scrollLeft % cycleWidth : 0;
-        cycleWidth = measured;
-        track.scrollLeft = cycleWidth + relative;
-        autoPosition = null;
-      }
-      if (cycleWidth > 0) {
-        const offset = track.scrollLeft < cycleWidth ? cycleWidth : track.scrollLeft >= cycleWidth * 2 ? -cycleWidth : 0;
-        if (offset) {
-          track.scrollLeft += offset;
-          startScroll += offset;
-          if (autoPosition !== null) autoPosition += offset;
-        }
-      }
+      normalizeScroll();
       if (!document.hidden && !region.matches(':hover') && !region.querySelector(':focus-visible') && pointer === null && now > resumeAt && cycleWidth > 0) {
 
 
-        autoPosition = (autoPosition ?? track.scrollLeft) + elapsed * 0.035;
+        autoPosition = wrapPosition((autoPosition ?? track.scrollLeft) + elapsed * 0.035);
         track.scrollLeft = autoPosition;
       }
       else { autoPosition = null; }
@@ -246,6 +264,7 @@ export default function ServicesDirectory() {
 
     region.addEventListener('focusout', blur);
     region.addEventListener('pointerdown', pause);
+    track.addEventListener('scroll', normalizeScroll, { passive: true });
     track.addEventListener('pointerdown', down);
     track.addEventListener('pointermove', move);
     track.addEventListener('pointerup', end);
@@ -256,6 +275,8 @@ export default function ServicesDirectory() {
     frame = requestAnimationFrame(animate);
     return () => {
       cancelAnimationFrame(frame);
+      observer.disconnect();
+      track.removeEventListener('scroll', normalizeScroll);
 
       region.removeEventListener('mouseleave', leave);
 
@@ -269,7 +290,7 @@ export default function ServicesDirectory() {
       track.removeEventListener('click', click, true);
       track.removeEventListener('wheel', pause);
     };
-  }, [listings.length]);
+  }, [listings.length, categoryCopies]);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
@@ -299,7 +320,7 @@ export default function ServicesDirectory() {
   function update<K extends keyof ServiceFilters>(key: K, value: ServiceFilters[K]) { setFilters(current => ({ ...current, [key]: value })); }
   const categoryLabel = (category: string) => listings.map(s => s.category === category ? translatedCard(s)?.category : undefined).find(Boolean) ?? category;
   const categoryQuery = filters.category.trim().normalize('NFKC').toLocaleLowerCase();
-  const visible = listings.filter(s => matchesService(s, { ...filters, category: '' }) && (!categoryQuery || [s.category, categoryLabel(s.category)].some(value => value.normalize('NFKC').toLocaleLowerCase().includes(categoryQuery))));
+  const visible = listings.filter(s => matchesService(s, { ...filters, category: '' }, translatedCard(s)) && (!categoryQuery || [s.category, categoryLabel(s.category)].some(value => value.normalize('NFKC').toLocaleLowerCase().includes(categoryQuery))));
   const specialistIds = visible.filter(isPersonalListing).map(s => s.id).join(',');
   useEffect(() => {
     const track = specialistCarousel.current;
@@ -428,7 +449,7 @@ export default function ServicesDirectory() {
     {categories.length > 0 && <section className="services-category-carousel" aria-label={t[10]}>
       <div className="services-category-heading"><h2>{t[10]}</h2><div className="services-category-arrows"><button type="button" aria-label={t[10] + ' ←'} onClick={() => categoryCarousel.current?.scrollBy({ left: -360, behavior: 'smooth' })}>←</button><button type="button" aria-label={t[10] + ' →'} onClick={() => categoryCarousel.current?.scrollBy({ left: 360, behavior: 'smooth' })}>→</button></div></div>
       <div className="services-category-track" ref={categoryCarousel}>
-        {[0, 1, 2].map(copy => <div key={copy} className="services-category-group" aria-hidden={copy !== 1 ? true : undefined}>{[{ value: '', label: t[11], count: listings.length }, ...categories.map(category => ({ value: category, label: categoryLabel(category), count: listings.filter(s => s.category === category).length }))].map(category => <button type="button" key={category.value} tabIndex={copy === 1 ? 0 : -1} className="services-category-tile" aria-pressed={filters.category === category.value} onClick={() => update('category', category.value)}><span className="services-category-art" aria-hidden="true" style={categoryImage(category.value) ? { backgroundImage: `url(${categoryImage(category.value)})`, backgroundSize: "cover", backgroundPosition: "center" } : { backgroundPosition: `${(categoryArt(category.value) % 4) * 100 / 3}% ${Math.floor(categoryArt(category.value) / 4) * 100}%` }} /><span className="services-category-name">{category.label}</span><span className="services-category-count">{category.count}</span></button>)}</div>)}
+        {Array.from({ length: categoryCopies }, (_, copy) => <div key={copy} className="services-category-group" aria-hidden={copy !== 1 ? true : undefined}>{[{ value: '', label: t[11], count: listings.length }, ...categories.map(category => ({ value: category, label: categoryLabel(category), count: listings.filter(s => s.category === category).length }))].map(category => <button type="button" key={category.value} tabIndex={copy === 1 ? 0 : -1} className="services-category-tile" aria-pressed={filters.category === category.value} onClick={() => update('category', category.value)}><span className="services-category-art" aria-hidden="true" style={categoryImage(category.value) ? { backgroundImage: `url(${categoryImage(category.value)})`, backgroundSize: "cover", backgroundPosition: "center" } : { backgroundPosition: `${(categoryArt(category.value) % 4) * 100 / 3}% ${Math.floor(categoryArt(category.value) / 4) * 100}%` }} /><span className="services-category-name">{category.label}</span><span className="services-category-count">{category.count}</span></button>)}</div>)}
       </div>
     </section>}
     <section className="services-filters" aria-label={t[7]}>

@@ -29,8 +29,18 @@ export function validListingIdentity(listing: Pick<ServiceListing, 'listing_kind
   return (isPersonalListing(listing) ? [listing.name] : [listing.name, listing.city, listing.category, listing.address]).every(value => value.trim().length > 0);
 }
 export type ServiceFilters = { query?: string; city: string; category: string; language: string; interpreter: boolean; interpreterLanguage: string };
-export function matchesService(s: ServiceListing, f: ServiceFilters) {
-  return (!f.query?.trim() || s.name.normalize('NFKC').toLowerCase().includes(f.query.trim().normalize('NFKC').toLowerCase())) && (!f.city || serviceCities(s).includes(normalizeServiceCity(f.city))) && (!f.category || s.category === f.category)
+function normalizeSearch(value: string) {
+  return value.normalize('NFKC').toLowerCase().replace(/ё/g, 'е').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+}
+export function matchesService(s: ServiceListing, f: ServiceFilters, translated?: { description?: string; category?: string; city?: string }) {
+  const terms = normalizeSearch(f.query ?? '').split(/\s+/).filter(Boolean);
+  const searchable = normalizeSearch([
+    s.name, s.category, s.description, s.city, s.address,
+    s.listing_kind ? listingKindLabels[s.listing_kind] : '',
+    ...(s.branches ?? []).flatMap(branch => [branch.name, branch.city, branch.address]),
+    translated?.description ?? '', translated?.category ?? '', translated?.city ?? '',
+  ].join(' '));
+  return terms.every(term => searchable.includes(term)) && (!f.city || serviceCities(s).includes(normalizeServiceCity(f.city))) && (!f.category || s.category === f.category)
     && (!f.language || s.service_languages.some(l => l === f.language))
     && (!f.interpreter || s.has_interpreter)
     && (!f.interpreterLanguage || (s.has_interpreter && s.interpreter_languages.some(l => l === f.interpreterLanguage)));

@@ -83,3 +83,24 @@ test('personal cards without a city do not create an empty city filter', () => {
   assert.equal(matchesService(person, {...empty, interpreterLanguage: 'ru'}), false);
   assert.equal(context.exports.isPersonalListing({has_manager: true}), false);
 });
+
+test('search finds services, specialist names and roles across fields', () => {
+  const specialist = {...listing, name: 'Инна Хен', category: 'Страховой агент', description: 'Страхование жизни, кредитные карты', listing_kind: 'manager'};
+  for (const query of ['инна', 'страховой', 'кредитные карты', 'инна страховой', 'карты сеул']) {
+    assert.equal(matchesService(specialist, {...empty, query}), true, query);
+  }
+  assert.equal(matchesService(specialist, {...empty, query: 'инна стоматология'}), false);
+  assert.equal(matchesService(specialist, {...empty, query: 'страховой', city: 'Пусан'}), false);
+  assert.equal(matchesService({...specialist, name: 'Алёна'}, {...empty, query: 'АЛЕНА'}), true);
+  assert.equal(matchesService({...specialist, category: '', listing_kind: 'interpreter'}, {...empty, query: 'переводчик'}), true);
+});
+
+test('search includes translated services while retaining original names', () => {
+  const company = {...listing, name: 'SABINA', category: 'Рестораны и кафе', description: 'Узбекская кухня'};
+  const translated = {description: 'Uzbek food and catering', category: 'Restaurants and cafes', city: 'Seoul'};
+  assert.equal(matchesService(company, {...empty, query: 'sabina catering'}, translated), true);
+  assert.equal(matchesService(company, {...empty, query: 'узбекская'}, translated), true);
+  assert.equal(matchesService(company, {...empty, query: 'restaurant'}, translated), true);
+  assert.equal(matchesService(company, {...empty, query: 'dentist'}, translated), false);
+});
+
