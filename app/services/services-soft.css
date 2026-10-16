@@ -92,3 +92,8 @@
 .services-directory .services-specialist-track[data-dragging=true],.services-directory .services-specialist-track[data-dragging=true] *{cursor:grabbing!important;user-select:none}
 .services-directory .services-specialist-track img{-webkit-user-drag:none}
 @media(pointer:fine){.services-directory .services-specialist-track{user-select:none}}
+
+/* Keep language flags inside the existing top padding of specialist cards. */
+.services-directory .services-specialist-track>.services-card{position:relative}
+.services-directory .services-card-language-flags{position:absolute;top:9px;right:24px;left:24px;display:flex;justify-content:flex-end;gap:4px;pointer-events:auto}
+.services-directory .services-card-language-flags img{display:block;flex:0 0 18px;width:18px;height:12px;object-fit:cover;border-radius:2px;box-shadow:0 0 0 1px #20375718}
