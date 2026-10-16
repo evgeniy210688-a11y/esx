@@ -101,3 +101,5 @@
 .services-directory .services-back-to-top:hover{background:#e5eefc;transform:translateY(-2px)}
 @media(max-width:600px){.services-directory .services-back-to-top{right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));width:46px;height:46px}}
 @media(prefers-reduced-motion:reduce){.services-directory .services-back-to-top{transition:none}}
+.services-directory .services-footer .services-admin-entry{display:inline;padding:0;border:0;border-radius:0;background:transparent;color:inherit;font:inherit;box-shadow:none;transform:none}
+.services-directory .services-footer .services-admin-entry:hover{text-decoration:underline;background:transparent}
