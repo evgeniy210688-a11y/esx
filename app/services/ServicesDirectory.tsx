@@ -75,6 +75,13 @@ const searchLabels: Record<InterfaceLanguage, string> = { ru: 'Поиск по �
 function isShoppingCategory(category: string): boolean {
   return /магазин|продукт|shop|grocer/i.test(category);
 }
+function categoryImage(category: string): string | null {
+  if (/переводчик|устный перевод|письменный перевод|translator|interpreter|translation/i.test(category)) return '/services/category-interpreters.webp';
+  if (/страхов|insurance/i.test(category)) return '/services/category-insurance.webp';
+  if (/ресторан|кафе|кофейн|restaurant|cafe|café|coffee/i.test(category)) return '/services/category-restaurants.webp';
+  if (isShoppingCategory(category)) return '/services/category-groceries.webp';
+  return null;
+}
 function categoryArt(category: string): number {
   if (!category) return 0;
   const value = category.toLocaleLowerCase();
@@ -298,43 +305,97 @@ export default function ServicesDirectory() {
     const track = specialistCarousel.current;
     const region = track?.closest('.services-listing-group');
     if (!track || !region) return;
-    let pauseUntil = performance.now() + 1000;
+    let pauseUntil = 0;
     let touching = false;
+    let pointer: number | null = null;
+    let startX = 0;
+    let startScroll = 0;
+    let dragged = false;
     let previous = 0;
     let position: number | null = null;
     const count = specialistIds ? specialistIds.split(',').length : 0;
     let cycle = 0;
     const measure = () => {
       const cards = track.querySelectorAll<HTMLElement>(':scope > .services-card');
-      cycle = count > 1 && cards[count] ? cards[count].offsetLeft - cards[0].offsetLeft : 0;
-      if (cycle > 0) setSpecialistCopies(Math.max(3, Math.ceil(track.clientWidth / cycle) + 2));
+      const measured = count > 1 && cards[count] ? cards[count].offsetLeft - cards[0].offsetLeft : 0;
+      if (measured > 0) {
+        setSpecialistCopies(Math.max(3, Math.ceil(track.clientWidth / measured) + 2));
+        if (measured !== cycle) {
+          const relative = cycle ? track.scrollLeft % cycle : 0;
+          track.scrollLeft = measured + relative;
+          position = null;
+        }
+      }
+      cycle = measured;
     };
     const observer = new ResizeObserver(measure);
     observer.observe(track);
     measure();
     let frame = 0;
     const pause = () => { pauseUntil = performance.now() + 2000; position = null; };
-    const down = () => { touching = true; pause(); };
-    const up = () => { touching = false; pause(); };
+    const down = (event: PointerEvent) => {
+      touching = true;
+      pause();
+      dragged = false;
+      if (event.pointerType !== 'mouse' || event.button !== 0) return;
+      if ((event.target as HTMLElement).closest('input, textarea, select, [contenteditable="true"]')) return;
+      pointer = event.pointerId;
+      startX = event.clientX;
+      startScroll = track.scrollLeft;
+    };
+    const move = (event: PointerEvent) => {
+      if (pointer !== event.pointerId) return;
+      const distance = event.clientX - startX;
+      if (!dragged && Math.abs(distance) < 5) return;
+      dragged = true;
+      track.setPointerCapture(event.pointerId);
+      track.dataset.dragging = 'true';
+      track.scrollLeft = startScroll - distance;
+      event.preventDefault();
+    };
+    const up = (event: PointerEvent) => {
+      if (pointer !== null && pointer !== event.pointerId) return;
+      touching = false;
+      pointer = null;
+      delete track.dataset.dragging;
+      if (track.hasPointerCapture(event.pointerId)) track.releasePointerCapture(event.pointerId);
+      pause();
+    };
+    const click = (event: MouseEvent) => {
+      if (dragged && event.detail !== 0) {
+        event.preventDefault();
+        event.stopPropagation();
+        dragged = false;
+      }
+    };
+    const preventNativeDrag = (event: DragEvent) => event.preventDefault();
     const animate = (now: number) => {
       const elapsed = previous ? Math.min(now - previous, 50) : 0;
+      if (!previous) pauseUntil = now + 1000;
       previous = now;
-      if (cycle > 0 && track.scrollLeft >= cycle && !touching && !track.querySelector('[data-expanded="true"]') && !region.querySelector(':focus-visible')) {
-        track.scrollLeft -= cycle;
-        if (position !== null) position -= cycle;
+      if (cycle > 0 && !track.querySelector('[data-expanded="true"]') && !region.querySelector(':focus-visible')) {
+        const offset = track.scrollLeft < cycle ? cycle : track.scrollLeft >= cycle * 2 ? -cycle : 0;
+        if (offset) {
+          track.scrollLeft += offset;
+          startScroll += offset;
+          if (position !== null) position += offset;
+        }
       }
-      if (!document.hidden && !touching && now >= pauseUntil && !region.querySelector(':focus-visible') && !track.querySelector('[data-expanded="true"]') && cycle > 0) {
+      if (!document.hidden && !touching && !region.matches(':hover') && now >= pauseUntil && !region.querySelector(':focus-visible') && !track.querySelector('[data-expanded="true"]') && cycle > 0) {
         position = (position ?? track.scrollLeft) + elapsed * 0.035;
-        if (position >= cycle) position -= cycle;
         track.scrollLeft = position;
       } else { position = null; }
       frame = requestAnimationFrame(animate);
     };
     frame = requestAnimationFrame(animate);
-    region.addEventListener('pointerenter', pause);
-    region.addEventListener('pointerdown', down);
+    track.addEventListener('pointerdown', down);
+    track.addEventListener('pointermove', move);
+    track.addEventListener('lostpointercapture', up);
+    track.addEventListener('click', click, true);
+    track.addEventListener('dragstart', preventNativeDrag);
     window.addEventListener('pointerup', up);
     window.addEventListener('pointercancel', up);
+    region.addEventListener('pointerenter', pause);
     region.addEventListener('wheel', pause, { passive: true });
     region.addEventListener('keydown', pause);
     region.addEventListener('mouseleave', pause);
@@ -342,10 +403,16 @@ export default function ServicesDirectory() {
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
-      region.removeEventListener('pointerenter', pause);
-      region.removeEventListener('pointerdown', down);
+      track.removeEventListener('pointerdown', down);
+      track.removeEventListener('pointermove', move);
+      track.removeEventListener('lostpointercapture', up);
+      track.removeEventListener('click', click, true);
+      track.removeEventListener('dragstart', preventNativeDrag);
+      delete track.dataset.dragging;
+      if (pointer !== null && track.hasPointerCapture(pointer)) track.releasePointerCapture(pointer);
       window.removeEventListener('pointerup', up);
       window.removeEventListener('pointercancel', up);
+      region.removeEventListener('pointerenter', pause);
       region.removeEventListener('wheel', pause);
       region.removeEventListener('keydown', pause);
       region.removeEventListener('mouseleave', pause);
@@ -361,7 +428,7 @@ export default function ServicesDirectory() {
     {categories.length > 0 && <section className="services-category-carousel" aria-label={t[10]}>
       <div className="services-category-heading"><h2>{t[10]}</h2><div className="services-category-arrows"><button type="button" aria-label={t[10] + ' ←'} onClick={() => categoryCarousel.current?.scrollBy({ left: -360, behavior: 'smooth' })}>←</button><button type="button" aria-label={t[10] + ' →'} onClick={() => categoryCarousel.current?.scrollBy({ left: 360, behavior: 'smooth' })}>→</button></div></div>
       <div className="services-category-track" ref={categoryCarousel}>
-        {[0, 1, 2].map(copy => <div key={copy} className="services-category-group" aria-hidden={copy !== 1 ? true : undefined}>{[{ value: '', label: t[11], count: listings.length }, ...categories.map(category => ({ value: category, label: categoryLabel(category), count: listings.filter(s => s.category === category).length }))].map(category => <button type="button" key={category.value} tabIndex={copy === 1 ? 0 : -1} className="services-category-tile" aria-pressed={filters.category === category.value} onClick={() => update('category', category.value)}><span className="services-category-art" aria-hidden="true" style={/переводчик|устный перевод|письменный перевод|translator|interpreter|translation/i.test(category.value) ? { backgroundImage: "url(/services/category-interpreters.webp)", backgroundSize: "cover", backgroundPosition: "center" } : isShoppingCategory(category.value) ? { backgroundImage: "url(/services/category-groceries.webp)", backgroundSize: "cover", backgroundPosition: "center" } : { backgroundPosition: `${(categoryArt(category.value) % 4) * 100 / 3}% ${Math.floor(categoryArt(category.value) / 4) * 100}%` }} /><span className="services-category-name">{category.label}</span><span className="services-category-count">{category.count}</span></button>)}</div>)}
+        {[0, 1, 2].map(copy => <div key={copy} className="services-category-group" aria-hidden={copy !== 1 ? true : undefined}>{[{ value: '', label: t[11], count: listings.length }, ...categories.map(category => ({ value: category, label: categoryLabel(category), count: listings.filter(s => s.category === category).length }))].map(category => <button type="button" key={category.value} tabIndex={copy === 1 ? 0 : -1} className="services-category-tile" aria-pressed={filters.category === category.value} onClick={() => update('category', category.value)}><span className="services-category-art" aria-hidden="true" style={categoryImage(category.value) ? { backgroundImage: `url(${categoryImage(category.value)})`, backgroundSize: "cover", backgroundPosition: "center" } : { backgroundPosition: `${(categoryArt(category.value) % 4) * 100 / 3}% ${Math.floor(categoryArt(category.value) / 4) * 100}%` }} /><span className="services-category-name">{category.label}</span><span className="services-category-count">{category.count}</span></button>)}</div>)}
       </div>
     </section>}
     <section className="services-filters" aria-label={t[7]}>

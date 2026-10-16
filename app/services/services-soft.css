@@ -86,3 +86,9 @@
 .services-directory .services-listing-group>.services-category-heading>h2{grid-column:2;text-align:center}
 .services-directory .services-listing-group>.services-category-heading>.services-category-arrows{grid-column:3;justify-self:end}
 @media(max-width:420px){.services-directory .services-listing-group>.services-category-heading{grid-template-columns:minmax(0,1fr)}.services-directory .services-listing-group>.services-category-heading>h2{grid-column:1}.services-directory .services-listing-group>.services-category-heading>.services-category-arrows{grid-column:1;justify-self:end}}
+
+/* Mouse dragging mirrors the category carousel without replacing native touch scrolling. */
+.services-directory .services-specialist-track{cursor:grab;touch-action:pan-x pan-y}
+.services-directory .services-specialist-track[data-dragging=true],.services-directory .services-specialist-track[data-dragging=true] *{cursor:grabbing!important;user-select:none}
+.services-directory .services-specialist-track img{-webkit-user-drag:none}
+@media(pointer:fine){.services-directory .services-specialist-track{user-select:none}}
