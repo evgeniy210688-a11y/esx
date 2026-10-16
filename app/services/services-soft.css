@@ -97,3 +97,7 @@
 .services-directory .services-specialist-track>.services-card{position:relative}
 .services-directory .services-card-language-flags{position:absolute;top:9px;right:24px;left:24px;display:flex;justify-content:flex-end;gap:4px;pointer-events:auto}
 .services-directory .services-card-language-flags img{display:block;flex:0 0 18px;width:18px;height:12px;object-fit:cover;border-radius:2px;box-shadow:0 0 0 1px #20375718}
+.services-directory .services-back-to-top{position:fixed;right:max(24px,env(safe-area-inset-right));bottom:max(24px,env(safe-area-inset-bottom));z-index:1100;display:grid;place-items:center;width:50px;height:50px;padding:0;border-radius:50%;border:1px solid #b9cde7;background:#fff;color:#365c8c;box-shadow:0 6px 24px #20375726}
+.services-directory .services-back-to-top:hover{background:#e5eefc;transform:translateY(-2px)}
+@media(max-width:600px){.services-directory .services-back-to-top{right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));width:46px;height:46px}}
+@media(prefers-reduced-motion:reduce){.services-directory .services-back-to-top{transition:none}}
