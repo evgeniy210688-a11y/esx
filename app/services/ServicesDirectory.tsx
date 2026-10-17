@@ -7,7 +7,7 @@ import { serviceItems, splitServiceDescription } from '@/lib/service-description
 import { alwaysOpenLabels, hoursLabels, weekdayName, validBusinessHours } from '@/lib/service-hours';
 import AdminEntry from '@/app/admin/AdminEntry';
 import { supabase } from '@/lib/supabase';
-import { isPersonalListing, normalizeServiceCity, serviceCities, matchesService, safeServiceWebsite, serviceLanguages, type ServiceListing, type ServiceFilters } from '@/lib/service-directory';
+import { serviceCategory, isPersonalListing, normalizeServiceCity, serviceCities, matchesService, safeServiceWebsite, serviceLanguages, type ServiceListing, type ServiceFilters } from '@/lib/service-directory';
 import './services.css';
 import './services-light.css';
 import './services-soft.css';
@@ -321,7 +321,7 @@ export default function ServicesDirectory() {
   function update<K extends keyof ServiceFilters>(key: K, value: ServiceFilters[K]) { setFilters(current => ({ ...current, [key]: value })); }
   const categoryLabel = (category: string) => listings.map(s => s.category === category ? translatedCard(s)?.category : undefined).find(Boolean) ?? category;
   const categoryQuery = filters.category.trim().normalize('NFKC').toLocaleLowerCase();
-  const visible = listings.filter(s => matchesService(s, { ...filters, category: '' }, translatedCard(s)) && (!categoryQuery || [s.category, categoryLabel(s.category)].some(value => value.normalize('NFKC').toLocaleLowerCase().includes(categoryQuery))));
+  const visible = listings.filter(s => matchesService(s, { ...filters, category: '' }, translatedCard(s)) && (!categoryQuery || [serviceCategory(s), categoryLabel(serviceCategory(s))].some(value => value.normalize('NFKC').toLocaleLowerCase().includes(categoryQuery))));
   const specialistIds = visible.filter(isPersonalListing).map(s => s.id).join(',');
   useEffect(() => {
     const track = specialistCarousel.current;
@@ -442,7 +442,7 @@ export default function ServicesDirectory() {
     };
   }, [specialistIds, status, specialistCopies]);
   const cities = [...new Set(listings.flatMap(s => serviceCities(s)))].sort((a,b) => a.localeCompare(b, 'ru'));
-  const categories = [...new Set(listings.map(s => s.category))].sort((a,b) => a.localeCompare(b, 'ru'));
+  const categories = [...new Set(listings.map(s => serviceCategory(s)))].sort((a,b) => a.localeCompare(b, 'ru'));
   return <div className="services-page services-directory" lang={language}>
     <header className="services-top"><Link className="services-brand" href="/" aria-label={"ESX — " + t[2]}><Image src="/esx-wordmark-color.png" alt="ESX" width={140} height={48} unoptimized /><span> / {t[1]}</span></Link><nav aria-label={t[36]}><Link href="/">{t[2]}</Link><Link href="/chat">{t[3]} ↗</Link></nav><div className="services-interface-language"><span id="services-language-label">{t[0]}</span><details className="services-language-picker" onKeyDown={e => { if (e.key === 'Escape') { e.currentTarget.open = false; e.currentTarget.querySelector('summary')?.focus(); } }}><summary aria-labelledby="services-language-label services-language-value"><Image src={'/flags/' + flags[language] + '.svg'} alt="" width={24} height={16} unoptimized /><span id="services-language-value">{interfaceLanguages.find(l => l.code === language)?.name}</span><span aria-hidden="true">▾</span></summary><ul aria-labelledby="services-language-label">{interfaceLanguages.map(l => <li key={l.code}><button type="button" lang={l.code} aria-pressed={language === l.code} onClick={e => { chooseLanguage(l.code); const picker = e.currentTarget.closest('details'); if (picker) { picker.open = false; picker.querySelector('summary')?.focus(); } }}><Image src={'/flags/' + flags[l.code] + '.svg'} alt="" width={24} height={16} unoptimized /><span>{l.name}</span>{language === l.code && <span aria-hidden="true">✓</span>}</button></li>)}</ul></details></div></header>
     <main className="services-main"><section className="services-intro"><p className="services-eyebrow">ESX • {t[4]}</p><h1>{t[5]}</h1><p>{t[6]}</p></section>
@@ -450,7 +450,7 @@ export default function ServicesDirectory() {
     {categories.length > 0 && <section className="services-category-carousel" aria-label={t[10]}>
       <div className="services-category-heading"><h2>{t[10]}</h2><div className="services-category-arrows"><button type="button" aria-label={t[10] + ' ←'} onClick={() => categoryCarousel.current?.scrollBy({ left: -360, behavior: 'smooth' })}>←</button><button type="button" aria-label={t[10] + ' →'} onClick={() => categoryCarousel.current?.scrollBy({ left: 360, behavior: 'smooth' })}>→</button></div></div>
       <div className="services-category-track" ref={categoryCarousel}>
-        {Array.from({ length: categoryCopies }, (_, copy) => <div key={copy} className="services-category-group" aria-hidden={copy !== 1 ? true : undefined}>{[{ value: '', label: t[11], count: listings.length }, ...categories.map(category => ({ value: category, label: categoryLabel(category), count: listings.filter(s => s.category === category).length }))].map(category => <button type="button" key={category.value} tabIndex={copy === 1 ? 0 : -1} className="services-category-tile" aria-pressed={filters.category === category.value} onClick={() => update('category', category.value)}><span className="services-category-art" aria-hidden="true" style={categoryImage(category.value) ? { backgroundImage: `url(${categoryImage(category.value)})`, backgroundSize: "cover", backgroundPosition: "center" } : { backgroundPosition: `${(categoryArt(category.value) % 4) * 100 / 3}% ${Math.floor(categoryArt(category.value) / 4) * 100}%` }} /><span className="services-category-name">{category.label}</span><span className="services-category-count">{category.count}</span></button>)}</div>)}
+        {Array.from({ length: categoryCopies }, (_, copy) => <div key={copy} className="services-category-group" aria-hidden={copy !== 1 ? true : undefined}>{[{ value: '', label: t[11], count: listings.length }, ...categories.map(category => ({ value: category, label: categoryLabel(category), count: listings.filter(s => serviceCategory(s) === category).length }))].map(category => <button type="button" key={category.value} tabIndex={copy === 1 ? 0 : -1} className="services-category-tile" aria-pressed={filters.category === category.value} onClick={() => update('category', category.value)}><span className="services-category-art" aria-hidden="true" style={categoryImage(category.value) ? { backgroundImage: `url(${categoryImage(category.value)})`, backgroundSize: "cover", backgroundPosition: "center" } : { backgroundPosition: `${(categoryArt(category.value) % 4) * 100 / 3}% ${Math.floor(categoryArt(category.value) / 4) * 100}%` }} /><span className="services-category-name">{category.label}</span><span className="services-category-count">{category.count}</span></button>)}</div>)}
       </div>
     </section>}
     <section className="services-filters" aria-label={t[7]}>

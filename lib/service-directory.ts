@@ -28,6 +28,13 @@ export type ServiceListing = { listing_kind?: ListingKind; branches?: ServiceBra
 export function validListingIdentity(listing: Pick<ServiceListing, 'listing_kind' | 'name' | 'city' | 'category' | 'address'>) {
   return (isPersonalListing(listing) ? [listing.name] : [listing.name, listing.city, listing.category, listing.address]).every(value => value.trim().length > 0);
 }
+export function serviceCategory(listing: Pick<ServiceListing, 'category'>) {
+  const category = listing.category.normalize('NFKC').trim().replace(/\s+/g, ' ');
+  if (/^консультант по визовым вопросам$/i.test(category)) return 'Визы и иммиграция';
+  return /^(международный\s+)?медицинский\s+координатор$/i.test(category)
+    ? 'Медицина и клиники'
+    : listing.category;
+}
 export type ServiceFilters = { query?: string; city: string; category: string; language: string; interpreter: boolean; interpreterLanguage: string };
 function normalizeSearch(value: string) {
   return value.normalize('NFKC').toLowerCase().replace(/ё/g, 'е').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
@@ -35,12 +42,12 @@ function normalizeSearch(value: string) {
 export function matchesService(s: ServiceListing, f: ServiceFilters, translated?: { description?: string; category?: string; city?: string }) {
   const terms = normalizeSearch(f.query ?? '').split(/\s+/).filter(Boolean);
   const searchable = normalizeSearch([
-    s.name, s.category, s.description, s.city, s.address,
+    s.name, s.category, serviceCategory(s), s.description, s.city, s.address,
     s.listing_kind ? listingKindLabels[s.listing_kind] : '',
     ...(s.branches ?? []).flatMap(branch => [branch.name, branch.city, branch.address]),
     translated?.description ?? '', translated?.category ?? '', translated?.city ?? '',
   ].join(' '));
-  return terms.every(term => searchable.includes(term)) && (!f.city || serviceCities(s).includes(normalizeServiceCity(f.city))) && (!f.category || s.category === f.category)
+  return terms.every(term => searchable.includes(term)) && (!f.city || serviceCities(s).includes(normalizeServiceCity(f.city))) && (!f.category || serviceCategory(s) === f.category)
     && (!f.language || s.service_languages.some(l => l === f.language))
     && (!f.interpreter || s.has_interpreter)
     && (!f.interpreterLanguage || (s.has_interpreter && s.interpreter_languages.some(l => l === f.interpreterLanguage)));
