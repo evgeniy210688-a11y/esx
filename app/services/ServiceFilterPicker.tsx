@@ -1,8 +1,9 @@
 'use client';
 import { useId, useRef, useState } from 'react';
+import Image from 'next/image';
 
 export default function ServiceFilterPicker({ label, value, options, onChange }: {
-  label: string; value: string; options: { value: string; label: string }[]; onChange: (value: string) => void;
+  label: string; value: string; options: { value: string; label: string; flag?: string }[]; onChange: (value: string) => void;
 }) {
   const id = useId();
   const root = useRef<HTMLDivElement>(null);
@@ -23,10 +24,10 @@ export default function ServiceFilterPicker({ label, value, options, onChange }:
   }}>
     <span id={id + '-label'}>{label}</span>
     <button type="button" className="services-city-trigger" aria-labelledby={id + '-label ' + id + '-value'} aria-haspopup="menu" aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}>
-      <span id={id + '-value'}>{selected?.label}</span><span aria-hidden="true">⌄</span>
+      <span id={id + '-value'} style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>{selected?.flag && <Image src={selected.flag} alt="" width={24} height={16} style={{ flexShrink: 0 }} />}{selected?.label}</span><span aria-hidden="true">⌄</span>
     </button>
     {open && <><div className="services-city-dismiss" onPointerDown={() => setOpen(false)} aria-hidden="true" /><div className="services-city-menu" id={id} role="menu" aria-labelledby={id + '-label'}>
-      {options.map(option => <button key={option.value} type="button" role="menuitemradio" aria-checked={value === option.value} onClick={() => { onChange(option.value); close(); }}><span>{option.label}</span>{value === option.value && <span aria-hidden="true">✓</span>}</button>)}
+      {options.map(option => <button key={option.value} type="button" role="menuitemradio" aria-checked={value === option.value} onClick={() => { onChange(option.value); close(); }}><span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>{option.flag && <Image src={option.flag} alt="" width={24} height={16} style={{ flexShrink: 0 }} />}{option.label}</span>{value === option.value && <span aria-hidden="true">✓</span>}</button>)}
     </div></>}
   </div>;
 }

@@ -113,7 +113,7 @@ export default function ServicesDirectory() {
   }, []);
   function chooseLanguage(value: InterfaceLanguage) { setLanguage(value); try { localStorage.setItem('esx-services-language', value); } catch {} }
   const languageName = (code: string) => new Intl.DisplayNames([language], { type: 'language' }).of(code) ?? code;
-  const languageOptions = Object.keys(serviceLanguages).map(code => ({value: code, label: languageName(code)}));
+  const languageOptions = Object.keys(serviceLanguages).map(code => ({value: code, label: languageName(code), flag: '/flags/' + flags[code as keyof typeof flags] + '.svg'}));
 
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
   const expandedCard = useRef<HTMLElement>(null);
