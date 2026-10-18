@@ -9,7 +9,7 @@ import BusinessHoursEditor from './BusinessHoursEditor';
 import useAccount from '@/app/account/useAccount';
 import { supabase } from '@/lib/supabase';
 import BranchEditor from './BranchEditor';
-import { isPersonalListing, validListingIdentity, listingKindLabels, type ListingKind, normalizeServiceCity, validServiceBranches, serviceLanguages, type ServiceListing, type ServiceLanguage } from '@/lib/service-directory';
+import { matchesService, serviceCategory, isPersonalListing, validListingIdentity, listingKindLabels, type ListingKind, normalizeServiceCity, validServiceBranches, serviceLanguages, type ServiceListing, type ServiceLanguage } from '@/lib/service-directory';
 import '../services/services.css';
 import './admin.css';
 import { socialNetworks, validSocialLinks, type SocialLink } from '@/lib/service-socials';
@@ -44,6 +44,15 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
   const [access, setAccess] = useState<'loading' | 'allowed' | 'denied' | 'error'>('loading');
   const [rows, setRows] = useState<Listing[]>([]);
   const [draft, setDraft] = useState<Listing>(blank);
+  const [query, setQuery] = useState('');
+  const [category, setCategory] = useState('');
+  const categoryOf = (row: Listing) => serviceCategory(row).trim() || 'Без категории';
+  const categories = [...new Set(rows.map(categoryOf))].sort((a, b) => a.localeCompare(b, 'ru'));
+  const filteredRows = rows.filter(row => (!category || categoryOf(row) === category) && matchesService(row, {
+    query, city: '', category: '', language: '', interpreter: false, interpreterLanguage: '',
+  }));
+  const groups = categories.map(name => ({ name, rows: filteredRows.filter(row => categoryOf(row) === name) })).filter(group => group.rows.length);
+
   const personal = isPersonalListing(draft);
   const [supportsPeople, setSupportsPeople] = useState(true);
   const [busy, setBusy] = useState(false);
@@ -124,7 +133,24 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     {access === 'loading' && <p role="status">Проверяем права…</p>}
     {access === 'denied' && <section className="services-empty"><h1>Нет доступа администратора</h1><p>Этому аккаунту не назначены права управления услугами. Войдите в аккаунт администратора.</p></section>}
     {access === 'error' && <section className="services-empty"><h1>Не удалось проверить доступ</h1><button onClick={() => { setAccess('loading'); setAttempt(n => n + 1); }}>Повторить</button></section>}
-    {access === 'allowed' && <><h1>Панель управления</h1><div className="admin-summary">{Object.entries(statuses).map(([status, label]) => <div key={status}><strong>{rows.filter(row => row.status === status).length}</strong><span>{label}</span></div>)}</div><h2>Компании и специалисты</h2><p>Добавляйте компании, менеджеров и переводчиков, редактируйте карточки и выбирайте, что показывать в справочнике.</p><div className="admin-columns"><section aria-label="Компании и специалисты" className="services-card"><button disabled={busy} onClick={() => { if (draft.name && !window.confirm('Открыть новую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...blank }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}>+ Добавить карточку</button>{!rows.length && <p>Карточек пока нет.</p>}<ul className="admin-list">{rows.map(row => <li key={row.id}><button disabled={busy} aria-pressed={draft.id === row.id} onClick={() => { if (draft.name && !window.confirm('Открыть другую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...row, ...splitServiceDescription(row.description) }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}><strong>{row.name}</strong><span>{row.city} · {statuses[row.status]}</span></button></li>)}</ul></section>
+    {access === 'allowed' && <><h1>Панель управления</h1><div className="admin-summary">{Object.entries(statuses).map(([status, label]) => <div key={status}><strong>{rows.filter(row => row.status === status).length}</strong><span>{label}</span></div>)}</div><h2>Компании и специалисты</h2><p>Добавляйте компании, менеджеров и переводчиков, редактируйте карточки и выбирайте, что показывать в справочнике.</p><div className="admin-columns"><section aria-label="Компании и специалисты" className="services-card"><button disabled={busy} onClick={() => { if (draft.name && !window.confirm('Открыть новую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...blank }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}>+ Добавить карточку</button>
+      <div className="admin-list-filters">
+        <label htmlFor="admin-list-search">Поиск карточек</label>
+        <input id="admin-list-search" type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Название, город, услуга…" />
+        <label htmlFor="admin-list-category">Категория</label>
+        <select id="admin-list-category" value={category} onChange={e => setCategory(e.target.value)}>
+          <option value="">Все категории</option>
+          {[...new Set([...categories, ...(category ? [category] : [])])].map(name => <option key={name} value={name}>{name}</option>)}
+        </select>
+        {(query || category) && <button type="button" onClick={() => { setQuery(''); setCategory(''); }}>Сбросить фильтры</button>}
+      </div>
+      <p role="status" aria-live="polite">Найдено: {filteredRows.length} из {rows.length}</p>
+      {!rows.length ? <p>Карточек пока нет.</p> : !filteredRows.length && <p>Ничего не найдено. Измените запрос или категорию.</p>}
+      {groups.map(group => <section className="admin-category" key={group.name} aria-label={group.name}>
+        <h3>{group.name} <span>{group.rows.length}</span></h3>
+        <ul className="admin-list">{group.rows.map(row => <li key={row.id}><button disabled={busy} aria-pressed={draft.id === row.id} onClick={() => { if (draft.name && !window.confirm('Открыть другую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...row, ...splitServiceDescription(row.description) }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}><strong>{row.name}</strong><span>{[row.city, statuses[row.status]].filter(Boolean).join(' · ')}</span></button></li>)}</ul>
+      </section>)}
+    </section>
     <form id="company-form" ref={form} onSubmit={save} className="services-card admin-form"><h2>{draft.id ? 'Редактирование карточки' : 'Новая карточка'}</h2>{!personal && <nav aria-label="Разделы настроек компании"><a href="#company-branches">Филиалы</a></nav>}<fieldset disabled={busy} className="admin-fields">
       <label>Тип карточки<select value={draft.listing_kind ?? 'company'} onChange={e => change('listing_kind', e.target.value as ListingKind)}>{Object.entries(listingKindLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
       {personal && <p>Укажите имя и фамилию, добавьте контактный телефон. Заполните описание, услуги и ссылки на соцсети. Город и адрес можно не указывать.</p>}
