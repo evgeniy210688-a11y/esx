@@ -77,23 +77,26 @@ function isShoppingCategory(category: string): boolean {
   return /магазин|продукт|shop|grocer/i.test(category);
 }
 function categoryImage(category: string): string | null {
-  if (/образован|обучен|автошкол|education|school/i.test(category)) return '/services/category-education.webp';
-  if (/автодилер|автомобил|car rental|car dealer/i.test(category)) return '/services/category-cars.webp';
-  if (/недвижим|риелтор|риэлтор|real estate|realtor/i.test(category)) return '/services/category-homes.webp';
-  if (/спорт|фитнес|sport|fitness/i.test(category)) return '/services/category-fitness.webp';
+  // Specific services must win over broad words such as school or shop.
+  if (/автошкол|обучение вождению|driving school|driving lesson/i.test(category)) return '/services/category-driving.webp';
   if (/ювелир|jewel/i.test(category)) return '/services/category-jewelry.webp';
+  if (/стомат|dent|медицин|клиник|medic|clinic|связ|интернет|internet|communicat|красот|уход|космет|beauty|cosmetic|salon|массаж|спа|massage|\bspa\b/i.test(category)) return null;
+  if (/образован|обучен|education|school/i.test(category)) return '/services/category-education.webp';
+  if (/автодилер|автомобил|автосервис|car rental|car dealer|auto repair/i.test(category)) return '/services/category-cars.webp';
+  if (/недвижим|риелтор|риэлтор|real estate|realtor/i.test(category)) return '/services/category-homes.webp';
+  if (/спорт|фитнес|\bsports?\b|fitness/i.test(category)) return '/services/category-fitness.webp';
   if (/переводчик|устный перевод|письменный перевод|translator|interpreter|translation/i.test(category)) return '/services/category-interpreters.webp';
   if (/страхов|insurance/i.test(category)) return '/services/category-insurance.webp';
   if (/ресторан|кафе|кофейн|restaurant|cafe|café|coffee/i.test(category)) return '/services/category-restaurants.webp';
-  if (isShoppingCategory(category)) return '/services/category-groceries.webp';
+  if (/продукт|grocer|food store|supermarket/i.test(category)) return '/services/category-groceries.webp';
   return null;
 }
 function categoryArt(category: string): number {
   if (!category) return 0;
   const value = category.toLocaleLowerCase();
   if (/виз|иммигра|visa|immig/.test(value)) return 1;
-  if (/достав|груз|логист|deliver|logist/.test(value)) return 2;
-  if (/массаж|спа|massage|spa/.test(value)) return 3;
+  if (/достав|груз|логист|переезд|deliver|logist|\bmoving\b/.test(value)) return 2;
+  if (/массаж|спа|massage|\bspa\b/.test(value)) return 3;
   if (/стомат|dent/.test(value)) return 6;
   if (/медицин|клиник|medic|clinic/.test(value)) return 4;
   if (/связ|интернет|internet|communicat/.test(value)) return 5;
