@@ -77,6 +77,8 @@ function isShoppingCategory(category: string): boolean {
   return /магазин|продукт|shop|grocer/i.test(category);
 }
 function categoryImage(category: string): string | null {
+  if (/автосервис|ремонт авто|ремонт машин|car repair|auto repair|mechanic/i.test(category)) return '/services/category-auto-repair.webp';
+  if (/юридич|юрист|адвокат|нотари|legal|lawyer|attorney|notary/i.test(category)) return '/services/category-legal.webp';
   // Specific services must win over broad words such as school or shop.
   if (/автошкол|обучение вождению|driving school|driving lesson/i.test(category)) return '/services/category-driving.webp';
   if (/ювелир|jewel/i.test(category)) return '/services/category-jewelry.webp';
