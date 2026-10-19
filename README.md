@@ -63,3 +63,9 @@ activation are not backfilled. Local development uses the SDK's development mode
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Prepared service translations
+
+The directory ships prepared translations for all seven interface languages, so existing listings switch languages without translation API calls. Cache keys include the original description, city and category; edited content cannot reuse a stale translation. New or edited listings fall back to four concurrent requests and a browser cache.
+
+After publishing listing changes, run `node scripts/prepare-service-translations.cjs` with the project's public Supabase environment variables available, then commit the regenerated `lib/service-translations.generated.json` and deploy. The script uses the site's existing translation endpoint, resumes missing entries and retries temporary failures. `SERVICE_TRANSLATION_ORIGIN` optionally selects a different deployment. This is a maintenance command, not part of every build.
