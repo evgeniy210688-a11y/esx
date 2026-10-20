@@ -13,6 +13,7 @@ import '../services-soft.css';
 import './profile.css';
 import ProfileHeader from './ProfileHeader';
 import ProfileSections from './ProfileSections';
+import ServiceTopics from './ServiceTopics';
 
 
 export const metadata: Metadata = { title: 'Tkhay Alina — ESX', description: 'Личная страница Tkhay Alina на ESX.' };
@@ -53,6 +54,6 @@ export default async function AlinaPage() {
         </div>
       </ProfileSections>
       
-    </article></main>
+    </article><ServiceTopics /></main>
   </div>;
 }
