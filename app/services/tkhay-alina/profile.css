@@ -10,12 +10,15 @@
 @media(max-width:540px){.specialist-profile .specialist-heading{align-items:flex-start;flex-direction:column;gap:16px}.specialist-profile .specialist-portrait{width:112px;height:112px}}
 
 .specialist-profile .specialist-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:start;gap:12px;margin-top:24px}
-.specialist-profile .specialist-actions details{min-width:0;overflow-wrap:anywhere}
-.specialist-profile .specialist-actions summary{display:flex;align-items:center;justify-content:space-between;min-height:48px;padding:12px 18px;border:1px solid #fff;border-radius:18px;background:linear-gradient(145deg,#f0f5ff,#d9e4f7);box-shadow:4px 5px 11px #a4b7d359;color:#1d4d9c;font-weight:600;cursor:pointer;list-style:none}
-.specialist-profile .specialist-actions summary::-webkit-details-marker{display:none}
-.specialist-profile .specialist-actions summary::after{content:'▾'}
-.specialist-profile .specialist-actions details[open] summary::after{content:'▴'}
+.specialist-profile .specialist-actions button{display:flex;align-items:center;justify-content:space-between;min-height:48px;padding:12px 18px;border:1px solid #fff;border-radius:18px;background:linear-gradient(145deg,#f0f5ff,#d9e4f7);box-shadow:4px 5px 11px #a4b7d359;color:#1d4d9c;font-weight:600;cursor:pointer;list-style:none}
 .specialist-profile .specialist-actions .services-contacts{padding:18px 0}
-@media(max-width:540px){.specialist-profile .specialist-actions{gap:6px}.specialist-profile .specialist-actions summary{justify-content:center;gap:4px;padding:10px 4px;font-size:12px;white-space:nowrap;border-radius:14px}.specialist-profile .specialist-actions summary::after{font-size:10px}}
+@media(max-width:540px){.specialist-profile .specialist-actions{gap:6px}.specialist-profile .specialist-actions button{justify-content:center;gap:4px;padding:10px 4px;font-size:12px;white-space:nowrap;border-radius:14px}.specialist-profile .specialist-actions button span{font-size:10px}}
 
 .specialist-profile .profile-back{display:inline-block;margin-bottom:20px;color:#1d4d9c}
+
+.specialist-profile .profile-section-panel{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows 1400ms cubic-bezier(.45,0,.2,1),opacity 1000ms ease-in-out}
+.specialist-profile .profile-section-panel[data-open=true]{grid-template-rows:1fr;opacity:1}
+.specialist-profile .profile-section-inner{min-height:0;overflow:hidden}
+.specialist-profile .profile-section-content{padding-top:16px;overflow-wrap:anywhere}
+.specialist-profile .specialist-actions button{font-family:inherit;min-width:0}
+@media(prefers-reduced-motion:reduce){.specialist-profile .profile-section-panel{transition-duration:0.01ms}}

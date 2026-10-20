@@ -12,6 +12,7 @@ import '../services-light.css';
 import '../services-soft.css';
 import './profile.css';
 import ProfileHeader from './ProfileHeader';
+import ProfileSections from './ProfileSections';
 
 
 export const metadata: Metadata = { title: 'Tkhay Alina — ESX', description: 'Личная страница Tkhay Alina на ESX.' };
@@ -41,11 +42,11 @@ export default async function AlinaPage() {
       <section className="services-card-section"><h2>Описание</h2><p className="specialist-description">{content.description}</p></section>
       
       {specialist.service_languages.length > 0 && <section className="services-card-section"><h2>Языки общения</h2><div className="services-tags">{specialist.service_languages.map(language => <span key={language}>{serviceLanguages[language]}</span>)}</div></section>}
-      <div className="specialist-actions">
-        <details><summary>Услуги</summary>{services.length > 0 ? <ul className="services-item-list">{services.map((item, index) => <li key={index}>{item}</li>)}</ul> : <p>Уточните услуги у специалиста.</p>}</details>
-        <details><summary>Контакты</summary><div className="services-contacts">{phones.map((phone, index) => <a key={index} href={'tel:' + phone.number.replace(/[^+0-9]/g, '')}>{phone.number}</a>)}{socials.map(link => <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">{socialNetworks[link.network]} ↗</a>)}{phones.length === 0 && socials.length === 0 && <p>Контакты пока не указаны.</p>}</div></details>
-        <details><summary>Наш адрес</summary><p>{specialist.address?.trim() || 'Адрес пока не указан. Уточните его у специалиста.'}</p></details>
-      </div>
+      <ProfileSections>
+        <div>{services.length > 0 ? <ul className="services-item-list">{services.map((item, index) => <li key={index}>{item}</li>)}</ul> : <p>Уточните услуги у специалиста.</p>}</div>
+        <div><div className="services-contacts">{phones.map((phone, index) => <a key={index} href={'tel:' + phone.number.replace(/[^+0-9]/g, '')}>{phone.number}</a>)}{socials.map(link => <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">{socialNetworks[link.network]} ↗</a>)}{phones.length === 0 && socials.length === 0 && <p>Контакты пока не указаны.</p>}</div></div>
+        <div><p>{specialist.address?.trim() || 'Адрес пока не указан. Уточните его у специалиста.'}</p></div>
+      </ProfileSections>
       
     </article></main>
   </div>;
