@@ -8,10 +8,10 @@
 .specialist-profile .services-contacts{display:flex;flex-wrap:wrap;gap:16px}
 .specialist-profile .services-contacts a{color:#1d4d9c;text-decoration:underline;text-underline-offset:4px}
 @media(max-width:540px){.specialist-profile .specialist-heading{align-items:flex-start;flex-direction:column;gap:16px}.specialist-profile .specialist-portrait{width:112px;height:112px}}
-.specialist-profile .citizenship-toggle,.specialist-profile .citizenship-options button{min-height:48px;padding:12px 18px;border:1px solid #fff;border-radius:18px;background:linear-gradient(145deg,#f0f5ff,#d9e4f7);box-shadow:4px 5px 11px #a4b7d359;color:#1d4d9c;font:inherit;cursor:pointer}
-.specialist-profile .citizenship-toggle{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;text-align:left;font-weight:600}
-.specialist-profile .citizenship-options{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
-.specialist-profile .citizenship-options button{flex:1 1 150px}
-.specialist-profile .citizenship-options button[aria-pressed=true]{background:#1d4d9c;color:#fff}
-.specialist-profile .citizenship-toggle:hover,.specialist-profile .citizenship-options button:hover{filter:brightness(.97)}
-.specialist-profile .citizenship-selected{color:#526889;margin:16px 0 0}
+
+.specialist-profile .specialist-actions{display:grid;gap:12px;margin-top:24px}
+.specialist-profile .specialist-actions summary{display:flex;align-items:center;justify-content:space-between;min-height:48px;padding:12px 18px;border:1px solid #fff;border-radius:18px;background:linear-gradient(145deg,#f0f5ff,#d9e4f7);box-shadow:4px 5px 11px #a4b7d359;color:#1d4d9c;font-weight:600;cursor:pointer;list-style:none}
+.specialist-profile .specialist-actions summary::-webkit-details-marker{display:none}
+.specialist-profile .specialist-actions summary::after{content:'▾'}
+.specialist-profile .specialist-actions details[open] summary::after{content:'▴'}
+.specialist-profile .specialist-actions .services-contacts{padding:18px 0}
