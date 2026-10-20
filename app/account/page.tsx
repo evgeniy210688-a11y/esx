@@ -13,6 +13,7 @@ import { registrationLabels } from './registrationLabels';
 import ProfilePhoto from './ProfilePhoto';
 import AdminEntry from '@/app/admin/AdminEntry';
 import SiteHeader from '@/app/design/SiteHeader';
+import RegistrationLink from '@/app/services/RegistrationLink';
 import { languages, type Language } from '@/app/design/content';
 
 const languageLabels: Record<Language, string> = {
@@ -114,6 +115,7 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
     {!ready ? <p role="status">{registrationLabels[language].loading}</p> : !user || user.is_anonymous ? <><p className="account-muted">{t.registrationHelp}</p><EmailSignIn language={language} />{user && <section className="account-card"><h2>{t.guestConversations}</h2><p className="account-muted">{t.guestHelp}</p><ul className="account-chats">{chats.map(chat => <li key={chat.id}><Link href={'/messages/' + chat.id}><span dir="auto">{contactNames[chat.id] === undefined ? registrationLabels[language].loading : contactNames[chat.id] === null ? t.loadError : contactNames[chat.id] || `${t.conversation} ${chat.id.slice(0, 8)}`}</span> →</Link></li>)}</ul></section>}</> : <>
       <header className="account-welcome"><ProfilePhoto userId={user.id} language={language}>{username && <p>{t.username}: <strong>{username}</strong></p>}<p className="account-muted">{user.email || user.phone}</p></ProfilePhoto>{languagePicker}</header>
       <AdminEntry language={language} account />
+      <section className="account-card"><RegistrationLink language={language} /></section>
       <section className="account-card"><h2>{t.qrTitle}</h2><p>{t.qrHelp}</p>
         <p className="account-muted">{t.guestChatNote}</p>
         {!qr && !loadError && <p role="status">{t.qrLoading}</p>}

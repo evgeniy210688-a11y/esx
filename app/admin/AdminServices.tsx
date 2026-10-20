@@ -46,9 +46,10 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
   const [draft, setDraft] = useState<Listing>(blank);
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
   const categoryOf = (row: Listing) => serviceCategory(row).trim() || 'Без категории';
   const categories = [...new Set(rows.map(categoryOf))].sort((a, b) => a.localeCompare(b, 'ru'));
-  const filteredRows = rows.filter(row => (!category || categoryOf(row) === category) && matchesService(row, {
+  const filteredRows = rows.filter(row => (!statusFilter || row.status === statusFilter) && (!category || categoryOf(row) === category) && matchesService(row, {
     query, city: '', category: '', language: '', interpreter: false, interpreterLanguage: '',
   }));
   const groups = categories.map(name => ({ name, rows: filteredRows.filter(row => categoryOf(row) === name) })).filter(group => group.rows.length);
@@ -135,6 +136,11 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     {access === 'error' && <section className="services-empty"><h1>Не удалось проверить доступ</h1><button onClick={() => { setAccess('loading'); setAttempt(n => n + 1); }}>Повторить</button></section>}
     {access === 'allowed' && <><h1>Панель управления</h1><div className="admin-summary">{Object.entries(statuses).map(([status, label]) => <div key={status}><strong>{rows.filter(row => row.status === status).length}</strong><span>{label}</span></div>)}</div><h2>Компании и специалисты</h2><p>Добавляйте компании, менеджеров и переводчиков, редактируйте карточки и выбирайте, что показывать в справочнике.</p><div className="admin-columns"><section aria-label="Компании и специалисты" className="services-card"><button disabled={busy} onClick={() => { if (draft.name && !window.confirm('Открыть новую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...blank }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}>+ Добавить карточку</button>
       <div className="admin-list-filters">
+        <label htmlFor="admin-list-status">Статус заявки</label>
+        <select id="admin-list-status" value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+          <option value="">Все статусы</option>
+          {Object.entries(statuses).map(([value, label]) => <option key={value} value={value}>{label} ({rows.filter(row => row.status === value).length})</option>)}
+        </select>
         <label htmlFor="admin-list-search">Поиск карточек</label>
         <input id="admin-list-search" type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Название, город, услуга…" />
         <label htmlFor="admin-list-category">Категория</label>
@@ -142,7 +148,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
           <option value="">Все категории</option>
           {[...new Set([...categories, ...(category ? [category] : [])])].map(name => <option key={name} value={name}>{name}</option>)}
         </select>
-        {(query || category) && <button type="button" onClick={() => { setQuery(''); setCategory(''); }}>Сбросить фильтры</button>}
+        {(query || category || statusFilter) && <button type="button" onClick={() => { setQuery(''); setCategory(''); setStatusFilter(''); }}>Сбросить фильтры</button>}
       </div>
       <p role="status" aria-live="polite">Найдено: {filteredRows.length} из {rows.length}</p>
       {!rows.length ? <p>Карточек пока нет.</p> : !filteredRows.length && <p>Ничего не найдено. Измените запрос или категорию.</p>}

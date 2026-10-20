@@ -1,0 +1,17 @@
+.registration-page .services-main{max-width:900px;margin:auto;padding:32px 20px 64px}
+.registration-page h1{font-size:clamp(26px,4vw,38px);line-height:1.2}
+.registration-page .registration-history{margin:28px 0}
+.registration-page .registration-form fieldset{display:grid;gap:18px;min-width:0;border:0;padding:0;margin:0}
+.registration-page .registration-form label{display:grid;gap:8px}
+.registration-page input,.registration-page textarea,.registration-page select{width:100%;padding:12px;border:1px solid #b9cbe4;border-radius:12px;color:#203757;background:#f8fbff;font:inherit}
+.registration-page .registration-check{display:flex;align-items:center;gap:8px}
+.registration-page .registration-check input{width:auto}
+.registration-page .registration-languages{display:flex;flex-wrap:wrap;gap:16px;margin-top:12px}
+.registration-page button{min-height:44px;padding:10px 18px;border:1px solid #c2d4ed;border-radius:14px;background:#e0eafb;color:#1d4d9c;font:inherit;cursor:pointer}
+.registration-page button[type=submit]{background:#1d4d9c;color:#fff}
+.registration-page button:disabled{opacity:.6;cursor:wait}
+.registration-page .registration-form img{object-fit:contain;border-radius:16px}
+.registration-page .account-card{padding:24px;border:1px solid #fff;border-radius:24px;background:#edf3ff}
+.registration-page .account-form{display:grid;gap:16px}
+.registration-page .account-form label{display:grid;gap:8px}
+.registration-page .account-tabs{display:flex;gap:12px;margin-bottom:20px}
