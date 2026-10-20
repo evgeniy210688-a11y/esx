@@ -16,9 +16,8 @@
 
 .specialist-profile .profile-back{display:inline-block;margin-bottom:20px;color:#1d4d9c}
 
-.specialist-profile .profile-section-panel{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows 1400ms cubic-bezier(.45,0,.2,1),opacity 1000ms ease-in-out}
-.specialist-profile .profile-section-panel[data-open=true]{grid-template-rows:1fr;opacity:1}
-.specialist-profile .profile-section-inner{min-height:0;overflow:hidden}
-.specialist-profile .profile-section-content{padding-top:16px;overflow-wrap:anywhere}
+.specialist-profile .profile-section-panel{height:0;overflow:hidden;opacity:0;transition:height 1400ms cubic-bezier(.45,0,.2,1),opacity 1000ms ease-in-out}
+.specialist-profile .profile-section-panel[data-open=true]{opacity:1}
+.specialist-profile .profile-section-content{display:flow-root;padding-top:16px;overflow-wrap:anywhere}
 .specialist-profile .specialist-actions button{font-family:inherit;min-width:0}
 @media(prefers-reduced-motion:reduce){.specialist-profile .profile-section-panel{transition-duration:0.01ms}}
