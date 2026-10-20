@@ -45,7 +45,12 @@ export default async function AlinaPage() {
       <ProfileSections>
         <div>{services.length > 0 ? <ul className="services-item-list">{services.map((item, index) => <li key={index}>{item}</li>)}</ul> : <p>Уточните услуги у специалиста.</p>}</div>
         <div><div className="services-contacts">{phones.map((phone, index) => <a key={index} href={'tel:' + phone.number.replace(/[^+0-9]/g, '')}>{phone.number}</a>)}{socials.map(link => <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">{socialNetworks[link.network]} ↗</a>)}{phones.length === 0 && socials.length === 0 && <p>Контакты пока не указаны.</p>}</div></div>
-        <div><p>{specialist.address?.trim() || 'Адрес пока не указан. Уточните его у специалиста.'}</p></div>
+        <div><p>{specialist.address?.trim() || 'Адрес пока не указан. Уточните его у специалиста.'}</p>
+          {specialist.address?.trim() && <div className="services-map-links">
+            <a href={'https://map.kakao.com/link/search/' + encodeURIComponent(specialist.address.trim())} target="_blank" rel="noopener noreferrer">Kakao Map ↗</a>
+            <a href={'https://map.naver.com/p/search/' + encodeURIComponent(specialist.address.trim())} target="_blank" rel="noopener noreferrer">Naver Map ↗</a>
+          </div>}
+        </div>
       </ProfileSections>
       
     </article></main>
