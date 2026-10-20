@@ -1,0 +1,10 @@
+.specialist-profile .services-main{max-width:850px;margin:0 auto;padding:32px 20px 64px}
+.specialist-profile .specialist-heading{display:flex;align-items:center;gap:24px;margin-bottom:28px}
+.specialist-profile .specialist-portrait{width:140px;height:140px;object-fit:cover;border-radius:24px}
+.specialist-profile h1{font-size:clamp(28px,5vw,40px);line-height:1.2;margin:8px 0}
+.specialist-profile h2{font-size:20px;margin:0 0 16px;color:#203757}
+.specialist-profile .specialist-description{white-space:pre-line;line-height:1.8;color:#526889;overflow-wrap:anywhere}
+.specialist-profile .services-card-section{margin-top:24px;padding-top:24px}
+.specialist-profile .services-contacts{display:flex;flex-wrap:wrap;gap:16px}
+.specialist-profile .services-contacts a{color:#1d4d9c;text-decoration:underline;text-underline-offset:4px}
+@media(max-width:540px){.specialist-profile .specialist-heading{align-items:flex-start;flex-direction:column;gap:16px}.specialist-profile .specialist-portrait{width:112px;height:112px}}

@@ -103,3 +103,7 @@
 @media(prefers-reduced-motion:reduce){.services-directory .services-back-to-top{transition:none}}
 .services-directory .services-footer .services-admin-entry{display:inline;padding:0;border:0;border-radius:0;background:transparent;color:inherit;font:inherit;box-shadow:none;transform:none}
 .services-directory .services-footer .services-admin-entry:hover{text-decoration:underline;background:transparent}
+
+.services-directory .services-card .services-profile-link{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 18px;margin-top:18px;border:1px solid #ffffffbf;border-radius:18px;background:linear-gradient(145deg,#f0f5ff,#d9e4f7);box-shadow:4px 5px 11px #a4b7d359,-4px -4px 10px #ffffffa0;color:#1d4d9c;font-weight:600;text-decoration:none}
+.services-directory .services-card .services-profile-link:hover{background:linear-gradient(145deg,#e7f0ff,#cfdef6)}
+.services-directory .services-card .services-profile-link:focus-visible{outline:2px solid #1d4d9c;outline-offset:4px}
