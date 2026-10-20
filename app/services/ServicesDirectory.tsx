@@ -11,6 +11,7 @@ import AdminEntry from '@/app/admin/AdminEntry';
 import { supabase } from '@/lib/supabase';
 import { serviceCategory, isPersonalListing, normalizeServiceCity, serviceCities, matchesService, safeServiceWebsite, serviceLanguages, type ServiceListing, type ServiceFilters } from '@/lib/service-directory';
 import './services.css';
+import ServicesHeader from './ServicesHeader';
 import './services-light.css';
 import './services-soft.css';
 import ServiceFilterPicker from './ServiceFilterPicker';
@@ -475,7 +476,7 @@ export default function ServicesDirectory() {
   const cities = [...new Set(listings.flatMap(s => serviceCities(s)))].sort((a,b) => a.localeCompare(b, 'ru'));
   const categories = [...new Set(listings.map(s => serviceCategory(s)))].sort((a,b) => a.localeCompare(b, 'ru'));
   return <div className="services-page services-directory" lang={language}>
-    <header className="services-top"><Link className="services-brand" href="/" aria-label={"ESX — " + t[2]}><Image src="/esx-wordmark-color.png" alt="ESX" width={140} height={48} unoptimized /><span> / {t[1]}</span></Link><nav aria-label={t[36]}><Link href="/">{t[2]}</Link><Link href="/chat">{t[3]} ↗</Link></nav><div className="services-interface-language"><span id="services-language-label">{t[0]}</span><details className="services-language-picker" onKeyDown={e => { if (e.key === 'Escape') { e.currentTarget.open = false; e.currentTarget.querySelector('summary')?.focus(); } }}><summary aria-labelledby="services-language-label services-language-value"><Image src={'/flags/' + flags[language] + '.svg'} alt="" width={24} height={16} unoptimized /><span id="services-language-value">{interfaceLanguages.find(l => l.code === language)?.name}</span><span aria-hidden="true">▾</span></summary><ul aria-labelledby="services-language-label">{interfaceLanguages.map(l => <li key={l.code}><button type="button" lang={l.code} aria-pressed={language === l.code} onClick={e => { chooseLanguage(l.code); const picker = e.currentTarget.closest('details'); if (picker) { picker.open = false; picker.querySelector('summary')?.focus(); } }}><Image src={'/flags/' + flags[l.code] + '.svg'} alt="" width={24} height={16} unoptimized /><span>{l.name}</span>{language === l.code && <span aria-hidden="true">✓</span>}</button></li>)}</ul></details></div></header>
+    <ServicesHeader language={language} chooseLanguage={chooseLanguage} />
     <main className="services-main"><section className="services-intro"><p className="services-eyebrow">ESX • {t[4]}</p><h1>{t[5]}</h1><p>{t[6]}</p></section>
     <AdminEntry language={language} />
     {categories.length > 0 && <section className="services-category-carousel" aria-label={t[10]}>

@@ -17,3 +17,5 @@
 .specialist-profile .specialist-actions details[open] summary::after{content:'▴'}
 .specialist-profile .specialist-actions .services-contacts{padding:18px 0}
 @media(max-width:540px){.specialist-profile .specialist-actions{gap:6px}.specialist-profile .specialist-actions summary{justify-content:center;gap:4px;padding:10px 4px;font-size:12px;white-space:nowrap;border-radius:14px}.specialist-profile .specialist-actions summary::after{font-size:10px}}
+
+.specialist-profile .profile-back{display:inline-block;margin-bottom:20px;color:#1d4d9c}

@@ -11,6 +11,7 @@ import '../services.css';
 import '../services-light.css';
 import '../services-soft.css';
 import './profile.css';
+import ProfileHeader from './ProfileHeader';
 
 
 export const metadata: Metadata = { title: 'Tkhay Alina — ESX', description: 'Личная страница Tkhay Alina на ESX.' };
@@ -30,8 +31,8 @@ export default async function AlinaPage() {
   const phones = companyPhones(specialist);
   const socials = validSocialLinks(specialist.social_links);
   return <div className="services-page services-directory specialist-profile">
-    <header className="services-top"><Link href="/">ESX</Link><nav><Link href="/services">← К специалистам</Link></nav></header>
-    <main className="services-main"><article className="services-card">
+    <ProfileHeader />
+    <main className="services-main"><Link className="profile-back" href="/services">← К специалистам</Link><article className="services-card">
       <div className="specialist-heading">
         {photos[0] && <Image src={photos[0]} alt={specialist.name} width={160} height={160} unoptimized className="specialist-portrait" />}
         <div><p className="services-eyebrow">{normalizeServiceCity(specialist.city)}</p><h1>{specialist.name}</h1><p>{specialist.category}</p></div>

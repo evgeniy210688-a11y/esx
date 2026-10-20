@@ -7,6 +7,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { copy, languages, type Language } from './content';
 import './design.css';
 import './mobile-invite.css';
+import './language-flags.css';
 import { accountLabels } from '../account/accountLabels';
 import BusinessHero from './BusinessHero';
 import MobileFoxGuide from './MobileFoxGuide';
@@ -21,6 +22,7 @@ import AccountLink from '../account/AccountLink';
 import { supabase } from '@/lib/supabase';
 import { contactLabels } from './contactLabels';
 
+const languageFlags: Record<Language, string> = { ru: 'ru', ko: 'kr', en: 'gb', zh: 'cn', tr: 'tr', vi: 'vn', km: 'kh', kk: 'kz' };
 const navigation = [{ id: 'home', label: 0 }, { id: 'korea', label: 1 }, { id: 'about', label: 2 }, { id: 'advertising', label: 3 }, { id: 'contact', label: 4 }];
 export default function SitePage({ section = 'home' }: { section?: 'home' | 'korea' | 'about' | 'advertising' | 'contact' }) {
   const siteRef = useRef<HTMLDivElement>(null);
@@ -165,7 +167,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
     </div></header>
     {menuOpen && <div className="mobile-menu-backdrop" style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }} aria-hidden="true" onClick={() => setMenuOpen(false)} />}
     <main key={section} className="site-main page-enter">
-      <section className="language-panel" aria-label={t[10]}><div className="language-label"><span>◎</span><div><strong>{t[10]}</strong><small>{t[11]}</small></div></div><div className="language-row">{languages.map(l=><button lang={l.code} key={l.code} onClick={()=>choose(l.code)} aria-pressed={language===l.code} className={language===l.code?'selected':''}>{l.name}</button>)}</div></section>
+      <section className="language-panel" aria-label={t[10]}><div className="language-label"><span>◎</span><div><strong>{t[10]}</strong><small>{t[11]}</small></div></div><div className="language-row">{languages.map(l=><button lang={l.code} key={l.code} onClick={()=>choose(l.code)} aria-pressed={language===l.code} className={language===l.code?'selected':''}><Image src={'/flags/' + languageFlags[l.code] + '.svg'} alt="" width={24} height={16} unoptimized /><span>{l.name}</span></button>)}</div></section>
       {section === 'korea' && <KoreaSection language={language} />}
       {section === 'advertising' && (
 <section id="advertising" className="advertising"><div><div className="eyebrow">{t[3]}</div><h1 style={{ fontSize: 'clamp(30px, 3.3vw, 43px)', lineHeight: 1.1 }}>{t[26]}</h1><p>{t[27]}</p><a href="/contact" className="button light">{t[31]} ↗</a></div><div className="ad-formats"><small>{t[45]}</small>{[28,29,30].map((n,i)=><div key={n}><span>0{i+1}</span><h3>{t[n]}</h3><span>↗</span></div>)}</div></section>
