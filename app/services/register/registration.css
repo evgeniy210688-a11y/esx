@@ -15,3 +15,6 @@
 .registration-page .account-form{display:grid;gap:16px}
 .registration-page .account-form label{display:grid;gap:8px}
 .registration-page .account-tabs{display:flex;gap:12px;margin-bottom:20px}
+
+.registration-social-row{display:grid;grid-template-columns:minmax(140px,1fr) minmax(180px,2fr) auto;gap:12px;align-items:end}
+@media(max-width:600px){.registration-social-row{grid-template-columns:1fr}.registration-social-row button{justify-self:start}}

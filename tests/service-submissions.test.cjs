@@ -30,9 +30,9 @@ test('submission permissions and moderation in PostgreSQL', {
   }
   await db.query('insert into auth.users values ($1,false,null)', [unverified]);
   for (const file of [
-    '20261011_service_directory.sql', '20261011_service_admin.sql',
+    '20261011_service_directory.sql', '20261011_service_socials.sql', '20261011_service_admin.sql',
     '20261012_company_phones_photo.sql', '20261012_company_manager.sql',
-    '20261015_personal_service_listings.sql', '20261020_service_submissions.sql',
+    '20261015_personal_service_listings.sql', '20261020_service_submissions.sql', '20261021_submission_socials.sql',
   ]) await db.exec(fs.readFileSync(path.join('supabase/migrations', file), 'utf8'));
   await db.query('insert into public.esx_service_admins(user_id) values ($1)', [admin]);
   async function as(role, id = '') {
@@ -42,7 +42,7 @@ test('submission permissions and moderation in PostgreSQL', {
   }
   const company = { listing_kind: 'company', name: 'Test company', description: 'Services',
     city: 'Seoul', category: 'Consulting', address: 'Seoul address', phone: '+82 10-1234-5678',
-    service_languages: ['ru'], website: '', photo: null };
+    social_links: [{ network: 'telegram', url: 'https://t.me/example' }, { network: 'instagram', url: 'https://instagram.com/example' }], service_languages: ['ru'], website: '', photo: null };
   const listing = randomUUID();
   const submit = (id, input = company) => db.query('select public.esx_submit_service($1,$2)', [id, JSON.stringify(input)]);
   try {
@@ -58,6 +58,7 @@ test('submission permissions and moderation in PostgreSQL', {
       await as('authenticated', owner);
       await submit(listing, { ...company, status: 'published', user_id: other });
       assert.equal((await db.query('select status from public.esx_service_listings where id=$1', [listing])).rows[0].status, 'pending');
+      assert.deepEqual((await db.query('select social_links from public.esx_service_listings where id=$1', [listing])).rows[0].social_links, company.social_links);
       assert.equal((await db.query('select user_id from public.esx_service_owners where listing_id=$1', [listing])).rows[0].user_id, owner);
     });
     await t.test('retry is idempotent', async () => {
@@ -84,6 +85,7 @@ test('submission permissions and moderation in PostgreSQL', {
     await t.test('invalid company and specialist submissions are rejected', async () => {
       await as('authenticated', owner);
       for (const input of [
+        ...[null, {}, [{network:'telegram',url:'javascript:alert(1)'}], [{network:'unknown',url:'https://example.com'}], Array(13).fill({network:'telegram',url:'https://t.me/example'})].map(social_links => ({...company, social_links})),
         { ...company, address: '' }, { ...company, service_languages: [] },
         { ...company, service_languages: ['invalid'] }, { ...company, phone: 'abc' },
         { ...company, listing_kind: 'admin' }, { ...company, description: '' },

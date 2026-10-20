@@ -8,6 +8,7 @@ import EmailSignIn from '@/app/account/EmailSignIn';
 import { supabase } from '@/lib/supabase';
 import { serviceLanguages, type ServiceLanguage } from '@/lib/service-directory';
 import { prepareCompanyPhoto, validCompanyPhones } from '@/lib/service-media';
+import { socialNetworks, validSocialLinks, type SocialLink } from '@/lib/service-socials';
 import { joinServiceDescription } from '@/lib/service-description';
 import '../services.css';
 import '../services-light.css';
@@ -31,6 +32,7 @@ function SubmissionForm({ userId }: { userId: string }) {
   const [kind, setKind] = useState<'company' | 'specialist'>('company');
   const [interpreter, setInterpreter] = useState(false);
   const [languages, setLanguages] = useState<ServiceLanguage[]>([]);
+  const [socials, setSocials] = useState<SocialLink[]>([]);
   const [photo, setPhoto] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [photoBusy, setPhotoBusy] = useState(false);
@@ -70,6 +72,8 @@ function SubmissionForm({ userId }: { userId: string }) {
       try { const url = new URL(get('website')); if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) throw new Error(); }
       catch { setMessage('Укажите ссылку на сайт, начинающуюся с https:// или http://.'); return; }
     }
+    const socialLinks = socials.map(link => ({ ...link, url: link.url.trim() }));
+    if (validSocialLinks(socialLinks).length !== socialLinks.length) { setMessage('Укажите полную ссылку для каждой соцсети: https:// или http://.'); return; }
     lock.current = true; setBusy(true); setMessage('');
     requestId.current ??= crypto.randomUUID();
     try {
@@ -78,7 +82,7 @@ function SubmissionForm({ userId }: { userId: string }) {
         p_input: {
           listing_kind: kind === 'company' ? 'company' : interpreter ? 'interpreter' : 'manager',
           name: get('name'), city: get('city'), category: get('category'), address: get('address'),
-          phone: get('phone'), website: get('website'), description, photo, service_languages: languages,
+          phone: get('phone'), website: get('website'), social_links: socialLinks, description, photo, service_languages: languages,
         },
       });
       if (error) throw error;
@@ -108,7 +112,16 @@ function SubmissionForm({ userId }: { userId: string }) {
         <label>Город<input name="city" required={kind === 'company'} maxLength={100} /></label>
         <label>Адрес{kind === 'specialist' ? ' (необязательно)' : ''}<input name="address" required={kind === 'company'} maxLength={500} /></label>
         <label>Телефон<input name="phone" type="tel" required maxLength={30} placeholder="+82 10-1234-5678" /></label>
-        <label>Сайт или страница в соцсети (необязательно)<input name="website" type="url" maxLength={500} placeholder="https://" /></label>
+        <label>Сайт (необязательно)<input name="website" type="url" maxLength={500} placeholder="https://" /></label>
+        <fieldset className="registration-socials"><legend>Социальные сети и мессенджеры (необязательно)</legend>
+          <p>Добавьте ссылки на страницы или чаты. До 12 ссылок.</p>
+          {socials.map((link, index) => <div className="registration-social-row" key={index}>
+            <label>Соцсеть {index + 1}<select value={link.network} onChange={e => setSocials(items => items.map((item, i) => i === index ? { ...item, network: e.target.value as SocialLink['network'] } : item))}>{Object.entries(socialNetworks).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</select></label>
+            <label>Ссылка {index + 1}<input type="url" required pattern="https?://.*" maxLength={2000} placeholder="https://…" value={link.url} onChange={e => setSocials(items => items.map((item, i) => i === index ? { ...item, url: e.target.value } : item))} /></label>
+            <button type="button" aria-label={'Убрать соцсеть ' + (index + 1)} onClick={() => setSocials(items => items.filter((_, i) => i !== index))}>Убрать</button>
+          </div>)}
+          <button type="button" disabled={socials.length >= 12} onClick={() => setSocials(items => [...items, { network: 'telegram', url: '' }])}>+ Добавить соцсеть</button>
+        </fieldset>
         <label>Описание<textarea name="description" required maxLength={4000} rows={5} /></label>
         <label>Услуги — по одной на строку<textarea name="services" maxLength={2000} rows={4} /></label>
         <fieldset><legend>Языки общения{interpreter ? ' / перевода' : ''}</legend><div className="registration-languages">{Object.entries(serviceLanguages).map(([code, name]) => <label className="registration-check" key={code}><input type="checkbox" checked={languages.includes(code as ServiceLanguage)} onChange={() => setLanguages(current => current.includes(code as ServiceLanguage) ? current.filter(value => value !== code) : [...current, code as ServiceLanguage])} />{name}</label>)}</div></fieldset>
@@ -124,7 +137,7 @@ function SubmissionForm({ userId }: { userId: string }) {
       </fieldset>
       {photoBusy && <p role="status">Подготавливаем фото…</p>}
       <p role="status" aria-live="polite">{message}</p>
-      {success && <button type="button" onClick={() => { formRef.current?.reset(); setLanguages([]); setPhoto(null); setKind('company'); setInterpreter(false); requestId.current = null; setSuccess(false); setMessage(''); }}>Подать ещё одну заявку</button>}
+      {success && <button type="button" onClick={() => { formRef.current?.reset(); setLanguages([]); setSocials([]); setPhoto(null); setKind('company'); setInterpreter(false); requestId.current = null; setSuccess(false); setMessage(''); }}>Подать ещё одну заявку</button>}
     </form>
   </>;
 }
