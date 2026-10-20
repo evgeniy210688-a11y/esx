@@ -11,6 +11,7 @@ import '../services.css';
 import '../services-light.css';
 import '../services-soft.css';
 import './profile.css';
+import CitizenshipPicker from './CitizenshipPicker';
 
 export const metadata: Metadata = { title: 'Tkhay Alina — ESX', description: 'Личная страница Tkhay Alina на ESX.' };
 export const dynamic = 'force-dynamic';
@@ -35,6 +36,7 @@ export default async function AlinaPage() {
         {photos[0] && <Image src={photos[0]} alt={specialist.name} width={160} height={160} unoptimized className="specialist-portrait" />}
         <div><p className="services-eyebrow">{normalizeServiceCity(specialist.city)}</p><h1>{specialist.name}</h1><p>{specialist.category}</p></div>
       </div>
+      <CitizenshipPicker />
       <section className="services-card-section"><h2>Описание</h2><p className="specialist-description">{content.description}</p></section>
       {services.length > 0 && <section className="services-card-section"><h2>Услуги</h2><ul className="services-item-list">{services.map((item, index) => <li key={index}>{item}</li>)}</ul></section>}
       {specialist.service_languages.length > 0 && <section className="services-card-section"><h2>Языки общения</h2><div className="services-tags">{specialist.service_languages.map(language => <span key={language}>{serviceLanguages[language]}</span>)}</div></section>}
