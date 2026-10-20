@@ -107,3 +107,7 @@
 .services-directory .services-card .services-profile-link{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 18px;margin-top:18px;border:1px solid #ffffffbf;border-radius:18px;background:linear-gradient(145deg,#f0f5ff,#d9e4f7);box-shadow:4px 5px 11px #a4b7d359,-4px -4px 10px #ffffffa0;color:#1d4d9c;font-weight:600;text-decoration:none}
 .services-directory .services-card .services-profile-link:hover{background:linear-gradient(145deg,#e7f0ff,#cfdef6)}
 .services-directory .services-card .services-profile-link:focus-visible{outline:2px solid #1d4d9c;outline-offset:4px}
+/* Keep the profile action inside the standard collapsed card height. */
+.services-directory .services-card[data-expanded=false] .services-profile-link{height:40px;min-height:40px;margin-top:8px;padding:7px 12px}
+.services-directory .services-card[data-expanded=false]:has(>.services-profile-link) .services-description-wrap{height:calc(5.1em - 48px)!important;min-height:0}
+.services-directory .services-card[data-expanded=false]:has(>.services-profile-link) .services-description{-webkit-line-clamp:1}
