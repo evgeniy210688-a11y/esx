@@ -9,9 +9,11 @@
 .specialist-profile .services-contacts a{color:#1d4d9c;text-decoration:underline;text-underline-offset:4px}
 @media(max-width:540px){.specialist-profile .specialist-heading{align-items:flex-start;flex-direction:column;gap:16px}.specialist-profile .specialist-portrait{width:112px;height:112px}}
 
-.specialist-profile .specialist-actions{display:grid;gap:12px;margin-top:24px}
+.specialist-profile .specialist-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:start;gap:12px;margin-top:24px}
+.specialist-profile .specialist-actions details{min-width:0;overflow-wrap:anywhere}
 .specialist-profile .specialist-actions summary{display:flex;align-items:center;justify-content:space-between;min-height:48px;padding:12px 18px;border:1px solid #fff;border-radius:18px;background:linear-gradient(145deg,#f0f5ff,#d9e4f7);box-shadow:4px 5px 11px #a4b7d359;color:#1d4d9c;font-weight:600;cursor:pointer;list-style:none}
 .specialist-profile .specialist-actions summary::-webkit-details-marker{display:none}
 .specialist-profile .specialist-actions summary::after{content:'▾'}
 .specialist-profile .specialist-actions details[open] summary::after{content:'▴'}
 .specialist-profile .specialist-actions .services-contacts{padding:18px 0}
+@media(max-width:540px){.specialist-profile .specialist-actions{gap:6px}.specialist-profile .specialist-actions summary{justify-content:center;gap:4px;padding:10px 4px;font-size:12px;white-space:nowrap;border-radius:14px}.specialist-profile .specialist-actions summary::after{font-size:10px}}
