@@ -113,7 +113,7 @@ function SubmissionForm({ userId }: { userId: string }) {
         {kind === 'specialist' && <label>Компания, которую представляете (необязательно)<input name="represented_company" maxLength={200} placeholder="Название компании" /></label>}
         {kind === 'specialist' && <label className="registration-check"><input type="checkbox" checked={interpreter} onChange={e => setInterpreter(e.target.checked)} />Работаю переводчиком</label>}
         <label>Город<input name="city" required={kind === 'company'} maxLength={100} /></label>
-        <label>Адрес{kind === 'specialist' ? ' (необязательно)' : ''}<input name="address" required={kind === 'company'} maxLength={500} /></label>
+        <label>Адрес{kind === 'specialist' ? ' (необязательно)' : ''}<input name="address" required={kind === 'company'} maxLength={500} placeholder="Хвасон, Мансе-гу, Чанан-мён" /><small>Укажите город, район и населённый пункт через запятую. При необходимости добавьте улицу и номер дома.</small></label>
         <fieldset><legend>Телефоны</legend><p>Можно добавить до 5 номеров. Первый номер — основной.</p>
           {phones.map((phone, index) => <div className="registration-phone-row" key={index}>
             <label>Тип телефона {index + 1}<select value={phone.type} onChange={e => setPhones(items => items.map((item, i) => i === index ? { ...item, type: e.target.value as CompanyPhone['type'] } : item))}><option value="mobile">Мобильный</option><option value="office">Офисный</option><option value="other">Другой</option></select></label>
