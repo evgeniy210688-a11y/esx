@@ -131,6 +131,21 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
   function toggle(key: 'service_languages' | 'interpreter_languages', code: ServiceLanguage) {
     setDraft(d => ({ ...d, [key]: d[key].includes(code) ? d[key].filter(l => l !== code) : [...d[key], code] }));
   }
+  async function deleteListing() {
+    if (lock.current || !draft.id) return;
+    const id = draft.id;
+    const name = rows.find(row => row.id === id)?.name || draft.name;
+    if (!window.confirm(`Удалить карточку «${name}» навсегда? Она исчезнет с сайта. Это действие нельзя отменить.`)) return;
+    lock.current = true; setBusy(true); setMessage('');
+    try {
+      const { data, error } = await supabase.from('esx_service_listings').delete().eq('id', id).select('id').single();
+      if (error || !data) throw error ?? new Error('Not deleted');
+      setRows(current => current.filter(row => row.id !== id));
+      setDraft({ ...blank });
+      setMessage(`Карточка «${name}» удалена.`);
+    } catch { setMessage('Не удалось удалить карточку. Проверьте соединение и права доступа.'); }
+    finally { lock.current = false; setBusy(false); }
+  }
   async function save(event: FormEvent) {
     event.preventDefault(); if (lock.current) return;
     if (!personal && (!draft.service_languages.length || (draft.has_interpreter && !draft.interpreter_languages.length))) { setMessage('Выберите язык обслуживания и, при наличии переводчика, его язык.'); return; }
@@ -162,7 +177,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     {access === 'loading' && <p role="status">Проверяем права…</p>}
     {access === 'denied' && <section className="services-empty"><h1>Нет доступа администратора</h1><p>Этому аккаунту не назначены права управления услугами. Войдите в аккаунт администратора.</p></section>}
     {access === 'error' && <section className="services-empty"><h1>Не удалось проверить доступ</h1><button onClick={() => { setAccess('loading'); setAttempt(n => n + 1); }}>Повторить</button></section>}
-    {access === 'allowed' && <><h1>Панель управления</h1><div className="admin-summary">{Object.entries(statuses).map(([status, label]) => <div key={status}><strong>{rows.filter(row => row.status === status).length}</strong><span>{label}</span></div>)}</div><h2>Компании и специалисты</h2><p>Добавляйте компании, менеджеров и переводчиков, редактируйте карточки и выбирайте, что показывать в справочнике.</p><div className="admin-columns"><section aria-label="Компании и специалисты" className="services-card"><button disabled={busy} onClick={() => { if (draft.name && !window.confirm('Открыть новую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...blank }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}>+ Добавить карточку</button>
+    {access === 'allowed' && <><h1>Панель управления</h1><div className="admin-summary">{Object.entries(statuses).map(([status, label]) => <button type="button" key={status} aria-pressed={statusFilter === status} aria-controls="admin-listings" onClick={() => { setStatusFilter(status); setQuery(''); setCategory(''); document.getElementById('admin-listings')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}><strong>{rows.filter(row => row.status === status).length}</strong><span>{label}</span></button>)}</div><h2>Компании и специалисты</h2><p>Добавляйте компании, менеджеров и переводчиков, редактируйте карточки и выбирайте, что показывать в справочнике.</p><div className="admin-columns"><section id="admin-listings" aria-label="Компании и специалисты" className="services-card"><button disabled={busy} onClick={() => { if (draft.name && !window.confirm('Открыть новую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...blank }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}>+ Добавить карточку</button>
       {!personal && <div style={{ marginTop: 12 }}><button type="button" disabled={busy || !draft.name.trim()} onClick={addBranchCard}>+ Добавить филиал</button></div>}
       <div className="admin-list-filters">
         <label htmlFor="admin-list-status">Статус заявки</label>
@@ -207,6 +222,6 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
       {!personal && <><fieldset className="admin-socials"><legend>Менеджер</legend><label className="admin-check"><input type="checkbox" checked={!!draft.has_manager} onChange={e => change('has_manager', e.target.checked)} />Есть менеджер</label></fieldset><label className="admin-check"><input type="checkbox" checked={draft.has_interpreter} onChange={e => setDraft(d => ({ ...d, has_interpreter: e.target.checked, interpreter_languages: e.target.checked ? d.interpreter_languages : [] }))} />Есть переводчик</label></>}
       {(personal ? draft.listing_kind === 'interpreter' : draft.has_interpreter) && <fieldset className="admin-language"><legend>Языки переводчика{personal ? ' (необязательно)' : ''}</legend>{Object.entries(serviceLanguages).map(([code,label]) => <label key={code}><input type="checkbox" checked={draft.interpreter_languages.includes(code as ServiceLanguage)} onChange={() => toggle('interpreter_languages', code as ServiceLanguage)} />{label}</label>)}</fieldset>}
       <label>Публикация<select value={draft.status} onChange={e => change('status', e.target.value as Listing['status'])}>{Object.entries(statuses).map(([code,label]) => <option key={code} value={code}>{label}</option>)}</select></label><p>Только статус «Опубликовано» показывает карточку посетителям. «В архиве» убирает её из справочника.</p><button disabled={busy}>{busy ? 'Сохраняем…' : 'Сохранить карточку'}</button>
-    </fieldset></form></div></>}
+    </fieldset>{draft.id && <button type="button" className="admin-delete" disabled={busy} onClick={deleteListing}>{personal ? 'Удалить специалиста' : 'Удалить компанию'}</button>}</form></div></>}
     <p className="admin-message" role="status" aria-live="polite">{message}</p></>;
 }

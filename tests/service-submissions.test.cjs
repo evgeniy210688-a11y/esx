@@ -32,7 +32,7 @@ test('submission permissions and moderation in PostgreSQL', {
   for (const file of [
     '20261011_service_directory.sql', '20261011_service_socials.sql', '20261011_service_admin.sql',
     '20261012_company_phones_photo.sql', '20261012_company_manager.sql',
-    '20261015_personal_service_listings.sql', '20261020_service_submissions.sql', '20261021_submission_socials.sql', '20261021_submission_phones.sql', '20261021_specialist_company.sql',
+    '20261015_personal_service_listings.sql', '20261020_service_submissions.sql', '20261021_submission_socials.sql', '20261021_submission_phones.sql', '20261021_specialist_company.sql', '20261021_admin_delete_listing.sql',
   ]) await db.exec(fs.readFileSync(path.join('supabase/migrations', file), 'utf8'));
   await db.query('insert into public.esx_service_admins(user_id) values ($1)', [admin]);
   async function as(role, id = '') {
@@ -68,7 +68,7 @@ test('submission permissions and moderation in PostgreSQL', {
     await t.test('owner cannot publish, edit or delete the pending listing', async () => {
       assert.equal((await db.query("update public.esx_service_listings set status='published' where id=$1 returning id", [listing])).rows.length, 0);
       assert.equal((await db.query("update public.esx_service_listings set name='Changed' where id=$1 returning id", [listing])).rows.length, 0);
-      await assert.rejects(db.query('delete from public.esx_service_listings where id=$1', [listing]), /permission denied/);
+      assert.equal((await db.query('delete from public.esx_service_listings where id=$1 returning id', [listing])).rows.length, 0);
       await assert.rejects(db.query('insert into public.esx_service_owners values ($1,$2)', [randomUUID(), owner]), /permission denied/);
       await assert.rejects(db.query(`insert into public.esx_service_listings
         (name,city,category,address,phone,service_languages,status)
@@ -131,6 +131,14 @@ test('submission permissions and moderation in PostgreSQL', {
       assert.equal((await db.query('select id from public.esx_service_listings where id=$1', [id])).rows.length, 0);
       await as('authenticated', owner);
       assert.equal((await db.query('select status from public.esx_service_listings where id=$1', [id])).rows[0].status, 'archived');
+    });
+    await t.test('admin can delete listings and ownership is removed', async () => {
+      await as('authenticated', other);
+      assert.equal((await db.query('delete from public.esx_service_listings where id=$1 returning id', [listing])).rows.length, 0);
+      await as('authenticated', admin);
+      assert.equal((await db.query('delete from public.esx_service_listings where id=$1 returning id', [listing])).rows.length, 1);
+      await as('authenticated', owner);
+      assert.equal((await db.query('select listing_id from public.esx_service_owners where listing_id=$1', [listing])).rows.length, 0);
     });
   } finally { await db.close(); }
 });
