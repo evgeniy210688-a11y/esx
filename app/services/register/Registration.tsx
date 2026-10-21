@@ -7,7 +7,7 @@ import useAccount from '@/app/account/useAccount';
 import EmailSignIn from '@/app/account/EmailSignIn';
 import { supabase } from '@/lib/supabase';
 import { serviceLanguages, type ServiceLanguage } from '@/lib/service-directory';
-import { prepareCompanyPhoto, validCompanyPhones } from '@/lib/service-media';
+import { prepareCompanyPhoto, validCompanyPhones, type CompanyPhone } from '@/lib/service-media';
 import { socialNetworks, validSocialLinks, type SocialLink } from '@/lib/service-socials';
 import { joinServiceDescription } from '@/lib/service-description';
 import '../services.css';
@@ -32,6 +32,7 @@ function SubmissionForm({ userId }: { userId: string }) {
   const [kind, setKind] = useState<'company' | 'specialist'>('company');
   const [interpreter, setInterpreter] = useState(false);
   const [languages, setLanguages] = useState<ServiceLanguage[]>([]);
+  const [phones, setPhones] = useState<CompanyPhone[]>([{ type: 'mobile', number: '' }]);
   const [socials, setSocials] = useState<SocialLink[]>([]);
   const [photo, setPhoto] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -65,7 +66,8 @@ function SubmissionForm({ userId }: { userId: string }) {
     const values = new FormData(event.currentTarget);
     const get = (key: string) => String(values.get(key) ?? '').trim();
     if (!languages.length) { setMessage('Выберите хотя бы один язык общения.'); return; }
-    if (!validCompanyPhones([{ type: 'other', number: get('phone') }])) { setMessage('Проверьте номер телефона.'); return; }
+    const phoneNumbers = phones.map(phone => ({ ...phone, number: phone.number.trim() }));
+    if (!phoneNumbers.length || !validCompanyPhones(phoneNumbers)) { setMessage('Укажите от 1 до 5 корректных номеров телефона.'); return; }
     const description = joinServiceDescription(get('description'), get('services'));
     if (description.length > 5000) { setMessage('Описание и список услуг вместе должны содержать не более 5000 символов.'); return; }
     if (get('website')) {
@@ -82,7 +84,7 @@ function SubmissionForm({ userId }: { userId: string }) {
         p_input: {
           listing_kind: kind === 'company' ? 'company' : interpreter ? 'interpreter' : 'manager',
           name: get('name'), city: get('city'), category: get('category'), address: get('address'),
-          phone: get('phone'), website: get('website'), social_links: socialLinks, description, photo, service_languages: languages,
+          phone: phoneNumbers[0].number, phones: phoneNumbers, website: get('website'), social_links: socialLinks, description, photo, service_languages: languages,
         },
       });
       if (error) throw error;
@@ -111,7 +113,14 @@ function SubmissionForm({ userId }: { userId: string }) {
         {kind === 'specialist' && <label className="registration-check"><input type="checkbox" checked={interpreter} onChange={e => setInterpreter(e.target.checked)} />Работаю переводчиком</label>}
         <label>Город<input name="city" required={kind === 'company'} maxLength={100} /></label>
         <label>Адрес{kind === 'specialist' ? ' (необязательно)' : ''}<input name="address" required={kind === 'company'} maxLength={500} /></label>
-        <label>Телефон<input name="phone" type="tel" required maxLength={30} placeholder="+82 10-1234-5678" /></label>
+        <fieldset><legend>Телефоны</legend><p>Можно добавить до 5 номеров. Первый номер — основной.</p>
+          {phones.map((phone, index) => <div className="registration-phone-row" key={index}>
+            <label>Тип телефона {index + 1}<select value={phone.type} onChange={e => setPhones(items => items.map((item, i) => i === index ? { ...item, type: e.target.value as CompanyPhone['type'] } : item))}><option value="mobile">Мобильный</option><option value="office">Офисный</option><option value="other">Другой</option></select></label>
+            <label>Номер телефона {index + 1}<input type="tel" required maxLength={30} placeholder="+82 10-1234-5678" value={phone.number} onChange={e => setPhones(items => items.map((item, i) => i === index ? { ...item, number: e.target.value } : item))} /></label>
+            <button type="button" disabled={phones.length === 1} aria-label={'Убрать телефон ' + (index + 1)} onClick={() => setPhones(items => items.filter((_, i) => i !== index))}>Убрать</button>
+          </div>)}
+          <button type="button" disabled={phones.length >= 5} onClick={() => setPhones(items => [...items, { type: 'mobile', number: '' }])}>+ Добавить телефон</button>
+        </fieldset>
         <label>Сайт (необязательно)<input name="website" type="url" maxLength={500} placeholder="https://" /></label>
         <fieldset className="registration-socials"><legend>Социальные сети и мессенджеры (необязательно)</legend>
           <p>Добавьте ссылки на страницы или чаты. До 12 ссылок.</p>
@@ -137,7 +146,7 @@ function SubmissionForm({ userId }: { userId: string }) {
       </fieldset>
       {photoBusy && <p role="status">Подготавливаем фото…</p>}
       <p role="status" aria-live="polite">{message}</p>
-      {success && <button type="button" onClick={() => { formRef.current?.reset(); setLanguages([]); setSocials([]); setPhoto(null); setKind('company'); setInterpreter(false); requestId.current = null; setSuccess(false); setMessage(''); }}>Подать ещё одну заявку</button>}
+      {success && <button type="button" onClick={() => { formRef.current?.reset(); setLanguages([]); setSocials([]); setPhones([{ type: 'mobile', number: '' }]); setPhoto(null); setKind('company'); setInterpreter(false); requestId.current = null; setSuccess(false); setMessage(''); }}>Подать ещё одну заявку</button>}
     </form>
   </>;
 }
