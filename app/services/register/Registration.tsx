@@ -83,7 +83,7 @@ function SubmissionForm({ userId }: { userId: string }) {
         p_id: requestId.current,
         p_input: {
           listing_kind: kind === 'company' ? 'company' : interpreter ? 'interpreter' : 'manager',
-          name: get('name'), city: get('city'), category: get('category'), address: get('address'),
+          represented_company: kind === 'specialist' ? get('represented_company') : null, name: get('name'), city: get('city'), category: get('category'), address: get('address'),
           phone: phoneNumbers[0].number, phones: phoneNumbers, website: get('website'), social_links: socialLinks, description, photo, service_languages: languages,
         },
       });
@@ -110,6 +110,7 @@ function SubmissionForm({ userId }: { userId: string }) {
         <label>Кого регистрируете?<select value={kind} onChange={e => { setKind(e.target.value as typeof kind); setInterpreter(false); }}><option value="company">Компания</option><option value="specialist">Специалист</option></select></label>
         <label>{kind === 'company' ? 'Название компании' : 'Имя специалиста'}<input name="name" required maxLength={200} /></label>
         <label>{kind === 'company' ? 'Категория компании' : 'Специальность / должность'}<input name="category" required maxLength={100} /></label>
+        {kind === 'specialist' && <label>Компания, которую представляете (необязательно)<input name="represented_company" maxLength={200} placeholder="Название компании" /></label>}
         {kind === 'specialist' && <label className="registration-check"><input type="checkbox" checked={interpreter} onChange={e => setInterpreter(e.target.checked)} />Работаю переводчиком</label>}
         <label>Город<input name="city" required={kind === 'company'} maxLength={100} /></label>
         <label>Адрес{kind === 'specialist' ? ' (необязательно)' : ''}<input name="address" required={kind === 'company'} maxLength={500} /></label>

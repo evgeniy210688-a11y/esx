@@ -32,7 +32,7 @@ test('submission permissions and moderation in PostgreSQL', {
   for (const file of [
     '20261011_service_directory.sql', '20261011_service_socials.sql', '20261011_service_admin.sql',
     '20261012_company_phones_photo.sql', '20261012_company_manager.sql',
-    '20261015_personal_service_listings.sql', '20261020_service_submissions.sql', '20261021_submission_socials.sql', '20261021_submission_phones.sql',
+    '20261015_personal_service_listings.sql', '20261020_service_submissions.sql', '20261021_submission_socials.sql', '20261021_submission_phones.sql', '20261021_specialist_company.sql',
   ]) await db.exec(fs.readFileSync(path.join('supabase/migrations', file), 'utf8'));
   await db.query('insert into public.esx_service_admins(user_id) values ($1)', [admin]);
   async function as(role, id = '') {
@@ -87,6 +87,7 @@ test('submission permissions and moderation in PostgreSQL', {
       for (const input of [
         ...[null, {}, [{network:'telegram',url:'javascript:alert(1)'}], [{network:'unknown',url:'https://example.com'}], Array(13).fill({network:'telegram',url:'https://t.me/example'})].map(social_links => ({...company, social_links})),
         ...[null, {}, [], [{type:'mobile',number:'abc'}], [{type:'invalid',number:'12345'}], Array(6).fill({type:'mobile',number:'12345'})].map(phones => ({...company, phones})),
+        { ...company, listing_kind: 'manager', represented_company: 'x'.repeat(201) },
         { ...company, address: '' }, { ...company, service_languages: [] },
         { ...company, service_languages: ['invalid'] }, { ...company, phone: 'abc' },
         { ...company, listing_kind: 'admin' }, { ...company, description: '' },
@@ -97,9 +98,10 @@ test('submission permissions and moderation in PostgreSQL', {
       for (const kind of ['manager', 'interpreter']) {
         const id = randomUUID();
         const phones = [{type:'mobile',number:'+82 10-1111-2222'}, {type:'office',number:'+82 2-333-4444'}];
-        await submit(id, { ...company, phones, listing_kind: kind, address: '', city: '' });
-        const contact = (await db.query('select phone,phones from public.esx_service_listings where id=$1', [id])).rows[0];
+        await submit(id, { ...company, phones, represented_company: kind === 'manager' ? '  Example company  ' : '', listing_kind: kind, address: '', city: '' });
+        const contact = (await db.query('select phone,phones,represented_company from public.esx_service_listings where id=$1', [id])).rows[0];
         assert.deepEqual(contact.phones, phones);
+        assert.equal(contact.represented_company, kind === 'manager' ? 'Example company' : null);
         assert.equal(contact.phone, phones[0].number);
         const row = (await db.query('select status,has_manager,has_interpreter from public.esx_service_listings where id=$1', [id])).rows[0];
         assert.equal(row.status, 'pending');
