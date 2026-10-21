@@ -111,3 +111,7 @@
 .services-directory .services-card[data-expanded=false] .services-profile-link{height:40px;min-height:40px;margin-top:8px;padding:7px 12px}
 .services-directory .services-card[data-expanded=false]:has(>.services-profile-link) .services-description-wrap{height:calc(5.1em - 48px)!important;min-height:0}
 .services-directory .services-card[data-expanded=false]:has(>.services-profile-link) .services-description{-webkit-line-clamp:1}
+.services-directory .services-company-categories{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 24px}
+.services-directory .services-company-categories button{min-height:42px;padding:9px 16px;border:1px solid #c2d3ed;border-radius:999px;background:#edf3ff;color:#244b86;font:inherit;cursor:pointer}
+.services-directory .services-company-categories button[aria-pressed="true"]{background:#1d4d9c;color:#fff;border-color:#1d4d9c}
+.services-directory .services-company-categories button:focus-visible{outline:3px solid #235cff;outline-offset:3px}
