@@ -18,3 +18,8 @@
 
 .admin-page .admin-delete{border:1px solid #f28b8b;color:#ffb4b4;background:#49222b}
 .admin-page .admin-delete:hover{background:#622733}
+
+.admin-page .services-back-to-top{position:fixed;right:max(24px,env(safe-area-inset-right));bottom:max(24px,env(safe-area-inset-bottom));z-index:1100;display:grid;place-items:center;width:50px;height:50px;padding:0;border-radius:50%;border:1px solid #75d6ce;background:#17334c;color:#75d6ce;box-shadow:0 6px 24px #0004;cursor:pointer}
+.admin-page .services-back-to-top:hover{background:#24465e}
+.admin-page .services-back-to-top:focus-visible{outline:3px solid #75d6ce;outline-offset:3px}
+@media(max-width:600px){.admin-page .services-back-to-top{right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));width:46px;height:46px}.admin-page .admin-message{padding-right:70px}}

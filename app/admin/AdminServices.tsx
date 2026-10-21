@@ -9,6 +9,7 @@ import BusinessHoursEditor from './BusinessHoursEditor';
 import useAccount from '@/app/account/useAccount';
 import { supabase } from '@/lib/supabase';
 import BranchEditor from './BranchEditor';
+import ServicesBackToTop from '../services/ServicesBackToTop';
 import { matchesService, serviceCategory, isPersonalListing, validListingIdentity, listingKindLabels, type ListingKind, normalizeServiceCity, validServiceBranches, serviceLanguages, type ServiceListing, type ServiceLanguage } from '@/lib/service-directory';
 import '../services/services.css';
 import './admin.css';
@@ -21,7 +22,7 @@ export default function AdminServices() {
   const { user, ready } = useAccount();
   return <div className="services-page admin-page" lang="ru"><header className="services-top"><Link className="services-brand" href="/" aria-label="ESX — Главная"><Image src="/esx-logo.png" alt="ESX" width={80} height={80} sizes="(max-width: 540px) 64px, 80px" preload /><span> / Администратор</span></Link><nav aria-label="Навигация"><Link href="/services">Услуги</Link><Link href="/account">Мой аккаунт</Link></nav></header><main className="services-main">
     {!ready ? <p role="status">Проверяем вход…</p> : !user || user.is_anonymous ? <AdminLogin /> : <AdminPanel key={user.id} userId={user.id} email={user.email ?? ''} />}
-  </main></div>;
+  </main><ServicesBackToTop language="ru" /></div>;
 }
 function AdminLogin() {
   const [email, setEmail] = useState('');
