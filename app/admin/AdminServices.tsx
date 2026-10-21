@@ -84,6 +84,19 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     }
     void load(); return () => { active = false; };
   }, [userId, attempt]);
+  useEffect(() => {
+    if (access !== 'allowed' || new URLSearchParams(window.location.search).get('newBranch') !== '1') return;
+    try {
+      const saved = sessionStorage.getItem('esx-new-branch');
+      if (!saved) return;
+      const payload = JSON.parse(saved);
+      if (payload.userId !== userId || !payload.draft || typeof payload.draft.name !== 'string') return;
+      setDraft({ ...payload.draft, id: '', branches: [], status: 'draft' });
+      sessionStorage.removeItem('esx-new-branch');
+      window.history.replaceState(null, '', '/admin');
+      setMessage('Новая карточка филиала. Все данные перенесены — измените город и адрес, затем сохраните.');
+    } catch { setMessage('Не удалось загрузить данные филиала. Откройте его повторно из исходной карточки.'); }
+  }, [access, userId]);
   async function signOut() {
     if (lock.current) return;
     lock.current = true; setBusy(true); setMessage('');
@@ -98,6 +111,21 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     try { const existing = companyPhotos(draft); if (files.length + existing.length > 3) { setMessage('Можно добавить не более 3 фото всего.'); return; } const added: string[] = []; for (const file of files) added.push(await prepareCompanyPhoto(file)); const photos = [...existing, ...added]; setDraft(d => ({ ...d, photos, photo: photos[0] ?? null })); setMessage('Фото подготовлены. Нажмите «Сохранить карточку».'); }
     catch { setMessage('Не удалось обработать фото. Выберите JPG, PNG или WebP до 10 МБ.'); }
     finally { lock.current = false; setBusy(false); }
+  }
+  function addBranchCard() {
+    if (lock.current || personal) return;
+    const branchTab = window.open('about:blank', '_blank');
+    if (!branchTab) { setMessage('Разрешите открытие новой вкладки, чтобы добавить филиал.'); return; }
+    try {
+      const branch = { ...structuredClone(draft), id: '', branches: [], status: 'draft' };
+      branchTab.sessionStorage.setItem('esx-new-branch', JSON.stringify({ userId, draft: branch }));
+      branchTab.opener = null;
+      branchTab.location.replace('/admin?newBranch=1');
+      setMessage('Филиал открыт в новой вкладке. Измените там адрес и сохраните карточку.');
+    } catch {
+      branchTab.close();
+      setMessage('Не удалось перенести данные в новую вкладку. Проверьте доступность хранилища браузера и попробуйте снова.');
+    }
   }
   function changePhones(phones: CompanyPhone[]) { setDraft(d => ({ ...d, phones, phone: phones[0]?.number || null })); }
   function toggle(key: 'service_languages' | 'interpreter_languages', code: ServiceLanguage) {
@@ -135,6 +163,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     {access === 'denied' && <section className="services-empty"><h1>Нет доступа администратора</h1><p>Этому аккаунту не назначены права управления услугами. Войдите в аккаунт администратора.</p></section>}
     {access === 'error' && <section className="services-empty"><h1>Не удалось проверить доступ</h1><button onClick={() => { setAccess('loading'); setAttempt(n => n + 1); }}>Повторить</button></section>}
     {access === 'allowed' && <><h1>Панель управления</h1><div className="admin-summary">{Object.entries(statuses).map(([status, label]) => <div key={status}><strong>{rows.filter(row => row.status === status).length}</strong><span>{label}</span></div>)}</div><h2>Компании и специалисты</h2><p>Добавляйте компании, менеджеров и переводчиков, редактируйте карточки и выбирайте, что показывать в справочнике.</p><div className="admin-columns"><section aria-label="Компании и специалисты" className="services-card"><button disabled={busy} onClick={() => { if (draft.name && !window.confirm('Открыть новую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...blank }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}>+ Добавить карточку</button>
+      {!personal && <div style={{ marginTop: 12 }}><button type="button" disabled={busy || !draft.name.trim()} onClick={addBranchCard}>+ Добавить филиал</button></div>}
       <div className="admin-list-filters">
         <label htmlFor="admin-list-status">Статус заявки</label>
         <select id="admin-list-status" value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
@@ -157,7 +186,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
         <ul className="admin-list">{group.rows.map(row => <li key={row.id}><button disabled={busy} aria-pressed={draft.id === row.id} onClick={() => { if (draft.name && !window.confirm('Открыть другую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...row, ...splitServiceDescription(row.description) }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}><strong>{row.name}</strong><span>{[row.city, statuses[row.status]].filter(Boolean).join(' · ')}</span></button></li>)}</ul>
       </section>)}
     </section>
-    <form id="company-form" ref={form} onSubmit={save} className="services-card admin-form"><h2>{draft.id ? 'Редактирование карточки' : 'Новая карточка'}</h2>{!personal && <nav aria-label="Разделы настроек компании"><a href="#company-branches">Филиалы</a></nav>}<fieldset disabled={busy} className="admin-fields">
+    <form id="company-form" ref={form} onSubmit={save} className="services-card admin-form"><h2>{draft.id ? 'Редактирование карточки' : 'Новая карточка'}</h2>{!personal && <nav aria-label="Разделы настроек компании"><a href="#company-branches">Адреса филиалов</a></nav>}<fieldset disabled={busy} className="admin-fields">
       <label>Тип карточки<select value={draft.listing_kind ?? 'company'} onChange={e => change('listing_kind', e.target.value as ListingKind)}>{Object.entries(listingKindLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
       {personal && <p>Укажите имя и фамилию, добавьте контактный телефон. Заполните описание, услуги и ссылки на соцсети. Город и адрес можно не указывать.</p>}
       {personal && !supportsPeople && <p role="alert">Сохранение личных карточек станет доступно после обновления базы данных.</p>}
@@ -168,7 +197,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
       <label>{personal ? 'Город (необязательно)' : 'Город'}<input required={!personal} list="service-city-options" autoComplete="off" value={draft.city} onChange={e => change('city', e.target.value)} placeholder="Начните вводить город" /><datalist id="service-city-options">{serviceCityGroups.flatMap(group => group.cities.map(city => <option key={city.value} value={city.value}>{city.label} · {group.region}</option>))}</datalist></label>
       {personal && <label>Компания, которую представляет (необязательно)<input maxLength={200} value={draft.represented_company ?? ''} onChange={e => change('represented_company', e.target.value)} /></label>}
       {personal ? <label>Должность<input maxLength={100} list="service-role-options" autoComplete="off" value={draft.category} onChange={e => { const category = e.target.value; setDraft(d => ({ ...d, category, listing_kind: category.trim().toLocaleLowerCase('ru') === 'переводчик' ? 'interpreter' : 'manager' })); }} placeholder={listingKindLabels[draft.listing_kind ?? 'manager']} /><datalist id="service-role-options">{['Менеджер', 'Страховой агент', 'Переводчик', 'Юрист'].map(role => <option key={role} value={role} />)}</datalist><span>Выберите должность из списка или введите свою.</span></label> : <label>Категория<input required maxLength={100} list="service-category-options" autoComplete="off" value={draft.category} onChange={e => change('category', e.target.value)} placeholder="Начните вводить услугу или категорию" /><datalist id="service-category-options">{serviceCategories.map(category => <option key={category} value={category} />)}</datalist></label>}
-      <label>{personal ? 'Адрес (необязательно)' : 'Адрес'}<input required={!personal} maxLength={500} value={draft.address} onChange={e => change('address', e.target.value)} placeholder="Хвасон, Мансе-гу, Чанан-мён" /><small>Город, район и населённый пункт через запятую. Можно добавить улицу и номер дома.</small></label>
+      <label>{personal ? 'Адрес (необязательно)' : 'Адрес'}<input name="company-address" required={!personal} maxLength={500} value={draft.address} onChange={e => change('address', e.target.value)} placeholder="Хвасон, Мансе-гу, Чанан-мён" /><small>Город, район и населённый пункт через запятую. Можно добавить улицу и номер дома.</small></label>
       {!personal && <BranchEditor key={draft.id || "new"} branches={draft.branches ?? []} onChange={branches => change('branches', branches)} />}
       <fieldset className="admin-socials"><legend>{personal ? 'Телефон' : 'Телефоны компании'}</legend>{companyPhones(draft).map((phone,index) => <div className="admin-social-row" key={index}><label>Тип телефона {index + 1}<select value={phone.type} onChange={e => changePhones(companyPhones(draft).map((p,i) => i === index ? { ...p, type: e.target.value as CompanyPhone['type'] } : p))}><option value="office">Офисный</option><option value="mobile">Мобильный</option><option value="other">Другой / не указан</option></select></label><label>Номер телефона {index + 1}<input type="tel" required maxLength={30} value={phone.number} onChange={e => changePhones(companyPhones(draft).map((p,i) => i === index ? { ...p, number: e.target.value } : p))} placeholder="+82 10-1234-5678" /></label><button type="button" onClick={() => changePhones(companyPhones(draft).filter((_,i) => i !== index))}>Убрать телефон {index + 1}</button></div>)}<button type="button" disabled={companyPhones(draft).length >= 5} onClick={() => changePhones([...companyPhones(draft), { type: personal ? 'mobile' : 'office', number: '' }])}>+ Добавить телефон</button><p>До 5 номеров. Для каждого выберите тип.</p></fieldset>
       <fieldset className="admin-socials"><legend>{personal ? 'Фото' : 'Фото компании'} ({companyPhotos(draft).length}/3)</legend><p>До 3 фото: JPG, PNG или WebP, до 10 МБ каждое. Первое фото — обложка карточки.</p><div className="admin-photo-grid">{companyPhotos(draft).map((photo, index) => <div key={index}><Image className="company-photo" src={photo} alt={(personal ? "Фото специалиста " : "Фото компании ") + (index + 1)} width={800} height={600} unoptimized /><button type="button" onClick={() => { const photos = companyPhotos(draft).filter((_, i) => i !== index); setDraft(d => ({ ...d, photos, photo: photos[0] ?? null })); }}>Убрать фото {index + 1}</button></div>)}</div><label>Добавить фото<input type="file" multiple disabled={companyPhotos(draft).length >= 3} accept="image/jpeg,image/png,image/webp" onChange={e => { const files = Array.from(e.target.files ?? []); e.target.value = ''; if (files.length) void uploadPhoto(files); }} /></label></fieldset>
