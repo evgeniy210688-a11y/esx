@@ -21,7 +21,6 @@
 .specialist-profile .profile-section-panel[data-open=true]{opacity:1}
 .specialist-profile .profile-section-content{display:flow-root;padding-top:16px;overflow-wrap:anywhere}
 .specialist-profile .specialist-actions button{font-family:inherit;min-width:0}
-@media(prefers-reduced-motion:reduce){.specialist-profile .profile-section-panel{transition-duration:0.01ms}}
 .specialist-profile .specialist-topics{margin-top:24px}
 .specialist-profile .specialist-topic-buttons{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
 .specialist-profile .specialist-topic-buttons button{min-height:52px;padding:12px;border:1px solid #fff;border-radius:18px;background:linear-gradient(145deg,#f0f5ff,#d9e4f7);box-shadow:4px 5px 11px #a4b7d359;color:#1d4d9c;font:inherit;font-weight:600;cursor:pointer;transition:background .25s,color .25s}
@@ -32,7 +31,6 @@
 .specialist-profile .specialist-sections{overflow-anchor:none}
 .specialist-profile .specialist-actions button span{display:inline-block;transition:transform 1200ms ease-in-out}
 .specialist-profile .specialist-actions button[aria-expanded=true] span{transform:rotate(180deg)}
-@media(prefers-reduced-motion:reduce){.specialist-profile .specialist-actions button span{transition:none}}
 
 .specialist-profile .visa-change-panel{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows 2400ms cubic-bezier(.45,0,.55,1),opacity 2000ms ease-in-out;overflow-anchor:none}
 .specialist-profile .visa-change-panel[data-open=true]{grid-template-rows:1fr;opacity:1}
@@ -41,4 +39,3 @@
 .specialist-profile .visa-change-content h3{margin:20px 0 8px;color:#203757;font-size:17px}
 .specialist-profile .visa-change-content ul{margin:0;padding-left:24px}
 .specialist-profile .visa-change-content p{margin:0}
-@media(prefers-reduced-motion:reduce){.specialist-profile .visa-change-panel{transition:none}}
