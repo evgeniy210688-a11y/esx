@@ -17,24 +17,24 @@
 
 .specialist-profile .profile-back{display:inline-block;margin-bottom:20px;color:#1d4d9c}
 
-.specialist-profile .profile-section-panel{height:0;overflow:hidden;opacity:0;transition:height 1800ms cubic-bezier(.4,0,.6,1),opacity 1500ms ease-in-out;overflow-anchor:none}
+.specialist-profile .profile-section-panel{height:0;overflow:hidden;opacity:0;transition:height 2400ms cubic-bezier(.45,0,.55,1),opacity 2000ms ease-in-out;overflow-anchor:none}
 .specialist-profile .profile-section-panel[data-open=true]{opacity:1}
 .specialist-profile .profile-section-content{display:flow-root;padding-top:16px;overflow-wrap:anywhere}
 .specialist-profile .specialist-actions button{font-family:inherit;min-width:0}
 @media(prefers-reduced-motion:reduce){.specialist-profile .profile-section-panel{transition-duration:0.01ms}}
 .specialist-profile .specialist-topics{margin-top:24px}
-.specialist-profile .specialist-topic-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.specialist-profile .specialist-topic-buttons{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
 .specialist-profile .specialist-topic-buttons button{min-height:52px;padding:12px;border:1px solid #fff;border-radius:18px;background:linear-gradient(145deg,#f0f5ff,#d9e4f7);box-shadow:4px 5px 11px #a4b7d359;color:#1d4d9c;font:inherit;font-weight:600;cursor:pointer;transition:background .25s,color .25s}
 .specialist-profile .specialist-topic-buttons button:hover{background:#dbe6f5}
 .specialist-profile .specialist-topic-buttons button[aria-pressed=true]{background:#1d4d9c;color:#fff}
 @media(max-width:800px){.specialist-profile .specialist-topic-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}.specialist-profile .specialist-topic-buttons button:last-child:nth-child(odd){grid-column:1/-1}}
 
 .specialist-profile .specialist-sections{overflow-anchor:none}
-.specialist-profile .specialist-actions button span{display:inline-block;transition:transform 600ms ease}
+.specialist-profile .specialist-actions button span{display:inline-block;transition:transform 1200ms ease-in-out}
 .specialist-profile .specialist-actions button[aria-expanded=true] span{transform:rotate(180deg)}
 @media(prefers-reduced-motion:reduce){.specialist-profile .specialist-actions button span{transition:none}}
 
-.specialist-profile .visa-change-panel{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows 1800ms cubic-bezier(.4,0,.6,1),opacity 1500ms ease-in-out;overflow-anchor:none}
+.specialist-profile .visa-change-panel{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows 2400ms cubic-bezier(.45,0,.55,1),opacity 2000ms ease-in-out;overflow-anchor:none}
 .specialist-profile .visa-change-panel[data-open=true]{grid-template-rows:1fr;opacity:1}
 .specialist-profile .visa-change-inner{min-height:0;overflow:hidden}
 .specialist-profile .visa-change-content{padding-top:28px;color:#526889;line-height:1.8;overflow-wrap:anywhere}

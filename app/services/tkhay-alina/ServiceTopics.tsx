@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-const topics = ['Айди карта', 'Продление визы', 'Смена визы', 'Смена статуса', 'Смена адреса', 'Апостиль'];
+const topics = ['Айди карта', 'Продление визы', 'Смена визы', 'Смена адреса', 'Апостиль'];
 
 export default function ServiceTopics() {
   const [selected, setSelected] = useState<string | null>(null);
