@@ -1,13 +1,15 @@
 'use client';
 
 import { useState } from 'react';
+import useDismissOutside from './useDismissOutside';
 
 const topics = ['Айди карта', 'Продление визы', 'Смена визы', 'Смена адреса', 'Апостиль'];
 
 export default function ServiceTopics() {
   const [selected, setSelected] = useState<string | null>(null);
+  const sectionRef = useDismissOutside<HTMLElement>(() => setSelected(null));
   const visaOpen = selected === 'Смена визы';
-  return <section className="services-card specialist-topics" aria-label="Вопросы по документам">
+  return <section ref={sectionRef} className="services-card specialist-topics" aria-label="Вопросы по документам">
     <div className="specialist-topic-buttons" role="group" aria-label="Выберите тему">
       {topics.map(topic => <button type="button" key={topic} aria-pressed={selected === topic}
         id={topic === 'Смена визы' ? 'visa-change-button' : undefined}

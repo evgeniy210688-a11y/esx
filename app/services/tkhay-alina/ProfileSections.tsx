@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 
+import useDismissOutside from './useDismissOutside';
+
 const labels = ['Услуги', 'Контакты', 'Наш адрес'];
 
 function Panel({ content, index, open }: { content: ReactNode; index: number; open: boolean }) {
@@ -24,7 +26,8 @@ function Panel({ content, index, open }: { content: ReactNode; index: number; op
 
 export default function ProfileSections({ children }: { children: ReactNode[] }) {
   const [active, setActive] = useState<number | null>(null);
-  return <div className="specialist-sections">
+  const sectionRef = useDismissOutside<HTMLDivElement>(() => setActive(null));
+  return <div ref={sectionRef} className="specialist-sections">
     <div className="specialist-actions">
       {labels.map((label, index) => <button
         key={label} type="button" id={`profile-section-button-${index}`}
