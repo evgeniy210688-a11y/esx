@@ -39,3 +39,7 @@
 .specialist-profile .visa-change-content h3{margin:20px 0 8px;color:#203757;font-size:17px}
 .specialist-profile .visa-change-content ul{margin:0;padding-left:24px}
 .specialist-profile .visa-change-content p{margin:0}
+
+.specialist-profile .id-card-options{grid-template-columns:repeat(4,minmax(0,1fr));padding:0 6px 12px}
+@media(max-width:800px){.specialist-profile .id-card-options{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:420px){.specialist-profile .id-card-options{grid-template-columns:1fr}}
