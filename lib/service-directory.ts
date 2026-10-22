@@ -14,6 +14,7 @@ export function validServiceBranches(branches: ServiceBranch[]) {
 }
 export function normalizeServiceCity(value: string) {
   const city = value.normalize('NFKC').trim().replace(/\s+/g, ' ');
+  if (/^хвасонг?\s*,\s*чоам$/i.test(city)) return 'Хвасонг, Чоам';
   return /^хвасонг?(?:\s*,\s*паран)?$/i.test(city) ? 'Хвасонг, Паран' : city;
 }
 export function serviceCities(listing: { city: string; branches?: ServiceBranch[] }) {
