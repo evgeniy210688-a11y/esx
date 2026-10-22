@@ -17,7 +17,7 @@
 
 .specialist-profile .profile-back{display:inline-block;margin-bottom:20px;color:#1d4d9c}
 
-.specialist-profile .profile-section-panel{height:0;overflow:hidden;opacity:0;transition:height 1400ms cubic-bezier(.45,0,.2,1),opacity 1000ms ease-in-out}
+.specialist-profile .profile-section-panel{height:0;overflow:hidden;opacity:0;transition:height 1800ms cubic-bezier(.4,0,.6,1),opacity 1500ms ease-in-out;overflow-anchor:none}
 .specialist-profile .profile-section-panel[data-open=true]{opacity:1}
 .specialist-profile .profile-section-content{display:flow-root;padding-top:16px;overflow-wrap:anywhere}
 .specialist-profile .specialist-actions button{font-family:inherit;min-width:0}
@@ -28,3 +28,8 @@
 .specialist-profile .specialist-topic-buttons button:hover{background:#dbe6f5}
 .specialist-profile .specialist-topic-buttons button[aria-pressed=true]{background:#1d4d9c;color:#fff}
 @media(max-width:800px){.specialist-profile .specialist-topic-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}.specialist-profile .specialist-topic-buttons button:last-child{grid-column:1/-1}}
+
+.specialist-profile .specialist-sections{overflow-anchor:none}
+.specialist-profile .specialist-actions button span{display:inline-block;transition:transform 600ms ease}
+.specialist-profile .specialist-actions button[aria-expanded=true] span{transform:rotate(180deg)}
+@media(prefers-reduced-motion:reduce){.specialist-profile .specialist-actions button span{transition:none}}

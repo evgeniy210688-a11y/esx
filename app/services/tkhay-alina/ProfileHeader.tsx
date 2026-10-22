@@ -16,5 +16,5 @@ export default function ProfileHeader() {
     setLanguage(value);
     try { localStorage.setItem('esx-services-language', value); } catch { /* Storage is optional. */ }
   }
-  return <ServicesHeader language={language} chooseLanguage={chooseLanguage} />;
+  return <ServicesHeader showDirectory language={language} chooseLanguage={chooseLanguage} />;
 }

@@ -30,7 +30,7 @@ export default function ProfileSections({ children }: { children: ReactNode[] })
         key={label} type="button" id={`profile-section-button-${index}`}
         aria-expanded={active === index} aria-controls={`profile-section-${index}`}
         onClick={() => setActive(current => current === index ? null : index)}
-      >{label}<span aria-hidden="true">{active === index ? '▴' : '▾'}</span></button>)}
+      >{label}<span aria-hidden="true">▾</span></button>)}
     </div>
     {children.map((content, index) => <Panel key={index} content={content} index={index} open={active === index} />)}
   </div>;

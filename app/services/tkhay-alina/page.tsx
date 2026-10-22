@@ -24,7 +24,7 @@ export default async function AlinaPage() {
   const { data, error } = await client.from('esx_service_listings')
     .select('id,name,represented_company,description,city,category,address,phone,phones,photo,photos,website,social_links,service_languages,has_interpreter,interpreter_languages')
     .eq('id', '7dab9a53-66c5-409c-ab50-9f6a5c8b48cf').eq('status', 'published').maybeSingle();
-  if (error) return <main className="services-page services-directory specialist-profile"><div className="services-main"><Link href="/services">← К специалистам</Link><p role="alert">Не удалось загрузить страницу. Попробуйте обновить её позже.</p></div></main>;
+  if (error) return <main className="services-page services-directory specialist-profile"><div className="services-main"><Link href="/services">← Назад</Link><p role="alert">Не удалось загрузить страницу. Попробуйте обновить её позже.</p></div></main>;
   if (!data) notFound();
   const specialist = data as ServiceListing;
   const photos = companyPhotos(specialist);
@@ -34,7 +34,7 @@ export default async function AlinaPage() {
   const socials = validSocialLinks(specialist.social_links);
   return <div className="services-page services-directory specialist-profile">
     <ProfileHeader />
-    <main className="services-main"><Link className="profile-back" href="/services">← К специалистам</Link><article className="services-card">
+    <main className="services-main"><Link className="profile-back" href="/services">← Назад</Link><article className="services-card">
       <div className="specialist-heading">
         {photos[0] && <Image src={photos[0]} alt={specialist.name} width={160} height={160} unoptimized className="specialist-portrait" />}
         <div><p className="services-eyebrow">{normalizeServiceCity(specialist.city)}</p><h1>{specialist.name}</h1><p>{specialist.category}</p>{specialist.represented_company && <p>{specialist.represented_company}</p>}</div>
