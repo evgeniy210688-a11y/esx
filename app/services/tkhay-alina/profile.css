@@ -45,3 +45,19 @@
 @media(max-width:420px){.specialist-profile .id-card-options{grid-template-columns:1fr}}
 
 @media(min-width:801px){.specialist-profile #id-card-details{transition-duration:800ms,800ms}}
+
+.specialist-profile .profile-builder-fieldset{border:0;padding:0;margin:0;min-width:0}
+.specialist-profile .profile-editor-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:24px;padding:16px;background:#e5eefc;border-radius:18px}
+.specialist-profile .profile-editor-toolbar button,.specialist-profile .profile-remove{font:inherit;padding:10px 16px;border:1px solid #bfcee3;border-radius:12px;background:white;color:#1d4d9c;cursor:pointer}
+.specialist-profile .profile-remove{color:#9b3040;justify-self:start}
+.specialist-profile .profile-block-editor,.specialist-profile .profile-node-editor{display:grid;gap:12px;margin-bottom:20px}
+.specialist-profile .profile-builder label{display:grid;gap:6px;font-weight:600;color:#203757}
+.specialist-profile .profile-builder input,.specialist-profile .profile-builder textarea{width:100%;box-sizing:border-box;font:inherit;line-height:1.6;padding:12px;border:1px solid #bdcde2;border-radius:12px;background:#fff;color:#203757}
+.specialist-profile .profile-builder textarea{resize:vertical;min-height:140px}
+.specialist-profile .profile-button-text{white-space:pre-wrap;overflow-wrap:anywhere;margin-bottom:20px}
+.specialist-profile .profile-builder-buttons{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));padding:4px 6px 12px}
+.specialist-profile .profile-add{border:2px dashed #8aa9d3!important;background:#f2f7ff!important;color:#1d4d9c!important}
+.specialist-profile .profile-editor-message{padding:12px;color:#203757}
+.specialist-profile .profile-builder button:disabled{opacity:.55;cursor:wait}
+@media(min-width:801px){.specialist-profile .profile-builder-panel[data-fast=true]{transition-duration:800ms,800ms}}
+@media(max-width:540px){.specialist-profile .profile-builder-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}.specialist-profile .profile-builder-buttons button:last-child:nth-child(odd){grid-column:auto}}

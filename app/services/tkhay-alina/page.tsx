@@ -14,6 +14,7 @@ import './profile.css';
 import ProfileHeader from './ProfileHeader';
 import ProfileSections from './ProfileSections';
 import ServiceTopics from './ServiceTopics';
+import type { ProfileContent } from '@/lib/specialist-content';
 
 
 export const metadata: Metadata = { title: 'Tkhay Alina — ESX', description: 'Личная страница Tkhay Alina на ESX.' };
@@ -22,7 +23,7 @@ export const dynamic = 'force-dynamic';
 export default async function AlinaPage() {
   const client = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!);
   const { data, error } = await client.from('esx_service_listings')
-    .select('id,name,represented_company,description,city,category,address,phone,phones,photo,photos,website,social_links,service_languages,has_interpreter,interpreter_languages')
+    .select('profile_content,id,name,represented_company,description,city,category,address,phone,phones,photo,photos,website,social_links,service_languages,has_interpreter,interpreter_languages')
     .eq('id', '7dab9a53-66c5-409c-ab50-9f6a5c8b48cf').eq('status', 'published').maybeSingle();
   if (error) return <main className="services-page services-directory specialist-profile"><div className="services-main"><Link href="/services">← Назад</Link><p role="alert">Не удалось загрузить страницу. Попробуйте обновить её позже.</p></div></main>;
   if (!data) notFound();
@@ -54,6 +55,6 @@ export default async function AlinaPage() {
         </div>
       </ProfileSections>
       
-    </article><ServiceTopics /></main>
+    </article><ServiceTopics initialContent={data.profile_content as ProfileContent | null} /></main>
   </div>;
 }
