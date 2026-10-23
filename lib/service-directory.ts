@@ -34,6 +34,7 @@ export function serviceCategory(listing: Pick<ServiceListing, 'category'>) {
   if (/образован|обучен|автошкол|школ|курсы|курс |репетитор|учеб|университет|колледж|детский сад|education|training|school|tutor|courses|university|college/i.test(category)) return 'Образование';
   if (/автодилер|автосалон|продажа автомобилей|покупка и аренда автомобилей|car dealer|car rental/i.test(category)) return 'Покупка и аренда автомобилей';
   if (/недвижим|риелтор|риэлтор|аренда квартир|продажа квартир|аренда домов|продажа домов|аренда офис|real estate|realtor|property rental/i.test(category)) return 'Недвижимость';
+  if (/^(?:специалист по массажу(?: лица и тела)?|массажист(?:ка)?|массаж и спа)$/i.test(category)) return 'Массаж и спа';
   if (/^консультант по визовым вопросам$/i.test(category)) return 'Визы и иммиграция';
   return /^(международный\s+)?медицинский\s+координатор$/i.test(category)
     ? 'Медицина и клиники'
