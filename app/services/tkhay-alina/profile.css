@@ -17,7 +17,7 @@
 
 .specialist-profile .profile-back{display:inline-block;margin-bottom:20px;color:#1d4d9c}
 
-.specialist-profile .profile-section-panel{height:0;overflow:hidden;opacity:0;transition:height 1700ms cubic-bezier(.45,0,.55,1),opacity 1700ms ease-in-out;overflow-anchor:none}
+.specialist-profile .profile-section-panel{height:0;overflow:hidden;opacity:0;transition:height 1400ms cubic-bezier(.45,0,.2,1),opacity 1000ms ease-in-out;overflow-anchor:none}
 .specialist-profile .profile-section-panel[data-open=true]{opacity:1}
 .specialist-profile .profile-section-content{display:flow-root;padding-top:16px;overflow-wrap:anywhere}
 .specialist-profile .specialist-actions button{font-family:inherit;min-width:0}
@@ -90,8 +90,9 @@
 .specialist-profile .profile-photo-editor{display:flex;flex-wrap:wrap;align-items:center;gap:16px}.profile-photo-editor img{border-radius:16px;object-fit:cover}
 .specialist-profile .profile-editor-actions{display:flex;gap:12px}.profile-main-editor button:disabled{opacity:.5;cursor:wait}
 
-.specialist-profile .profile-collapse-services{display:block;margin:20px auto 0;padding:10px 24px;border:1px solid #bfcee3;border-radius:12px;background:#f2f7ff;color:#1d4d9c;font:inherit;font-weight:600;cursor:pointer}
 
 .specialist-profile .profile-address-buttons{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px}
 .specialist-profile .profile-address-buttons button{min-width:120px;padding:12px 24px;border:1px solid #bfcee3;border-radius:14px;background:#f2f7ff;color:#1d4d9c;font:inherit;font-weight:600;cursor:pointer}
 .specialist-profile .profile-address-buttons button[aria-pressed=true]{background:#2459a0;color:#fff;border-color:#2459a0}
+
+@media(prefers-reduced-motion:reduce){.specialist-profile .profile-section-panel{transition-duration:600ms;transition-timing-function:cubic-bezier(.4,0,.2,1)}}

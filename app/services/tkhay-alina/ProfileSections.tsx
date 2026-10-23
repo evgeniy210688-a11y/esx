@@ -21,7 +21,7 @@ function Panel({ content, index, open, onCollapse }: { content: ReactNode; index
     role="region" aria-labelledby={`profile-section-button-${index}`}
     data-open={open} aria-hidden={!open} inert={!open}
     style={{ height: open ? height : 0 }}
-  ><div ref={inner} className="profile-section-content">{content}{index === 0 && <button type="button" className="profile-collapse-services" onClick={onCollapse} aria-label="Свернуть услуги">Свернуть <span aria-hidden="true">▴</span></button>}</div></div>;
+  ><div ref={inner} className="profile-section-content">{content}{index === 0 && <button type="button" className="services-details-toggle profile-collapse-services" onClick={onCollapse} aria-label="Свернуть услуги">Свернуть <span aria-hidden="true">▴</span></button>}</div></div>;
 }
 
 export default function ProfileSections({ children }: { children: ReactNode[] }) {
@@ -39,7 +39,6 @@ export default function ProfileSections({ children }: { children: ReactNode[] })
       setActive(null);
       const trigger = document.getElementById(`profile-section-button-${index}`);
       trigger?.focus({ preventScroll: true });
-      trigger?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'center' });
     }} />)}
   </div>;
 }
