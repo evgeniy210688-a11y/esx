@@ -5,6 +5,7 @@ import useAccount from '@/app/account/useAccount';
 import { supabase } from '@/lib/supabase';
 import { ALINA_ID, MAX_DEPTH, contentError, defaultProfileContent, type ProfileButton, type ProfileBlock, type ProfileContent } from '@/lib/specialist-content';
 import useDismissOutside from './useDismissOutside';
+import useRevealPanel from './useRevealPanel';
 
 function newButton(): ProfileButton { return { id: crypto.randomUUID(), label: 'Новая кнопка', text: '', children: [] }; }
 
@@ -51,6 +52,7 @@ export default function ServiceTopics({ initialContent }: { initialContent: Prof
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
   const [path, setPath] = useState<string[]>([]);
+  useRevealPanel(path.length > 1 ? `topic-panel-${path[path.length - 1]}` : null);
   const isAdmin = !!userId && allowedId === userId;
   const canEdit = editing && isAdmin;
   const dirty = JSON.stringify(draft) !== JSON.stringify(saved ?? defaultProfileContent);

@@ -75,3 +75,5 @@
 .inquiry-list summary{display:flex;flex-wrap:wrap;align-items:center;gap:10px;cursor:pointer}.inquiry-list time{font-size:.85rem;color:#52647b}
 .inquiry-message{white-space:pre-wrap;overflow-wrap:anywhere}.inquiry-status{font-size:.85rem;border-radius:20px;padding:4px 10px;background:#eaf1fc;color:#2459a0}
 .inquiry-status-new{background:#fff0cf;color:#775000}.inquiry-status-done{background:#e2f4e9;color:#236340}
+
+.specialist-profile .profile-builder-panel{scroll-margin-top:24px}
