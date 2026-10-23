@@ -16,6 +16,7 @@ import ProfileAddresses from './ProfileAddresses';
 import ServiceTopics from './ServiceTopics';
 import type { ProfileContent } from '@/lib/specialist-content';
 import { useProfileLanguage } from './ProfileLanguage';
+import { profileCity } from './profileCopy';
 
 
 export default function ProfilePage({data}:{data:ServiceListing & {profile_content:ProfileContent | null}}) {
@@ -31,7 +32,7 @@ export default function ProfilePage({data}:{data:ServiceListing & {profile_conte
     <main className="services-main"><Link className="profile-back" href="/services">← {t('Назад')}</Link><article className="services-card"><ProfileEditor />
       <div className="specialist-heading">
         {photos[0] && <Image src={photos[0]} alt={specialist.name} width={160} height={160} unoptimized className="specialist-portrait" />}
-        <div><p className="services-eyebrow">{language === 'ru' ? normalizeServiceCity(specialist.city) : t(specialist.city)}</p><h1>{specialist.name}</h1><p>{t(specialist.category)}</p>{specialist.represented_company && <p>{specialist.represented_company}</p>}</div>
+        <div><p className="services-eyebrow">{normalizeServiceCity(specialist.city) === 'Хвасонг, Паран' ? profileCity[language] : t(specialist.city)}</p><h1>{specialist.name}</h1><p>{t(specialist.category)}</p>{specialist.represented_company && <p>{specialist.represented_company}</p>}</div>
       </div>
 
       <section className="services-card-section"><h2>{t('Описание')}</h2><p className="specialist-description">{t(content.description)}</p></section>

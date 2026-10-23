@@ -10,3 +10,7 @@ vi:['Quay lại','Giới thiệu','Ngôn ngữ giao tiếp','Dịch vụ','Liên
 tr:['Geri','Açıklama','Konuşulan diller','Hizmetler','İletişim','Adresimiz','Daralt','Hizmetler hakkında uzmana danışın.','İletişim bilgileri henüz eklenmedi.','Adres için uzmana danışın.','Ofis seçin','Paran','Incheon','Sayfa çevriliyor…','Çeviri kullanılamıyor. Orijinal metin gösteriliyor.','Tekrar dene','Konu seçin','Alt seçenekler','Belge soruları','Adsız']
 };
 export function profileLabel(language: InterfaceLanguage,text: string) { const index = ru.indexOf(text); return index < 0 ? text : copy[language][index]; }
+
+export const profileCity: Record<InterfaceLanguage,string> = {
+ ru:'Хвасонг, Паран',en:'Hwaseong, Paran',ko:'화성, 발안',uz:'Hwaseong, Paran',zh:'华城，Paran（발안）',vi:'Hwaseong, Paran',tr:'Hwaseong, Paran'
+};
