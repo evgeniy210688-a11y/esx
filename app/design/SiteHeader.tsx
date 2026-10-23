@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import AccountLink from '../account/AccountLink';
@@ -41,9 +41,9 @@ export default function SiteHeader({ language, actions }: { language: Language; 
         {actions && <div className="site-header-actions">{actions}</div>}
         <button ref={toggle} type="button" className="menu-toggle" aria-label={t[44]} aria-expanded={open} aria-controls="account-site-navigation" onClick={() => setOpen(!open)}><span /><span /><span /></button>
         <nav id="account-site-navigation" aria-label={t[44]}>
-          {sections.map((href, index) => <Link key={href} href={href} className={index === 4 ? 'nav-contact' : ''} style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }} onClick={() => setOpen(false)}>{t[index]}{index === 4 && <span>↗</span>}</Link>)}
+          {sections.map((href, index) => <Fragment key={href}><Link key={href} href={href} className={index === 4 ? 'nav-contact' : ''} style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }} onClick={() => setOpen(false)}>{t[index]}{index === 4 && <span>↗</span>}</Link>{index === 0 && <Link href="/services" onClick={() => setOpen(false)}>{language === 'ru' ? 'Справочник' : 'Directory'}</Link>}</Fragment>)}
           <Link href="/scan" onClick={() => setOpen(false)}>{scanLabels[language][0]}</Link>
-          <Link href="/services" onClick={() => setOpen(false)}>{language === 'ru' ? 'Справочник' : 'Directory'}</Link><AccountLink language={language} onClick={() => setOpen(false)} />
+          <AccountLink language={language} onClick={() => setOpen(false)} />
         </nav>
       </div>
     </header>
