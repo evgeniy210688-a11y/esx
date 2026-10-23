@@ -6,6 +6,8 @@ import { supabase } from '@/lib/supabase';
 import { ALINA_ID, MAX_DEPTH, contentError, defaultProfileContent, type ProfileButton, type ProfileBlock, type ProfileContent } from '@/lib/specialist-content';
 import useDismissOutside from './useDismissOutside';
 import useRevealPanel from './useRevealPanel';
+import { useProfileLanguage } from './ProfileLanguage';
+import { useRouter } from 'next/navigation';
 
 function newButton(): ProfileButton { return { id: crypto.randomUUID(), label: 'Новая кнопка', text: '', children: [] }; }
 
@@ -13,12 +15,13 @@ function ButtonLevel({ buttons, path, setPath, level = 1, editing, change }: {
   buttons: ProfileButton[]; path: string[]; setPath: (path: string[]) => void; level?: number;
   editing: boolean; change: (buttons: ProfileButton[]) => void;
 }) {
+  const {t} = useProfileLanguage();
   function update(id: string, values: Partial<ProfileButton>) { change(buttons.map(button => button.id === id ? { ...button, ...values } : button)); }
   return <>
-    <div className="specialist-topic-buttons profile-builder-buttons" role="group" aria-label={level === 1 ? 'Выберите тему' : 'Вложенные кнопки'}>
+    <div className="specialist-topic-buttons profile-builder-buttons" role="group" aria-label={t(level === 1 ? 'Выберите тему' : 'Вложенные кнопки')}>
       {buttons.map(button => <button type="button" key={button.id} id={`topic-button-${button.id}`}
         aria-expanded={path[0] === button.id} aria-controls={`topic-panel-${button.id}`} aria-pressed={path[0] === button.id}
-        onClick={() => setPath(path[0] === button.id ? [] : [button.id])}>{button.label || 'Без названия'}</button>)}
+        onClick={() => setPath(path[0] === button.id ? [] : [button.id])}>{editing ? button.label || 'Без названия' : t(button.label || 'Без названия')}</button>)}
       {editing && <button type="button" className="profile-add" aria-label={level === 1 ? 'Добавить кнопку' : 'Добавить вложенную кнопку'}
         onClick={() => { const button = newButton(); change([...buttons, button]); setPath([button.id]); }}>+ Кнопка</button>}
     </div>
@@ -33,7 +36,7 @@ function ButtonLevel({ buttons, path, setPath, level = 1, editing, change }: {
             if (!window.confirm(`Удалить «${button.label}» вместе с текстом и вложенными кнопками? Изменение применится после сохранения.`)) return;
             change(buttons.filter(item => item.id !== button.id)); setPath([]);
           }}>Удалить кнопку</button>
-        </div> : button.text && <div className="profile-button-text">{button.text}</div>}
+        </div> : button.text && <div className="profile-button-text">{t(button.text)}</div>}
         {(button.children.length > 0 || (editing && level < MAX_DEPTH)) && <ButtonLevel buttons={button.children} path={path.slice(1)}
           setPath={next => setPath([button.id, ...next])} level={level + 1} editing={editing} change={children => update(button.id, { children })} />}
       </div></div>
@@ -42,6 +45,8 @@ function ButtonLevel({ buttons, path, setPath, level = 1, editing, change }: {
 }
 
 export default function ServiceTopics({ initialContent }: { initialContent: ProfileContent | null }) {
+  const {t} = useProfileLanguage();
+  const router = useRouter();
   const { user } = useAccount();
   const userId = user && !user.is_anonymous ? user.id : null;
   const [allowedId, setAllowedId] = useState<string | null>(null);
@@ -94,7 +99,7 @@ export default function ServiceTopics({ initialContent }: { initialContent: Prof
       const { data, error } = await query.select('profile_content').maybeSingle();
       if (error) throw error;
       if (!data) { setMessage('Страница уже изменена в другом окне или права доступа изменились. Скопируйте нужный текст и обновите страницу. Ваш черновик здесь сохранён.'); return; }
-      setSaved(data.profile_content); setDraft(data.profile_content); setEditing(false); setMessage('Сохранено. Изменения видны всем посетителям.');
+      setSaved(data.profile_content); setDraft(data.profile_content); setEditing(false); setMessage('Сохранено. Изменения видны всем посетителям.'); router.refresh();
     } catch { setMessage('Не удалось сохранить. Проверьте подключение и права администратора, затем повторите. Черновик не потерян.'); }
     finally { setBusy(false); }
   }
@@ -110,12 +115,12 @@ export default function ServiceTopics({ initialContent }: { initialContent: Prof
     </div>}
     {message && isAdmin && <p role="status" className="profile-editor-message">{message}</p>}
     <fieldset className="profile-builder-fieldset" disabled={busy}>
-      {content.blocks.map(block => <section key={block.id} className="services-card specialist-topics" aria-label={block.title || 'Вопросы по документам'}>
+      {content.blocks.map(block => <section key={block.id} className="services-card specialist-topics" aria-label={t(block.title || 'Вопросы по документам')}>
         {canEdit ? <div className="profile-block-editor"><label>Название блока (необязательно)<input maxLength={100} value={block.title} onChange={e => changeBlock(block.id, { title: e.target.value })} /></label>
           <button type="button" className="profile-remove" onClick={() => {
             if (!window.confirm('Удалить этот блок со всеми кнопками и текстом? Изменение применится после сохранения.')) return;
             setDraft(current => ({ ...current, blocks: current.blocks.filter(item => item.id !== block.id) })); setPath([]);
-          }}>Удалить блок</button></div> : block.title && <h2>{block.title}</h2>}
+          }}>Удалить блок</button></div> : block.title && <h2>{t(block.title)}</h2>}
         <ButtonLevel buttons={block.buttons} path={path[0] === block.id ? path.slice(1) : []} setPath={next => setPath([block.id, ...next])}
           editing={canEdit} change={buttons => changeBlock(block.id, { buttons })} />
       </section>)}
