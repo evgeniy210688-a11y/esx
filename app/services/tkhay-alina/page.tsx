@@ -14,6 +14,7 @@ import './profile.css';
 import ProfileHeader from './ProfileHeader';
 import ProfileSections from './ProfileSections';
 import ServiceTopics from './ServiceTopics';
+import ServiceInbox from './ServiceInbox';
 import type { ProfileContent } from '@/lib/specialist-content';
 
 
@@ -55,6 +56,6 @@ export default async function AlinaPage() {
         </div>
       </ProfileSections>
       
-    </article><ServiceTopics initialContent={data.profile_content as ProfileContent | null} /></main>
+    </article><ServiceTopics initialContent={data.profile_content as ProfileContent | null} /><ServiceInbox /></main>
   </div>;
 }

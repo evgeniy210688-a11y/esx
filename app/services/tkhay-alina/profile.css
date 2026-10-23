@@ -61,3 +61,17 @@
 .specialist-profile .profile-builder button:disabled{opacity:.55;cursor:wait}
 @media(min-width:801px){.specialist-profile .profile-builder-panel[data-fast=true]{transition-duration:800ms,800ms}}
 @media(max-width:540px){.specialist-profile .profile-builder-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}.specialist-profile .profile-builder-buttons button:last-child:nth-child(odd){grid-column:auto}}
+
+.specialist-inquiries{margin-top:24px}
+.specialist-inquiries button,.specialist-inquiries select{font:inherit;border:1px solid #bdcde2;border-radius:12px;padding:10px 16px;background:#fff;color:#203757}
+.specialist-inquiries button{cursor:pointer}.specialist-inquiries button:disabled{opacity:.5;cursor:default}
+.specialist-inquiries .inquiry-inbox-toggle,.specialist-inquiries button[type=submit]{background:#2459a0;color:white;border-color:#2459a0}
+.specialist-inquiries label{display:grid;gap:6px;font-weight:600}
+.specialist-inquiries input,.specialist-inquiries textarea{box-sizing:border-box;width:100%;font:inherit;color:#203757;background:white;border:1px solid #bdcde2;border-radius:12px;padding:12px}
+.specialist-inquiries textarea{resize:vertical}.inquiry-form fieldset{border:0;padding:0;margin:0;display:grid;gap:16px;min-width:0}
+.inquiry-form{padding-top:12px}.inquiry-note{font-size:.9rem;color:#52647b}.inquiry-compose{margin-top:20px}
+.inquiry-compose>summary{font-weight:700;cursor:pointer}.inquiry-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:18px 0}
+.inquiry-list{list-style:none;padding:0;display:grid;gap:12px}.inquiry-list li{border:1px solid #d6e0ee;border-radius:16px;padding:16px;overflow-wrap:anywhere}
+.inquiry-list summary{display:flex;flex-wrap:wrap;align-items:center;gap:10px;cursor:pointer}.inquiry-list time{font-size:.85rem;color:#52647b}
+.inquiry-message{white-space:pre-wrap;overflow-wrap:anywhere}.inquiry-status{font-size:.85rem;border-radius:20px;padding:4px 10px;background:#eaf1fc;color:#2459a0}
+.inquiry-status-new{background:#fff0cf;color:#775000}.inquiry-status-done{background:#e2f4e9;color:#236340}
