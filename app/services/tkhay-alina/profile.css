@@ -91,3 +91,7 @@
 .specialist-profile .profile-editor-actions{display:flex;gap:12px}.profile-main-editor button:disabled{opacity:.5;cursor:wait}
 
 .specialist-profile .profile-collapse-services{display:block;margin:20px auto 0;padding:10px 24px;border:1px solid #bfcee3;border-radius:12px;background:#f2f7ff;color:#1d4d9c;font:inherit;font-weight:600;cursor:pointer}
+
+.specialist-profile .profile-address-buttons{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.specialist-profile .profile-address-buttons button{min-width:120px;padding:12px 24px;border:1px solid #bfcee3;border-radius:14px;background:#f2f7ff;color:#1d4d9c;font:inherit;font-weight:600;cursor:pointer}
+.specialist-profile .profile-address-buttons button[aria-pressed=true]{background:#2459a0;color:#fff;border-color:#2459a0}
