@@ -12,6 +12,7 @@ import '../services-light.css';
 import '../services-soft.css';
 import './profile.css';
 import ProfileHeader from './ProfileHeader';
+import ProfileEditor from './ProfileEditor';
 import ProfileSections from './ProfileSections';
 import ServiceTopics from './ServiceTopics';
 import type { ProfileContent } from '@/lib/specialist-content';
@@ -35,7 +36,7 @@ export default async function AlinaPage() {
   const socials = validSocialLinks(specialist.social_links);
   return <div className="services-page services-directory specialist-profile">
     <ProfileHeader />
-    <main className="services-main"><Link className="profile-back" href="/services">← Назад</Link><article className="services-card">
+    <main className="services-main"><Link className="profile-back" href="/services">← Назад</Link><article className="services-card"><ProfileEditor />
       <div className="specialist-heading">
         {photos[0] && <Image src={photos[0]} alt={specialist.name} width={160} height={160} unoptimized className="specialist-portrait" />}
         <div><p className="services-eyebrow">{normalizeServiceCity(specialist.city)}</p><h1>{specialist.name}</h1><p>{specialist.category}</p>{specialist.represented_company && <p>{specialist.represented_company}</p>}</div>
