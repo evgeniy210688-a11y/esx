@@ -6,7 +6,7 @@ import useDismissOutside from './useDismissOutside';
 
 const labels = ['Услуги', 'Контакты', 'Наш адрес'];
 
-function Panel({ content, index, open }: { content: ReactNode; index: number; open: boolean }) {
+function Panel({ content, index, open, onCollapse }: { content: ReactNode; index: number; open: boolean; onCollapse: () => void }) {
   const inner = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
   useEffect(() => {
@@ -21,7 +21,7 @@ function Panel({ content, index, open }: { content: ReactNode; index: number; op
     role="region" aria-labelledby={`profile-section-button-${index}`}
     data-open={open} aria-hidden={!open} inert={!open}
     style={{ height: open ? height : 0 }}
-  ><div ref={inner} className="profile-section-content">{content}</div></div>;
+  ><div ref={inner} className="profile-section-content">{content}{index === 0 && <button type="button" className="profile-collapse-services" onClick={onCollapse} aria-label="Свернуть услуги">Свернуть <span aria-hidden="true">▴</span></button>}</div></div>;
 }
 
 export default function ProfileSections({ children }: { children: ReactNode[] }) {
@@ -35,6 +35,11 @@ export default function ProfileSections({ children }: { children: ReactNode[] })
         onClick={() => setActive(current => current === index ? null : index)}
       >{label}<span aria-hidden="true">▾</span></button>)}
     </div>
-    {children.map((content, index) => <Panel key={index} content={content} index={index} open={active === index} />)}
+    {children.map((content, index) => <Panel key={index} content={content} index={index} open={active === index} onCollapse={() => {
+      setActive(null);
+      const trigger = document.getElementById(`profile-section-button-${index}`);
+      trigger?.focus({ preventScroll: true });
+      trigger?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'center' });
+    }} />)}
   </div>;
 }
