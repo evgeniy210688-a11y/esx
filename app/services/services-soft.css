@@ -130,3 +130,6 @@
 .services-filter-options .services-note{grid-column:1/-1;margin:0}
 @media(max-width:850px){.services-filter-options{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:540px){.services-search-toolbar{gap:10px}.services-filters .services-search-toolbar .services-filter-toggle{padding:11px 12px;font-size:13px}.services-filter-options{grid-template-columns:1fr}.services-search-toolbar input{font-size:14px}}
+
+/* Keep directory navigation visible while scrolling. */
+.services-directory:not(.specialist-profile) .services-top{position:sticky;top:0;z-index:50;background:#e4ecfaf5;box-shadow:0 8px 20px #52688918;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
