@@ -43,7 +43,13 @@ export default function ProfileLanguage({sourceKey,children}:{sourceKey:string;c
     void load(); return () => controller.abort();
   }, [key,language,retry]);
   function chooseLanguage(value: InterfaceLanguage) { setLanguage(value); try { localStorage.setItem('esx-services-language',value); } catch { /* Storage is optional. */ } }
-  const t = (text:string) => { const label = profileLabel(language,text); return label !== text ? label : language !== 'ru' && result.key === key ? result.map[text] ?? text : text; };
+  const t = (text:string) => {
+    const label = profileLabel(language,text);
+    if (label !== text) return label;
+    if (language === 'ru' || result.key !== key || !result.map[text]) return text;
+    const names: Record<InterfaceLanguage,string> = {ru:'Алина',en:'Alina',ko:'알리나',uz:'Alina',zh:'阿丽娜',vi:'Alina',tr:'Alina'};
+    return result.map[text].replace(/(?<!\p{L})(?:Алина|Alina)(?!\p{L})/giu,names[language]);
+  };
   return <Context.Provider value={{language,chooseLanguage,t}}><div lang={language}>
     {children}
     {language !== 'ru' && (loading || failure === key) && <div className="profile-translation-status" role="status">{t(loading ? 'Переводим страницу…' : 'Перевод недоступен. Показан исходный текст.')}{!loading && <button type="button" onClick={() => { setFailure(''); setRetry(value => value+1); }}>{t('Повторить')}</button>}</div>}
