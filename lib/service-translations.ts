@@ -1,3 +1,5 @@
+import { uzbekLatin } from './uzbek-latin';
+import { splitServiceDescription, joinServiceDescription } from './service-description';
 import catalog from './service-translations.generated.json';
 export type ServiceTranslation = { description: string; city: string; category: string };
 export type TranslationSource = { id: string; description: string; city: string; category: string };
@@ -9,4 +11,10 @@ export function validTranslation(value: unknown): value is ServiceTranslation {
   if (!value || typeof value !== 'object') return false;
   const item = value as Record<string, unknown>;
   return ['description', 'city', 'category'].every(key => typeof item[key] === 'string');
+}
+
+export function displayTranslation(language: string, value: ServiceTranslation | undefined) {
+  if (language !== 'uz' || !value) return value;
+  const content = splitServiceDescription(value.description);
+  return {description: joinServiceDescription(uzbekLatin(content.description), uzbekLatin(content.services)), city: uzbekLatin(value.city), category: uzbekLatin(value.category)};
 }

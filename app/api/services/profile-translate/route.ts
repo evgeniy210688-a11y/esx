@@ -4,7 +4,7 @@ import { ALINA_ID } from '@/lib/specialist-content';
 import { profileTexts, profileBatches } from '@/lib/profile-translation';
 export const runtime = 'nodejs';
 export const maxDuration = 30;
-const languages: Record<string,string> = {ru:'Russian',en:'English',ko:'Korean',uz:'Uzbek',zh:'Chinese',vi:'Vietnamese',tr:'Turkish'};
+const languages: Record<string,string> = {ru:'Russian',en:'English',ko:'Korean',uz:'Uzbek using only the Latin alphabet (never Cyrillic)',zh:'Chinese',vi:'Vietnamese',tr:'Turkish'};
 const cache = new Map<string,{ texts:string[]; expires:number }>();
 const limits = new Map<string,{ count:number; expires:number }>();
 export async function POST(request: Request) {

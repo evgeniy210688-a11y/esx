@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from 'react';
-import { preparedTranslations, translationKey, validTranslation } from '@/lib/service-translations';
+import { preparedTranslations, translationKey, validTranslation, displayTranslation } from '@/lib/service-translations';
 import { categoryTranslation } from '@/lib/service-category-labels';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -190,7 +190,7 @@ export default function ServicesDirectory() {
     // Only restart for a language/source change or explicit retry, not each result.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language, listings, translationRetry]);
-  const translatedCard = (s: ServiceListing) => preparedTranslations[translationKey(language, s)] ?? translations[translationKey(language, s)];
+  const translatedCard = (s: ServiceListing) => displayTranslation(language, preparedTranslations[translationKey(language, s)] ?? translations[translationKey(language, s)]);
   const [filters, setFilters] = useState(empty);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const filterButtonLabels: Record<InterfaceLanguage,string> = {ru:'Фильтр',en:'Filter',ko:'필터',uz:'Filtr',zh:'筛选',vi:'Bộ lọc',tr:'Filtre'};

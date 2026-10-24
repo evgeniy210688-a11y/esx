@@ -1,6 +1,7 @@
 'use client';
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { interfaceLanguages, type InterfaceLanguage } from '../serviceLabels';
+import { uzbekLatin } from '@/lib/uzbek-latin';
 import { profileLabel } from './profileCopy';
 const Context = createContext<{language:InterfaceLanguage;chooseLanguage:(value:InterfaceLanguage) => void;t:(text:string) => string}>({language:'ru',chooseLanguage:() => {},t:text => text});
 export const useProfileLanguage = () => useContext(Context);
@@ -31,7 +32,7 @@ export default function ProfileLanguage({sourceKey,children}:{sourceKey:string;c
             if (!Array.isArray(data.source) || !Array.isArray(data.texts) || data.source.length !== data.texts.length || !Number.isInteger(data.total) || data.total < 1 || data.total > 201 || typeof data.revision !== 'string') throw new Error('format');
             if (batch > 0 && revision !== data.revision) throw new Error('changed');
             revision = data.revision; total = data.total;
-            data.source.forEach((source: string,index:number) => { if (typeof source !== 'string' || typeof data.texts[index] !== 'string') throw new Error('format'); map![source] = data.texts[index]; });
+            data.source.forEach((source: string,index:number) => { if (typeof source !== 'string' || typeof data.texts[index] !== 'string') throw new Error('format'); map![source] = language === 'uz' ? uzbekLatin(data.texts[index]) : data.texts[index]; });
           }
           if (cache.size >= 14) cache.delete(cache.keys().next().value!);
           cache.set(key,map);
