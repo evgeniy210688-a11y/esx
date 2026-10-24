@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 import { interfaceLanguages, type InterfaceLanguage } from '../serviceLabels';
 import { uzbekLatin } from '@/lib/uzbek-latin';
 import { profileLabel } from './profileCopy';
+import prepared from '@/lib/profile-translations.generated.json';
 const Context = createContext<{language:InterfaceLanguage;chooseLanguage:(value:InterfaceLanguage) => void;t:(text:string) => string}>({language:'ru',chooseLanguage:() => {},t:text => text});
 export const useProfileLanguage = () => useContext(Context);
 const cache = new Map<string,Record<string,string>>();
@@ -12,16 +13,24 @@ export default function ProfileLanguage({sourceKey,children}:{sourceKey:string;c
   const [failure,setFailure] = useState('');
   const [retry,setRetry] = useState(0);
   const key = language + sourceKey;
-  const loading = language !== 'ru' && result.key !== key && failure !== key;
+  const readyMap = sourceKey === prepared.sourceKey ? (prepared.translations as Record<string,Record<string,string>>)[language] : undefined;
+  const currentMap = readyMap ?? cache.get(key) ?? (result.key === key ? result.map : undefined);
+  const loading = language !== 'ru' && !currentMap && failure !== key;
   useEffect(() => {
     try { const saved = localStorage.getItem('esx-services-language'); if (interfaceLanguages.some(item => item.code === saved)) queueMicrotask(() => setLanguage(saved as InterfaceLanguage)); } catch { /* Storage is optional. */ }
   }, []);
   useEffect(() => {
-    if (language === 'ru') return;
+    if (language === 'ru' || readyMap) return;
     const controller = new AbortController();
     async function load() {
       try {
         let map = cache.get(key);
+        if (!map) {
+          try {
+            const saved = JSON.parse(localStorage.getItem('esx-profile-translation-' + language) || 'null');
+            if (saved?.key === key && saved.map && typeof saved.map === 'object' && !Array.isArray(saved.map) && Object.values(saved.map).every(value => typeof value === 'string')) map = saved.map;
+          } catch { /* Storage is optional. */ }
+        }
         if (!map) {
           map = Object.create(null) as Record<string,string>;
           let total = 1; let revision = '';
@@ -36,19 +45,21 @@ export default function ProfileLanguage({sourceKey,children}:{sourceKey:string;c
           }
           if (cache.size >= 14) cache.delete(cache.keys().next().value!);
           cache.set(key,map);
+          try { localStorage.setItem('esx-profile-translation-' + language,JSON.stringify({key,map})); } catch { /* Storage is optional. */ }
         }
         if (!controller.signal.aborted) { setResult({key,map}); setFailure(''); }
       } catch { if (!controller.signal.aborted) setFailure(key); }
     }
     void load(); return () => controller.abort();
-  }, [key,language,retry]);
+  }, [key,language,retry,readyMap]);
   function chooseLanguage(value: InterfaceLanguage) { setLanguage(value); try { localStorage.setItem('esx-services-language',value); } catch { /* Storage is optional. */ } }
   const t = (text:string) => {
     const label = profileLabel(language,text);
     if (label !== text) return label;
-    if (language === 'ru' || result.key !== key || !result.map[text]) return text;
+    if (language === 'ru' || !currentMap?.[text]) return text;
     const names: Record<InterfaceLanguage,string> = {ru:'Алина',en:'Alina',ko:'알리나',uz:'Alina',zh:'阿丽娜',vi:'Alina',tr:'Alina'};
-    return result.map[text].replace(/(?<!\p{L})(?:Алина|Alina)(?!\p{L})/giu,names[language]);
+    const translated = language === 'uz' ? uzbekLatin(currentMap[text]) : currentMap[text];
+    return translated.replace(/(?<!\p{L})(?:Алина|Alina)(?!\p{L})/giu,names[language]);
   };
   return <Context.Provider value={{language,chooseLanguage,t}}><div lang={language}>
     {children}
