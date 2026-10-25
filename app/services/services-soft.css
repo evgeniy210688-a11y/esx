@@ -135,8 +135,13 @@
 .services-directory:not(.specialist-profile) .services-top{position:sticky;top:0;z-index:50;background:#e4ecfaf5;box-shadow:0 8px 20px #52688918;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 
 /* Keep long specialist headings inside the card until details are opened. */
-.services-directory .services-card[data-expanded=false] .services-card-header{height:auto;min-height:104px}
+.services-directory .services-card[data-expanded=false] .services-card-header{height:104px;min-height:104px}
 .services-directory .services-person-role,.services-directory .services-person-company{margin:4px 0 0;overflow-wrap:anywhere}
 .services-directory .services-card[data-expanded=false] .services-person-role,.services-directory .services-card[data-expanded=false] .services-person-company{display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;-webkit-line-clamp:2}
 .services-directory .services-card[data-expanded=false] .services-person-company{-webkit-line-clamp:1}
 .services-directory .services-card[data-expanded=true] .services-person-role,.services-directory .services-card[data-expanded=true] .services-person-company{display:block;overflow:visible;-webkit-line-clamp:unset}
+
+.services-directory .services-card[data-expanded=false] .services-card-heading:has(.services-person-role){max-height:104px;overflow:hidden}
+.services-directory .services-card[data-expanded=false] .services-card-heading:has(.services-person-role)>.services-eyebrow{margin-bottom:4px;-webkit-line-clamp:1}
+.services-directory .services-card[data-expanded=false] .services-card-heading:has(.services-person-role)>h2{-webkit-line-clamp:1}
+.services-directory .services-card[data-expanded=false] .services-person-role,.services-directory .services-card[data-expanded=false] .services-person-company{line-height:1.35;-webkit-line-clamp:1}
