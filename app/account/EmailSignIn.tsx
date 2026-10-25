@@ -20,6 +20,9 @@ export default function EmailSignIn({ language }: { language: Language }) {
   const [status, setStatus] = useState<RegistrationMessage | ''>('');
   const lock = useRef(false);
   useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('mode') === 'login') {
+      queueMicrotask(() => setRegister(false));
+    }
     if (new URLSearchParams(window.location.search).has('auth_error')) {
       // Surface the result of the server-side confirmation redirect after hydration.
       // eslint-disable-next-line react-hooks/set-state-in-effect
