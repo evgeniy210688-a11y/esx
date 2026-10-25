@@ -31,6 +31,7 @@ export function validListingIdentity(listing: Pick<ServiceListing, 'listing_kind
 }
 export function serviceCategory(listing: Pick<ServiceListing, 'category'>) {
   const category = listing.category.normalize('NFKC').trim().replace(/\s+/g, ' ');
+  if (/^переводчик(?:и)?$/i.test(category)) return 'Переводчики';
   if (/^страховой агент$/i.test(category)) return 'Страхование';
   if (/^(?:специалист по красоте|мастер красоты|парикмахер|hair stylist)$/i.test(category)) return 'Красота и уход';
   if (/академи|academy|образован|обучен|автошкол|школ|курсы|курс |репетитор|учеб|университет|колледж|детский сад|education|training|school|tutor|courses|university|college/i.test(category)) return 'Образование';
