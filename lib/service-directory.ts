@@ -21,7 +21,7 @@ export function serviceCities(listing: { city: string; branches?: ServiceBranch[
   return [...new Set([listing.city, ...(listing.branches ?? []).map(branch => branch.city)].map(normalizeServiceCity).filter(Boolean))];
 }
 export type ListingKind = 'company' | 'manager' | 'interpreter';
-export const listingKindLabels = { company: 'Компания', manager: 'Менеджер', interpreter: 'Переводчик' } as const;
+export const listingKindLabels = { company: 'Компания', manager: 'Специалист', interpreter: 'Переводчик' } as const;
 export function isPersonalListing(listing: { listing_kind?: ListingKind }) {
   return listing.listing_kind === 'manager' || listing.listing_kind === 'interpreter';
 }
