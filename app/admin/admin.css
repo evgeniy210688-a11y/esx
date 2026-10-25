@@ -23,7 +23,7 @@
 .admin-page .services-back-to-top:hover{background:#24465e}
 .admin-page .services-back-to-top:focus-visible{outline:3px solid #75d6ce;outline-offset:3px}
 @media(max-width:600px){.admin-page .services-back-to-top{right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));width:46px;height:46px}.admin-page .admin-message{padding-right:70px}}
-.admin-page .services-main{max-width:1600px}
+.admin-page .services-main{width:100%;max-width:none;box-sizing:border-box;padding-left:clamp(16px,2vw,40px);padding-right:clamp(16px,2vw,40px)}
 .admin-columns{grid-template-columns:minmax(230px,1fr) minmax(0,2fr) minmax(260px,1fr)}
 .admin-access{display:grid;gap:14px;min-width:0;position:sticky;top:16px}
 .admin-access label{display:grid;gap:8px}
