@@ -133,3 +133,10 @@
 
 /* Keep directory navigation visible while scrolling. */
 .services-directory:not(.specialist-profile) .services-top{position:sticky;top:0;z-index:50;background:#e4ecfaf5;box-shadow:0 8px 20px #52688918;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+
+/* Keep long specialist headings inside the card until details are opened. */
+.services-directory .services-card[data-expanded=false] .services-card-header{height:auto;min-height:104px}
+.services-directory .services-person-role,.services-directory .services-person-company{margin:4px 0 0;overflow-wrap:anywhere}
+.services-directory .services-card[data-expanded=false] .services-person-role,.services-directory .services-card[data-expanded=false] .services-person-company{display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;-webkit-line-clamp:2}
+.services-directory .services-card[data-expanded=false] .services-person-company{-webkit-line-clamp:1}
+.services-directory .services-card[data-expanded=true] .services-person-role,.services-directory .services-card[data-expanded=true] .services-person-company{display:block;overflow:visible;-webkit-line-clamp:unset}
