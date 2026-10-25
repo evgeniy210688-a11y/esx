@@ -70,7 +70,7 @@ function SubmissionForm({ userId }: { userId: string }) {
     if (!languages.length) { setMessage('Выберите хотя бы один язык общения.'); return; }
     const phoneNumbers = phones.map(phone => ({ ...phone, number: phone.number.trim() }));
     if (!phoneNumbers.length || !validCompanyPhones(phoneNumbers)) { setMessage('Укажите от 1 до 5 корректных номеров телефона.'); return; }
-    const description = joinServiceDescription(get('description'), get('services'));
+    const description = joinServiceDescription((kind === 'specialist' && get('role') ? 'Должность: ' + get('role') + '\n\n' : '') + get('description'), get('services'));
     if (description.length > 5000) { setMessage('Описание и список услуг вместе должны содержать не более 5000 символов.'); return; }
     if (get('website')) {
       try { const url = new URL(get('website')); if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) throw new Error(); }
@@ -85,7 +85,7 @@ function SubmissionForm({ userId }: { userId: string }) {
         p_id: requestId.current,
         p_input: {
           listing_kind: kind === 'company' ? 'company' : interpreter ? 'interpreter' : 'manager',
-          represented_company: kind === 'specialist' ? get('represented_company') : null, name: get('name'), city: get('city'), category: kind === 'specialist' && newCategory ? get('new_category') : get('category'), address: get('address'),
+          represented_company: kind === 'specialist' ? get('represented_company') : null, name: get('name'), city: get('city'), category: kind === 'specialist' && newCategory ? get('role') : get('category'), address: get('address'),
           phone: phoneNumbers[0].number, phones: phoneNumbers, website: get('website'), social_links: socialLinks, description, photo, service_languages: languages,
         },
       });
@@ -112,7 +112,7 @@ function SubmissionForm({ userId }: { userId: string }) {
         <label>Кого регистрируете?<select value={kind} onChange={e => { setKind(e.target.value as typeof kind); setInterpreter(false); }}><option value="company">Компания</option><option value="specialist">Специалист</option></select></label>
         <label>{kind === 'company' ? 'Название компании' : 'Имя специалиста'}<input name="name" required maxLength={200} /></label>
         <label>{kind === 'company' ? 'Категория компании' : 'Категория специалиста'}{kind === 'company' ? <input name="category" required maxLength={100} /> : <select name="category" required defaultValue="" onChange={e => setNewCategory(e.target.value === '__new__')}><option value="" disabled>Выберите категорию</option>{serviceCategories.filter(category => category !== 'Другие услуги').map(category => <option key={category} value={category}>{category}</option>)}<option value="__new__">Новая услуга</option></select>}</label>
-        {kind === 'specialist' && newCategory && <label>Должность<input name="new_category" required maxLength={100} placeholder="Введите должность" /><span>По должности будет создана новая категория.</span></label>}
+        {kind === 'specialist' && <label>Должность<input name="role" required={newCategory} maxLength={100} placeholder="Введите должность" />{newCategory && <span>По должности будет создана новая категория.</span>}</label>}
         {kind === 'specialist' && <label>Компания, которую представляете (необязательно)<input name="represented_company" maxLength={200} placeholder="Название компании" /></label>}
         {kind === 'specialist' && <label className="registration-check"><input type="checkbox" checked={interpreter} onChange={e => setInterpreter(e.target.checked)} />Работаю переводчиком</label>}
         <label>Город<input name="city" required={kind === 'company'} maxLength={100} /></label>
