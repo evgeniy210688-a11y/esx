@@ -18,3 +18,8 @@
 
 .registration-social-row,.registration-phone-row{display:grid;grid-template-columns:minmax(140px,1fr) minmax(180px,2fr) auto;gap:12px;align-items:end}
 @media(max-width:600px){.registration-social-row,.registration-phone-row{grid-template-columns:1fr}.registration-social-row button,.registration-phone-row button{justify-self:start}}
+.registration-page .registration-kind{border:0;padding:0;margin:0;min-width:0}
+.registration-page .registration-kind>div{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+.registration-page .registration-kind label{display:flex;align-items:center;gap:10px;flex:1;min-width:140px;padding:14px 16px;border:1px solid #b8cbea;border-radius:14px;cursor:pointer;background:#f7faff}
+.registration-page .registration-kind label:has(input:checked){background:#214e9b;color:#fff;border-color:#214e9b}
+.registration-page .registration-kind input{width:18px;height:18px;margin:0;accent-color:#214e9b}
