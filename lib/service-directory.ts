@@ -33,7 +33,7 @@ export function serviceCategory(listing: Pick<ServiceListing, 'category'>) {
   const category = listing.category.normalize('NFKC').trim().replace(/\s+/g, ' ');
   if (/^страховой агент$/i.test(category)) return 'Страхование';
   if (/^(?:специалист по красоте|мастер красоты|парикмахер|hair stylist)$/i.test(category)) return 'Красота и уход';
-  if (/образован|обучен|автошкол|школ|курсы|курс |репетитор|учеб|университет|колледж|детский сад|education|training|school|tutor|courses|university|college/i.test(category)) return 'Образование';
+  if (/академи|academy|образован|обучен|автошкол|школ|курсы|курс |репетитор|учеб|университет|колледж|детский сад|education|training|school|tutor|courses|university|college/i.test(category)) return 'Образование';
   if (/автодилер|автосалон|продажа автомобилей|покупка и аренда автомобилей|car dealer|car rental/i.test(category)) return 'Покупка и аренда автомобилей';
   if (/недвижим|риелтор|риэлтор|аренда квартир|продажа квартир|аренда домов|продажа домов|аренда офис|real estate|realtor|property rental/i.test(category)) return 'Недвижимость';
   if (/^(?:специалист по массажу(?: лица и тела)?|массажист(?:ка)?|массаж и спа)$/i.test(category)) return 'Массаж и спа';
