@@ -23,3 +23,6 @@
 .registration-page .registration-kind label{display:flex;align-items:center;gap:10px;flex:1;min-width:140px;padding:14px 16px;border:1px solid #b8cbea;border-radius:14px;cursor:pointer;background:#f7faff}
 .registration-page .registration-kind label:has(input:checked){background:#214e9b;color:#fff;border-color:#214e9b}
 .registration-page .registration-kind input{width:18px;height:18px;margin:0;accent-color:#214e9b}
+.registration-interface-language{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.registration-interface-language select{padding:10px 12px;border:1px solid #b8cbea;border-radius:12px;background:#f7faff;color:#244b86;font:inherit;max-width:100%}
+@media(max-width:600px){.registration-interface-language{width:100%;justify-content:flex-end}.registration-page .services-top{flex-wrap:wrap}}

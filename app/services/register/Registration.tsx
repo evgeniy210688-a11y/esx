@@ -1,4 +1,6 @@
 'use client';
+import { interfaceLanguages, type InterfaceLanguage } from '../serviceLabels';
+import { registrationTree } from './registrationCopy';
 import SearchableSelect from '@/app/services/SearchableSelect';
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
@@ -22,15 +24,18 @@ const statusLabels: Record<string, string> = { pending: 'На проверке',
 
 export default function Registration() {
   const { user, ready } = useAccount();
-  return <div className="services-page services-directory registration-page" lang="ru">
-    <header className="services-top"><Link className="services-brand" href="/"><Image src="/esx-wordmark-color.png" alt="ESX" width={140} height={48} unoptimized /></Link><nav><Link href="/services">Справочник</Link><Link href="/account">Мой аккаунт</Link></nav></header>
+  const [language,setLanguage] = useState<InterfaceLanguage>('ru');
+  useEffect(() => { try { const saved=localStorage.getItem('esx-services-language'); if(interfaceLanguages.some(item=>item.code===saved)) queueMicrotask(()=>setLanguage(saved as InterfaceLanguage)); } catch {} },[]);
+  function chooseLanguage(value:InterfaceLanguage) { setLanguage(value); try { localStorage.setItem('esx-services-language',value); } catch {} }
+  return registrationTree(<div className="services-page services-directory registration-page" lang={language}>
+    <header className="services-top"><Link className="services-brand" href="/"><Image src="/esx-wordmark-color.png" alt="ESX" width={140} height={48} unoptimized /></Link><nav><Link href="/services">Справочник</Link><Link href="/account">Мой аккаунт</Link></nav><label className="registration-interface-language"><span>🌐</span><select aria-label="Interface language" value={language} onChange={event=>chooseLanguage(event.target.value as InterfaceLanguage)}>{interfaceLanguages.map(item=><option key={item.code} value={item.code}>{item.name}</option>)}</select></label></header>
     <main className="services-main"><h1>Регистрация в справочнике</h1><p>Добавьте компанию или специалиста. Карточка появится на сайте только после проверки и одобрения администратором.</p>
-      {!ready ? <p role="status">Проверяем вход…</p> : !user || user.is_anonymous ? <><p>Войдите или создайте аккаунт, чтобы отправить заявку.</p><EmailSignIn language="ru" /></> : <SubmissionForm key={user.id} userId={user.id} />}
+      {!ready ? <p role="status">Проверяем вход…</p> : !user || user.is_anonymous ? <><p>Войдите или создайте аккаунт, чтобы отправить заявку.</p><EmailSignIn key={language} language={language === "uz" ? "en" : language} /></> : <SubmissionForm key={user.id} userId={user.id} language={language} />}
     </main>
-  </div>;
+  </div>,language);
 }
 
-function SubmissionForm({ userId }: { userId: string }) {
+function SubmissionForm({ userId, language }: { userId: string; language: InterfaceLanguage }) {
   const [kind, setKind] = useState<'company' | 'specialist'>('company');
   const [newCategory, setNewCategory] = useState(false);
   const [interpreter, setInterpreter] = useState(false);
@@ -102,7 +107,7 @@ function SubmissionForm({ userId }: { userId: string }) {
     } finally { lock.current = false; setBusy(false); }
   }
 
-  return <>
+  return registrationTree(<>
     <section className="services-card registration-history"><h2>Мои заявки</h2>
       {loadError ? <p role="alert">Не удалось загрузить заявки. <button type="button" onClick={() => setRefresh(value => value + 1)}>Повторить</button></p>
         : applications.length ? <ul>{applications.map(item => <li key={item.id}><strong>{item.name}</strong> — {statusLabels[item.status] ?? 'На рассмотрении'}</li>)}</ul> : <p>Пока нет заявок.</p>}
@@ -138,7 +143,7 @@ function SubmissionForm({ userId }: { userId: string }) {
         </fieldset>
         <label>Описание<textarea name="description" required maxLength={4000} rows={5} /></label>
         <label>Услуги — по одной на строку<textarea name="services" maxLength={2000} rows={4} /></label>
-        <fieldset><legend>Языки общения{interpreter ? ' / перевода' : ''}</legend><div className="registration-languages">{Object.entries(serviceLanguages).map(([code, name]) => <label className="registration-check" key={code}><input type="checkbox" checked={languages.includes(code as ServiceLanguage)} onChange={() => setLanguages(current => current.includes(code as ServiceLanguage) ? current.filter(value => value !== code) : [...current, code as ServiceLanguage])} />{name}</label>)}</div></fieldset>
+        <fieldset><legend>Языки общения{interpreter ? ' / перевода' : ''}</legend><div className="registration-languages">{Object.entries(serviceLanguages).map(([code, name]) => <label className="registration-check" key={code}><input type="checkbox" checked={languages.includes(code as ServiceLanguage)} onChange={() => setLanguages(current => current.includes(code as ServiceLanguage) ? current.filter(value => value !== code) : [...current, code as ServiceLanguage])} />{new Intl.DisplayNames([language],{type:"language"}).of(code) ?? name}</label>)}</div></fieldset>
         <label>Фото (необязательно)<input type="file" accept="image/jpeg,image/png,image/webp" onChange={async e => {
           const file = e.target.files?.[0]; e.target.value = ''; if (!file) return;
           setPhotoBusy(true); setMessage('');
@@ -153,5 +158,5 @@ function SubmissionForm({ userId }: { userId: string }) {
       <p role="status" aria-live="polite">{message}</p>
       {success && <button type="button" onClick={() => { formRef.current?.reset(); setLanguages([]); setSocials([]); setPhones([{ type: 'mobile', number: '' }]); setPhoto(null); setKind('company'); setInterpreter(false); requestId.current = null; setSuccess(false); setMessage(''); }}>Подать ещё одну заявку</button>}
     </form>
-  </>;
+  </>,language);
 }
