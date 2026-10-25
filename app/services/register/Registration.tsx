@@ -31,6 +31,7 @@ export default function Registration() {
 
 function SubmissionForm({ userId }: { userId: string }) {
   const [kind, setKind] = useState<'company' | 'specialist'>('company');
+  const [newCategory, setNewCategory] = useState(false);
   const [interpreter, setInterpreter] = useState(false);
   const [languages, setLanguages] = useState<ServiceLanguage[]>([]);
   const [phones, setPhones] = useState<CompanyPhone[]>([{ type: 'mobile', number: '' }]);
@@ -84,7 +85,7 @@ function SubmissionForm({ userId }: { userId: string }) {
         p_id: requestId.current,
         p_input: {
           listing_kind: kind === 'company' ? 'company' : interpreter ? 'interpreter' : 'manager',
-          represented_company: kind === 'specialist' ? get('represented_company') : null, name: get('name'), city: get('city'), category: get('category'), address: get('address'),
+          represented_company: kind === 'specialist' ? get('represented_company') : null, name: get('name'), city: get('city'), category: kind === 'specialist' && newCategory ? get('new_category') : get('category'), address: get('address'),
           phone: phoneNumbers[0].number, phones: phoneNumbers, website: get('website'), social_links: socialLinks, description, photo, service_languages: languages,
         },
       });
@@ -110,7 +111,8 @@ function SubmissionForm({ userId }: { userId: string }) {
       <fieldset disabled={busy || success || photoBusy}>
         <label>Кого регистрируете?<select value={kind} onChange={e => { setKind(e.target.value as typeof kind); setInterpreter(false); }}><option value="company">Компания</option><option value="specialist">Специалист</option></select></label>
         <label>{kind === 'company' ? 'Название компании' : 'Имя специалиста'}<input name="name" required maxLength={200} /></label>
-        <label>{kind === 'company' ? 'Категория компании' : 'Категория специалиста'}{kind === 'company' ? <input name="category" required maxLength={100} /> : <select name="category" required defaultValue=""><option value="" disabled>Выберите категорию</option>{serviceCategories.map(category => <option key={category} value={category}>{category}</option>)}</select>}</label>
+        <label>{kind === 'company' ? 'Категория компании' : 'Категория специалиста'}{kind === 'company' ? <input name="category" required maxLength={100} /> : <select name="category" required defaultValue="" onChange={e => setNewCategory(e.target.value === '__new__')}><option value="" disabled>Выберите категорию</option>{serviceCategories.filter(category => category !== 'Другие услуги').map(category => <option key={category} value={category}>{category}</option>)}<option value="__new__">Новая услуга</option></select>}</label>
+        {kind === 'specialist' && newCategory && <label>Должность<input name="new_category" required maxLength={100} placeholder="Введите должность" /><span>По должности будет создана новая категория.</span></label>}
         {kind === 'specialist' && <label>Компания, которую представляете (необязательно)<input name="represented_company" maxLength={200} placeholder="Название компании" /></label>}
         {kind === 'specialist' && <label className="registration-check"><input type="checkbox" checked={interpreter} onChange={e => setInterpreter(e.target.checked)} />Работаю переводчиком</label>}
         <label>Город<input name="city" required={kind === 'company'} maxLength={100} /></label>
