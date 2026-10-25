@@ -130,7 +130,7 @@ function SubmissionForm({ userId }: { userId: string }) {
         <fieldset className="registration-socials"><legend>Социальные сети и мессенджеры (необязательно)</legend>
           <p>Добавьте ссылки на страницы или чаты. До 12 ссылок.</p>
           {socials.map((link, index) => <div className="registration-social-row" key={index}>
-            <label>Соцсеть {index + 1}<SearchableSelect value={link.network} onChange={e => setSocials(items => items.map((item, i) => i === index ? { ...item, network: e.target.value as SocialLink['network'] } : item))}>{Object.entries(socialNetworks).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</SearchableSelect></label>
+            <label>Соцсеть {index + 1}<select value={link.network} onChange={e => setSocials(items => items.map((item, i) => i === index ? { ...item, network: e.target.value as SocialLink['network'] } : item))}>{Object.entries(socialNetworks).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</select></label>
             <label>Ссылка {index + 1}<input type="url" required pattern="https?://.*" maxLength={2000} placeholder="https://…" value={link.url} onChange={e => setSocials(items => items.map((item, i) => i === index ? { ...item, url: e.target.value } : item))} /></label>
             <button type="button" aria-label={'Убрать соцсеть ' + (index + 1)} onClick={() => setSocials(items => items.filter((_, i) => i !== index))}>Убрать</button>
           </div>)}
