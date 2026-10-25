@@ -1,4 +1,5 @@
 'use client';
+import SearchableSelect from '@/app/services/SearchableSelect';
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import Link from 'next/link';
@@ -106,9 +107,9 @@ function Inbox() {
   return <div className="inquiry-inbox">
     <button type="button" className="inquiry-inbox-toggle" aria-expanded={open} aria-controls="alina-inbox" onClick={() => setOpen(value => !value)}>✉ Входящие заявки{!loading && !error && filter === 'all' ? ` (${count})` : ''}</button>
     {open && <div id="alina-inbox">
-      <div className="inquiry-toolbar"><label>Показать<select value={filter} disabled={!!busy} onChange={event => { setFilter(event.target.value as Status | 'all'); setPage(0); }}><option value="all">Все заявки</option>{Object.entries(labels).map(([value,label]) => <option key={value} value={value}>{label}</option>)}</select></label><button type="button" disabled={loading || !!busy} onClick={() => setRefresh(value => value+1)}>Обновить</button></div>
+      <div className="inquiry-toolbar"><label>Показать<SearchableSelect value={filter} disabled={!!busy} onChange={event => { setFilter(event.target.value as Status | 'all'); setPage(0); }}><option value="all">Все заявки</option>{Object.entries(labels).map(([value,label]) => <option key={value} value={value}>{label}</option>)}</SearchableSelect></label><button type="button" disabled={loading || !!busy} onClick={() => setRefresh(value => value+1)}>Обновить</button></div>
       {!loading && error && <p role="alert">{error}</p>}
-      {loading ? <p role="status">Загружаем заявки…</p> : !error && items.length === 0 ? <p>Заявок пока нет.</p> : <ul className="inquiry-list">{items.map(item => <li key={item.id}><details><summary><strong>{item.name}</strong><span className={'inquiry-status inquiry-status-' + item.status}>{labels[item.status]}</span><time dateTime={item.created_at}>{new Date(item.created_at).toLocaleString('ru-RU',{timeZone:'Asia/Seoul'})} (Корея)</time></summary><p><strong>Контакт:</strong> {item.contact}</p><p className="inquiry-message">{item.message}</p><label>Статус<select value={item.status} disabled={!!busy} onChange={event => void changeStatus(item.id,event.target.value as Status)}>{Object.entries(labels).map(([value,label]) => <option key={value} value={value}>{label}</option>)}</select></label></details></li>)}</ul>}
+      {loading ? <p role="status">Загружаем заявки…</p> : !error && items.length === 0 ? <p>Заявок пока нет.</p> : <ul className="inquiry-list">{items.map(item => <li key={item.id}><details><summary><strong>{item.name}</strong><span className={'inquiry-status inquiry-status-' + item.status}>{labels[item.status]}</span><time dateTime={item.created_at}>{new Date(item.created_at).toLocaleString('ru-RU',{timeZone:'Asia/Seoul'})} (Корея)</time></summary><p><strong>Контакт:</strong> {item.contact}</p><p className="inquiry-message">{item.message}</p><label>Статус<SearchableSelect value={item.status} disabled={!!busy} onChange={event => void changeStatus(item.id,event.target.value as Status)}>{Object.entries(labels).map(([value,label]) => <option key={value} value={value}>{label}</option>)}</SearchableSelect></label></details></li>)}</ul>}
       <div className="inquiry-toolbar"><button type="button" disabled={page === 0 || loading || !!busy} onClick={() => setPage(value => value-1)}>Назад</button><span>Страница {page+1}</span><button type="button" disabled={(page+1)*PAGE_SIZE >= count || loading || !!busy} onClick={() => setPage(value => value+1)}>Далее</button></div>
     </div>}
   </div>;

@@ -8,6 +8,7 @@ export default function ServiceFilterPicker({ label, value, options, onChange }:
   const id = useId();
   const root = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
   const selected = options.find(option => option.value === value) ?? options[0];
   const close = () => { setOpen(false); root.current?.querySelector<HTMLButtonElement>('.services-city-trigger')?.focus(); };
   return <div className="services-city-picker" ref={root} onBlur={event => {
@@ -23,11 +24,12 @@ export default function ServiceFilterPicker({ label, value, options, onChange }:
     }
   }}>
     <span id={id + '-label'}>{label}</span>
-    <button type="button" className="services-city-trigger" aria-labelledby={id + '-label ' + id + '-value'} aria-haspopup="menu" aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}>
+    <button type="button" className="services-city-trigger" aria-labelledby={id + '-label ' + id + '-value'} aria-haspopup="menu" aria-expanded={open} aria-controls={id} onClick={() => { setQuery(''); setOpen(!open); }}>
       <span id={id + '-value'} style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>{selected?.flag && <Image src={selected.flag} alt="" width={24} height={16} style={{ flexShrink: 0 }} />}{selected?.label}</span><span aria-hidden="true">⌄</span>
     </button>
     {open && <><div className="services-city-dismiss" onPointerDown={() => setOpen(false)} aria-hidden="true" /><div className="services-city-menu" id={id} role="menu" aria-labelledby={id + '-label'}>
-      {options.map(option => <button key={option.value} type="button" role="menuitemradio" aria-checked={value === option.value} onClick={() => { onChange(option.value); close(); }}><span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>{option.flag && <Image src={option.flag} alt="" width={24} height={16} style={{ flexShrink: 0 }} />}{option.label}</span>{value === option.value && <span aria-hidden="true">✓</span>}</button>)}
+      <input type="search" aria-label={label} placeholder={label} value={query} onChange={event => setQuery(event.target.value)} onKeyDown={event => { if (event.key === 'Home' || event.key === 'End') event.stopPropagation(); }} />
+      {options.filter(option => option.label.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())).map(option => <button key={option.value} type="button" role="menuitemradio" aria-checked={value === option.value} onClick={() => { onChange(option.value); close(); }}><span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>{option.flag && <Image src={option.flag} alt="" width={24} height={16} style={{ flexShrink: 0 }} />}{option.label}</span>{value === option.value && <span aria-hidden="true">✓</span>}</button>)}
     </div></>}
   </div>;
 }

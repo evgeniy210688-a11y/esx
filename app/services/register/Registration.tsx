@@ -1,4 +1,5 @@
 'use client';
+import SearchableSelect from '@/app/services/SearchableSelect';
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import Link from 'next/link';
@@ -109,9 +110,9 @@ function SubmissionForm({ userId }: { userId: string }) {
     <form ref={formRef} className="services-card registration-form" onSubmit={submit}>
       <h2>Новая заявка</h2>
       <fieldset disabled={busy || success || photoBusy}>
-        <label>Кого регистрируете?<select value={kind} onChange={e => { setKind(e.target.value as typeof kind); setInterpreter(false); }}><option value="company">Компания</option><option value="specialist">Специалист</option></select></label>
+        <label>Кого регистрируете?<SearchableSelect value={kind} onChange={e => { setKind(e.target.value as typeof kind); setInterpreter(false); }}><option value="company">Компания</option><option value="specialist">Специалист</option></SearchableSelect></label>
         <label>{kind === 'company' ? 'Название компании' : 'Имя специалиста'}<input name="name" required maxLength={200} /></label>
-        <label>{kind === 'company' ? 'Категория компании' : 'Категория специалиста'}{kind === 'company' ? <input name="category" required maxLength={100} /> : <select name="category" required defaultValue="" onChange={e => setNewCategory(e.target.value === '__new__')}><option value="" disabled>Выберите категорию</option>{serviceCategories.filter(category => category !== 'Другие услуги').map(category => <option key={category} value={category}>{category}</option>)}<option value="__new__">Новая услуга</option></select>}</label>
+        <label>{kind === 'company' ? 'Категория компании' : 'Категория специалиста'}{kind === 'company' ? <input name="category" required maxLength={100} /> : <SearchableSelect name="category" required defaultValue="" onChange={e => setNewCategory(e.target.value === '__new__')}><option value="" disabled>Выберите категорию</option>{serviceCategories.filter(category => category !== 'Другие услуги').map(category => <option key={category} value={category}>{category}</option>)}<option value="__new__">Новая услуга</option></SearchableSelect>}</label>
         {kind === 'specialist' && <label>Должность<input name="role" required={newCategory} maxLength={100} placeholder="Введите должность" />{newCategory && <span>По должности будет создана новая категория.</span>}</label>}
         {kind === 'specialist' && <label>Компания, которую представляете (необязательно)<input name="represented_company" maxLength={200} placeholder="Название компании" /></label>}
         {kind === 'specialist' && <label className="registration-check"><input type="checkbox" checked={interpreter} onChange={e => setInterpreter(e.target.checked)} />Работаю переводчиком</label>}
@@ -119,7 +120,7 @@ function SubmissionForm({ userId }: { userId: string }) {
         <label>Адрес{kind === 'specialist' ? ' (необязательно)' : ''}<input name="address" required={kind === 'company'} maxLength={500} placeholder="Хвасон, Мансе-гу, Чанан-мён" /><small>Укажите город, район и населённый пункт через запятую. При необходимости добавьте улицу и номер дома.</small></label>
         <fieldset><legend>Телефоны</legend><p>Можно добавить до 5 номеров. Первый номер — основной.</p>
           {phones.map((phone, index) => <div className="registration-phone-row" key={index}>
-            <label>Тип телефона {index + 1}<select value={phone.type} onChange={e => setPhones(items => items.map((item, i) => i === index ? { ...item, type: e.target.value as CompanyPhone['type'] } : item))}><option value="mobile">Мобильный</option><option value="office">Офисный</option><option value="other">Другой</option></select></label>
+            <label>Тип телефона {index + 1}<SearchableSelect value={phone.type} onChange={e => setPhones(items => items.map((item, i) => i === index ? { ...item, type: e.target.value as CompanyPhone['type'] } : item))}><option value="mobile">Мобильный</option><option value="office">Офисный</option><option value="other">Другой</option></SearchableSelect></label>
             <label>Номер телефона {index + 1}<input type="tel" required maxLength={30} placeholder="+82 10-1234-5678" value={phone.number} onChange={e => setPhones(items => items.map((item, i) => i === index ? { ...item, number: e.target.value } : item))} /></label>
             <button type="button" disabled={phones.length === 1} aria-label={'Убрать телефон ' + (index + 1)} onClick={() => setPhones(items => items.filter((_, i) => i !== index))}>Убрать</button>
           </div>)}
@@ -129,7 +130,7 @@ function SubmissionForm({ userId }: { userId: string }) {
         <fieldset className="registration-socials"><legend>Социальные сети и мессенджеры (необязательно)</legend>
           <p>Добавьте ссылки на страницы или чаты. До 12 ссылок.</p>
           {socials.map((link, index) => <div className="registration-social-row" key={index}>
-            <label>Соцсеть {index + 1}<select value={link.network} onChange={e => setSocials(items => items.map((item, i) => i === index ? { ...item, network: e.target.value as SocialLink['network'] } : item))}>{Object.entries(socialNetworks).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</select></label>
+            <label>Соцсеть {index + 1}<SearchableSelect value={link.network} onChange={e => setSocials(items => items.map((item, i) => i === index ? { ...item, network: e.target.value as SocialLink['network'] } : item))}>{Object.entries(socialNetworks).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</SearchableSelect></label>
             <label>Ссылка {index + 1}<input type="url" required pattern="https?://.*" maxLength={2000} placeholder="https://…" value={link.url} onChange={e => setSocials(items => items.map((item, i) => i === index ? { ...item, url: e.target.value } : item))} /></label>
             <button type="button" aria-label={'Убрать соцсеть ' + (index + 1)} onClick={() => setSocials(items => items.filter((_, i) => i !== index))}>Убрать</button>
           </div>)}
