@@ -1,4 +1,5 @@
 "use client";
+import ServiceAccess from './ServiceAccess';
 import SearchableSelect from '@/app/services/SearchableSelect';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import Link from 'next/link';
@@ -232,6 +233,6 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
       {!personal && <><fieldset className="admin-socials"><legend>Менеджер</legend><label className="admin-check"><input type="checkbox" checked={!!draft.has_manager} onChange={e => change('has_manager', e.target.checked)} />Есть менеджер</label></fieldset><label className="admin-check"><input type="checkbox" checked={draft.has_interpreter} onChange={e => setDraft(d => ({ ...d, has_interpreter: e.target.checked, interpreter_languages: e.target.checked ? d.interpreter_languages : [] }))} />Есть переводчик</label></>}
       {(personal ? draft.listing_kind === 'interpreter' : draft.has_interpreter) && <fieldset className="admin-language"><legend>Языки переводчика{personal ? ' (необязательно)' : ''}</legend>{Object.entries(serviceLanguages).map(([code,label]) => <label key={code}><input type="checkbox" checked={draft.interpreter_languages.includes(code as ServiceLanguage)} onChange={() => toggle('interpreter_languages', code as ServiceLanguage)} />{label}</label>)}</fieldset>}
       <label>Публикация<SearchableSelect value={draft.status} onChange={e => change('status', e.target.value as Listing['status'])}>{Object.entries(statuses).map(([code,label]) => <option key={code} value={code}>{label}</option>)}</SearchableSelect></label><p>Только статус «Опубликовано» показывает карточку посетителям. «В архиве» убирает её из справочника.</p><button disabled={busy}>{busy ? 'Сохраняем…' : 'Сохранить карточку'}</button>
-    </fieldset>{draft.id && <button type="button" className="admin-delete" disabled={busy} onClick={deleteListing}>{personal ? 'Удалить специалиста' : 'Удалить компанию'}</button>}</form></div></>}
+    </fieldset>{draft.id && <button type="button" className="admin-delete" disabled={busy} onClick={deleteListing}>{personal ? 'Удалить специалиста' : 'Удалить компанию'}</button>}</form><ServiceAccess key={draft.id || "new"} listingId={draft.id} name={draft.name} /></div></>}
     <p className="admin-message" role="status" aria-live="polite">{message}</p></>;
 }
