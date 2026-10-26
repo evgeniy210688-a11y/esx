@@ -148,3 +148,5 @@
 .services-directory .services-top nav{flex-wrap:wrap}
 
 .services-directory:not(.specialist-profile)>.services-top{width:100%;max-width:none;margin:0;box-sizing:border-box;padding-inline:clamp(16px,3vw,48px)}
+
+.services-search-toolbar{grid-template-columns:minmax(0,1fr) auto auto}.services-filters .services-search-toolbar .services-filter-reset{grid-column:auto;min-height:50px;white-space:nowrap;align-self:end}@media(max-width:540px){.services-search-toolbar{grid-template-columns:minmax(0,1fr) auto}.services-filters .services-search-toolbar .services-company-search{grid-column:1/-1}.services-filters .services-search-toolbar .services-filter-toggle{justify-self:end}.services-filters .services-search-toolbar .services-filter-reset{padding:11px 12px;font-size:13px}}

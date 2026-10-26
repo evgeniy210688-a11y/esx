@@ -194,6 +194,7 @@ export default function ServicesDirectory() {
   const translatedCard = (s: ServiceListing) => displayTranslation(language, preparedTranslations[translationKey(language, s)] ?? translations[translationKey(language, s)]);
   const [filters, setFilters] = useState(empty);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const resetButtonLabels: Record<InterfaceLanguage,string> = {ru:'Сброс',en:'Reset',ko:'초기화',uz:'Tozalash',zh:'重置',vi:'Đặt lại',tr:'Sıfırla'};
   const filterButtonLabels: Record<InterfaceLanguage,string> = {ru:'Фильтр',en:'Filter',ko:'필터',uz:'Filtr',zh:'筛选',vi:'Bộ lọc',tr:'Filtre'};
   const activeFilterCount = [filters.city,filters.category,filters.language,filters.interpreterLanguage,filters.interpreter].filter(Boolean).length;
   const [companyCategories, setCompanyCategories] = useState<string[]>([]);
@@ -508,6 +509,7 @@ export default function ServicesDirectory() {
       <div className="services-search-toolbar">
       <label className="services-company-search">{searchLabels[language]}<input type="search" value={filters.query ?? ''} onChange={e => update('query', e.target.value)} placeholder={searchLabels[language]} /></label>
       <button type="button" className="services-filter-toggle" aria-expanded={filtersOpen} aria-controls="services-filter-options" onClick={() => setFiltersOpen(value => !value)}>{filterButtonLabels[language]}{activeFilterCount > 0 && <span className="services-filter-count">{activeFilterCount}</span>}<span aria-hidden="true">{filtersOpen ? '▴' : '▾'}</span></button>
+      <button type="button" className="services-filter-reset" aria-label={t[16]} onClick={() => { setFilters(empty); setCompanyCategories([]); setSpecialistCategories([]); }}>{resetButtonLabels[language]}</button>
       </div>
       <div id="services-filter-options" className="services-filter-options" hidden={!filtersOpen}>
       <ServiceFilterPicker label={t[8]} value={filters.city} onChange={value => update('city', value)} options={[{value: '', label: t[9]}, ...cities.map(city => ({value: city, label: city === 'Хвасонг, Паран' ? (language === 'ko' ? '화성, 발안' : city) : listings.map(s => s.city === city ? translatedCard(s)?.city : undefined).find(Boolean) ?? city}))]} />
@@ -515,7 +517,6 @@ export default function ServicesDirectory() {
       <ServiceFilterPicker label={t[12]} value={filters.language} onChange={value => update('language', value)} options={[{value: '', label: t[13]}, ...languageOptions]} />
       <ServiceFilterPicker label={t[14]} value={filters.interpreterLanguage} onChange={value => update('interpreterLanguage', value)} options={[{value: '', label: t[13]}, ...languageOptions]} />
       <label className="services-check"><input type="checkbox" checked={filters.interpreter} onChange={e => update('interpreter', e.target.checked)} />{t[15]}</label>
-      <button type="button" onClick={() => { setFilters(empty); setCompanyCategories([]); setSpecialistCategories([]); }}>{t[16]}</button>
       <p className="services-note">{t[17]}</p>
       </div>
     </section>
