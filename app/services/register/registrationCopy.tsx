@@ -59,7 +59,15 @@ const rows = [
 'На проверке|Under review|검토 중|Tekshiruvda|审核中|Đang xét duyệt|İnceleniyor',
 'На рассмотрении|Pending|대기 중|Ko‘rib chiqilmoqda|待处理|Đang chờ|Beklemede',
 'Опубликовано|Published|게시됨|E’lon qilingan|已发布|Đã đăng|Yayınlandı',
-'Не опубликовано|Not published|미게시|E’lon qilinmagan|未发布|Chưa đăng|Yayınlanmadı'
+'Не опубликовано|Not published|미게시|E’lon qilinmagan|未发布|Chưa đăng|Yayınlanmadı',
+'Другая|Other|기타|Boshqa|其他|Khác|Diğer',
+'Укажите категорию|Enter a category|카테고리 입력|Toifani kiriting|输入类别|Nhập danh mục|Kategori girin',
+'+ Добавить категорию|+ Add category|+ 카테고리 추가|+ Toifa qo‘shish|+ 添加类别|+ Thêm danh mục|+ Kategori ekle',
+'Есть переводчик|Interpreter available|통역사 있음|Tarjimon bor|有翻译员|Có phiên dịch viên|Tercüman var',
+'Языки переводчика|Interpreter languages|통역 언어|Tarjimon tillari|翻译语言|Ngôn ngữ phiên dịch|Tercüman dilleri',
+'Выберите языки переводчика|Choose interpreter languages|통역 언어를 선택하세요|Tarjimon tillarini tanlang|请选择翻译语言|Chọn ngôn ngữ phiên dịch|Tercüman dillerini seçin',
+'Заявка отправлена на проверку. Она появится в справочнике после одобрения администратором.|Your application was submitted for review. It will appear in the directory after administrator approval.|신청서가 검토를 위해 제출되었습니다. 관리자 승인 후 디렉터리에 표시됩니다.|Arizangiz tekshirish uchun yuborildi. Administrator tasdiqlagandan keyin katalogda ko‘rinadi.|申请已提交审核。管理员批准后将显示在目录中。|Đơn đã được gửi để xét duyệt. Sau khi quản trị viên phê duyệt, thông tin sẽ hiển thị trong danh bạ.|Başvurunuz incelemeye gönderildi. Yönetici onayından sonra rehberde görünecektir.',
+
 ];
 const codes = ['ru','en','ko','uz','zh','vi','tr'];
 const copy = new Map(rows.map(row => { const values=row.split('|'); return [values[0],values]; }));

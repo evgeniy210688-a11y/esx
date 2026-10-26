@@ -10,7 +10,7 @@ import { serviceItems, splitServiceDescription, specialistRole } from '@/lib/ser
 import BusinessHoursDisplay from './BusinessHoursDisplay';
 import AdminEntry from '@/app/admin/AdminEntry';
 import { supabase } from '@/lib/supabase';
-import { serviceCategory, isPersonalListing, normalizeServiceCity, serviceCities, matchesService, safeServiceWebsite, serviceLanguages, type ServiceListing, type ServiceFilters } from '@/lib/service-directory';
+import { listingCategories, serviceCategory, isPersonalListing, normalizeServiceCity, serviceCities, matchesService, safeServiceWebsite, serviceLanguages, type ServiceListing, type ServiceFilters } from '@/lib/service-directory';
 import './services.css';
 import ServicesHeader from './ServicesHeader';
 import RegistrationLink from './RegistrationLink';
@@ -348,7 +348,7 @@ export default function ServicesDirectory() {
         // Fetch every page: Supabase's default row limit must not silently hide listings.
         for (let from = 0; ; from += 500) {
           let { data, error } = await supabase.from('esx_service_listings')
-            .select('listing_kind,id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages')
+            .select('categories,listing_kind,id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages')
             .eq('status', 'published').order('name').order('id').range(from, from + 499).abortSignal(controller.signal).returns<ServiceListing[]>();
           if (error?.code === '42703') {
             ({ data, error } = await supabase.from('esx_service_listings').select('id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages').eq('status', 'published').order('name').order('id').range(from, from + 499).abortSignal(controller.signal).returns<ServiceListing[]>());
@@ -366,10 +366,10 @@ export default function ServicesDirectory() {
   function update<K extends keyof ServiceFilters>(key: K, value: ServiceFilters[K]) { setFilters(current => ({ ...current, [key]: value })); }
   const categoryLabel = (category: string) => categoryTranslation(category, language) ?? listings.map(s => s.category === category ? translatedCard(s)?.category : undefined).find(Boolean) ?? category;
   const categoryQuery = filters.category.trim().normalize('NFKC').toLocaleLowerCase();
-  const matchingListings = listings.filter(s => matchesService(s, { ...filters, category: '' }, translatedCard(s)) && (!categoryQuery || [serviceCategory(s), categoryLabel(serviceCategory(s))].some(value => value.normalize('NFKC').toLocaleLowerCase().includes(categoryQuery))));
-  const companyCategoryOptions = [...new Set(listings.filter(s => !isPersonalListing(s)).map(serviceCategory))].filter(Boolean).sort((a, b) => a.localeCompare(b, 'ru'));
-  const specialistCategoryOptions = [...new Set(listings.filter(isPersonalListing).map(serviceCategory))].filter(Boolean).sort((a,b) => a.localeCompare(b, 'ru'));
-  const visible = matchingListings.filter(s => isPersonalListing(s) ? !specialistCategories.length || specialistCategories.includes(serviceCategory(s)) : !companyCategories.length || companyCategories.includes(serviceCategory(s)));
+  const matchingListings = listings.filter(s => matchesService(s, { ...filters, category: '' }, translatedCard(s)) && (!categoryQuery || listingCategories(s).flatMap(category=>[category,categoryLabel(category)]).some(value => value.normalize('NFKC').toLocaleLowerCase().includes(categoryQuery))));
+  const companyCategoryOptions = [...new Set(listings.filter(s => !isPersonalListing(s)).flatMap(listingCategories))].filter(Boolean).sort((a, b) => a.localeCompare(b, 'ru'));
+  const specialistCategoryOptions = [...new Set(listings.filter(isPersonalListing).flatMap(listingCategories))].filter(Boolean).sort((a,b) => a.localeCompare(b, 'ru'));
+  const visible = matchingListings.filter(s => isPersonalListing(s) ? !specialistCategories.length || listingCategories(s).some(category=>specialistCategories.includes(category)) : !companyCategories.length || listingCategories(s).some(category=>companyCategories.includes(category)));
   const specialistIds = visible.filter(isPersonalListing).map(s => s.id).join(',');
   useEffect(() => {
     const track = specialistCarousel.current;
@@ -490,7 +490,7 @@ export default function ServicesDirectory() {
     };
   }, [specialistIds, status, specialistCopies]);
   const cities = [...new Set(listings.flatMap(s => serviceCities(s)))].sort((a,b) => a.localeCompare(b, 'ru'));
-  const categories = [...new Set(listings.map(s => serviceCategory(s)))].sort((a,b) => a.localeCompare(b, 'ru'));
+  const categories = [...new Set(listings.flatMap(listingCategories))].sort((a,b) => a.localeCompare(b, 'ru'));
   return <div className="services-page services-directory" lang={language}>
     <ServicesHeader language={language} chooseLanguage={chooseLanguage} />
     <main className="services-main"><section className="services-intro"><p className="services-eyebrow">ESX • {t[4]}</p><h1>{t[5]}</h1><p>{t[6]}</p></section>
@@ -498,7 +498,7 @@ export default function ServicesDirectory() {
     {categories.length > 0 && <section className="services-category-carousel" aria-label={t[10]}>
       <div className="services-category-heading"><h2>{t[10]}</h2><div className="services-category-arrows"><button type="button" aria-label={t[10] + ' ←'} onClick={() => categoryCarousel.current?.scrollBy({ left: -360, behavior: 'smooth' })}>←</button><button type="button" aria-label={t[10] + ' →'} onClick={() => categoryCarousel.current?.scrollBy({ left: 360, behavior: 'smooth' })}>→</button></div></div>
       <div className="services-category-track" ref={categoryCarousel}>
-        {Array.from({ length: categoryCopies }, (_, copy) => <div key={copy} className="services-category-group" aria-hidden={copy !== 1 ? true : undefined}>{[{ value: '', label: t[11], count: listings.length }, ...categories.map(category => ({ value: category, label: categoryLabel(category), count: listings.filter(s => serviceCategory(s) === category).length }))].map(category => <button type="button" key={category.value} tabIndex={copy === 1 ? 0 : -1} className="services-category-tile" aria-pressed={filters.category === category.value} onClick={() => update('category', category.value)}><span className="services-category-art" aria-hidden="true" style={categoryImage(category.value) ? { backgroundImage: `url(${categoryImage(category.value)})`, backgroundSize: "cover", backgroundPosition: "center" } : { backgroundPosition: `${(categoryArt(category.value) % 4) * 100 / 3}% ${Math.floor(categoryArt(category.value) / 4) * 100}%` }} /><span className="services-category-name">{category.label}</span></button>)}</div>)}
+        {Array.from({ length: categoryCopies }, (_, copy) => <div key={copy} className="services-category-group" aria-hidden={copy !== 1 ? true : undefined}>{[{ value: '', label: t[11], count: listings.length }, ...categories.map(category => ({ value: category, label: categoryLabel(category), count: listings.filter(s => listingCategories(s).includes(category)).length }))].map(category => <button type="button" key={category.value} tabIndex={copy === 1 ? 0 : -1} className="services-category-tile" aria-pressed={filters.category === category.value} onClick={() => update('category', category.value)}><span className="services-category-art" aria-hidden="true" style={categoryImage(category.value) ? { backgroundImage: `url(${categoryImage(category.value)})`, backgroundSize: "cover", backgroundPosition: "center" } : { backgroundPosition: `${(categoryArt(category.value) % 4) * 100 / 3}% ${Math.floor(categoryArt(category.value) / 4) * 100}%` }} /><span className="services-category-name">{category.label}</span></button>)}</div>)}
       </div>
     </section>}
     <section className="services-filters services-compact-filters" aria-label={t[7]}>

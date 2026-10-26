@@ -80,7 +80,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
         if (!admin) { if (active) setAccess('denied'); return; }
         const all: Listing[] = [];
         for (let from = 0; ; from += 500) {
-          let result = await supabase.from('esx_service_listings').select('listing_kind,id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages,status').order('name').order('id').range(from, from + 499).returns<Listing[]>();
+          let result = await supabase.from('esx_service_listings').select('categories,listing_kind,id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages,status').order('name').order('id').range(from, from + 499).returns<Listing[]>();
           if (result.error?.code === '42703') {
             if (active) setSupportsPeople(false);
             result = await supabase.from('esx_service_listings').select('id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages,status').order('name').order('id').range(from, from + 499).returns<Listing[]>();
@@ -213,7 +213,8 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
       </section>)}
     </section>
     <form id="company-form" ref={form} onSubmit={save} className="services-card admin-form"><h2>{draft.id ? 'Редактирование карточки' : 'Новая карточка'}</h2>{!personal && <nav aria-label="Разделы настроек компании"><a href="#company-branches">Адреса филиалов</a></nav>}<fieldset disabled={busy} className="admin-fields">
-      <label>Тип карточки<SearchableSelect value={draft.listing_kind ?? 'company'} onChange={e => change('listing_kind', e.target.value as ListingKind)}>{Object.entries(listingKindLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</SearchableSelect></label>
+      {draft.categories && draft.categories.length > 1 && <p>Категории заявки: {draft.categories.join(', ')}</p>}
+          <label>Тип карточки<SearchableSelect value={draft.listing_kind ?? 'company'} onChange={e => change('listing_kind', e.target.value as ListingKind)}>{Object.entries(listingKindLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</SearchableSelect></label>
       {personal && <p>Укажите имя и фамилию, добавьте контактный телефон. Заполните описание, услуги и ссылки на соцсети. Город и адрес можно не указывать.</p>}
       {personal && !supportsPeople && <p role="alert">Сохранение личных карточек станет доступно после обновления базы данных.</p>}
       <label>{personal ? 'Имя и фамилия' : 'Название компании'}<input required maxLength={200} value={draft.name} onChange={e => change('name', e.target.value)} /></label>
