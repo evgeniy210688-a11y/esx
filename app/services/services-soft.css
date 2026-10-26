@@ -152,3 +152,21 @@
 .services-search-toolbar{grid-template-columns:minmax(0,1fr) auto auto}.services-filters .services-search-toolbar .services-filter-reset{grid-column:auto;min-height:50px;white-space:nowrap;align-self:end}@media(max-width:540px){.services-search-toolbar{grid-template-columns:minmax(0,1fr) auto}.services-filters .services-search-toolbar .services-company-search{grid-column:1/-1}.services-filters .services-search-toolbar .services-filter-toggle{justify-self:end}.services-filters .services-search-toolbar .services-filter-reset{padding:11px 12px;font-size:13px}}
 
 .trademark-notice{width:100%;grid-column:1/-1;flex-basis:100%;margin:20px 0 0;font-size:12px;line-height:1.6;opacity:.8;overflow-wrap:anywhere}
+
+.services-directory .services-top.services-glass-header{background:rgba(231,239,252,.76);backdrop-filter:blur(22px) saturate(145%);-webkit-backdrop-filter:blur(22px) saturate(145%);border-bottom:1px solid #ffffff9c;box-shadow:0 6px 24px #334b7514}
+.services-glass-header .services-header-menu{display:flex;align-items:center;justify-content:flex-end;gap:24px;flex:1;min-width:0}
+.services-directory .services-glass-header .services-menu-toggle{display:none}
+@media(max-width:760px){
+.services-directory .services-top.services-glass-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px}
+.services-directory .services-glass-header .services-brand img{width:110px;height:38px}
+.services-directory .services-glass-header .services-brand>span{display:none}
+.services-directory .services-glass-header .services-menu-toggle{display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:9px;border:1px solid #ffffffb3;border-radius:12px;color:#244b86;background:#ffffff70;box-shadow:0 3px 10px #294b7412}
+.services-directory .services-glass-header .services-header-menu{display:none;flex:0 0 100%;width:100%;gap:16px;padding:12px 0 4px}
+.services-directory .services-glass-header[data-menu-open=true] .services-header-menu{display:flex;flex-direction:column;align-items:stretch}
+.services-directory .services-glass-header .services-header-menu nav{display:flex;flex-direction:column;align-items:stretch;width:100%;margin:0;gap:4px;font-size:16px}
+.services-directory .services-glass-header .services-header-menu nav a{display:block;padding:12px 14px;border-radius:12px;background:#ffffff55}
+.services-directory .services-glass-header .services-interface-language{width:100%;margin:0;justify-content:stretch}
+.services-directory .services-glass-header .services-interface-language>span{display:none}
+.services-directory .services-glass-header .services-language-picker{width:100%}
+.services-directory .services-glass-header .services-language-picker summary{justify-content:center}
+}
