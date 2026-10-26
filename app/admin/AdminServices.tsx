@@ -12,7 +12,7 @@ import useAccount from '@/app/account/useAccount';
 import { supabase } from '@/lib/supabase';
 import BranchEditor from './BranchEditor';
 import ServicesBackToTop from '../services/ServicesBackToTop';
-import { matchesService, serviceCategory, isPersonalListing, validListingIdentity, listingKindLabels, type ListingKind, normalizeServiceCity, validServiceBranches, serviceLanguages, type ServiceListing, type ServiceLanguage } from '@/lib/service-directory';
+import { listingCategories, matchesService, serviceCategory, isPersonalListing, validListingIdentity, listingKindLabels, type ListingKind, normalizeServiceCity, validServiceBranches, serviceLanguages, type ServiceListing, type ServiceLanguage } from '@/lib/service-directory';
 import '../services/services.css';
 import './admin.css';
 import { socialNetworks, validSocialLinks, type SocialLink } from '@/lib/service-socials';
@@ -21,7 +21,7 @@ type Listing = ServiceListing & { role?: string; services?: string; status: 'dra
 const blank: Listing = { listing_kind: 'company', branches: [], id: '', name: '', description: '', city: '', category: '', address: '', phone: '', phones: [], photo: null, website: '', social_links: [], service_languages: [], has_interpreter: false, interpreter_languages: [], status: 'draft' };
 const statuses = { draft: 'Черновик', pending: 'На проверке', published: 'Опубликовано', archived: 'В архиве' };
 function editableDescription(description: string) {
-  const content = splitServiceDescription(description);
+  const content = splitServiceDescription(description.replace(/\n\nКатегории заявки: [^\n]+(?=\n|$)/g, ''));
   const match = content.description.match(/^Должность: ([^\n]+)\n\n/);
   return {...content, role: match?.[1] ?? '', description: match ? content.description.slice(match[0].length) : content.description};
 }
@@ -58,13 +58,14 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
   const [category, setCategory] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const categoryOf = (row: Listing) => serviceCategory(row).trim() || 'Без категории';
-  const categories = [...new Set(rows.map(categoryOf))].sort((a, b) => a.localeCompare(b, 'ru'));
-  const filteredRows = rows.filter(row => (!statusFilter || row.status === statusFilter) && (!category || categoryOf(row) === category) && matchesService(row, {
+  const categories = [...new Set(rows.flatMap(listingCategories))].sort((a, b) => a.localeCompare(b, 'ru'));
+  const filteredRows = rows.filter(row => (!statusFilter || row.status === statusFilter) && (!category || listingCategories(row).includes(category)) && matchesService(row, {
     query, city: '', category: '', language: '', interpreter: false, interpreterLanguage: '',
   }));
-  const groups = categories.map(name => ({ name, rows: filteredRows.filter(row => categoryOf(row) === name) })).filter(group => group.rows.length);
+  const groups = categories.map(name => ({ name, rows: filteredRows.filter(row => listingCategories(row).includes(name)) })).filter(group => group.rows.length);
 
   const personal = isPersonalListing(draft);
+  const [supportsCategories,setSupportsCategories] = useState(false);
   const [supportsPeople, setSupportsPeople] = useState(true);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
@@ -81,6 +82,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
         const all: Listing[] = [];
         for (let from = 0; ; from += 500) {
           let result = await supabase.from('esx_service_listings').select('categories,listing_kind,id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages,status').order('name').order('id').range(from, from + 499).returns<Listing[]>();
+          if (active && !result.error) setSupportsCategories(true);
           if (result.error?.code === '42703') {
             result = await supabase.from('esx_service_listings').select('listing_kind,id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages,status').order('name').order('id').range(from, from + 499).returns<Listing[]>();
           }
@@ -89,7 +91,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
             result = await supabase.from('esx_service_listings').select('id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages,status').order('name').order('id').range(from, from + 499).returns<Listing[]>();
           }
           if (result.error || !result.data) throw result.error ?? new Error('No listings returned');
-          all.push(...result.data as Listing[]);
+          all.push(...(result.data as Listing[]).map(row=>({...row,categories:listingCategories(row)})));
           if (result.data.length < 500) break;
         }
         if (active) { setRows(all); setAccess('allowed'); }
@@ -174,14 +176,16 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     const socials = (draft.social_links ?? []).map(link => ({ ...link, url: link.url.trim() }));
     if (validSocialLinks(socials).length !== socials.length) { setMessage('Для каждой соцсети укажите полную ссылку, начинающуюся с https:// или http://.'); return; }
     lock.current = true; setBusy(true); setMessage('');
+    const selectedCategories = [...new Set([(personal && newCategory ? draft.role?.trim() : draft.category.trim()) || '', ...(draft.categories ?? []).filter(value=>value !== serviceCategory(draft))].map(value=>value.trim()).filter(Boolean))];
     const description = joinServiceDescription((personal && draft.role?.trim() ? 'Должность: ' + draft.role.trim() + '\n\n' : '') + draft.description, draft.services ?? '');
-    if (description.length > 5000) { lock.current = false; setBusy(false); setMessage('Описание и услуги вместе должны содержать не более 5000 символов.'); return; }
-    const values = { ...(supportsPeople ? { listing_kind: draft.listing_kind ?? 'company' } : {}), branches: personal ? [] : branches, has_manager: personal ? draft.listing_kind === 'manager' : !!draft.has_manager, business_hours: draft.business_hours ?? null, name: draft.name.trim(), represented_company: personal ? draft.represented_company?.trim() || null : null, description, city: normalizeServiceCity(draft.city), category: (personal && newCategory ? draft.role?.trim() : draft.category.trim()) || (personal ? listingKindLabels[draft.listing_kind!] : ''), address: draft.address.trim(), phone: phones[0]?.number || null, phones, photo: companyPhotos(draft)[0] ?? null, photos: companyPhotos(draft), website: draft.website?.trim() || null, social_links: socials, service_languages: draft.service_languages, has_interpreter: personal ? draft.listing_kind === 'interpreter' : draft.has_interpreter, interpreter_languages: (personal ? draft.listing_kind === 'interpreter' : draft.has_interpreter) ? draft.interpreter_languages : [], status: draft.status };
+    const persistedDescription = description + (selectedCategories.length > 1 ? '\n\nКатегории заявки: ' + selectedCategories.join('; ') : '');
+    if (persistedDescription.length > 5000) { lock.current = false; setBusy(false); setMessage('Описание и услуги вместе должны содержать не более 5000 символов.'); return; }
+    const values = { ...(supportsCategories ? {categories:selectedCategories} : {}), ...(supportsPeople ? { listing_kind: draft.listing_kind ?? 'company' } : {}), branches: personal ? [] : branches, has_manager: personal ? draft.listing_kind === 'manager' : !!draft.has_manager, business_hours: draft.business_hours ?? null, name: draft.name.trim(), represented_company: personal ? draft.represented_company?.trim() || null : null, description: persistedDescription, city: normalizeServiceCity(draft.city), category: (personal && newCategory ? draft.role?.trim() : draft.category.trim()) || (personal ? listingKindLabels[draft.listing_kind!] : ''), address: draft.address.trim(), phone: phones[0]?.number || null, phones, photo: companyPhotos(draft)[0] ?? null, photos: companyPhotos(draft), website: draft.website?.trim() || null, social_links: socials, service_languages: draft.service_languages, has_interpreter: personal ? draft.listing_kind === 'interpreter' : draft.has_interpreter, interpreter_languages: (personal ? draft.listing_kind === 'interpreter' : draft.has_interpreter) ? draft.interpreter_languages : [], status: draft.status };
     try {
       const query = draft.id ? supabase.from('esx_service_listings').update(values).eq('id', draft.id) : supabase.from('esx_service_listings').insert(values);
       const { data, error } = await query.select('id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages,status').single();
       if (error) throw error;
-      const saved = { ...data, listing_kind: draft.listing_kind ?? 'company' } as Listing;
+      const saved = { ...data, categories:selectedCategories, listing_kind: draft.listing_kind ?? 'company' } as Listing;
       setDraft({ ...saved, ...editableDescription(saved.description) }); setRows(current => [...current.filter(r => r.id !== saved.id), saved].sort((a,b) => a.name.localeCompare(b.name, 'ru')));
       setMessage(saved.status === 'published' ? 'Карточка сохранена и опубликована в справочнике.' : 'Карточка сохранена. Посетители её не видят.');
     } catch { setMessage('Сохранить не удалось. Проверьте поля и права доступа. Введённые данные сохранены в форме.'); }
@@ -226,7 +230,8 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
       <BusinessHoursEditor value={draft.business_hours ?? null} onChange={value => change('business_hours', value)} />
       <label>{personal ? 'Город (необязательно)' : 'Город'}<input required={!personal} list="service-city-options" autoComplete="off" value={draft.city} onChange={e => change('city', e.target.value)} placeholder="Начните вводить город" /><datalist id="service-city-options">{serviceCityGroups.flatMap(group => group.cities.map(city => <option key={city.value} value={city.value}>{city.label} · {group.region}</option>))}</datalist></label>
       {personal && <label>Компания, которую представляет (необязательно)<input maxLength={200} value={draft.represented_company ?? ''} onChange={e => change('represented_company', e.target.value)} /></label>}
-      {personal ? <><label>Категория специалиста<SearchableSelect required value={newCategory || (draft.category && !serviceCategories.some(category => category === serviceCategory(draft))) ? '__new__' : serviceCategory(draft)} onChange={e => { const category = e.target.value; setNewCategory(category === '__new__'); setDraft(d => ({ ...d, category: category === '__new__' ? '' : category, listing_kind: category === 'Переводчики' ? 'interpreter' : 'manager' })); }}><option value="" disabled>Выберите категорию</option>{serviceCategories.filter(category => category !== 'Другие услуги').map(category => <option key={category} value={category}>{category}</option>)}<option value="__new__">Новая услуга</option></SearchableSelect></label><label>Должность<input required={newCategory} maxLength={100} value={draft.role ?? ''} onChange={e => change('role', e.target.value)} placeholder="Введите должность" />{newCategory && <span>По должности будет создана новая категория.</span>}</label></> : <label>Категория<input required maxLength={100} list="service-category-options" autoComplete="off" value={draft.category} onChange={e => change('category', e.target.value)} placeholder="Начните вводить услугу или категорию" /><datalist id="service-category-options">{serviceCategories.map(category => <option key={category} value={category} />)}</datalist></label>}
+      {personal ? <><label>Категория специалиста<SearchableSelect required value={newCategory || (draft.category && !serviceCategories.some(category => category === serviceCategory(draft))) ? '__new__' : serviceCategory(draft)} onChange={e => { const category = e.target.value; const extras = (draft.categories ?? []).filter(value=>value !== serviceCategory(draft)); setNewCategory(category === '__new__'); setDraft(d => ({ ...d, categories:extras, category: category === '__new__' ? '' : category, listing_kind: category === 'Переводчики' ? 'interpreter' : 'manager' })); }}><option value="" disabled>Выберите категорию</option>{serviceCategories.filter(category => category !== 'Другие услуги').map(category => <option key={category} value={category}>{category}</option>)}<option value="__new__">Новая услуга</option></SearchableSelect></label><label>Должность<input required={newCategory} maxLength={100} value={draft.role ?? ''} onChange={e => change('role', e.target.value)} placeholder="Введите должность" />{newCategory && <span>По должности будет создана новая категория.</span>}</label></> : <label>Категория<input required maxLength={100} list="service-category-options" autoComplete="off" value={draft.category} onChange={e => change('category', e.target.value)} placeholder="Начните вводить услугу или категорию" /><datalist id="service-category-options">{serviceCategories.map(category => <option key={category} value={category} />)}</datalist></label>}
+      {personal && <fieldset><legend>Дополнительные категории специалиста</legend>{(draft.categories ?? []).filter(value=>value!==serviceCategory(draft)).map((value,index,extras)=><div key={index} className="admin-extra-category"><label>Категория<select required value={value} onChange={event=>change('categories',[draft.category,...extras.map((item,i)=>i===index?event.target.value:item)])}><option value="" disabled>Выберите категорию</option>{[...new Set([...serviceCategories.filter(item=>item!=='Другие услуги'),...(value?[value]:[])])].map(item=><option key={item} value={item}>{item}</option>)}</select></label><button type="button" onClick={()=>change('categories',[draft.category,...extras.filter((_,i)=>i!==index)])}>Убрать</button></div>)}<button type="button" disabled={(draft.categories?.length ?? 1)>=10 || !draft.category} onClick={()=>change('categories',[...(draft.categories ?? [draft.category]),''])}>+ Добавить категорию</button></fieldset>}
       <label>{personal ? 'Адрес (необязательно)' : 'Адрес'}<input name="company-address" required={!personal} maxLength={500} value={draft.address} onChange={e => change('address', e.target.value)} placeholder="Хвасон, Мансе-гу, Чанан-мён" /><small>Город, район и населённый пункт через запятую. Можно добавить улицу и номер дома.</small></label>
       {!personal && <BranchEditor key={draft.id || "new"} branches={draft.branches ?? []} onChange={branches => change('branches', branches)} />}
       <fieldset className="admin-socials"><legend>{personal ? 'Телефон' : 'Телефоны компании'}</legend>{companyPhones(draft).map((phone,index) => <div className="admin-social-row" key={index}><label>Тип телефона {index + 1}<SearchableSelect value={phone.type} onChange={e => changePhones(companyPhones(draft).map((p,i) => i === index ? { ...p, type: e.target.value as CompanyPhone['type'] } : p))}><option value="office">Офисный</option><option value="mobile">Мобильный</option><option value="other">Другой / не указан</option></SearchableSelect></label><label>Номер телефона {index + 1}<input type="tel" required maxLength={30} value={phone.number} onChange={e => changePhones(companyPhones(draft).map((p,i) => i === index ? { ...p, number: e.target.value } : p))} placeholder="+82 10-1234-5678" /></label><button type="button" onClick={() => changePhones(companyPhones(draft).filter((_,i) => i !== index))}>Убрать телефон {index + 1}</button></div>)}<button type="button" disabled={companyPhones(draft).length >= 5} onClick={() => changePhones([...companyPhones(draft), { type: personal ? 'mobile' : 'office', number: '' }])}>+ Добавить телефон</button><p>До 5 номеров. Для каждого выберите тип.</p></fieldset>

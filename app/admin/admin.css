@@ -33,3 +33,5 @@
 @media(max-width:750px){.admin-columns{grid-template-columns:1fr}.admin-access{grid-column:auto}}
 .admin-page .services-main>:not(.admin-login){max-width:none;width:100%}
 .admin-page>.services-top{max-width:none;width:100%;box-sizing:border-box}
+
+.admin-extra-category{display:flex;gap:12px;align-items:end;margin-bottom:12px}.admin-extra-category>label{flex:1;min-width:0}

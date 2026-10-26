@@ -4,6 +4,7 @@ export function serviceItems(text: string): string[] {
   return text.split(/\r?\n/).map(line => line.trim().replace(/^[•●*-]\s+/, '')).filter(Boolean);
 }
 export function splitServiceDescription(text: string) {
+  text = text.replace(/\n\nКатегории заявки: [^\n]+(?=\n|$)/g, '');
   const normalized = text.replace(/\r\n/g, '\n');
   const index = normalized.lastIndexOf(separator);
   if (index < 0) return { description: text, services: '' };

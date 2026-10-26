@@ -43,7 +43,7 @@ export function serviceCategory(listing: Pick<ServiceListing, 'category'>) {
     ? 'Медицина и клиники'
     : listing.category;
 }
-export function listingCategories(listing: Pick<ServiceListing, 'category' | 'categories'>) { return [...new Set([listing.category,...(listing.categories ?? [])].filter(Boolean).map(category=>serviceCategory({category})))]; }
+export function listingCategories(listing: Pick<ServiceListing, 'category' | 'categories'> & {description?: string}) { return [...new Set([listing.category,...(listing.categories ?? []),...(listing.description?.match(/^Категории заявки: ([^\n]+)$/m)?.[1].split(';').map(value=>value.trim()) ?? [])].filter(Boolean).map(category=>serviceCategory({category})))]; }
 export type ServiceFilters = { query?: string; city: string; category: string; language: string; interpreter: boolean; interpreterLanguage: string };
 function normalizeSearch(value: string) {
   return value.normalize('NFKC').toLowerCase().replace(/ё/g, 'е').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
