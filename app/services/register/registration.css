@@ -41,3 +41,5 @@
 .registration-language-controls{display:flex;align-items:center;justify-content:center;gap:10px;min-height:24px}
 .registration-page .registration-language-controls input[type=checkbox]{appearance:auto;width:20px;height:20px;flex:0 0 20px;margin:0;padding:0;accent-color:#214e9b}
 .registration-language-name{text-align:center;line-height:1.4}
+
+.activation-page .services-card>p{color:#203757}.activation-page .services-card>p strong{color:#203757}

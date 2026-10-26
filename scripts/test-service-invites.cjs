@@ -30,6 +30,12 @@ const request=(body,headers={})=>new Request('https://example.com/api/service-ac
  const before=calls;verified=false;
  r=await route.POST(request({action:'claim'},{cookie,authorization:'Bearer verified-session'}));assert.equal(r.status,401);assert.equal(calls,before);
  verified=true;r=await route.POST(request({action:'claim'},{cookie,authorization:'Bearer verified-session'}));assert.equal(r.status,200);assert.ok(r.headers.get('Set-Cookie').includes('Max-Age=0'));
+ const successfulRpc=db.rpc;
+ db.rpc=async()=>({error:{code:'P0001',message:'Already owned'}});
+ r=await route.POST(request({action:'claim'},{cookie,authorization:'Bearer verified-session'}));assert.equal(r.status,409);assert.ok((await r.json()).error.includes('уже есть владелец'));
+ db.rpc=async()=>({error:{code:'42703',message:'private internal details'}});
+ r=await route.POST(request({action:'claim'},{cookie,authorization:'Bearer verified-session'}));const failure=await r.json();assert.ok(failure.error.includes('42703'));assert.ok(!failure.error.includes('private internal details'));assert.equal(r.headers.get('Set-Cookie'),null);
+ db.rpc=successfulRpc;
  const client={auth:{getUser:async()=>({data:{user:{id:'admin',is_anonymous:false}},error:null})},from:()=>({select:()=>({eq:()=>({maybeSingle:async()=>({data:null,error:null})})})})};
  const admin=load('app/api/admin/service-access/route.ts',{'@/lib/service-invites':helper,'@supabase/supabase-js':{createClient:()=>client}});
  r=await admin.GET(new Request('https://example.com/api/admin/service-access?listing='+id));assert.equal(r.status,401);

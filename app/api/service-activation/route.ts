@@ -33,7 +33,16 @@ export async function POST(request:Request) {
       const {data:{user},error}=await db.auth.getUser(bearer);
       if(error||!user||user.is_anonymous||!user.email_confirmed_at)return reply({error:'Подтвердите свою почту.'},401);
       const result=await db.rpc('esx_claim_service_invite',{p_session:digest(token),p_user:user.id});
-      if(result.error)return reply({error:'Не удалось завершить активацию. Временный доступ мог истечь или быть заменён администратором.'},409);
+      if(result.error) {
+        const issue=result.error;
+        const known:Record<string,string>={
+          'Activation expired':'Срок активации истёк или администратор заменил временные данные. Попросите выдать новый одноразовый доступ.',
+          'Already owned':'У этой карточки уже есть владелец. Администратору нужно проверить, к какому аккаунту она подключена.',
+          'Verified email required':'Подтвердите почту выбранного аккаунта перед подключением карточки.',
+        };
+        const code=/^[A-Z0-9]{5,12}$/.test(issue.code??'')?issue.code:'SERVER';
+        return reply({error:known[issue.message] ?? ('Не удалось подключить карточку: ошибка базы данных ('+code+'). Передайте этот код администратору.'),code},409);
+      }
       return setActivationCookie(reply({complete:true}),request,'',0);
     }
     return reply({error:'Неизвестное действие.'},400);
