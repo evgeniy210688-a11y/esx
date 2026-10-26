@@ -351,6 +351,9 @@ export default function ServicesDirectory() {
             .select('categories,listing_kind,id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages')
             .eq('status', 'published').order('name').order('id').range(from, from + 499).abortSignal(controller.signal).returns<ServiceListing[]>();
           if (error?.code === '42703') {
+            ({ data, error } = await supabase.from('esx_service_listings').select('listing_kind,id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages').eq('status', 'published').order('name').order('id').range(from, from + 499).abortSignal(controller.signal).returns<ServiceListing[]>());
+          }
+          if (error?.code === '42703') {
             ({ data, error } = await supabase.from('esx_service_listings').select('id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages').eq('status', 'published').order('name').order('id').range(from, from + 499).abortSignal(controller.signal).returns<ServiceListing[]>());
           }
           if (error || !data) throw error ?? new Error('No listings returned');

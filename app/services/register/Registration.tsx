@@ -94,14 +94,22 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
     lock.current = true; setBusy(true); setMessage('');
     requestId.current ??= crypto.randomUUID();
     try {
-      const { error } = await supabase.rpc('esx_submit_service_v2', {
+      const submission = {
         p_id: requestId.current,
         p_input: {
           listing_kind: kind === 'company' ? 'company' : selectedCategories.includes('Переводчики') ? 'interpreter' : 'manager',
           represented_company: kind === 'specialist' ? get('represented_company') : null, name: get('name'), city: get('city'), category: selectedCategories[0], categories: selectedCategories, has_interpreter: kind === 'company' && interpreter, interpreter_languages: interpreterLanguages, address: get('address'),
           phone: phoneNumbers[0].number, phones: phoneNumbers, website: get('website'), social_links: socialLinks, description, photo, service_languages: languages,
         },
-      });
+      };
+      let { error } = await supabase.rpc('esx_submit_service_v2', submission);
+      // The legacy server must retain every requested field until migration.
+      if (error?.code === 'PGRST202') {
+        const details = [selectedCategories.length > 1 ? 'Категории заявки: ' + selectedCategories.join('; ') : '', kind === 'company' && interpreter ? 'Есть переводчик. Языки переводчика: ' + interpreterLanguages.map(code=>serviceLanguages[code]).join(', ') : ''].filter(Boolean).join('\n');
+        const legacyDescription = description + (details ? '\n\n' + details : '');
+        if (legacyDescription.length > 5000) { setMessage('Описание и список услуг вместе должны содержать не более 5000 символов.'); return; }
+        ({error} = await supabase.rpc('esx_submit_service', {...submission,p_input:{...submission.p_input,description:legacyDescription}}));
+      }
       if (error) throw error;
       setSuccess(true); setMessage('Заявка отправлена на проверку. Она появится в справочнике после одобрения администратором.');
       setRefresh(value => value + 1);

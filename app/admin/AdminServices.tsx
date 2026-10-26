@@ -82,6 +82,9 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
         for (let from = 0; ; from += 500) {
           let result = await supabase.from('esx_service_listings').select('categories,listing_kind,id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages,status').order('name').order('id').range(from, from + 499).returns<Listing[]>();
           if (result.error?.code === '42703') {
+            result = await supabase.from('esx_service_listings').select('listing_kind,id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages,status').order('name').order('id').range(from, from + 499).returns<Listing[]>();
+          }
+          if (result.error?.code === '42703') {
             if (active) setSupportsPeople(false);
             result = await supabase.from('esx_service_listings').select('id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages,status').order('name').order('id').range(from, from + 499).returns<Listing[]>();
           }
