@@ -2,6 +2,9 @@ import { Children, cloneElement, isValidElement, type ReactNode } from 'react';
 import type { InterfaceLanguage } from '../serviceLabels';
 import { categoryTranslation } from '@/lib/service-category-labels';
 const rows = [
+'Категория|Category|분야|Toifa|类别|Danh mục|Kategori',
+'Не удалось загрузить заявки.|Could not load applications.|신청 목록을 불러오지 못했습니다.|Arizalarni yuklab bo‘lmadi.|无法加载申请。|Không thể tải danh sách đơn.|Başvurular yüklenemedi.',
+'Фото для заявки|Application photo|신청 사진|Ariza uchun surat|申请照片|Ảnh đăng ký|Başvuru fotoğrafı',
 'Справочник|Directory|업체 안내|Ma’lumotnoma|服务目录|Danh bạ|Rehber',
 'Мой аккаунт|My account|내 계정|Mening hisobim|我的账户|Tài khoản của tôi|Hesabım',
 'Регистрация в справочнике|Directory registration|업체 등록|Ma’lumotnomaga ro‘yxatdan o‘tish|目录注册|Đăng ký danh bạ|Rehbere kayıt',
