@@ -507,7 +507,7 @@ export default function ServicesDirectory() {
     </section>}
     <section className="services-filters services-compact-filters" aria-label={t[7]}>
       <div className="services-search-toolbar">
-      <label className="services-company-search">{searchLabels[language]}<input type="search" value={filters.query ?? ''} onChange={e => update('query', e.target.value)} placeholder={searchLabels[language]} /></label>
+      <label className="services-company-search"><input aria-label={searchLabels[language]} type="search" value={filters.query ?? ''} onChange={e => update('query', e.target.value)} placeholder={searchLabels[language]} /></label>
       <button type="button" className="services-filter-toggle" aria-expanded={filtersOpen} aria-controls="services-filter-options" onClick={() => setFiltersOpen(value => !value)}>{filterButtonLabels[language]}{activeFilterCount > 0 && <span className="services-filter-count">{activeFilterCount}</span>}<span aria-hidden="true">{filtersOpen ? '▴' : '▾'}</span></button>
       <button type="button" className="services-filter-reset" aria-label={t[16]} onClick={() => { setFilters(empty); setCompanyCategories([]); setSpecialistCategories([]); }}>{resetButtonLabels[language]}</button>
       </div>
