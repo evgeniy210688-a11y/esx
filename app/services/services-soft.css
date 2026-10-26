@@ -146,3 +146,5 @@
 .services-directory .services-card[data-expanded=false] .services-card-heading:has(.services-person-role)>h2{-webkit-line-clamp:1}
 .services-directory .services-card[data-expanded=false] .services-person-role,.services-directory .services-card[data-expanded=false] .services-person-company{line-height:1.35;-webkit-line-clamp:1}
 .services-directory .services-top nav{flex-wrap:wrap}
+
+.services-directory:not(.specialist-profile)>.services-top{width:100%;max-width:none;margin:0;box-sizing:border-box;padding-inline:clamp(16px,3vw,48px)}
