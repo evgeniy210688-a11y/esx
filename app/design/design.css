@@ -815,3 +815,5 @@
 /* Dark surfaces improve readability in the About section. */
 .esx-site .about-details .korea-story { background: #081426f5; border-color: #526781; }
 .esx-site .about-details p { color: #d4e3f4; }
+
+.esx-site .home-quick-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 16px}.esx-site .home-quick-links a{display:flex;align-items:center;justify-content:center;min-height:50px;padding:12px 18px;border:1px solid #5371b9;border-radius:16px;background:linear-gradient(135deg,#173a81,#10245b);color:#fff;font-weight:700;text-align:center;text-decoration:none;transition:background .2s,box-shadow .2s}.esx-site .home-quick-links a:hover{background:#244b9b;box-shadow:0 0 18px #30bfff26}.esx-site .home-quick-links a:focus-visible{outline:3px solid #35d4ff;outline-offset:3px}@media(max-width:480px){.esx-site .home-quick-links{gap:8px}.esx-site .home-quick-links a{padding:10px 8px;font-size:14px}}
