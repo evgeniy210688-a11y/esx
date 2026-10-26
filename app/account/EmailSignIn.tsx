@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase';
 import type { Language } from '@/app/design/content';
 import { registrationLabels, type RegistrationMessage } from './registrationLabels';
 
-export default function EmailSignIn({ language }: { language: Language }) {
+export default function EmailSignIn({ language, activation = false }: { language: Language; activation?: boolean }) {
   const t = registrationLabels[language];
   const [register, setRegister] = useState(true);
   const [email, setEmail] = useState('');
@@ -47,7 +47,7 @@ export default function EmailSignIn({ language }: { language: Language }) {
   async function submit(event: FormEvent) {
     event.preventDefault();
     if (lock.current) return;
-    const login = username.trim().toLowerCase();
+    const login = activation ? 'owner_'+crypto.randomUUID().replaceAll('-','').slice(0,16) : username.trim().toLowerCase();
     if (register && !/^[a-z0-9][a-z0-9_]{2,23}$/.test(login)) {
       setStatus('invalidUsername');
       return;
@@ -111,7 +111,7 @@ export default function EmailSignIn({ language }: { language: Language }) {
       <h1>{register ? t.createTitle : t.welcome}</h1>
       <p className="account-muted">{register ? t.registerHelp : t.signInHelp}</p>
       <form className="account-form" onSubmit={submit}>
-        {register && <label>{t.username}<input type="text" autoComplete="username" autoCapitalize="none" spellCheck={false} value={username} onChange={event => setUsername(event.target.value)} minLength={3} maxLength={24} required disabled={busy} /><small>{t.usernameHelp}</small></label>}
+        {register && !activation && <label>{t.username}<input type="text" autoComplete="username" autoCapitalize="none" spellCheck={false} value={username} onChange={event => setUsername(event.target.value)} minLength={3} maxLength={24} required disabled={busy} /><small>{t.usernameHelp}</small></label>}
         <label>{t.email}<input type="email" autoComplete="email" autoCapitalize="none" spellCheck={false} value={email} onChange={event => setEmail(event.target.value)} maxLength={254} required disabled={busy} /></label>
         <label>{t.password}<input type={visible ? 'text' : 'password'} autoComplete={register ? 'new-password' : 'current-password'} value={password} onChange={event => setPassword(event.target.value)} minLength={register ? 8 : 1} maxLength={72} required disabled={busy} /><small>{register && t.passwordHelp}</small></label>
         {register && <label>{t.confirmPassword}<input type={visible ? 'text' : 'password'} autoComplete="new-password" value={confirmation} onChange={event => setConfirmation(event.target.value)} minLength={8} maxLength={72} required disabled={busy} /></label>}
@@ -119,6 +119,7 @@ export default function EmailSignIn({ language }: { language: Language }) {
         <button disabled={busy}>{busy ? t.wait : register ? t.createAccount : t.signIn}</button>
       </form>
     </>}
+    {!activation && <p><a href="/account/activate">Войти по одноразовому логину и паролю</a></p>}
     <p role="status" className="account-status">{status ? t[status] : ''}</p>
   </section>;
 }
