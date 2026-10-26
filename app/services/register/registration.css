@@ -33,3 +33,6 @@
 
 .registration-page .registration-form img.registration-language-flag{width:24px;height:16px;border-radius:2px;object-fit:cover;flex-shrink:0}
 .registration-interface-language .services-language-picker img{width:24px;height:16px;border-radius:2px;object-fit:cover;flex-shrink:0}
+
+.registration-page .registration-form label.registration-interpreter-check{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid #b9cbe4;border-radius:12px;background:#f8fbff;cursor:pointer}
+.registration-page .registration-interpreter-check input[type=checkbox]{appearance:auto;width:22px;height:22px;flex:0 0 22px;margin:0;padding:0;accent-color:#214e9b}
