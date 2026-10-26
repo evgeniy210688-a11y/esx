@@ -42,3 +42,5 @@
   .account-qr-print svg{display:block;width:100mm;height:100mm;margin:4mm auto}
   .account-qr-print .qr-print-url{font-size:9pt;overflow-wrap:anywhere}
 }
+
+.account-language-grid button{display:flex;align-items:center;justify-content:center;gap:8px}.account-language-grid button img{width:24px;height:16px;object-fit:cover;border-radius:2px;flex-shrink:0}@media(max-width:480px){.account-language-grid button{flex-direction:column;gap:5px}}

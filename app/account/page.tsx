@@ -2,6 +2,7 @@
 import { accountLabels, type AccountMessage } from './accountLabels';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import AccountQr from './AccountQr';
 import { supabase } from '@/lib/supabase';
@@ -16,6 +17,7 @@ import SiteHeader from '@/app/design/SiteHeader';
 import RegistrationLink from '@/app/services/RegistrationLink';
 import { languages, type Language } from '@/app/design/content';
 
+const accountLanguageFlags: Record<Language,string> = {ru:'ru',ko:'kr',en:'gb',zh:'cn',tr:'tr',vi:'vn',km:'kh',kk:'kz'};
 const languageLabels: Record<Language, string> = {
   ru: 'Язык интерфейса', en: 'Interface language', ko: '인터페이스 언어',
   zh: '界面语言', tr: 'Arayüz dili', vi: 'Ngôn ngữ giao diện',
@@ -106,7 +108,7 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
       {languages.map(item => <button type="button" key={item.code} lang={item.code} aria-pressed={language === item.code} onClick={() => {
         setSelectedLanguage(item.code);
         try { localStorage.setItem('esx-language', item.code); } catch {}
-      }}>{item.name}</button>)}
+      }}><Image src={'/flags/'+accountLanguageFlags[item.code]+'.svg'} alt="" width={24} height={16} unoptimized/><span>{item.name}</span></button>)}
     </div>
   </div>;
   return <div className="esx-site account-site" lang={language}><SiteHeader language={language} /><main className="account-page"><div className="account-shell">
