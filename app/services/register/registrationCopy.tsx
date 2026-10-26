@@ -66,7 +66,7 @@ const rows = [
 'Есть переводчик|Interpreter available|통역사 있음|Tarjimon bor|有翻译员|Có phiên dịch viên|Tercüman var',
 'Языки переводчика|Interpreter languages|통역 언어|Tarjimon tillari|翻译语言|Ngôn ngữ phiên dịch|Tercüman dilleri',
 'Выберите языки переводчика|Choose interpreter languages|통역 언어를 선택하세요|Tarjimon tillarini tanlang|请选择翻译语言|Chọn ngôn ngữ phiên dịch|Tercüman dillerini seçin',
-'Заявка отправлена на проверку. Она появится в справочнике после одобрения администратором.|Your application was submitted for review. It will appear in the directory after administrator approval.|신청서가 검토를 위해 제출되었습니다. 관리자 승인 후 디렉터리에 표시됩니다.|Arizangiz tekshirish uchun yuborildi. Administrator tasdiqlagandan keyin katalogda ko‘rinadi.|申请已提交审核。管理员批准后将显示在目录中。|Đơn đã được gửi để xét duyệt. Sau khi quản trị viên phê duyệt, thông tin sẽ hiển thị trong danh bạ.|Başvurunuz incelemeye gönderildi. Yönetici onayından sonra rehberde görünecektir.',
+'Заявка отправлена на проверку. Статус объявления вы можете видеть в личном кабинете.|Your application has been submitted for review. You can view the listing status in your account.|신청서가 검토를 위해 제출되었습니다. 등록 상태는 내 계정에서 확인할 수 있습니다.|Arizangiz tekshirish uchun yuborildi. E’lon holatini shaxsiy kabinetingizda ko‘rishingiz mumkin.|申请已提交审核。您可以在个人中心查看信息的状态。|Đơn đã được gửi để xét duyệt. Bạn có thể xem trạng thái tin đăng trong tài khoản cá nhân.|Başvurunuz incelemeye gönderildi. İlanınızın durumunu hesabınızdan görebilirsiniz.',
 
 ];
 const codes = ['ru','en','ko','uz','zh','vi','tr'];

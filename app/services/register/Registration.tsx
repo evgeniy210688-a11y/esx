@@ -111,7 +111,7 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
         ({error} = await supabase.rpc('esx_submit_service', {...submission,p_input:{...submission.p_input,description:legacyDescription}}));
       }
       if (error) throw error;
-      setSuccess(true); setMessage('Заявка отправлена на проверку. Она появится в справочнике после одобрения администратором.');
+      setSuccess(true); setMessage('Заявка отправлена на проверку. Статус объявления вы можете видеть в личном кабинете.');
       setRefresh(value => value + 1);
     } catch (error) {
       const code = (error as { code?: string }).code;
