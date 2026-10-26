@@ -496,7 +496,7 @@ export default function ServicesDirectory() {
   const categories = [...new Set(listings.flatMap(listingCategories))].sort((a,b) => a.localeCompare(b, 'ru'));
   return <div className="services-page services-directory" lang={language}>
     <ServicesHeader language={language} chooseLanguage={chooseLanguage} />
-    <main className="services-main"><section className="services-intro"><p className="services-eyebrow">ESX • {t[4]}</p><h1>{t[5]}</h1><p>{t[6]}</p></section>
+    <main className="services-main"><section className="services-intro"><h1>{t[5]}</h1><p>{t[6]}</p></section>
     <AdminEntry language={language} />
     {categories.length > 0 && <section className="services-category-carousel" aria-label={t[10]}>
       <div className="services-category-heading"><h2>{t[10]}</h2><div className="services-category-arrows"><button type="button" aria-label={t[10] + ' ←'} onClick={() => categoryCarousel.current?.scrollBy({ left: -360, behavior: 'smooth' })}>←</button><button type="button" aria-label={t[10] + ' →'} onClick={() => categoryCarousel.current?.scrollBy({ left: 360, behavior: 'smooth' })}>→</button></div></div>
