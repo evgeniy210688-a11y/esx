@@ -36,3 +36,8 @@
 
 .registration-page .registration-form label.registration-interpreter-check{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid #b9cbe4;border-radius:12px;background:#f8fbff;cursor:pointer}
 .registration-page .registration-interpreter-check input[type=checkbox]{appearance:auto;width:22px;height:22px;flex:0 0 22px;margin:0;padding:0;accent-color:#214e9b}
+
+.registration-page .registration-form .registration-languages>label{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer}
+.registration-language-controls{display:flex;align-items:center;justify-content:center;gap:10px;min-height:24px}
+.registration-page .registration-language-controls input[type=checkbox]{appearance:auto;width:20px;height:20px;flex:0 0 20px;margin:0;padding:0;accent-color:#214e9b}
+.registration-language-name{text-align:center;line-height:1.4}
