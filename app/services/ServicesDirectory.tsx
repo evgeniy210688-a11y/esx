@@ -78,7 +78,7 @@ const personRoleLabels: Record<InterfaceLanguage, { manager: string; interpreter
 const managerLabels: Record<InterfaceLanguage,string> = {ru:"Есть менеджер",en:"Manager available",ko:"매니저 있음",uz:"Menejer bor",zh:"有经理",vi:"Có quản lý",tr:"Yönetici mevcut"};
 const directoryGroupLabels: Record<InterfaceLanguage, [string, string]> = { ru: ['Специалисты', 'Компании'], en: ['Specialists', 'Companies'], ko: ['전문가', '업체'], uz: ['Mutaxassislar', 'Kompaniyalar'], zh: ['专业人士', '公司'], vi: ['Chuyên gia', 'Công ty'], tr: ['Uzmanlar', 'Şirketler'] };
 const flags = { ru: 'ru', uz: 'uz', zh: 'cn', vi: 'vn', en: 'gb', ko: 'kr', tr: 'tr' } as const;
-const searchLabels: Record<InterfaceLanguage, string> = { ru: 'Поиск компании, услуги или специалиста', en: 'Search companies, services or specialists', ko: '업체, 서비스 또는 전문가 검색', uz: 'Kompaniya, xizmat yoki mutaxassisni qidirish', zh: '搜索公司、服务或专业人士', vi: 'Tìm công ty, dịch vụ hoặc chuyên gia', tr: 'Şirket, hizmet veya uzman ara' };
+const searchLabels: Record<InterfaceLanguage, string> = { ru: 'Поиск', en: 'Search', ko: '검색', uz: 'Qidirish', zh: '搜索', vi: 'Tìm kiếm', tr: 'Ara' };
 function isShoppingCategory(category: string): boolean {
   return /магазин|продукт|shop|grocer/i.test(category);
 }
