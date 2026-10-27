@@ -155,7 +155,7 @@
 
 .services-directory .services-top.services-glass-header{background:#e7effc;border-bottom:1px solid #ffffffc7;box-shadow:0 6px 24px #334b751f,inset 0 -1px 0 #ffffff70}
 @supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-.services-directory .services-top.services-glass-header{background:linear-gradient(120deg,rgba(244,248,255,.9),rgba(222,233,250,.86));-webkit-backdrop-filter:blur(32px) saturate(125%);backdrop-filter:blur(32px) saturate(125%)}
+.services-directory .services-top.services-glass-header{background:linear-gradient(120deg,rgba(244,248,255,.58),rgba(222,233,250,.48));-webkit-backdrop-filter:blur(32px) saturate(125%);backdrop-filter:blur(32px) saturate(125%)}
 }
 .services-glass-header .services-header-menu{display:flex;align-items:center;justify-content:flex-end;gap:24px;flex:1;min-width:0}
 .services-directory .services-glass-header .services-menu-toggle{display:none}
