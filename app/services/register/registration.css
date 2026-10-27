@@ -43,3 +43,27 @@
 .registration-language-name{text-align:center;line-height:1.4}
 
 .activation-page .services-card>p{color:#203757}.activation-page .services-card>p strong{color:#203757}
+
+/* Account registration inside the directory. */
+.registration-page .services-main>h1{margin:0 0 14px}
+.registration-page .services-main>p{margin:0 0 16px;line-height:1.6;color:#445d7f}
+.registration-page .account-card{max-width:620px;margin:24px auto 0;padding:28px;background:linear-gradient(145deg,#f3f7ff,#e4edfc);box-shadow:0 12px 32px #48658d16}
+.registration-page .account-card h1{font-size:clamp(24px,3vw,30px);margin:0 0 12px}
+.registration-page .account-card .account-muted{color:#526889;line-height:1.6;margin:0 0 22px;font-size:14px}
+.registration-page .account-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;border-radius:16px;background:#dce7f8;margin-bottom:26px}
+.registration-page .account-tabs button{border:0;background:transparent;box-shadow:none;font-weight:600}
+.registration-page .account-tabs button[aria-pressed=true]{background:#fff;color:#194c97;box-shadow:0 3px 9px #42628d1c}
+.registration-page .account-form{gap:18px}
+.registration-page .account-form label{font-size:14px;font-weight:600;gap:8px}
+.registration-page .account-form input:not([type=checkbox]){min-height:48px;font-size:16px;font-weight:400}
+.registration-page .account-form small{color:#61738f;font-size:12px;line-height:1.5;font-weight:400}
+.registration-page .account-form small:empty{display:none}
+.registration-page .account-form label.account-checkbox{display:flex;align-items:center;justify-content:flex-start;gap:10px;min-height:36px;font-weight:400;cursor:pointer}
+.registration-page .account-checkbox input[type=checkbox]{appearance:auto;flex:0 0 20px;width:20px;height:20px;padding:0;margin:0;accent-color:#2254a1}
+.registration-page .account-form button[type=submit]{min-height:48px;background:linear-gradient(120deg,#2463bb,#214c98);border-color:#2859a3;color:#fff;font-weight:600;box-shadow:0 5px 14px #2554a329}
+.registration-page .account-card>p:not(.account-muted):not(.account-status){margin-top:20px;font-size:14px;line-height:1.6}
+.registration-page .account-card>p>a{color:#24549b;text-decoration:underline;text-underline-offset:3px}
+.registration-page .account-status:empty{display:none}
+.registration-page .account-status:not(:empty){margin-top:18px;padding:12px 14px;background:#dce8fc;border-radius:12px;line-height:1.5;color:#244b7e}
+.registration-page .account-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+@media(max-width:540px){.registration-page .account-card{padding:20px 16px;border-radius:20px;margin-top:20px}.registration-page .services-main{padding:24px 16px 48px}.registration-page .account-tabs button{padding-inline:8px}}

@@ -104,7 +104,7 @@ export default function EmailSignIn({ language, activation = false }: { language
       <form className="account-form" onSubmit={verifyCode}>
         <label>{t.emailCode}<input type="text" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" minLength={6} maxLength={6} value={code} onChange={event => setCode(event.target.value.replace(/[^0-9]/g, '').slice(0, 6))} required disabled={busy} aria-describedby="email-code-help" autoFocus /></label>
         <small id="email-code-help" className="account-muted">{t.codeHelp}</small>
-        <button disabled={busy}>{busy ? t.wait : t.verifyCode}</button>
+        <button type="submit" disabled={busy}>{busy ? t.wait : t.verifyCode}</button>
       </form>
       <div className="account-actions"><button disabled={busy || cooldown > 0} onClick={resend}>{cooldown > 0 ? t.resendCountdown.replace('{seconds}', String(cooldown)) : t.resend}</button><button className="account-secondary" disabled={busy} onClick={() => { setSentEmail(''); setCode(''); setStatus(''); }}>{t.changeEmail}</button></div>
     </> : <>
@@ -116,7 +116,7 @@ export default function EmailSignIn({ language, activation = false }: { language
         <label>{t.password}<input type={visible ? 'text' : 'password'} autoComplete={register ? 'new-password' : 'current-password'} value={password} onChange={event => setPassword(event.target.value)} minLength={register ? 8 : 1} maxLength={72} required disabled={busy} /><small>{register && t.passwordHelp}</small></label>
         {register && <label>{t.confirmPassword}<input type={visible ? 'text' : 'password'} autoComplete="new-password" value={confirmation} onChange={event => setConfirmation(event.target.value)} minLength={8} maxLength={72} required disabled={busy} /></label>}
         <label className="account-checkbox"><input type="checkbox" checked={visible} onChange={event => setVisible(event.target.checked)} />{t.showPassword}</label>
-        <button disabled={busy}>{busy ? t.wait : register ? t.createAccount : t.signIn}</button>
+        <button type="submit" disabled={busy}>{busy ? t.wait : register ? t.createAccount : t.signIn}</button>
       </form>
     </>}
     {!activation && <p><a href="/account/activate">Войти по одноразовому логину и паролю</a></p>}
