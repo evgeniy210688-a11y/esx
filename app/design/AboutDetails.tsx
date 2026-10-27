@@ -84,17 +84,6 @@ const details: Record<Language, string[]> = {
   ]
 };
 
-const founderLabels: Record<Language, string> = {
-  ru: 'основатель',
-  en: 'Founder',
-  ko: '설립자',
-  zh: '创始人',
-  tr: 'Kurucu',
-  vi: 'Người sáng lập',
-  km: 'ស្ថាបនិក',
-  kk: 'Негізін қалаушы',
-};
-
 export default function AboutDetails({ language }: { language: Language }) {
   const text = details[language];
   return <div className="about-details">
@@ -105,8 +94,5 @@ export default function AboutDetails({ language }: { language: Language }) {
       </section>
     ))}
     <AboutMissionArticle language={language} />
-    <p style={{ gridColumn: '1 / -1', fontSize: '12px', margin: 0 }}>
-      {founderLabels[language]}: SON EVGENIY
-    </p>
   </div>;
 }
