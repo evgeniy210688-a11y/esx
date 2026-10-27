@@ -119,7 +119,6 @@ export default function EmailSignIn({ language, activation = false }: { language
         <button type="submit" disabled={busy}>{busy ? t.wait : register ? t.createAccount : t.signIn}</button>
       </form>
     </>}
-    {!activation && <p><a href="/account/activate">Войти по одноразовому логину и паролю</a></p>}
     <p role="status" className="account-status">{status ? t[status] : ''}</p>
   </section>;
 }
