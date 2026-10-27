@@ -1,0 +1,4 @@
+.account-card .account-form .signup-legal{display:grid;gap:14px;padding:16px;border:1px solid #90aaca66;border-radius:14px;font-size:14px;line-height:1.5}
+.account-card .account-form .signup-legal p{margin:0}.account-card .account-form .signup-legal a{text-decoration:underline;text-underline-offset:3px}
+.account-card .account-form .signup-legal label{display:flex;align-items:flex-start;gap:10px;font-size:14px;font-weight:400;cursor:pointer}
+.account-card .account-form .signup-legal input[type=checkbox]{appearance:auto;flex:0 0 20px;width:20px;height:20px;min-height:20px;padding:0;margin:1px 0 0;accent-color:#285aaa}

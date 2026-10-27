@@ -1,12 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { signupLegalCopy } from './signupLegalCopy';
+import './signup-legal.css';
 import { supabase } from '@/lib/supabase';
 import type { Language } from '@/app/design/content';
 import { registrationLabels, type RegistrationMessage } from './registrationLabels';
 
 export default function EmailSignIn({ language, activation = false }: { language: Language; activation?: boolean }) {
   const t = registrationLabels[language];
+  const legal = signupLegalCopy[language];
+  const [rulesAccepted,setRulesAccepted]=useState(false);
+  const [dataRead,setDataRead]=useState(false);
   const [register, setRegister] = useState(true);
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -44,9 +49,10 @@ export default function EmailSignIn({ language, activation = false }: { language
       : code?.includes('rate_limit') ? 'rateLimit'
       : 'requestFailed');
   }
-  async function submit(event: FormEvent) {
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (lock.current) return;
+    if (register && (!rulesAccepted || !dataRead)) { event.currentTarget.reportValidity(); return; }
     const login = activation ? 'owner_'+crypto.randomUUID().replaceAll('-','').slice(0,16) : username.trim().toLowerCase();
     if (register && !/^[a-z0-9][a-z0-9_]{2,23}$/.test(login)) {
       setStatus('invalidUsername');
@@ -116,6 +122,11 @@ export default function EmailSignIn({ language, activation = false }: { language
         <label>{t.password}<input type={visible ? 'text' : 'password'} autoComplete={register ? 'new-password' : 'current-password'} value={password} onChange={event => setPassword(event.target.value)} minLength={register ? 8 : 1} maxLength={72} required disabled={busy} /><small>{register && t.passwordHelp}</small></label>
         {register && <label>{t.confirmPassword}<input type={visible ? 'text' : 'password'} autoComplete="new-password" value={confirmation} onChange={event => setConfirmation(event.target.value)} minLength={8} maxLength={72} required disabled={busy} /></label>}
         <label className="account-checkbox"><input type="checkbox" checked={visible} onChange={event => setVisible(event.target.checked)} />{t.showPassword}</label>
+        {register && <div className="signup-legal">
+          <p><a href="/legal#terms" target="_blank" rel="noopener noreferrer">{legal[2]} (RU)</a> · <a href="/legal#data" target="_blank" rel="noopener noreferrer">{legal[3]} (RU)</a></p>
+          <label><input type="checkbox" required checked={rulesAccepted} disabled={busy} onChange={e=>setRulesAccepted(e.target.checked)} /><span>{legal[0]}</span></label>
+          <label><input type="checkbox" required checked={dataRead} disabled={busy} onChange={e=>setDataRead(e.target.checked)} /><span>{legal[1]}</span></label>
+        </div>}
         <button type="submit" disabled={busy}>{busy ? t.wait : register ? t.createAccount : t.signIn}</button>
       </form>
     </>}
