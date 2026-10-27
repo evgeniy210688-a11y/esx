@@ -1,5 +1,6 @@
 "use client";
 
+import HeaderLanguage from './HeaderLanguage';
 import LegalLinks from '@/app/LegalLinks';
 import { trademarkNotice } from '@/lib/trademark-notice';
 import { Fragment, useEffect, useRef, useState } from 'react';
@@ -167,6 +168,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
     <svg width="0" height="0" aria-hidden="true" style={{ position: "absolute" }}><defs><filter id="esx-remove-black" colorInterpolationFilters="sRGB"><feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  1 1 1 0 0" /></filter></defs></svg>
     <header className={`esx-header ${menuOpen ? "menu-open" : ""}`} ><span aria-hidden="true" className="header-glass" style={{ backdropFilter: "blur(24px) saturate(145%)", WebkitBackdropFilter: "blur(24px) saturate(145%)" }} /><div className="header-inner">
       <a className="header-logo" href={navigationHref('home')} aria-label={`ESX — ${t[0]}`}><Image src="/esx-logo.png" alt="ESX" width={1254} height={1254} sizes="(max-width: 760px) 64px, 80px" preload /></a>
+      <HeaderLanguage language={language} choose={choose} label={t[10]} />
       <button type="button" className="menu-toggle" aria-label={t[44]} aria-expanded={menuOpen} aria-controls="main-navigation" onClick={() => setMenuOpen(!menuOpen)}><span/><span/><span/></button>
       <nav id="main-navigation" aria-label={t[44]}>{navigation.map(({id,label:i})=><Fragment key={id}><Link style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }} onClick={() => setMenuOpen(false)} className={i===4?'nav-contact':''} href={navigationHref(id)} key={id}>{t[i]}{i===4&&<span>↗</span>}</Link>{i===0&&<Link href="/services" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>{language === 'ru' ? 'Справочник' : 'Directory'}</Link>}</Fragment>)}<AccountLink language={language} onClick={() => setMenuOpen(false)} /></nav>
     </div></header>
