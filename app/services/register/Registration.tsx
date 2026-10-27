@@ -4,6 +4,7 @@ import { registrationTree } from './registrationCopy';
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import Link from 'next/link';
+import LegalLinks from '@/app/LegalLinks';
 import Image from 'next/image';
 import useAccount from '@/app/account/useAccount';
 import EmailSignIn from '@/app/account/EmailSignIn';
@@ -76,6 +77,7 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
     event.preventDefault();
     if (lock.current || photoBusy) return;
     const values = new FormData(event.currentTarget);
+    if (values.get('accept_rules') !== 'on' || values.get('accept_publication') !== 'on') { event.currentTarget.reportValidity(); return; }
     const get = (key: string) => String(values.get(key) ?? '').trim();
     const selectedCategories = [...new Set(categories.map((value,index) => value === '__other__' ? (customCategories[index] ?? '').trim() : value).filter(Boolean))];
     if(!selectedCategories.length) { setMessage('Выберите категорию'); return; }
@@ -170,6 +172,9 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
           finally { setPhotoBusy(false); }
         }} /></label>
         {photo && <div><Image src={photo} alt="Фото для заявки" width={160} height={160} unoptimized /><button type="button" onClick={() => setPhoto(null)}>Убрать фото</button></div>}
+        <LegalLinks language={language} />
+        <label className="registration-check"><input type="checkbox" name="accept_rules" required />Я принимаю правила размещения и подтверждаю право представлять компанию или специалиста и использовать переданные материалы.</label>
+        <label className="registration-check"><input type="checkbox" name="accept_publication" required />Я разрешаю публичное размещение сведений карточки, контактов и добавленного фото после одобрения заявки, включая их перевод.</label>
         <p>После отправки данные передаются на проверку. Отправка заявки не означает публикацию.</p>
         <button type="submit">{busy ? 'Отправляем…' : 'Отправить на проверку'}</button>
       </fieldset>
