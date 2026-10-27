@@ -537,7 +537,7 @@ export default function ServicesDirectory() {
       </div>
     </section>
     {translationStatus && <p role="status">{translationLabels[language][translationStatus === 'error' ? 1 : 0]} {translationStatus === 'error' && <button type="button" onClick={() => setTranslationRetry(n=>n+1)}>{t[21]}</button>}</p>}
-    <div aria-live="polite" role="status">{status === 'loading' ? <p>{t[18]}</p> : status === 'error' ? <div className="services-empty"><h2>{t[19]}</h2><p>{t[20]}</p><button onClick={() => { setStatus('loading'); setAttempt(a => a + 1); }}>{t[21]}</button></div> : null}</div>
+    <div aria-live="polite" role="status">{status === 'loading' ? <p className="services-loading"><span className="services-loading-spinner" aria-hidden="true" /><span>{t[18]}</span></p> : status === 'error' ? <div className="services-empty"><h2>{t[19]}</h2><p>{t[20]}</p><button onClick={() => { setStatus('loading'); setAttempt(a => a + 1); }}>{t[21]}</button></div> : null}</div>
     {status === 'ready' && !visible.length && <div className="services-empty"><h2>{listings.length ? t[23] : t[24]}</h2><p>{listings.length ? t[25] : t[26]}</p></div>}
     {status === 'ready' && [true, false].map(personalGroup => {
       const group = visible.filter(listing => isPersonalListing(listing) === personalGroup);
