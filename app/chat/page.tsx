@@ -5,6 +5,9 @@ import { copy, languages, type Language } from '@/app/design/content';
 import { accountLabels } from '@/app/account/accountLabels';
 import QrLanguagePicker from './QrLanguagePicker';
 import Link from 'next/link';
+import Image from 'next/image';
+import { guide } from '@/app/design/MobileFoxGuide';
+import './qr-page.css';
 
 import { useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
@@ -14,6 +17,8 @@ export default function ChatPage() {
   const [language, setLanguage] = useState<Language>('en');
   const [copyStatus, setCopyStatus] = useState<'linkCopied' | 'copyError' | ''>('');
   const t = accountLabels[language];
+  const [guideOpen,setGuideOpen]=useState(false);
+  const guideLabels:Record<Language,string>={ru:'Руководство',en:'Guide',ko:'이용 안내',zh:'使用指南',tr:'Kılavuz',vi:'Hướng dẫn',km:'ការណែនាំ',kk:'Нұсқаулық'};
   useEffect(() => {
     try {
       const saved = localStorage.getItem('esx-language');
@@ -56,7 +61,7 @@ export default function ChatPage() {
             href="/"
             className="text-2xl font-bold tracking-tight"
           >
-            ESX
+            <Image src="/esx-wordmark-color.png" alt="ESX" width={110} height={38} unoptimized />
           </Link>
 
           <span className="text-sm text-zinc-400">
@@ -77,45 +82,29 @@ export default function ChatPage() {
           </p>
 
           {/* QR */}
-          <div className="mt-8 rounded-3xl border border-zinc-200 bg-white p-6 shadow-lg">
+          <div className="mt-8 rounded-3xl border border-zinc-200 bg-white p-3 shadow-lg">
             {chatLink ? (
               <QRCodeSVG
                 value={chatLink}
-                size={240}
+                size={180}
                 level="M"
+                marginSize={4}
               />
             ) : (
-              <div className="flex h-[240px] w-[240px] items-center justify-center text-sm text-zinc-400">
+              <div className="flex h-[180px] w-[180px] items-center justify-center text-sm text-zinc-400">
                 {t.qrLoading}
               </div>
             )}
           </div>
 
-          {/* Chat ID */}
-          <div className="mt-6">
-            <p className="text-sm text-zinc-400">
-              {t.conversation} ID
-            </p>
-
-            <p className="mt-1 font-mono text-lg font-semibold">
-              {chatId || t.qrLoading}
-            </p>
+          <div className="qr-page-actions">
+            <a href={chatLink || undefined} aria-disabled={!chatLink}>{t.openChat}</a>
+            <button type="button" aria-expanded={guideOpen} aria-controls="qr-page-guide" onClick={()=>setGuideOpen(value=>!value)}>{guideLabels[language]}</button>
+            <button type="button" onClick={copyLink} disabled={!chatLink}>{t.copyLink}</button>
+            <ShareChatLink url={chatLink} language={language} />
           </div>
-
-          {chatLink && <ShareChatLink url={chatLink} language={language} />}
-          {/* Copy */}
-          {chatLink && (
-            <a href={chatLink} className="mt-6 font-semibold underline">
-              {t.openChat}
-            </a>
-          )}
-          <button
-            onClick={copyLink}
-            disabled={!chatLink}
-            className="mt-6 rounded-full bg-black px-7 py-3 font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {t.copyLink}
-          </button>
+          {guideOpen && <section id="qr-page-guide" className="qr-page-guide"><h2>{guide[language][2]}</h2><ol><li>{t.openChat}</li><li>{guide[language][4]}</li><li>{guide[language][5]}</li></ol></section>}
+          <p className="mt-4 max-w-full break-all text-xs text-zinc-400">{t.conversation} ID: {chatId || t.qrLoading}</p>
           <p role="status" aria-live="polite">{copyStatus ? t[copyStatus] : ''}</p>
 
         </section>

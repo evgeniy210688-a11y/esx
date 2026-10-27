@@ -1,6 +1,6 @@
 import type { Language } from './content';
 
-const guide: Record<Language, [string, string, string, string, string, string]> = {
+export const guide: Record<Language, [string, string, string, string, string, string]> = {
   ru: ['Общайтесь на разных языках', 'ESX — чат с автоматическим переводом входящих сообщений на выбранный язык. Для знакомства, общения с гостями, клиентами и партнёрами.', 'Как пользоваться', 'Нажмите «Начать общение». Откройте чат или свой QR-код в аккаунте.', 'Пригласите собеседника: покажите QR-код или отправьте ссылку на чат.', 'Выберите язык входящих сообщений и пишите на своём. ESX переведёт сообщения собеседника.'],
   en: ['Talk across languages', 'ESX is a chat that automatically translates incoming messages into your chosen language. Connect with new people, guests, customers and partners.', 'How to use ESX', 'Tap the start button. Open a chat or your QR code in your account.', 'Invite someone by showing your QR code or sharing a chat link.', 'Choose a language for incoming messages and write in your own. ESX translates the replies.'],
   ko: ['서로 다른 언어로 소통하세요', 'ESX는 받은 메시지를 선택한 언어로 자동 번역하는 채팅입니다. 새로운 친구, 손님, 고객, 파트너와 대화하세요.', '이용 방법', '대화 시작 버튼을 누르세요. 채팅을 열거나 계정에서 내 QR 코드를 확인하세요.', 'QR 코드를 보여 주거나 채팅 링크를 보내 상대방을 초대하세요.', '받을 메시지의 언어를 선택하고 자신의 언어로 입력하세요. ESX가 상대방의 메시지를 번역합니다.'],
