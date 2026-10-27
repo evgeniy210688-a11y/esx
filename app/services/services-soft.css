@@ -164,8 +164,8 @@
 .services-directory .services-glass-header .services-brand img{width:110px;height:38px}
 .services-directory .services-glass-header .services-brand>span{display:none}
 .services-directory .services-glass-header .services-menu-toggle{display:flex;align-items:center;justify-content:center;flex:0 0 44px;width:44px;height:44px;padding:9px;border:1px solid #ffffffb3;border-radius:12px;color:#244b86;background:#ffffff70;box-shadow:0 3px 10px #294b7412}
-.services-directory .services-glass-header .services-header-menu{display:none;order:4;flex:0 0 100%;width:100%;gap:16px;padding:12px 0 4px}
-.services-directory .services-glass-header[data-menu-open=true] .services-header-menu{display:flex;flex-direction:column;align-items:stretch}
+.services-directory .services-glass-header .services-header-menu{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;width:100%;padding:16px 18px 20px;background:#e7effcf5;border-bottom:1px solid #ffffffb3;border-radius:0 0 22px 22px;box-shadow:0 14px 24px #2037571f;opacity:0;transform:translateY(-12px);visibility:hidden;pointer-events:none;transition:opacity .25s ease,transform .25s ease,visibility 0s linear .25s;max-height:calc(100dvh - 90px);overflow-y:auto}
+.services-directory .services-glass-header[data-menu-open=true] .services-header-menu{opacity:1;transform:translateY(0);visibility:visible;pointer-events:auto;transition-delay:0s}
 .services-directory .services-glass-header .services-header-menu nav{display:flex;flex-direction:column;align-items:stretch;width:100%;margin:0;gap:4px;font-size:16px}
 .services-directory .services-glass-header .services-header-menu nav a{display:block;padding:12px 14px;border-radius:12px;background:#ffffff55}
 .services-directory .services-glass-header .services-interface-language{width:auto;min-width:0;flex:0 1 auto;margin:0 0 0 auto;justify-content:flex-end}
@@ -179,3 +179,15 @@
 .services-directory .services-glass-header .services-brand img{width:86px;height:auto}
 .services-directory .services-glass-header .services-language-picker summary{padding-inline:7px;font-size:12px}
 }
+
+.services-menu-backdrop{display:none}
+@media(max-width:760px){
+.services-directory .services-top.services-glass-header{z-index:50}
+.services-directory .services-menu-backdrop{display:block;position:fixed;inset:0;z-index:49;background:rgba(13,29,51,.22);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease,visibility 0s linear .25s}
+.services-directory .services-menu-backdrop[data-open=true]{opacity:1;visibility:visible;pointer-events:auto;transition-delay:0s}
+}
+@media(prefers-reduced-motion:reduce){
+.services-directory .services-menu-backdrop,.services-directory .services-glass-header .services-header-menu{transition:none}
+}
+
+@media(max-width:760px){.services-directory:has(.services-menu-backdrop[data-open=true]) .services-back-to-top{visibility:hidden}}
