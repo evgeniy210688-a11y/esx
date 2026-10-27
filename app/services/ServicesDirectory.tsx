@@ -195,6 +195,20 @@ export default function ServicesDirectory() {
   const translatedCard = (s: ServiceListing) => displayTranslation(language, preparedTranslations[translationKey(language, s)] ?? translations[translationKey(language, s)]);
   const [filters, setFilters] = useState(empty);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const filtersRoot = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!filtersOpen) return;
+    const dismissOutside = (event: PointerEvent) => {
+      const root = filtersRoot.current;
+      if (!root || !(event.target instanceof Element)) return;
+      const bounds = root.getBoundingClientRect();
+      const pickerBackdrop = event.target.closest('.services-city-dismiss');
+      const outsideBounds = event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom;
+      if (!root.contains(event.target) || (pickerBackdrop && outsideBounds)) setFiltersOpen(false);
+    };
+    document.addEventListener('pointerdown', dismissOutside, true);
+    return () => document.removeEventListener('pointerdown', dismissOutside, true);
+  }, [filtersOpen]);
   const resetButtonLabels: Record<InterfaceLanguage,string> = {ru:'Сброс',en:'Reset',ko:'초기화',uz:'Tozalash',zh:'重置',vi:'Đặt lại',tr:'Sıfırla'};
   const filterButtonLabels: Record<InterfaceLanguage,string> = {ru:'Фильтр',en:'Filter',ko:'필터',uz:'Filtr',zh:'筛选',vi:'Bộ lọc',tr:'Filtre'};
   const activeFilterCount = [filters.city,filters.category,filters.language,filters.interpreterLanguage,filters.interpreter].filter(Boolean).length;
@@ -506,7 +520,7 @@ export default function ServicesDirectory() {
         {Array.from({ length: categoryCopies }, (_, copy) => <div key={copy} className="services-category-group" aria-hidden={copy !== 1 ? true : undefined}>{[{ value: '', label: t[11], count: listings.length }, ...categories.map(category => ({ value: category, label: categoryLabel(category), count: listings.filter(s => listingCategories(s).includes(category)).length }))].map(category => <button type="button" key={category.value} tabIndex={copy === 1 ? 0 : -1} className="services-category-tile" aria-pressed={filters.category === category.value} onClick={() => update('category', category.value)}><span className="services-category-art" aria-hidden="true" style={categoryImage(category.value) ? { backgroundImage: `url(${categoryImage(category.value)})`, backgroundSize: "cover", backgroundPosition: "center" } : { backgroundPosition: `${(categoryArt(category.value) % 4) * 100 / 3}% ${Math.floor(categoryArt(category.value) / 4) * 100}%` }} /><span className="services-category-name">{category.label}</span></button>)}</div>)}
       </div>
     </section>}
-    <section className="services-filters services-compact-filters" aria-label={t[7]}>
+    <section ref={filtersRoot} className="services-filters services-compact-filters" aria-label={t[7]}>
       <div className="services-search-toolbar">
       <label className="services-company-search"><input aria-label={searchLabels[language]} type="search" value={filters.query ?? ''} onChange={e => update('query', e.target.value)} placeholder={searchLabels[language]} /></label>
       <button type="button" className="services-filter-toggle" aria-expanded={filtersOpen} aria-controls="services-filter-options" onClick={() => setFiltersOpen(value => !value)}>{filterButtonLabels[language]}{activeFilterCount > 0 && <span className="services-filter-count">{activeFilterCount}</span>}<span aria-hidden="true">{filtersOpen ? '▴' : '▾'}</span></button>
