@@ -18,7 +18,7 @@ export function normalizeServiceCity(value: string) {
   return /^хвасонг?(?:\s*,\s*паран)?$/i.test(city) ? 'Хвасонг, Паран' : city;
 }
 export function serviceCities(listing: { city: string; branches?: ServiceBranch[] }) {
-  return [...new Set([listing.city, ...(listing.branches ?? []).map(branch => branch.city)].map(normalizeServiceCity).filter(Boolean))];
+  return [...new Set([listing.city, ...(listing.branches ?? []).map(branch => branch.city)].flatMap(city => city.split(';')).map(normalizeServiceCity).filter(Boolean))];
 }
 export type ListingKind = 'company' | 'manager' | 'interpreter';
 export const listingKindLabels = { company: 'Компания', manager: 'Специалист', interpreter: 'Переводчик' } as const;
@@ -56,7 +56,7 @@ export function matchesService(s: ServiceListing, f: ServiceFilters, translated?
     ...(s.branches ?? []).flatMap(branch => [branch.name, branch.city, branch.address]),
     translated?.description ?? '', translated?.category ?? '', translated?.city ?? '',
   ].join(' '));
-  return terms.every(term => searchable.includes(term)) && (!f.city || serviceCities(s).includes(normalizeServiceCity(f.city))) && (!f.category || listingCategories(s).includes(f.category))
+  return terms.every(term => searchable.includes(term)) && (!f.city || serviceCities(s).includes('Вся Южная Корея') || serviceCities(s).includes(normalizeServiceCity(f.city))) && (!f.category || listingCategories(s).includes(f.category))
     && (!f.language || s.service_languages.some(l => l === f.language))
     && (!f.interpreter || s.has_interpreter)
     && (!f.interpreterLanguage || (s.has_interpreter && s.interpreter_languages.some(l => l === f.interpreterLanguage)));

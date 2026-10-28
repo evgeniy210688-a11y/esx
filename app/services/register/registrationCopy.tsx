@@ -2,6 +2,12 @@ import { Children, cloneElement, isValidElement, type ReactNode } from 'react';
 import type { InterfaceLanguage } from '../serviceLabels';
 import { categoryTranslation } from '@/lib/service-category-labels';
 const rows = [
+'Города обслуживания|Service cities|서비스 지역|Xizmat ko‘rsatiladigan shaharlar|服务城市|Thành phố phục vụ|Hizmet şehirleri',
+'Вся Южная Корея|All of South Korea|대한민국 전역|Butun Janubiy Koreya|韩国全境|Toàn Hàn Quốc|Güney Kore geneli',
+'+ Добавить город|+ Add city|+ 도시 추가|+ Shahar qo‘shish|+ 添加城市|+ Thêm thành phố|+ Şehir ekle',
+'Можно указать до 3 городов.|You can specify up to 3 cities.|최대 3개 도시를 지정할 수 있습니다.|3 tagacha shahar ko‘rsatish mumkin.|最多可指定3个城市。|Có thể chọn tối đa 3 thành phố.|En fazla 3 şehir belirtebilirsiniz.',
+'Укажите до 3 городов, не более 100 символов всего.|Enter up to 3 cities, no more than 100 characters in total.|도시는 최대 3개, 총 100자 이내로 입력하세요.|3 tagacha shahar, jami 100 ta belgidan oshmasin.|最多填写3个城市，总计不超过100个字符。|Nhập tối đa 3 thành phố, tổng cộng không quá 100 ký tự.|En fazla 3 şehir ve toplam 100 karakter girin.',
+
 'Добавить фото|Add photo|사진 추가|Surat qo‘shish|添加照片|Thêm ảnh|Fotoğraf ekle',
 'Заменить фото|Replace photo|사진 변경|Suratni almashtirish|更换照片|Thay ảnh|Fotoğrafı değiştir',
 'Аватарка или логотип (необязательно)|Avatar or logo (optional)|프로필 사진 또는 로고 (선택)|Avatar yoki logotip (ixtiyoriy)|头像或标识（可选）|Ảnh đại diện hoặc logo (không bắt buộc)|Profil fotoğrafı veya logo (isteğe bağlı)',

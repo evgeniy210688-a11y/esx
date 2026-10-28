@@ -38,6 +38,8 @@ export default function Registration() {
 
 function SubmissionForm({ userId, language }: { userId: string; language: InterfaceLanguage }) {
   const [kind, setKind] = useState<'company' | 'specialist'>('company');
+  const [cities,setCities]=useState(['']);
+  const [nationwide,setNationwide]=useState(false);
   const [categories, setCategories] = useState<string[]>(['']);
   const [customCategories,setCustomCategories] = useState<Record<number,string>>({});
   const [interpreterLanguages,setInterpreterLanguages] = useState<ServiceLanguage[]>([]);
@@ -81,6 +83,9 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
     const values = new FormData(event.currentTarget);
     if (values.get('accept_rules') !== 'on' || values.get('accept_publication') !== 'on') { event.currentTarget.reportValidity(); return; }
     const get = (key: string) => String(values.get(key) ?? '').trim();
+    const selectedCities=[...new Set(cities.map(city=>city.trim()).filter(Boolean))];
+    const serviceCity=nationwide?'Вся Южная Корея':selectedCities.join('; ');
+    if(!nationwide && (serviceCity.length>100 || selectedCities.length>3 || cities.some(city=>city.includes(';')))) { setMessage('Укажите до 3 городов, не более 100 символов всего.'); return; }
     const selectedCategories = [...new Set(categories.map((value,index) => value === '__other__' ? (customCategories[index] ?? '').trim() : value).filter(Boolean))];
     if(!selectedCategories.length) { setMessage('Выберите категорию'); return; }
     if(kind === 'company' && interpreter && !interpreterLanguages.length) { setMessage('Выберите языки переводчика'); return; }
@@ -102,7 +107,7 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
         p_id: requestId.current,
         p_input: {
           listing_kind: kind === 'company' ? 'company' : selectedCategories.includes('Переводчики') ? 'interpreter' : 'manager',
-          represented_company: kind === 'specialist' ? get('represented_company') : null, name: get('name'), city: get('city'), category: selectedCategories[0], categories: selectedCategories, has_interpreter: kind === 'company' && interpreter, interpreter_languages: interpreterLanguages, address: get('address'),
+          represented_company: kind === 'specialist' ? get('represented_company') : null, name: get('name'), city: serviceCity, category: selectedCategories[0], categories: selectedCategories, has_interpreter: kind === 'company' && interpreter, interpreter_languages: interpreterLanguages, address: get('address'),
           phone: phoneNumbers[0].number, phones: phoneNumbers, website: get('website'), social_links: socialLinks, description, photo, service_languages: languages,
         },
       };
@@ -156,7 +161,10 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
         </fieldset>
         {kind === 'specialist' && <label>Должность<input name="role" maxLength={100} placeholder="Введите должность" /></label>}
         {kind === 'specialist' && <label>Компания, которую представляете (необязательно)<input name="represented_company" maxLength={200} placeholder="Название компании" /></label>}
-        <label>Город<input name="city" required={kind === 'company'} maxLength={100} /></label>
+        <fieldset className="registration-cities"><legend>Города обслуживания</legend>
+          <label className="registration-check registration-consent"><input type="checkbox" checked={nationwide} onChange={e=>setNationwide(e.target.checked)} />Вся Южная Корея</label>
+          {!nationwide && <>{cities.map((city,index)=><div className="registration-city-row" key={index}><label>Город<input value={city} required={kind==='company' || cities.length>1} maxLength={100} onChange={e=>setCities(items=>items.map((item,i)=>i===index?e.target.value:item))} /></label>{cities.length>1&&<button type="button" onClick={()=>setCities(items=>items.filter((_,i)=>i!==index))}>Убрать</button>}</div>)}<button type="button" disabled={cities.length>=3} onClick={()=>setCities(items=>items.length<3?[...items,'']:items)}>+ Добавить город</button><small>Можно указать до 3 городов.</small></>}
+        </fieldset>
         <label>Адрес{kind === 'specialist' ? ' (необязательно)' : ''}<input name="address" required={kind === 'company'} maxLength={500} placeholder="Хвасон, Мансе-гу, Чанан-мён" /><small>Укажите город, район и населённый пункт через запятую. При необходимости добавьте улицу и номер дома.</small></label>
         <fieldset><legend>Телефоны</legend><p>Можно добавить до 5 номеров. Первый номер — основной.</p>
           {phones.map((phone, index) => <div className="registration-phone-row" key={index}>
@@ -189,7 +197,7 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
       </fieldset>
       {photoBusy && <p role="status">Подготавливаем фото…</p>}
       <p ref={messageRef} tabIndex={-1} className={success ? "registration-success" : ""} role="status" aria-live="polite">{message}</p>
-      {success && <button type="button" onClick={() => { formRef.current?.reset(); setRulesAccepted(false); setPublicationAccepted(false); setLanguages([]); setSocials([]); setPhones([{ type: 'mobile', number: '' }]); setPhoto(null); setKind('company'); setCategories(['']); setCustomCategories({}); setInterpreterLanguages([]); setInterpreter(false); requestId.current = null; setSuccess(false); setMessage(''); }}>Подать ещё одну заявку</button>}
+      {success && <button type="button" onClick={() => { formRef.current?.reset(); setRulesAccepted(false); setPublicationAccepted(false); setLanguages([]); setSocials([]); setPhones([{ type: 'mobile', number: '' }]); setPhoto(null); setKind('company'); setCategories(['']); setCities(['']); setNationwide(false); setCustomCategories({}); setInterpreterLanguages([]); setInterpreter(false); requestId.current = null; setSuccess(false); setMessage(''); }}>Подать ещё одну заявку</button>}
     </form>
   </>,language);
 }

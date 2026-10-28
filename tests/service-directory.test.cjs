@@ -104,3 +104,18 @@ test('search includes translated services while retaining original names', () =>
   assert.equal(matchesService(company, {...empty, query: 'dentist'}, translated), false);
 });
 
+
+
+test('multiple service cities remain separate and combine with branches', () => {
+  const company = { ...listing, city: 'Сеул; Пусан; Хвасон', branches: [{city: 'Сеул'}] };
+  assert.deepEqual(Array.from(context.exports.serviceCities(company)), ['Сеул', 'Пусан', 'Хвасонг, Паран']);
+  for (const city of ['Сеул', 'Пусан', 'Хвасон']) assert.equal(matchesService(company, {...empty, city}), true);
+  assert.equal(matchesService(company, {...empty, city: 'Инчхон'}), false);
+});
+
+test('nationwide coverage matches any city while retaining other filters', () => {
+  const company = { ...listing, city: 'Вся Южная Корея' };
+  for (const city of ['Сеул', 'Пусан', 'Инчхон']) assert.equal(matchesService(company, {...empty, city}), true);
+  assert.equal(matchesService(company, {...empty, city: 'Пусан', category: 'Образование'}), false);
+  assert.equal(matchesService(company, {...empty, city: 'Сеул', language: 'ru'}), false);
+});

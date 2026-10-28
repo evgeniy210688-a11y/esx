@@ -85,3 +85,5 @@
 @media(max-width:540px){.registration-avatar-fields{flex-basis:100%}}
 
 .registration-page button[type=submit]:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+
+.registration-city-row{display:flex;align-items:end;gap:12px}.registration-city-row>label{flex:1;min-width:0}.registration-cities>button{justify-self:start}
