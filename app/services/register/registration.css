@@ -67,3 +67,6 @@
 .registration-page .account-status:not(:empty){margin-top:18px;padding:12px 14px;background:#dce8fc;border-radius:12px;line-height:1.5;color:#244b7e}
 .registration-page .account-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 @media(max-width:540px){.registration-page .account-card{padding:20px 16px;border-radius:20px;margin-top:20px}.registration-page .services-main{padding:24px 16px 48px}.registration-page .account-tabs button{padding-inline:8px}}
+
+.registration-page .registration-form label.registration-consent{display:flex;align-items:flex-start;justify-content:flex-start;gap:12px;line-height:1.6;cursor:pointer}
+.registration-page .registration-form .registration-consent input[type=checkbox]{appearance:auto;flex:0 0 20px;width:20px;height:20px;min-height:20px;margin:3px 0 0;padding:0;accent-color:#214e9b}
