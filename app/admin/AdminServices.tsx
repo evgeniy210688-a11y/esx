@@ -12,7 +12,7 @@ import useAccount from '@/app/account/useAccount';
 import { supabase } from '@/lib/supabase';
 import BranchEditor from './BranchEditor';
 import ServicesBackToTop from '../services/ServicesBackToTop';
-import { listingCategories, matchesService, serviceCategory, isPersonalListing, validListingIdentity, listingKindLabels, type ListingKind, normalizeServiceCity, validServiceBranches, serviceLanguages, type ServiceListing, type ServiceLanguage } from '@/lib/service-directory';
+import { listingCategories, matchesService, serviceCategory, isPersonalListing, validListingIdentity, listingKindLabels, normalizeServiceCity, validServiceBranches, serviceLanguages, type ServiceListing, type ServiceLanguage } from '@/lib/service-directory';
 import '../services/services.css';
 import './admin.css';
 import { socialNetworks, validSocialLinks, type SocialLink } from '@/lib/service-socials';
@@ -221,7 +221,10 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     </section>
     <form id="company-form" ref={form} onSubmit={save} className="services-card admin-form"><h2>{draft.id ? 'Редактирование карточки' : 'Новая карточка'}</h2>{!personal && <nav aria-label="Разделы настроек компании"><a href="#company-branches">Адреса филиалов</a></nav>}<fieldset disabled={busy} className="admin-fields">
       {draft.categories && draft.categories.length > 1 && <p>Категории заявки: {draft.categories.join(', ')}</p>}
-          <label>Тип карточки<SearchableSelect value={draft.listing_kind ?? 'company'} onChange={e => change('listing_kind', e.target.value as ListingKind)}>{Object.entries(listingKindLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</SearchableSelect></label>
+          <div className="admin-card-kind"><span id="admin-card-kind-label">Тип карточки</span><div className="admin-card-kind-buttons" role="group" aria-labelledby="admin-card-kind-label">
+            <button type="button" aria-pressed={!personal} onClick={() => change('listing_kind', 'company')}>Компания</button>
+            <button type="button" aria-pressed={personal} onClick={() => { if (!personal) change('listing_kind', serviceCategory(draft) === 'Переводчики' ? 'interpreter' : 'manager'); }}>Специалист</button>
+          </div></div>
       {personal && <p>Укажите имя и фамилию, добавьте контактный телефон. Заполните описание, услуги и ссылки на соцсети. Город и адрес можно не указывать.</p>}
       {personal && !supportsPeople && <p role="alert">Сохранение личных карточек станет доступно после обновления базы данных.</p>}
       <label>{personal ? 'Имя и фамилия' : 'Название компании'}<input required maxLength={200} value={draft.name} onChange={e => change('name', e.target.value)} /></label>
