@@ -108,3 +108,5 @@
 .services-category-tile[aria-pressed=true] .services-category-name{background:#ffe267}
 .services-category-track[data-dragging=true] .services-category-tile{transform:none}
 @media(prefers-reduced-motion:reduce){.services-category-track .services-category-tile{transition:none}}
+
+.services-page .services-top nav .services-auth-action{border:0;border-radius:0;padding:0;background:transparent;color:inherit;font:inherit;text-align:left}.services-page .services-top nav .services-auth-action:disabled{opacity:.55;cursor:wait}

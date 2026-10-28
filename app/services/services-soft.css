@@ -167,7 +167,7 @@
 .services-directory .services-glass-header .services-header-menu{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;width:100%;padding:16px 18px 20px;background:#e7effcf5;border-bottom:1px solid #ffffffb3;border-radius:0 0 22px 22px;box-shadow:0 14px 24px #2037571f;opacity:0;transform:translateY(-12px);visibility:hidden;pointer-events:none;transition:opacity .25s ease,transform .25s ease,visibility 0s linear .25s;max-height:calc(100dvh - 90px);overflow-y:auto}
 .services-directory .services-glass-header[data-menu-open=true] .services-header-menu{opacity:1;transform:translateY(0);visibility:visible;pointer-events:auto;transition-delay:0s}
 .services-directory .services-glass-header .services-header-menu nav{display:flex;flex-direction:column;align-items:stretch;width:100%;margin:0;gap:4px;font-size:16px}
-.services-directory .services-glass-header .services-header-menu nav a{display:block;padding:12px 14px;border-radius:12px;background:#ffffff55}
+.services-directory .services-glass-header .services-header-menu nav a,.services-directory .services-glass-header .services-header-menu nav .services-auth-action{display:block;padding:12px 14px;border-radius:12px;background:#ffffff55}
 .services-directory .services-glass-header .services-interface-language{width:auto;min-width:0;flex:0 1 auto;margin:0 0 0 auto;justify-content:flex-end}
 .services-directory .services-glass-header .services-interface-language>span{display:none}
 .services-directory .services-glass-header .services-language-picker{width:auto;min-width:0}

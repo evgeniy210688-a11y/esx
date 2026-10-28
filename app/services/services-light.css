@@ -113,7 +113,7 @@
 .services-directory .services-brand{gap:14px}
 .services-directory .services-top .services-brand span{font-size:14px;color:#56677e}
 .services-directory .services-top nav{margin-left:auto;font-size:14px;gap:28px}
-.services-directory .services-top nav a{padding:10px 0;color:#003478}
+.services-directory .services-top nav a,.services-directory .services-top nav .services-auth-action{padding:10px 0;color:#003478}
 .services-directory .services-interface-language{margin-left:20px}
 .services-directory .services-interface-language>span{display:none!important}
 .services-directory .services-language-picker summary{border-radius:10px;border-color:#cdd9e8;background:#ffffff90}
