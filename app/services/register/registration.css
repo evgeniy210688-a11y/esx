@@ -70,3 +70,8 @@
 
 .registration-page .registration-form label.registration-consent{display:flex;align-items:flex-start;justify-content:flex-start;gap:12px;line-height:1.6;cursor:pointer}
 .registration-page .registration-form .registration-consent input[type=checkbox]{appearance:auto;flex:0 0 20px;width:20px;height:20px;min-height:20px;margin:3px 0 0;padding:0;accent-color:#214e9b}
+
+.registration-avatar-upload{padding:16px;border:1px dashed #afc5e6;border-radius:16px;background:#f2f7ff}
+.registration-avatar-preview{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:14px}
+.registration-page .registration-form .registration-avatar-preview img{width:96px;height:96px;object-fit:contain;border-radius:16px;background:#fff;border:1px solid #c5d6ec}
+.registration-avatar-upload input[type=file]{max-width:100%;font-size:14px}

@@ -133,6 +133,15 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
       <h2>Новая заявка</h2>
       <fieldset disabled={busy || success || photoBusy}>
         <fieldset className="registration-kind"><legend>Кого регистрируете?</legend><div>{([{value:'company',label:'Компания'},{value:'specialist',label:'Специалист'}] as const).map(option => <label key={option.value}><input type="radio" name="registration_kind" value={option.value} checked={kind === option.value} onChange={() => { setKind(option.value); setInterpreter(false); }} /><span>{option.label}</span></label>)}</div></fieldset>
+        <div className="registration-avatar-upload">
+        <label>Аватарка или логотип (необязательно)<input type="file" accept="image/jpeg,image/png,image/webp" onChange={async e => {
+          const file = e.target.files?.[0]; e.target.value = ''; if (!file) return;
+          setPhotoBusy(true); setMessage('');
+          try { setPhoto(await prepareCompanyPhoto(file)); } catch { setMessage('Не удалось добавить фото. Выберите JPG, PNG или WebP до 10 МБ.'); }
+          finally { setPhotoBusy(false); }
+        }} /></label>
+        {photo && <div className="registration-avatar-preview"><Image src={photo} alt="Фото для заявки" width={160} height={160} unoptimized /><button type="button" onClick={() => setPhoto(null)}>Убрать фото</button></div>}
+        </div>
         <label>{kind === 'company' ? 'Название компании' : 'Имя специалиста'}<input name="name" required maxLength={200} /></label>
         <fieldset><legend>{kind === 'company' ? 'Категория компании' : 'Категория специалиста'}</legend>
           {categories.map((category,index)=><div key={index} className="registration-category-row"><label>Категория<select required value={category} onChange={event=>setCategories(items=>items.map((item,i)=>i===index?event.target.value:item))}><option value="" disabled>Выберите категорию</option>{serviceCategories.filter(item=>item!=='Другие услуги').map(item=><option key={item} value={item}>{item}</option>)}<option value="__other__">Другая</option></select></label>{category==='__other__' && <label>Укажите категорию<input required maxLength={100} value={customCategories[index]??''} onChange={event=>setCustomCategories(items=>({...items,[index]:event.target.value}))}/></label>}{categories.length>1 && <button type="button" onClick={()=>{setCategories(items=>items.filter((_,i)=>i!==index));setCustomCategories(items=>Object.fromEntries(Object.entries(items).filter(([key])=>Number(key)!==index).map(([key,value])=>[Number(key)>index?Number(key)-1:Number(key),value])));}}>Убрать</button>}</div>)}
@@ -165,13 +174,6 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
         <fieldset><legend>Языки общения</legend><div className="registration-languages">{Object.entries(serviceLanguages).map(([code, name]) => <label className="registration-check" key={code}><span className="registration-language-controls"><input type="checkbox" checked={languages.includes(code as ServiceLanguage)} onChange={() => setLanguages(current => current.includes(code as ServiceLanguage) ? current.filter(value => value !== code) : [...current, code as ServiceLanguage])} /><Image className="registration-language-flag" src={'/flags/'+flags[code]+'.svg'} alt="" width={24} height={16} unoptimized/></span><span className="registration-language-name">{new Intl.DisplayNames([language],{type:"language"}).of(code) ?? name}</span></label>)}</div></fieldset>
         {kind === 'company' && <label className="registration-check registration-interpreter-check"><input type="checkbox" name="has_interpreter" checked={interpreter} onChange={e => setInterpreter(e.target.checked)} />Есть переводчик</label>}
         {kind==='company' && interpreter && <fieldset><legend>Языки переводчика</legend><div className="registration-languages">{Object.entries(serviceLanguages).map(([code,name])=><label className="registration-check" key={code}><span className="registration-language-controls"><input type="checkbox" checked={interpreterLanguages.includes(code as ServiceLanguage)} onChange={()=>setInterpreterLanguages(items=>items.includes(code as ServiceLanguage)?items.filter(item=>item!==code):[...items,code as ServiceLanguage])}/><Image className="registration-language-flag" src={'/flags/'+flags[code]+'.svg'} alt="" width={24} height={16} unoptimized/></span><span className="registration-language-name">{new Intl.DisplayNames([language],{type:'language'}).of(code)??name}</span></label>)}</div></fieldset>}
-        <label>Фото (необязательно)<input type="file" accept="image/jpeg,image/png,image/webp" onChange={async e => {
-          const file = e.target.files?.[0]; e.target.value = ''; if (!file) return;
-          setPhotoBusy(true); setMessage('');
-          try { setPhoto(await prepareCompanyPhoto(file)); } catch { setMessage('Не удалось добавить фото. Выберите JPG, PNG или WebP до 10 МБ.'); }
-          finally { setPhotoBusy(false); }
-        }} /></label>
-        {photo && <div><Image src={photo} alt="Фото для заявки" width={160} height={160} unoptimized /><button type="button" onClick={() => setPhoto(null)}>Убрать фото</button></div>}
         <LegalLinks language={language} />
         <label className="registration-check registration-consent"><input type="checkbox" name="accept_rules" required />Я принимаю правила размещения и подтверждаю право представлять компанию или специалиста и использовать переданные материалы.</label>
         <label className="registration-check registration-consent"><input type="checkbox" name="accept_publication" required />Я разрешаю публичное размещение сведений карточки, контактов и добавленного фото после одобрения заявки, включая их перевод.</label>
