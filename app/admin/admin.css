@@ -41,3 +41,13 @@
 .admin-form .admin-card-kind-buttons button{flex:1;min-width:130px;padding:12px 18px;border:1px solid #526c82;border-radius:10px;background:#091c2b;color:#e5edf5;cursor:pointer}
 .admin-form .admin-card-kind-buttons button[aria-pressed=true]{background:#2563eb;border-color:#60a5fa;color:#fff;box-shadow:0 0 0 1px #60a5fa;font-weight:700}
 .admin-form .admin-card-kind-buttons button:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+
+.admin-form .admin-avatar-upload{border-style:dashed;border-radius:16px;background:#132b42}
+.admin-avatar-main{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.admin-form label.admin-avatar-slot{display:flex;flex-direction:column;align-items:center;gap:8px;flex:0 0 120px;width:120px;cursor:pointer;text-align:center;color:#b9d6ff;font-size:12px}
+.admin-avatar-slot>svg{box-sizing:content-box;padding:36px;border:2px dashed #6385b2;border-radius:20px;background:#1c3856}
+.admin-avatar-slot>img{width:120px;height:120px;object-fit:contain;background:#fff;border:1px solid #6385b2;border-radius:20px}
+.admin-avatar-fields{flex:1;min-width:0;display:grid;gap:10px}.admin-avatar-fields input[type=file]{box-sizing:border-box;max-width:100%}
+.admin-avatar-upload .admin-photo-grid:not(:empty){margin-top:18px}
+.admin-avatar-upload:has(input:focus-visible) .admin-avatar-slot{outline:3px solid #93c5fd;outline-offset:4px;border-radius:20px}
+@media(max-width:540px){.admin-avatar-fields{flex-basis:100%}}
