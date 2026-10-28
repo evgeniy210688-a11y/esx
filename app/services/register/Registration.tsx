@@ -134,13 +134,18 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
       <fieldset disabled={busy || success || photoBusy}>
         <fieldset className="registration-kind"><legend>Кого регистрируете?</legend><div>{([{value:'company',label:'Компания'},{value:'specialist',label:'Специалист'}] as const).map(option => <label key={option.value}><input type="radio" name="registration_kind" value={option.value} checked={kind === option.value} onChange={() => { setKind(option.value); setInterpreter(false); }} /><span>{option.label}</span></label>)}</div></fieldset>
         <div className="registration-avatar-upload">
-        <label>Аватарка или логотип (необязательно)<input type="file" accept="image/jpeg,image/png,image/webp" onChange={async e => {
+        <label className="registration-avatar-slot" htmlFor="registration-avatar-file">
+          {photo ? <Image src={photo} alt="Фото для заявки" width={120} height={120} unoptimized /> : <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="3"/><circle cx="9" cy="10" r="2"/><path d="m3 17 5-4 4 3 4-5 5 6M12 2v5M9.5 4.5h5"/></svg>}
+          <span>{photoBusy ? 'Подготавливаем фото…' : photo ? 'Заменить фото' : 'Добавить фото'}</span>
+        </label>
+        <div className="registration-avatar-fields"><label>Аватарка или логотип (необязательно)<input id="registration-avatar-file" type="file" accept="image/jpeg,image/png,image/webp" onChange={async e => {
           const file = e.target.files?.[0]; e.target.value = ''; if (!file) return;
           setPhotoBusy(true); setMessage('');
           try { setPhoto(await prepareCompanyPhoto(file)); } catch { setMessage('Не удалось добавить фото. Выберите JPG, PNG или WebP до 10 МБ.'); }
           finally { setPhotoBusy(false); }
         }} /></label>
-        {photo && <div className="registration-avatar-preview"><Image src={photo} alt="Фото для заявки" width={160} height={160} unoptimized /><button type="button" onClick={() => setPhoto(null)}>Убрать фото</button></div>}
+        {photo && <button type="button" onClick={() => setPhoto(null)}>Убрать фото</button>}
+        </div>
         </div>
         <label>{kind === 'company' ? 'Название компании' : 'Имя специалиста'}<input name="name" required maxLength={200} /></label>
         <fieldset><legend>{kind === 'company' ? 'Категория компании' : 'Категория специалиста'}</legend>

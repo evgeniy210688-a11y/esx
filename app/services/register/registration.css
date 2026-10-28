@@ -75,3 +75,11 @@
 .registration-avatar-preview{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:14px}
 .registration-page .registration-form .registration-avatar-preview img{width:96px;height:96px;object-fit:contain;border-radius:16px;background:#fff;border:1px solid #c5d6ec}
 .registration-avatar-upload input[type=file]{max-width:100%;font-size:14px}
+
+.registration-avatar-upload{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.registration-page .registration-form label.registration-avatar-slot{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;flex:0 0 120px;width:120px;min-height:150px;cursor:pointer;color:#42689d;text-align:center;font-size:12px}
+.registration-avatar-slot>svg{box-sizing:content-box;padding:36px;border:2px dashed #b4c9e7;border-radius:20px;background:#e5eefc}
+.registration-page .registration-form .registration-avatar-slot img{width:120px;height:120px;border-radius:20px;object-fit:contain;background:#fff;border:1px solid #c5d6ec}
+.registration-avatar-fields{flex:1;min-width:0;display:grid;gap:12px}.registration-avatar-fields>button{justify-self:start}
+.registration-avatar-upload:has(input:focus-visible) .registration-avatar-slot{outline:3px solid #3682df;outline-offset:4px;border-radius:20px}
+@media(max-width:540px){.registration-avatar-fields{flex-basis:100%}}
