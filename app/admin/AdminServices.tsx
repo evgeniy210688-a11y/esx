@@ -57,6 +57,8 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [openTypes, setOpenTypes] = useState({ specialists: false, companies: false });
+  const listingTypes = [{ key: 'specialists', label: 'Специалисты', personal: true }, { key: 'companies', label: 'Компании', personal: false }] as const;
   const categoryOf = (row: Listing) => serviceCategory(row).trim() || 'Без категории';
   const categories = [...new Set(rows.flatMap(listingCategories))].sort((a, b) => a.localeCompare(b, 'ru'));
   const filteredRows = rows.filter(row => (!statusFilter || row.status === statusFilter) && (!category || listingCategories(row).includes(category)) && matchesService(row, {
@@ -195,7 +197,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     {access === 'loading' && <p role="status">Проверяем права…</p>}
     {access === 'denied' && <section className="services-empty"><h1>Нет доступа администратора</h1><p>Этому аккаунту не назначены права управления услугами. Войдите в аккаунт администратора.</p></section>}
     {access === 'error' && <section className="services-empty"><h1>Не удалось проверить доступ</h1><button onClick={() => { setAccess('loading'); setAttempt(n => n + 1); }}>Повторить</button></section>}
-    {access === 'allowed' && <><h1>Панель управления</h1><div className="admin-summary">{Object.entries(statuses).map(([status, label]) => <button type="button" key={status} aria-pressed={statusFilter === status} aria-controls="admin-listings" onClick={() => { setStatusFilter(status); setQuery(''); setCategory(''); document.getElementById('admin-listings')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}><strong>{rows.filter(row => row.status === status).length}</strong><span>{label}</span></button>)}</div><h2>Компании и специалисты</h2><p>Добавляйте компании, специалистов и переводчиков, редактируйте карточки и выбирайте, что показывать в справочнике.</p><div className="admin-columns"><section id="admin-listings" aria-label="Компании и специалисты" className="services-card"><button disabled={busy} onClick={() => { if (draft.name && !window.confirm('Открыть новую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...blank }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}>+ Добавить карточку</button>
+    {access === 'allowed' && <><h1>Панель управления</h1><div className="admin-summary">{Object.entries(statuses).map(([status, label]) => <button type="button" key={status} aria-pressed={statusFilter === status} aria-controls="admin-listings" onClick={() => { setStatusFilter(status); setQuery(''); setCategory(''); setOpenTypes({ specialists: true, companies: true }); document.getElementById('admin-listings')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}><strong>{rows.filter(row => row.status === status).length}</strong><span>{label}</span></button>)}{listingTypes.map(type => <button type="button" key={type.key} aria-expanded={openTypes[type.key]} aria-controls={'admin-type-' + type.key} onClick={() => { setStatusFilter(''); setQuery(''); setCategory(''); setOpenTypes({ specialists: type.personal, companies: !type.personal }); document.getElementById('admin-listings')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}><strong>{rows.filter(row => isPersonalListing(row) === type.personal).length}</strong><span>{type.label}</span></button>)}</div><h2>Компании и специалисты</h2><p>Добавляйте компании, специалистов и переводчиков, редактируйте карточки и выбирайте, что показывать в справочнике.</p><div className="admin-columns"><section id="admin-listings" aria-label="Компании и специалисты" className="services-card"><button disabled={busy} onClick={() => { if (draft.name && !window.confirm('Открыть новую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...blank }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}>+ Добавить карточку</button>
       {!personal && <div style={{ marginTop: 12 }}><button type="button" disabled={busy || !draft.name.trim()} onClick={addBranchCard}>+ Добавить филиал</button></div>}
       <div className="admin-list-filters">
         <label htmlFor="admin-list-status">Статус заявки</label>
@@ -214,9 +216,15 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
       </div>
       <p role="status" aria-live="polite">Найдено: {filteredRows.length} из {rows.length}</p>
       {!rows.length ? <p>Карточек пока нет.</p> : !filteredRows.length && <p>Ничего не найдено. Измените запрос или категорию.</p>}
-      {groups.map(group => <section className="admin-category" key={group.name} aria-label={group.name}>
+      {listingTypes.map(type => <section className="admin-type-section" key={type.key}>
+        <button className="admin-type-toggle" type="button" aria-expanded={openTypes[type.key]} aria-controls={'admin-type-' + type.key} onClick={() => setOpenTypes(current => ({ ...current, [type.key]: !current[type.key] }))}><span>{type.label}</span><span>{filteredRows.filter(row => isPersonalListing(row) === type.personal).length} <span aria-hidden="true">{openTypes[type.key] ? '▴' : '▾'}</span></span></button>
+        <div id={'admin-type-' + type.key} hidden={!openTypes[type.key]}>
+          {!filteredRows.some(row => isPersonalListing(row) === type.personal) && <p>Карточек не найдено.</p>}
+      {groups.map(group => ({ ...group, rows: group.rows.filter(row => isPersonalListing(row) === type.personal) })).filter(group => group.rows.length).map(group => <section className="admin-category" key={group.name} aria-label={group.name}>
         <h3>{group.name} <span>{group.rows.length}</span></h3>
         <ul className="admin-list">{group.rows.map(row => <li key={row.id}><button disabled={busy} aria-pressed={draft.id === row.id} onClick={() => { if (draft.name && !window.confirm('Открыть другую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...row, ...editableDescription(row.description) }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}><strong>{row.name}</strong><span>{[row.city, statuses[row.status]].filter(Boolean).join(' · ')}</span></button></li>)}</ul>
+      </section>)}
+        </div>
       </section>)}
     </section>
     <form id="company-form" ref={form} onSubmit={save} className="services-card admin-form"><h2>{draft.id ? 'Редактирование карточки' : 'Новая карточка'}</h2>{!personal && <nav aria-label="Разделы настроек компании"><a href="#company-branches">Адреса филиалов</a></nav>}<fieldset disabled={busy} className="admin-fields">
