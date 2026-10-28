@@ -1,0 +1,506 @@
+{
+  "ru": {
+    "nav": [
+      "Главная",
+      "Справочник",
+      "Обращения"
+    ],
+    "title": "Правила использования ESX",
+    "intro": "Редакция от 27 октября 2026 года. Документ относится к справочнику и подаче заявок на размещение компаний и специалистов.",
+    "sections": [
+      {
+        "id": "terms",
+        "title": "Использование справочника",
+        "paragraphs": [
+          "ESX предоставляет информацию о компаниях и специалистах и помогает связаться с ними. Публикация карточки сама по себе не является рекомендацией, подтверждением квалификации, лицензии или гарантией качества услуг. Условия, стоимость, разрешения и квалификацию исполнителя следует уточнять непосредственно у него до заключения сделки.",
+          "Договор об услуге заключается с выбранным исполнителем. Размещение карточки не делает ESX стороной такого договора. Сведения могут изменяться, а автоматический перевод может содержать ошибки; существенные условия необходимо проверять по оригиналу и у исполнителя.",
+          "Эти правила не исключают и не ограничивают ответственность, которую нельзя исключить или ограничить по применимому закону, и не отменяют права потребителей и субъектов персональных данных."
+        ],
+        "list": false
+      },
+      {
+        "id": "placement",
+        "title": "Правила размещения",
+        "paragraphs": [
+          "Заявку подаёт сам специалист, владелец компании или уполномоченный представитель. Нельзя выдавать себя за другое лицо или заявлять права на чужой бизнес.",
+          "Указывайте достоверные сведения и актуальные деловые контакты. Для регулируемых видов деятельности необходимые разрешения и квалификация должны быть действительными.",
+          "Добавляйте только материалы, которые вправе использовать и публиковать, включая фотографии людей, логотипы, тексты и контактные данные. Наличие информации в открытом доступе само по себе не подтверждает право на её повторную публикацию.",
+          "Не добавляйте номера документов, банковские реквизиты, медицинские сведения, пароли, данные детей или частные сведения третьих лиц. Используйте рабочие контакты вместо личных, когда это возможно.",
+          "Заявка проходит модерацию. Она может быть отклонена, возвращена для уточнения или снята с публикации при недостоверности, нарушении правил или обоснованном обращении. Модерация не означает проверку всех документов и фактов.",
+          "Заявитель разрешает отображение переданных материалов в карточке, их техническое форматирование и перевод для работы справочника. Это не передача исключительных прав на материалы."
+        ],
+        "list": true
+      },
+      {
+        "id": "data",
+        "title": "Информация об обработке данных",
+        "paragraphs": [
+          "Для аккаунта используются адрес электронной почты и данные авторизации. При подаче заявки обрабатываются сведения из формы: название или имя, должность, компания, категории, город, адрес, телефоны, ссылки, описание, услуги, языки и необязательная фотография. Аккаунт связывается с заявками для управления ими и отображения статуса.",
+          "Данные заявки используются для её рассмотрения и, после одобрения, публикации карточки. Опубликованная карточка доступна посетителям интернета и может индексироваться поисковыми системами. Пароль аккаунта и адрес почты для входа не являются полями публичной карточки; если вы сами добавите почту в описание или контакты, она станет публичной.",
+          "В работе сайта используются Supabase для авторизации и хранения данных, Vercel для размещения сайта, OpenAI для автоматического перевода отдельных текстов и Resend для отправки писем. Для работы входа и настроек используются cookies и локальное хранилище браузера. Обращение через форму связи передаётся через почтовый сервис администрации.",
+          "По обращению можно запросить сведения об обработке, исправление, удаление данных или прекращение обработки в пределах применимого закона. Для защиты чужих данных может потребоваться подтверждение личности или полномочий; не присылайте паспорт или пароль через обычную форму. Удаление с ESX не означает немедленного удаления копий из поискового кеша.",
+          "Этот раздел описывает известные функции сайта и не является полной политикой конфиденциальности: сведения об ответственном за обработку, точные сроки хранения и условия возможной трансграничной передачи здесь не определены. Разрешение на публикацию карточки не заменяет отдельные уведомления или согласия, если они требуются законом."
+        ],
+        "list": false
+      },
+      {
+        "id": "requests",
+        "title": "Исправление, удаление, права на карточку и жалобы",
+        "paragraphs": [
+          "Если это ваша компания или карточка специалиста, либо вы считаете, что публикация нарушает ваши права, используйте форму «Написать нам». Укажите ссылку на карточку, что нужно исправить или удалить, основание обращения и контакт для ответа. Для запроса доступа укажите вашу связь с компанией или специалистом. Само обращение не предоставляет доступ автоматически: полномочия необходимо проверить.",
+          "Для жалобы на фотографию, персональные данные или авторские права укажите конкретный материал и объясните, какие права затронуты. Не включайте лишние персональные данные. Решение об изменении, ограничении доступа или удалении принимается после рассмотрения обстоятельств."
+        ],
+        "list": false
+      }
+    ],
+    "contact": "Написать нам: исправление, удаление, жалоба или доступ к своей карточке →"
+  },
+  "en": {
+    "nav": [
+      "Home",
+      "Directory",
+      "Requests"
+    ],
+    "title": "ESX rules of use",
+    "intro": "Version dated 27 October 2026. This document covers the directory and applications to list companies and professionals.",
+    "sections": [
+      {
+        "id": "terms",
+        "title": "Using the directory",
+        "paragraphs": [
+          "ESX provides information about companies and professionals and helps you contact them. A listing alone is not a recommendation, confirmation of qualifications or licensing, or a guarantee of service quality. Check terms, prices, permits and qualifications directly with the provider before a transaction.",
+          "The service contract is with the chosen provider. Publishing a listing does not make ESX a party to that contract. Information can change and automatic translations can contain errors; verify essential terms against the original and with the provider.",
+          "These rules do not exclude or limit liability that cannot be excluded or limited under applicable law, or override consumer or data subject rights."
+        ],
+        "list": false
+      },
+      {
+        "id": "placement",
+        "title": "Listing rules",
+        "paragraphs": [
+          "Applications must be submitted by the professional, business owner or an authorised representative. Do not impersonate anyone or claim another business.",
+          "Provide accurate information and current business contacts. Required permits and qualifications for regulated activities must be valid.",
+          "Only submit material you have the right to use and publish, including photographs of people, logos, text and contact details. Public availability alone does not establish a right to republish.",
+          "Do not submit identity document numbers, banking details, medical information, passwords, children's data or private information about third parties. Use business rather than personal contacts where possible.",
+          "Applications undergo moderation and may be rejected, returned for clarification or unpublished for inaccurate information, rule violations or a substantiated request. Moderation does not mean every document and fact has been verified.",
+          "The applicant permits display, technical formatting and translation of submitted material for the directory. This does not transfer exclusive rights to the material."
+        ],
+        "list": true
+      },
+      {
+        "id": "data",
+        "title": "Data processing information",
+        "paragraphs": [
+          "Accounts use email addresses and authentication data. Applications process form details: business or personal name, role, company, categories, city, address, telephone numbers, links, description, services, languages and an optional photo. Accounts are linked to applications to manage them and show their status.",
+          "Application data is used for review and, after approval, publication. Published listings are publicly accessible and may be indexed by search engines. Account passwords and sign-in emails are not public listing fields; an email you add to the description or contacts becomes public.",
+          "The website uses Supabase for authentication and storage, Vercel for hosting, OpenAI to translate certain texts, and Resend to send emails. Cookies and browser local storage support sign-in and settings. Contact form messages are delivered to the administration through an email service.",
+          "You may request processing information, correction, deletion or cessation of processing within applicable law. Identity or authority may need to be verified to protect others' data; do not send a passport or password through the ordinary form. Removal from ESX does not immediately remove search engine caches.",
+          "This section describes known website functions and is not a complete privacy policy: the responsible party, exact retention periods and conditions of possible international transfers are not specified here. Permission to publish a listing does not replace separate notices or consents required by law."
+        ],
+        "list": false
+      },
+      {
+        "id": "requests",
+        "title": "Corrections, removal, listing ownership and complaints",
+        "paragraphs": [
+          "If you own the company or professional listing, or believe publication infringes your rights, use Contact us. Include the listing link, requested correction or deletion, grounds and a reply contact. For access requests, explain your relationship to the company or professional. A request does not automatically grant access: authority must be verified.",
+          "For complaints concerning photos, personal data or copyright, identify the material and explain the affected rights. Do not include unnecessary personal data. Changes, restrictions or removal are decided after reviewing the circumstances."
+        ],
+        "list": false
+      }
+    ],
+    "contact": "Contact us: correction, removal, complaint or access to your listing →"
+  },
+  "ko": {
+    "nav": [
+      "홈",
+      "업체 안내",
+      "문의"
+    ],
+    "title": "ESX 이용 규칙",
+    "intro": "2026년 10월 27일 버전. 이 문서는 업체 안내와 기업 및 전문가 등록 신청에 적용됩니다.",
+    "sections": [
+      {
+        "id": "terms",
+        "title": "업체 안내 이용",
+        "paragraphs": [
+          "ESX는 기업과 전문가에 관한 정보 및 연락 수단을 제공합니다. 등록 정보의 게시 자체가 추천, 자격이나 면허 확인 또는 서비스 품질 보증을 의미하지 않습니다. 거래 전에 조건, 가격, 허가 및 자격을 제공자에게 직접 확인하세요.",
+          "서비스 계약은 선택한 제공자와 체결합니다. 정보 게시는 ESX를 계약 당사자로 만들지 않습니다. 정보는 변경될 수 있고 자동 번역에 오류가 있을 수 있으므로 중요한 조건은 원문 및 제공자에게 확인하세요.",
+          "이 규칙은 관련 법률상 배제하거나 제한할 수 없는 책임을 배제·제한하지 않으며 소비자 및 정보주체의 권리를 무효화하지 않습니다."
+        ],
+        "list": false
+      },
+      {
+        "id": "placement",
+        "title": "등록 규칙",
+        "paragraphs": [
+          "전문가 본인, 사업주 또는 권한을 위임받은 대리인이 신청해야 합니다. 타인을 사칭하거나 타인의 사업에 대한 권리를 주장해서는 안 됩니다.",
+          "정확한 정보와 최신 업무용 연락처를 제공하세요. 규제 대상 업무에 필요한 허가와 자격은 유효해야 합니다.",
+          "인물 사진, 로고, 글과 연락처를 포함하여 사용·게시 권한이 있는 자료만 제출하세요. 공개된 정보라는 사실만으로 재게시 권한이 인정되는 것은 아닙니다.",
+          "신분증 번호, 금융 계좌 정보, 의료 정보, 비밀번호, 아동 정보 또는 제3자의 사적인 정보를 제출하지 마세요. 가능하면 개인 연락처 대신 업무용 연락처를 사용하세요.",
+          "신청은 검토되며 부정확한 정보, 규칙 위반 또는 근거 있는 요청에 따라 거절, 보완 요청 또는 게시 중단될 수 있습니다. 검토는 모든 문서와 사실을 확인했다는 의미가 아닙니다.",
+          "신청자는 안내 서비스 운영을 위해 제출 자료의 표시, 기술적 형식 조정 및 번역을 허용합니다. 자료의 독점적 권리를 양도하는 것은 아닙니다."
+        ],
+        "list": true
+      },
+      {
+        "id": "data",
+        "title": "정보 처리 안내",
+        "paragraphs": [
+          "계정에는 이메일 주소와 인증 정보가 사용됩니다. 신청 시 이름 또는 상호, 직함, 회사, 분야, 도시, 주소, 전화번호, 링크, 설명, 서비스, 언어 및 선택적 사진을 처리합니다. 계정은 신청 관리와 상태 표시를 위해 신청과 연결됩니다.",
+          "신청 정보는 검토 및 승인 후 게시에 사용됩니다. 게시된 정보는 인터넷 이용자에게 공개되며 검색 엔진에 색인될 수 있습니다. 계정 비밀번호와 로그인 이메일은 공개 항목이 아니지만 직접 설명이나 연락처에 기재한 이메일은 공개됩니다.",
+          "인증과 저장에는 Supabase, 호스팅에는 Vercel, 일부 글의 자동 번역에는 OpenAI, 이메일 발송에는 Resend를 사용합니다. 로그인과 설정을 위해 쿠키 및 브라우저 로컬 저장소를 사용합니다. 문의 양식의 내용은 이메일 서비스를 통해 관리자에게 전달됩니다.",
+          "관련 법률의 범위 내에서 처리 정보, 수정, 삭제 또는 처리 정지를 요청할 수 있습니다. 타인의 정보 보호를 위해 신원이나 권한 확인이 필요할 수 있습니다. 일반 양식으로 여권이나 비밀번호를 보내지 마세요. ESX에서 삭제해도 검색 캐시가 즉시 삭제되지는 않습니다.",
+          "이 안내는 확인된 사이트 기능을 설명하며 완전한 개인정보 처리방침이 아닙니다. 처리 책임자, 정확한 보유 기간 및 가능한 국외 이전 조건은 여기에 명시되지 않았습니다. 게시 허용은 법률상 필요한 별도의 고지나 동의를 대체하지 않습니다."
+        ],
+        "list": false
+      },
+      {
+        "id": "requests",
+        "title": "수정, 삭제, 등록 정보에 대한 권한 및 신고",
+        "paragraphs": [
+          "본인의 업체나 전문가 정보이거나 게시가 권리를 침해한다고 생각되면 문의 양식을 이용하세요. 해당 링크, 수정·삭제할 내용, 사유 및 회신 연락처를 기재하세요. 접근 권한 요청 시 업체 또는 전문가와의 관계를 설명하세요. 요청만으로 권한이 자동 부여되지 않으며 권한 확인이 필요합니다.",
+          "사진, 개인정보 또는 저작권 신고 시 구체적인 자료와 침해된 권리를 설명하세요. 불필요한 개인정보를 포함하지 마세요. 수정, 접근 제한 또는 삭제는 사정을 검토한 후 결정합니다."
+        ],
+        "list": false
+      }
+    ],
+    "contact": "문의: 수정, 삭제, 신고 또는 본인 등록 정보 접근 →"
+  },
+  "zh": {
+    "nav": [
+      "首页",
+      "服务目录",
+      "联系"
+    ],
+    "title": "ESX 使用规则",
+    "intro": "2026年10月27日版本。本文件适用于服务目录以及公司和专业人士的发布申请。",
+    "sections": [
+      {
+        "id": "terms",
+        "title": "使用目录",
+        "paragraphs": [
+          "ESX提供公司和专业人士的信息并帮助您联系他们。发布资料本身不构成推荐、资质或许可认证，也不是服务质量保证。交易前应直接向服务提供者核实条款、价格、许可和资质。",
+          "服务合同由您与所选提供者订立。发布资料不使ESX成为合同一方。信息可能变化，自动翻译可能有误；重要条款应核对原文并向提供者确认。",
+          "本规则不排除或限制适用法律规定不得排除或限制的责任，也不取消消费者和个人数据主体的权利。"
+        ],
+        "list": false
+      },
+      {
+        "id": "placement",
+        "title": "发布规则",
+        "paragraphs": [
+          "申请应由专业人士本人、公司所有者或授权代表提交。不得冒充他人或声称拥有他人企业的权利。",
+          "请提供真实信息和最新业务联系方式。受监管业务所需的许可和资格必须有效。",
+          "仅提交您有权使用和发布的材料，包括人物照片、标识、文字和联系方式。信息公开可见本身并不意味着有权再次发布。",
+          "请勿提交证件号码、银行资料、医疗信息、密码、儿童数据或第三方隐私信息。尽可能使用工作联系方式而非私人联系方式。",
+          "申请需经审核。信息不实、违反规则或有合理依据的请求可能导致拒绝、要求补充或撤下资料。审核不代表已核实所有文件和事实。",
+          "申请人允许为目录运营而展示、进行技术性格式调整和翻译所提交材料。这并不转让材料的专有权利。"
+        ],
+        "list": true
+      },
+      {
+        "id": "data",
+        "title": "数据处理说明",
+        "paragraphs": [
+          "账户使用电子邮箱和认证数据。申请处理表单中的名称或姓名、职位、公司、类别、城市、地址、电话、链接、说明、服务、语言以及可选照片。账户与申请关联，以便管理和显示状态。",
+          "申请数据用于审核，并在批准后发布。公开资料可被互联网用户访问及搜索引擎索引。账户密码和登录邮箱不是公开资料字段；若自行将邮箱写入说明或联系方式，该邮箱将公开。",
+          "网站使用Supabase进行认证和存储、Vercel托管、OpenAI翻译部分文字及Resend发送邮件。登录和设置使用Cookie和浏览器本地存储。联系表单内容通过邮件服务传给管理方。",
+          "您可在适用法律范围内请求处理信息、更正、删除或停止处理。为保护他人数据，可能需核实身份或权限；请勿通过普通表单发送护照或密码。从ESX删除不意味着搜索缓存会立即删除。",
+          "本节说明已知网站功能，并非完整隐私政策：未在此明确处理负责人、具体保存期限及可能的跨境传输条件。允许发布资料不能代替法律要求的单独告知或同意。"
+        ],
+        "list": false
+      },
+      {
+        "id": "requests",
+        "title": "更正、删除、资料管理权与投诉",
+        "paragraphs": [
+          "若该公司或专业人士资料属于您，或您认为发布侵犯了您的权利，请使用联系表单。提供资料链接、要更正或删除的内容、理由及回复联系方式。请求访问权限时说明与公司或专业人士的关系。请求不会自动授予访问权，须核实权限。",
+          "涉及照片、个人数据或版权的投诉，请指出具体材料和受影响权利，勿提供不必要的个人数据。更改、限制访问或删除将在审查情况后决定。"
+        ],
+        "list": false
+      }
+    ],
+    "contact": "联系我们：更正、删除、投诉或申请管理自己的资料 →"
+  },
+  "uz": {
+    "nav": [
+      "Bosh sahifa",
+      "Ma’lumotnoma",
+      "Murojaatlar"
+    ],
+    "title": "ESX foydalanish qoidalari",
+    "intro": "2026-yil 27-oktabrdagi tahrir. Hujjat ma’lumotnoma hamda kompaniya va mutaxassislarni joylashtirish arizalariga taalluqli.",
+    "sections": [
+      {
+        "id": "terms",
+        "title": "Ma’lumotnomadan foydalanish",
+        "paragraphs": [
+          "ESX kompaniyalar va mutaxassislar haqida ma’lumot beradi va ular bilan bog‘lanishga yordam beradi. Kartochkaning e’lon qilinishi tavsiya, malaka yoki litsenziya tasdig‘i yoxud xizmat sifati kafolati emas. Bitimdan oldin shartlar, narxlar, ruxsatnomalar va malakani ijrochidan tekshiring.",
+          "Xizmat shartnomasi tanlangan ijrochi bilan tuziladi. Kartochkani joylashtirish ESXni shartnoma tomoniga aylantirmaydi. Ma’lumotlar o‘zgarishi va avtomatik tarjimada xatolar bo‘lishi mumkin; muhim shartlarni asl matn va ijrochi orqali tekshiring.",
+          "Bu qoidalar amaldagi qonun bo‘yicha istisno qilish yoki cheklash mumkin bo‘lmagan javobgarlikni cheklamaydi hamda iste’molchi va shaxsiy ma’lumotlar subyekti huquqlarini bekor qilmaydi."
+        ],
+        "list": false
+      },
+      {
+        "id": "placement",
+        "title": "Joylashtirish qoidalari",
+        "paragraphs": [
+          "Arizani mutaxassisning o‘zi, kompaniya egasi yoki vakolatli vakil topshiradi. Boshqa shaxs nomidan o‘zini tanishtirish yoki begona biznesga da’vo qilish mumkin emas.",
+          "To‘g‘ri ma’lumot va dolzarb ish kontaktlarini kiriting. Tartibga solinadigan faoliyat uchun zarur ruxsatnoma va malaka amalda bo‘lishi kerak.",
+          "Faqat foydalanish va e’lon qilish huquqingiz bo‘lgan materiallarni, jumladan odamlar suratlari, logotiplar, matn va kontaktlarni yuboring. Ma’lumotning ochiqligi uni qayta e’lon qilish huquqini o‘z-o‘zidan bermaydi.",
+          "Hujjat raqamlari, bank rekvizitlari, tibbiy ma’lumotlar, parollar, bolalar ma’lumotlari va uchinchi shaxslarning xususiy ma’lumotlarini yubormang. Imkon bo‘lsa, shaxsiy kontakt o‘rniga ish kontaktini ishlating.",
+          "Ariza moderatsiyadan o‘tadi. Noto‘g‘ri ma’lumot, qoidabuzarlik yoki asosli murojaat sabab rad etilishi, aniqlashtirishga qaytarilishi yoki e’londan olinishi mumkin. Moderatsiya barcha hujjat va faktlar tekshirilganini anglatmaydi.",
+          "Arizachi ma’lumotnoma uchun yuborilgan materiallarni ko‘rsatish, texnik formatlash va tarjima qilishga ruxsat beradi. Bu materiallarga mutlaq huquqlarni topshirish emas."
+        ],
+        "list": true
+      },
+      {
+        "id": "data",
+        "title": "Ma’lumotlarni qayta ishlash",
+        "paragraphs": [
+          "Hisob uchun elektron pochta va autentifikatsiya ma’lumotlari ishlatiladi. Arizada nom yoki ism, lavozim, kompaniya, toifalar, shahar, manzil, telefonlar, havolalar, tavsif, xizmatlar, tillar va ixtiyoriy surat qayta ishlanadi. Arizalarni boshqarish va holatini ko‘rsatish uchun ular hisob bilan bog‘lanadi.",
+          "Ariza ma’lumotlari ko‘rib chiqish va tasdiqdan so‘ng e’lon qilish uchun ishlatiladi. E’lon internet foydalanuvchilariga ochiq va qidiruv tizimlarida indekslanishi mumkin. Parol va kirish pochtasi ochiq kartochka maydonlari emas; pochtani tavsif yoki kontaktga o‘zingiz kiritsangiz, u ochiq bo‘ladi.",
+          "Sayt autentifikatsiya va saqlash uchun Supabase, hosting uchun Vercel, ayrim matnlar tarjimasi uchun OpenAI, xatlar uchun Resenddan foydalanadi. Kirish va sozlamalar uchun cookies va brauzerning lokal xotirasi ishlatiladi. Aloqa formasi murojaati pochta xizmati orqali ma’muriyatga yuboriladi.",
+          "Amaldagi qonun doirasida qayta ishlash haqida ma’lumot, tuzatish, o‘chirish yoki qayta ishlashni to‘xtatishni so‘rashingiz mumkin. Boshqalar ma’lumotlarini himoyalash uchun shaxs yoki vakolat tasdig‘i kerak bo‘lishi mumkin; oddiy forma orqali pasport yoki parol yubormang. ESXdan o‘chirish qidiruv keshidan darhol o‘chirishni anglatmaydi.",
+          "Bu bo‘lim saytning ma’lum funksiyalarini tavsiflaydi va to‘liq maxfiylik siyosati emas: mas’ul shaxs, aniq saqlash muddatlari va mumkin bo‘lgan transchegaraviy uzatish shartlari bu yerda belgilanmagan. E’lon qilish ruxsati qonun talab qiladigan alohida xabarnoma yoki rozilik o‘rnini bosmaydi."
+        ],
+        "list": false
+      },
+      {
+        "id": "requests",
+        "title": "Tuzatish, o‘chirish, kartochka huquqlari va shikoyatlar",
+        "paragraphs": [
+          "Kompaniya yoki mutaxassis kartochkasi sizniki bo‘lsa yoki e’lon huquqlaringizni buzsa, aloqa formasidan foydalaning. Kartochka havolasi, tuzatish yoki o‘chirish talabi, asos va javob kontaktini yozing. Kirish so‘rovida kompaniya yoki mutaxassis bilan aloqangizni tushuntiring. Murojaat avtomatik kirish bermaydi: vakolat tekshiriladi.",
+          "Surat, shaxsiy ma’lumot yoki mualliflik huquqi bo‘yicha shikoyatda aniq material va tegishli huquqlarni ko‘rsating. Ortiqcha shaxsiy ma’lumot kiritmang. O‘zgartirish, kirishni cheklash yoki o‘chirish vaziyat ko‘rib chiqilgach hal etiladi."
+        ],
+        "list": false
+      }
+    ],
+    "contact": "Yozing: tuzatish, o‘chirish, shikoyat yoki o‘z kartochkangizga kirish →"
+  },
+  "tr": {
+    "nav": [
+      "Ana sayfa",
+      "Rehber",
+      "Başvurular"
+    ],
+    "title": "ESX kullanım kuralları",
+    "intro": "27 Ekim 2026 tarihli sürüm. Bu belge rehberi ve şirket veya uzman ilanı başvurularını kapsar.",
+    "sections": [
+      {
+        "id": "terms",
+        "title": "Rehberin kullanımı",
+        "paragraphs": [
+          "ESX şirketler ve uzmanlar hakkında bilgi ve iletişim imkânı sağlar. Bir ilanın yayımlanması tavsiye, yeterlilik veya ruhsat doğrulaması ya da hizmet kalitesi garantisi değildir. İşlemden önce koşulları, ücretleri, izinleri ve yeterlilikleri sağlayıcıdan doğrudan doğrulayın.",
+          "Hizmet sözleşmesi seçilen sağlayıcıyla yapılır. İlan yayımlamak ESX'i sözleşmenin tarafı yapmaz. Bilgiler değişebilir, otomatik çeviri hata içerebilir; önemli koşulları asıl metin ve sağlayıcı üzerinden kontrol edin.",
+          "Bu kurallar uygulanabilir hukuk uyarınca dışlanamayan veya sınırlandırılamayan sorumluluğu sınırlandırmaz ve tüketicilerin ya da veri sahiplerinin haklarını ortadan kaldırmaz."
+        ],
+        "list": false
+      },
+      {
+        "id": "placement",
+        "title": "İlan kuralları",
+        "paragraphs": [
+          "Başvuruyu uzmanın kendisi, işletme sahibi veya yetkili temsilci yapmalıdır. Başkasının kimliğine bürünmeyin veya başka bir işletme üzerinde hak iddia etmeyin.",
+          "Doğru bilgiler ve güncel iş iletişim bilgileri verin. Düzenlemeye tabi faaliyetler için gereken izin ve yeterlilikler geçerli olmalıdır.",
+          "Kişilerin fotoğrafları, logolar, metinler ve iletişim bilgileri dâhil yalnızca kullanma ve yayımlama hakkınız olan materyalleri gönderin. Bilginin kamuya açık olması tek başına yeniden yayımlama hakkı vermez.",
+          "Kimlik belge numaraları, banka bilgileri, sağlık bilgileri, şifreler, çocuk verileri veya üçüncü kişilerin özel bilgilerini göndermeyin. Mümkünse kişisel yerine iş iletişim bilgilerini kullanın.",
+          "Başvurular incelemeye tabidir. Yanlış bilgi, kural ihlali veya gerekçeli bir talep nedeniyle reddedilebilir, açıklama istenebilir veya yayından kaldırılabilir. İnceleme bütün belge ve olguların doğrulandığı anlamına gelmez.",
+          "Başvuran, rehberin çalışması için materyallerin gösterilmesine, teknik biçimlendirilmesine ve çevrilmesine izin verir. Bu, münhasır hakların devri değildir."
+        ],
+        "list": true
+      },
+      {
+        "id": "data",
+        "title": "Veri işleme bilgileri",
+        "paragraphs": [
+          "Hesaplar için e-posta ve kimlik doğrulama verileri kullanılır. Başvuruda ad veya unvan, görev, şirket, kategoriler, şehir, adres, telefonlar, bağlantılar, açıklama, hizmetler, diller ve isteğe bağlı fotoğraf işlenir. Başvurular yönetim ve durum gösterimi için hesaba bağlanır.",
+          "Başvuru verileri inceleme ve onay sonrası yayın için kullanılır. İlanlar internette herkese açıktır ve arama motorlarınca indekslenebilir. Hesap şifresi ve giriş e-postası ilan alanı değildir; açıklamaya veya iletişim bilgilerine kendiniz eklediğiniz e-posta herkese açık olur.",
+          "Site kimlik doğrulama ve depolama için Supabase, barındırma için Vercel, bazı metinlerin çevirisi için OpenAI ve e-posta için Resend kullanır. Giriş ve ayarlar için çerezler ve tarayıcı yerel depolaması kullanılır. İletişim formu mesajları e-posta hizmetiyle yönetime iletilir.",
+          "Uygulanabilir hukuk kapsamında işleme bilgisi, düzeltme, silme veya işlemenin durdurulmasını talep edebilirsiniz. Başkalarının verilerini korumak için kimlik veya yetki doğrulaması gerekebilir; normal formdan pasaport veya şifre göndermeyin. ESX'ten kaldırma, arama önbelleklerini hemen silmez.",
+          "Bu bölüm bilinen site işlevlerini açıklar, tam bir gizlilik politikası değildir: sorumlu kişi, kesin saklama süreleri ve olası uluslararası aktarım koşulları burada belirtilmemiştir. İlan izni, kanunen gereken ayrı bildirim veya rızaların yerine geçmez."
+        ],
+        "list": false
+      },
+      {
+        "id": "requests",
+        "title": "Düzeltme, kaldırma, ilan yetkisi ve şikâyetler",
+        "paragraphs": [
+          "İşletme veya uzman ilanı size aitse ya da yayın haklarınızı ihlal ediyorsa iletişim formunu kullanın. İlan bağlantısını, düzeltilecek veya silinecek bilgiyi, gerekçeyi ve yanıt iletişimini belirtin. Erişim talebinde işletme veya uzmanla ilişkinizi açıklayın. Başvuru otomatik erişim vermez; yetki doğrulanmalıdır.",
+          "Fotoğraf, kişisel veri veya telif hakkı şikâyetinde ilgili materyali ve etkilenen hakları belirtin. Gereksiz kişisel veri eklemeyin. Değişiklik, erişim kısıtlaması veya kaldırma, koşullar incelendikten sonra kararlaştırılır."
+        ],
+        "list": false
+      }
+    ],
+    "contact": "Bize yazın: düzeltme, kaldırma, şikâyet veya kendi ilanınıza erişim →"
+  },
+  "vi": {
+    "nav": [
+      "Trang chủ",
+      "Danh bạ",
+      "Liên hệ"
+    ],
+    "title": "Quy định sử dụng ESX",
+    "intro": "Phiên bản ngày 27 tháng 10 năm 2026. Tài liệu áp dụng cho danh bạ và đơn đăng thông tin công ty, chuyên gia.",
+    "sections": [
+      {
+        "id": "terms",
+        "title": "Sử dụng danh bạ",
+        "paragraphs": [
+          "ESX cung cấp thông tin về công ty, chuyên gia và giúp liên hệ với họ. Việc đăng hồ sơ không phải là khuyến nghị, xác nhận trình độ, giấy phép hay bảo đảm chất lượng dịch vụ. Trước giao dịch, hãy xác minh điều kiện, giá, giấy phép và năng lực trực tiếp với bên cung cấp.",
+          "Hợp đồng dịch vụ được ký với bên cung cấp đã chọn. Đăng hồ sơ không khiến ESX trở thành bên của hợp đồng. Thông tin có thể thay đổi và dịch tự động có thể sai; hãy đối chiếu điều khoản quan trọng với bản gốc và bên cung cấp.",
+          "Quy định này không loại trừ hoặc hạn chế trách nhiệm không được phép loại trừ hay hạn chế theo luật áp dụng, cũng không hủy bỏ quyền của người tiêu dùng và chủ thể dữ liệu."
+        ],
+        "list": false
+      },
+      {
+        "id": "placement",
+        "title": "Quy định đăng tin",
+        "paragraphs": [
+          "Người nộp đơn phải là chính chuyên gia, chủ doanh nghiệp hoặc đại diện được ủy quyền. Không mạo danh người khác hay nhận quyền đối với doanh nghiệp của người khác.",
+          "Cung cấp thông tin chính xác và liên hệ công việc hiện hành. Giấy phép và trình độ bắt buộc cho hoạt động được quản lý phải còn hiệu lực.",
+          "Chỉ gửi tài liệu bạn có quyền sử dụng và công bố, gồm ảnh người, biểu trưng, văn bản và liên hệ. Thông tin công khai không tự động tạo quyền đăng lại.",
+          "Không gửi số giấy tờ, thông tin ngân hàng, thông tin y tế, mật khẩu, dữ liệu trẻ em hay thông tin riêng tư của bên thứ ba. Nếu có thể, dùng liên hệ công việc thay vì cá nhân.",
+          "Đơn được kiểm duyệt; có thể bị từ chối, yêu cầu bổ sung hoặc gỡ nếu sai thông tin, vi phạm quy định hoặc có yêu cầu có căn cứ. Kiểm duyệt không có nghĩa đã xác minh mọi giấy tờ và sự kiện.",
+          "Người nộp đơn cho phép hiển thị, định dạng kỹ thuật và dịch tài liệu để vận hành danh bạ. Đây không phải việc chuyển giao quyền độc quyền."
+        ],
+        "list": true
+      },
+      {
+        "id": "data",
+        "title": "Thông tin xử lý dữ liệu",
+        "paragraphs": [
+          "Tài khoản dùng email và dữ liệu xác thực. Đơn xử lý tên, chức danh, công ty, danh mục, thành phố, địa chỉ, điện thoại, liên kết, mô tả, dịch vụ, ngôn ngữ và ảnh tùy chọn. Tài khoản liên kết với đơn để quản lý và hiển thị trạng thái.",
+          "Dữ liệu đơn dùng để xét duyệt và đăng sau khi được chấp thuận. Hồ sơ công khai cho người dùng internet và có thể được máy tìm kiếm lập chỉ mục. Mật khẩu và email đăng nhập không phải trường công khai; email bạn tự thêm vào mô tả hoặc liên hệ sẽ công khai.",
+          "Trang dùng Supabase để xác thực và lưu trữ, Vercel để lưu trú website, OpenAI để dịch một số văn bản và Resend để gửi email. Cookie và bộ nhớ cục bộ trình duyệt phục vụ đăng nhập, cài đặt. Nội dung biểu mẫu liên hệ được chuyển đến quản trị qua dịch vụ email.",
+          "Bạn có thể yêu cầu thông tin xử lý, sửa, xóa hoặc ngừng xử lý trong phạm vi luật áp dụng. Có thể cần xác minh danh tính hoặc thẩm quyền để bảo vệ dữ liệu người khác; không gửi hộ chiếu hay mật khẩu qua biểu mẫu thông thường. Xóa khỏi ESX không xóa ngay bộ nhớ đệm tìm kiếm.",
+          "Phần này mô tả chức năng đã biết, không phải chính sách riêng tư đầy đủ: chưa xác định bên chịu trách nhiệm, thời hạn lưu cụ thể và điều kiện chuyển dữ liệu xuyên biên giới có thể xảy ra. Cho phép đăng hồ sơ không thay thế thông báo hay đồng ý riêng nếu luật yêu cầu."
+        ],
+        "list": false
+      },
+      {
+        "id": "requests",
+        "title": "Sửa, xóa, quyền quản lý hồ sơ và khiếu nại",
+        "paragraphs": [
+          "Nếu hồ sơ công ty hoặc chuyên gia là của bạn, hoặc việc đăng xâm phạm quyền của bạn, hãy dùng biểu mẫu liên hệ. Nêu liên kết hồ sơ, nội dung cần sửa/xóa, lý do và liên hệ trả lời. Khi xin quyền truy cập, giải thích quan hệ với công ty hoặc chuyên gia. Yêu cầu không tự động cấp quyền; phải xác minh thẩm quyền.",
+          "Với khiếu nại ảnh, dữ liệu cá nhân hoặc bản quyền, xác định tài liệu và quyền bị ảnh hưởng. Không gửi dữ liệu cá nhân không cần thiết. Việc sửa, hạn chế truy cập hoặc gỡ được quyết định sau khi xem xét hoàn cảnh."
+        ],
+        "list": false
+      }
+    ],
+    "contact": "Liên hệ: sửa, xóa, khiếu nại hoặc quyền truy cập hồ sơ của bạn →"
+  },
+  "kk": {
+    "nav": [
+      "Басты бет",
+      "Анықтамалық",
+      "Өтініштер"
+    ],
+    "title": "ESX пайдалану ережелері",
+    "intro": "2026 жылғы 27 қазандағы нұсқа. Құжат анықтамалыққа және компаниялар мен мамандарды орналастыру өтінімдеріне қолданылады.",
+    "sections": [
+      {
+        "id": "terms",
+        "title": "Анықтамалықты пайдалану",
+        "paragraphs": [
+          "ESX компаниялар мен мамандар туралы ақпарат беріп, олармен байланысуға көмектеседі. Карточканың жариялануы ұсыным, біліктілік не лицензияны растау немесе қызмет сапасының кепілі емес. Мәміле алдында шарттарды, бағаны, рұқсаттар мен біліктілікті орындаушыдан тікелей тексеріңіз.",
+          "Қызмет шарты таңдалған орындаушымен жасалады. Карточканы жариялау ESX-ті сол шарттың тарабы етпейді. Ақпарат өзгеруі, автоматты аудармада қате болуы мүмкін; маңызды талаптарды түпнұсқадан және орындаушыдан тексеріңіз.",
+          "Бұл ережелер қолданылатын заң бойынша алып тастауға не шектеуге болмайтын жауапкершілікті шектемейді және тұтынушылар мен дербес деректер субъектілерінің құқықтарын жоймайды."
+        ],
+        "list": false
+      },
+      {
+        "id": "placement",
+        "title": "Жариялау ережелері",
+        "paragraphs": [
+          "Өтінімді маманның өзі, компания иесі немесе уәкілетті өкіл береді. Өзгенің атын жамылуға немесе бөтен бизнеске құқық талап етуге болмайды.",
+          "Дұрыс мәлімет пен өзекті жұмыс байланыстарын көрсетіңіз. Реттелетін қызметке қажетті рұқсаттар мен біліктілік жарамды болуы тиіс.",
+          "Адамдардың фотосуреттері, логотиптер, мәтіндер мен байланыс деректерін қоса, пайдалануға және жариялауға құқығыңыз бар материалдарды ғана жіберіңіз. Ақпараттың ашық болуы оны қайта жариялау құқығын өздігінен бермейді.",
+          "Құжат нөмірлерін, банк деректемелерін, медициналық ақпаратты, құпиясөздерді, балалар деректерін не үшінші тұлғалардың жеке мәліметтерін қоспаңыз. Мүмкін болса, жеке байланыс орнына жұмыс байланысын қолданыңыз.",
+          "Өтінім модерациядан өтеді. Қате ақпарат, ереже бұзылуы немесе негізді өтініш болғанда қабылданбауы, нақтылауға қайтарылуы не жарияланымнан алынуы мүмкін. Модерация барлық құжат пен факт тексерілді дегенді білдірмейді.",
+          "Өтінім беруші анықтамалық жұмысы үшін материалдарды көрсетуге, техникалық пішімдеуге және аударуға рұқсат береді. Бұл айрықша құқықтарды беру емес."
+        ],
+        "list": true
+      },
+      {
+        "id": "data",
+        "title": "Деректерді өңдеу туралы ақпарат",
+        "paragraphs": [
+          "Аккаунт үшін электрондық пошта мен авторизация деректері пайдаланылады. Өтінімде атау немесе есім, лауазым, компания, санаттар, қала, мекенжай, телефондар, сілтемелер, сипаттама, қызметтер, тілдер және міндетті емес фото өңделеді. Басқару және мәртебені көрсету үшін өтінімдер аккаунтқа байланыстырылады.",
+          "Өтінім деректері қарау және мақұлдаудан кейін жариялау үшін қолданылады. Жарияланған карточка интернет пайдаланушыларына ашық, іздеу жүйелерінде индекстелуі мүмкін. Құпиясөз және кіру поштасы ашық карточка өрістері емес; поштаны сипаттамаға не байланыстарға өзіңіз қоссаңыз, ол ашық болады.",
+          "Сайт авторизация мен сақтау үшін Supabase, орналастыру үшін Vercel, кейбір мәтіндерді аудару үшін OpenAI және хат жіберу үшін Resend қолданады. Кіру мен баптаулар үшін cookies және браузердің жергілікті қоймасы пайдаланылады. Байланыс нысанындағы өтініш пошта қызметі арқылы әкімшілікке беріледі.",
+          "Қолданылатын заң шегінде өңдеу туралы ақпарат, түзету, жою немесе өңдеуді тоқтатуды сұрауға болады. Өзгелердің деректерін қорғау үшін тұлға не өкілеттік расталуы мүмкін; әдеттегі нысан арқылы паспорт немесе құпиясөз жібермеңіз. ESX-тен жою іздеу кешінен бірден жоюды білдірмейді.",
+          "Бұл бөлім белгілі сайт функцияларын сипаттайды және толық құпиялық саясаты емес: жауапты тұлға, нақты сақтау мерзімдері және ықтимал трансшекаралық беру шарттары мұнда анықталмаған. Карточка жариялауға рұқсат заң талап ететін бөлек хабарламалар немесе келісімдерді алмастырмайды."
+        ],
+        "list": false
+      },
+      {
+        "id": "requests",
+        "title": "Түзету, жою, карточкаға құқықтар және шағымдар",
+        "paragraphs": [
+          "Компания немесе маман карточкасы сіздікі болса не жарияланым құқығыңызды бұзса, байланыс нысанын пайдаланыңыз. Сілтемені, түзету не жою талабын, негізін және жауап байланысын көрсетіңіз. Қолжетімділік сұрағанда компаниямен не маманмен қатынасыңызды түсіндіріңіз. Өтініш автоматты қолжетімділік бермейді: өкілеттік тексеріледі.",
+          "Фото, дербес деректер немесе авторлық құқық жөніндегі шағымда нақты материал мен бұзылған құқықтарды көрсетіңіз. Артық дербес дерек қоспаңыз. Өзгерту, қолжетімділікті шектеу немесе жою жағдайлар қаралған соң шешіледі."
+        ],
+        "list": false
+      }
+    ],
+    "contact": "Жазыңыз: түзету, жою, шағым немесе өз карточкаңызға қолжетімділік →"
+  },
+  "km": {
+    "nav": [
+      "ទំព័រដើម",
+      "បញ្ជីសេវាកម្ម",
+      "ទំនាក់ទំនង"
+    ],
+    "title": "ច្បាប់ប្រើប្រាស់ ESX",
+    "intro": "កំណែថ្ងៃទី ២៧ ខែតុលា ឆ្នាំ ២០២៦។ ឯកសារនេះគ្របដណ្ដប់លើបញ្ជីសេវាកម្ម និងពាក្យសុំចុះផ្សាយក្រុមហ៊ុន ឬអ្នកជំនាញ។",
+    "sections": [
+      {
+        "id": "terms",
+        "title": "ការប្រើបញ្ជីសេវាកម្ម",
+        "paragraphs": [
+          "ESX ផ្តល់ព័ត៌មានអំពីក្រុមហ៊ុន និងអ្នកជំនាញ ហើយជួយឱ្យទាក់ទងពួកគេ។ ការចុះផ្សាយមិនមែនជាការណែនាំ ការបញ្ជាក់គុណវុឌ្ឍិ អាជ្ញាបណ្ណ ឬការធានាគុណភាពសេវាទេ។ មុនប្រតិបត្តិការ សូមផ្ទៀងផ្ទាត់លក្ខខណ្ឌ តម្លៃ លិខិតអនុញ្ញាត និងគុណវុឌ្ឍិជាមួយអ្នកផ្តល់សេវាដោយផ្ទាល់។",
+          "កិច្ចសន្យាសេវាត្រូវធ្វើជាមួយអ្នកផ្តល់សេវាដែលបានជ្រើស។ ការចុះផ្សាយមិនធ្វើឱ្យ ESX ក្លាយជាភាគីនៃកិច្ចសន្យានោះទេ។ ព័ត៌មានអាចផ្លាស់ប្តូរ និងការបកប្រែស្វ័យប្រវត្តិអាចខុស។ សូមផ្ទៀងផ្ទាត់លក្ខខណ្ឌសំខាន់ៗជាមួយអត្ថបទដើម និងអ្នកផ្តល់សេវា។",
+          "ច្បាប់ទាំងនេះមិនលុបចោល ឬកម្រិតការទទួលខុសត្រូវដែលច្បាប់ជាធរមានមិនអនុញ្ញាតឱ្យលុប ឬកម្រិត និងមិនលុបសិទ្ធិអ្នកប្រើប្រាស់ ឬម្ចាស់ទិន្នន័យផ្ទាល់ខ្លួនទេ។"
+        ],
+        "list": false
+      },
+      {
+        "id": "placement",
+        "title": "ច្បាប់ចុះផ្សាយ",
+        "paragraphs": [
+          "អ្នកជំនាញផ្ទាល់ ម្ចាស់ក្រុមហ៊ុន ឬតំណាងមានសិទ្ធិជាអ្នកដាក់ពាក្យ។ មិនត្រូវក្លែងខ្លួនជាអ្នកដទៃ ឬទាមទារសិទ្ធិលើអាជីវកម្មអ្នកដទៃទេ។",
+          "ផ្តល់ព័ត៌មានត្រឹមត្រូវ និងទំនាក់ទំនងការងារបច្ចុប្បន្ន។ ការអនុញ្ញាត និងគុណវុឌ្ឍិដែលត្រូវការសម្រាប់សកម្មភាពមានបទប្បញ្ញត្តិត្រូវមានសុពលភាព។",
+          "ផ្ញើតែសម្ភារៈដែលអ្នកមានសិទ្ធិប្រើ និងចុះផ្សាយ រួមទាំងរូបមនុស្ស ស្លាកសញ្ញា អត្ថបទ និងទំនាក់ទំនង។ ព័ត៌មានដែលអាចមើលជាសាធារណៈមិនផ្តល់សិទ្ធិចុះផ្សាយឡើងវិញដោយស្វ័យប្រវត្តិទេ។",
+          "កុំផ្ញើលេខឯកសារអត្តសញ្ញាណ ព័ត៌មានធនាគារ ព័ត៌មានវេជ្ជសាស្ត្រ ពាក្យសម្ងាត់ ទិន្នន័យកុមារ ឬព័ត៌មានឯកជនរបស់ភាគីទីបី។ ប្រើទំនាក់ទំនងការងារជំនួសទំនាក់ទំនងផ្ទាល់ខ្លួន បើអាចធ្វើបាន។",
+          "ពាក្យសុំត្រូវបានពិនិត្យ ហើយអាចត្រូវបដិសេធ ស្នើសុំបញ្ជាក់ ឬដកចេញពីការផ្សាយ ដោយសារព័ត៌មានមិនត្រឹមត្រូវ ការបំពាន ឬសំណើមានមូលដ្ឋាន។ ការពិនិត្យមិនមានន័យថាបានផ្ទៀងផ្ទាត់គ្រប់ឯកសារ និងហេតុការណ៍ទេ។",
+          "អ្នកដាក់ពាក្យអនុញ្ញាតឱ្យបង្ហាញ កែទ្រង់ទ្រាយបច្ចេកទេស និងបកប្រែសម្ភារៈសម្រាប់បញ្ជីសេវាកម្ម។ នេះមិនមែនជាការផ្ទេរសិទ្ធិផ្តាច់មុខទេ។"
+        ],
+        "list": true
+      },
+      {
+        "id": "data",
+        "title": "ព័ត៌មានអំពីការដំណើរការទិន្នន័យ",
+        "paragraphs": [
+          "គណនីប្រើអ៊ីមែល និងទិន្នន័យផ្ទៀងផ្ទាត់។ ពាក្យសុំដំណើរការឈ្មោះ តួនាទី ក្រុមហ៊ុន ប្រភេទ ទីក្រុង អាសយដ្ឋាន ទូរសព្ទ តំណ សេចក្តីពិពណ៌នា សេវា ភាសា និងរូបថតជាជម្រើស។ គណនីភ្ជាប់នឹងពាក្យសុំដើម្បីគ្រប់គ្រង និងបង្ហាញស្ថានភាព។",
+          "ទិន្នន័យប្រើសម្រាប់ពិនិត្យ និងចុះផ្សាយក្រោយអនុម័ត។ ព័ត៌មានដែលផ្សាយអាចមើលជាសាធារណៈ និងអាចត្រូវបានម៉ាស៊ីនស្វែងរកធ្វើលិបិក្រម។ ពាក្យសម្ងាត់ និងអ៊ីមែលចូលមិនមែនជាវាលសាធារណៈទេ ប៉ុន្តែអ៊ីមែលដែលអ្នកសរសេរនៅក្នុងការពិពណ៌នា ឬទំនាក់ទំនងនឹងក្លាយជាសាធារណៈ។",
+          "គេហទំព័រប្រើ Supabase សម្រាប់ផ្ទៀងផ្ទាត់ និងរក្សាទុក Vercel សម្រាប់បង្ហោះ OpenAI សម្រាប់បកប្រែអត្ថបទខ្លះ និង Resend សម្រាប់អ៊ីមែល។ Cookies និងឃ្លាំងមូលដ្ឋានរបស់កម្មវិធីរុករកប្រើសម្រាប់ចូល និងការកំណត់។ សារតាមទម្រង់ទំនាក់ទំនងត្រូវបានផ្ញើទៅរដ្ឋបាលតាមសេវាអ៊ីមែល។",
+          "អ្នកអាចស្នើព័ត៌មានអំពីការដំណើរការ កែ លុប ឬបញ្ឈប់ការដំណើរការតាមច្បាប់ជាធរមាន។ អាចត្រូវផ្ទៀងផ្ទាត់អត្តសញ្ញាណ ឬសិទ្ធិដើម្បីការពារទិន្នន័យអ្នកដទៃ។ កុំផ្ញើលិខិតឆ្លងដែន ឬពាក្យសម្ងាត់តាមទម្រង់ធម្មតា។ ការលុបពី ESX មិនលុបច្បាប់ចម្លងក្នុងឃ្លាំងស្វែងរកភ្លាមៗទេ។",
+          "ផ្នែកនេះពិពណ៌នាមុខងារដែលបានដឹង មិនមែនជាគោលការណ៍ឯកជនភាពពេញលេញទេ៖ អ្នកទទួលខុសត្រូវ រយៈពេលរក្សាទុកជាក់លាក់ និងលក្ខខណ្ឌផ្ទេរឆ្លងប្រទេសដែលអាចកើតមាន មិនត្រូវបានកំណត់នៅទីនេះ។ ការអនុញ្ញាតចុះផ្សាយមិនជំនួសការជូនដំណឹង ឬការយល់ព្រមដាច់ដោយឡែកដែលច្បាប់ទាមទារទេ។"
+        ],
+        "list": false
+      },
+      {
+        "id": "requests",
+        "title": "ការកែ លុប សិទ្ធិលើទំព័រព័ត៌មាន និងបណ្ដឹង",
+        "paragraphs": [
+          "បើក្រុមហ៊ុន ឬទំព័រអ្នកជំនាញជារបស់អ្នក ឬអ្នកជឿថាការផ្សាយបំពានសិទ្ធិ សូមប្រើទម្រង់ទំនាក់ទំនង។ បញ្ជាក់តំណ អ្វីត្រូវកែ ឬលុប មូលហេតុ និងទំនាក់ទំនងសម្រាប់ឆ្លើយតប។ ពេលស្នើសិទ្ធិចូល សូមពន្យល់ទំនាក់ទំនងរបស់អ្នកជាមួយក្រុមហ៊ុន ឬអ្នកជំនាញ។ សំណើមិនផ្តល់សិទ្ធិចូលស្វ័យប្រវត្តិទេ ត្រូវផ្ទៀងផ្ទាត់សិទ្ធិ។",
+          "សម្រាប់បណ្ដឹងអំពីរូបថត ទិន្នន័យផ្ទាល់ខ្លួន ឬរក្សាសិទ្ធិ សូមបញ្ជាក់សម្ភារៈ និងសិទ្ធិដែលរងផលប៉ះពាល់។ កុំផ្តល់ទិន្នន័យផ្ទាល់ខ្លួនលើសតម្រូវការ។ ការកែ កម្រិតការចូល ឬលុបត្រូវសម្រេចក្រោយពិនិត្យកាលៈទេសៈ។"
+        ],
+        "list": false
+      }
+    ],
+    "contact": "ទាក់ទង៖ កែ លុប បណ្ដឹង ឬសិទ្ធិចូលទំព័ររបស់អ្នក →"
+  }
+}

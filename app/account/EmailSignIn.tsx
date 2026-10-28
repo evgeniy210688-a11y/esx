@@ -123,7 +123,7 @@ export default function EmailSignIn({ language, activation = false }: { language
         {register && <label>{t.confirmPassword}<input type={visible ? 'text' : 'password'} autoComplete="new-password" value={confirmation} onChange={event => setConfirmation(event.target.value)} minLength={8} maxLength={72} required disabled={busy} /></label>}
         <label className="account-checkbox"><input type="checkbox" checked={visible} onChange={event => setVisible(event.target.checked)} />{t.showPassword}</label>
         {register && <div className="signup-legal">
-          <p><a href="/legal#terms" target="_blank" rel="noopener noreferrer">{legal[2]} (RU)</a> · <a href="/legal#data" target="_blank" rel="noopener noreferrer">{legal[3]} (RU)</a></p>
+          <p><a href={"/legal?lang="+language+"#terms"} target="_blank" rel="noopener noreferrer">{legal[2]}</a> · <a href={"/legal?lang="+language+"#data"} target="_blank" rel="noopener noreferrer">{legal[3]}</a></p>
           <label><input type="checkbox" required checked={rulesAccepted} disabled={busy} onChange={e=>setRulesAccepted(e.target.checked)} /><span>{legal[0]}</span></label>
           <label><input type="checkbox" required checked={dataRead} disabled={busy} onChange={e=>setDataRead(e.target.checked)} /><span>{legal[1]}</span></label>
         </div>}
