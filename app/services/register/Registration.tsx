@@ -53,6 +53,8 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
   const [loadError, setLoadError] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const [success, setSuccess] = useState(false);
+  const [rulesAccepted,setRulesAccepted]=useState(false);
+  const [publicationAccepted,setPublicationAccepted]=useState(false);
   const lock = useRef(false);
   const requestId = useRef<string | null>(null);
   const messageRef = useRef<HTMLParagraphElement>(null);
@@ -180,14 +182,14 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
         {kind === 'company' && <label className="registration-check registration-interpreter-check"><input type="checkbox" name="has_interpreter" checked={interpreter} onChange={e => setInterpreter(e.target.checked)} />Есть переводчик</label>}
         {kind==='company' && interpreter && <fieldset><legend>Языки переводчика</legend><div className="registration-languages">{Object.entries(serviceLanguages).map(([code,name])=><label className="registration-check" key={code}><span className="registration-language-controls"><input type="checkbox" checked={interpreterLanguages.includes(code as ServiceLanguage)} onChange={()=>setInterpreterLanguages(items=>items.includes(code as ServiceLanguage)?items.filter(item=>item!==code):[...items,code as ServiceLanguage])}/><Image className="registration-language-flag" src={'/flags/'+flags[code]+'.svg'} alt="" width={24} height={16} unoptimized/></span><span className="registration-language-name">{new Intl.DisplayNames([language],{type:'language'}).of(code)??name}</span></label>)}</div></fieldset>}
         <LegalLinks language={language} />
-        <label className="registration-check registration-consent"><input type="checkbox" name="accept_rules" required />Я принимаю правила размещения и подтверждаю право представлять компанию или специалиста и использовать переданные материалы.</label>
-        <label className="registration-check registration-consent"><input type="checkbox" name="accept_publication" required />Я разрешаю публичное размещение сведений карточки, контактов и добавленного фото после одобрения заявки, включая их перевод.</label>
+        <label className="registration-check registration-consent"><input type="checkbox" name="accept_rules" required checked={rulesAccepted} onChange={e=>setRulesAccepted(e.target.checked)} />Я принимаю правила размещения и подтверждаю право представлять компанию или специалиста и использовать переданные материалы.</label>
+        <label className="registration-check registration-consent"><input type="checkbox" name="accept_publication" required checked={publicationAccepted} onChange={e=>setPublicationAccepted(e.target.checked)} />Я разрешаю публичное размещение сведений карточки, контактов и добавленного фото после одобрения заявки, включая их перевод.</label>
         <p>После отправки данные передаются на проверку. Отправка заявки не означает публикацию.</p>
-        <button type="submit">{busy ? 'Отправляем…' : 'Отправить на проверку'}</button>
+        <button type="submit" disabled={!rulesAccepted || !publicationAccepted || busy || photoBusy || success}>{busy ? 'Отправляем…' : 'Отправить на проверку'}</button>
       </fieldset>
       {photoBusy && <p role="status">Подготавливаем фото…</p>}
       <p ref={messageRef} tabIndex={-1} className={success ? "registration-success" : ""} role="status" aria-live="polite">{message}</p>
-      {success && <button type="button" onClick={() => { formRef.current?.reset(); setLanguages([]); setSocials([]); setPhones([{ type: 'mobile', number: '' }]); setPhoto(null); setKind('company'); setCategories(['']); setCustomCategories({}); setInterpreterLanguages([]); setInterpreter(false); requestId.current = null; setSuccess(false); setMessage(''); }}>Подать ещё одну заявку</button>}
+      {success && <button type="button" onClick={() => { formRef.current?.reset(); setRulesAccepted(false); setPublicationAccepted(false); setLanguages([]); setSocials([]); setPhones([{ type: 'mobile', number: '' }]); setPhoto(null); setKind('company'); setCategories(['']); setCustomCategories({}); setInterpreterLanguages([]); setInterpreter(false); requestId.current = null; setSuccess(false); setMessage(''); }}>Подать ещё одну заявку</button>}
     </form>
   </>,language);
 }

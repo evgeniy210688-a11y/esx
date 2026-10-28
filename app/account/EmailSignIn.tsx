@@ -127,7 +127,7 @@ export default function EmailSignIn({ language, activation = false }: { language
           <label><input type="checkbox" required checked={rulesAccepted} disabled={busy} onChange={e=>setRulesAccepted(e.target.checked)} /><span>{legal[0]}</span></label>
           <label><input type="checkbox" required checked={dataRead} disabled={busy} onChange={e=>setDataRead(e.target.checked)} /><span>{legal[1]}</span></label>
         </div>}
-        <button type="submit" disabled={busy}>{busy ? t.wait : register ? t.createAccount : t.signIn}</button>
+        <button type="submit" disabled={busy || (register && (!rulesAccepted || !dataRead))}>{busy ? t.wait : register ? t.createAccount : t.signIn}</button>
       </form>
     </>}
     <p role="status" className="account-status">{status ? t[status] : ''}</p>
