@@ -221,4 +221,4 @@
 .services-filter-reveal{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows 1400ms cubic-bezier(.45,0,.2,1),opacity 1000ms ease-in-out}
 .services-filter-reveal[data-open=true]{grid-template-rows:1fr;opacity:1}
 .services-filter-clip{min-height:0;overflow:hidden}
-@media(prefers-reduced-motion:reduce){.services-filter-reveal{transition:none}.services-filter-reveal[data-open=true]>.services-filter-clip{overflow:visible}}
+
