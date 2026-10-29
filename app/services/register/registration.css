@@ -99,3 +99,7 @@
 .registration-page[data-theme=dark] .registration-avatar-slot>svg{background:#1b3552;border-color:#567da5}
 .registration-page[data-theme=dark] :is(small,legend,.registration-avatar-slot span){color:#b9cde6}
 .registration-page .directory-theme-toggle{min-height:42px;padding:4px 10px;border-radius:24px}
+
+.registration-page[data-theme=dark] .registration-form label.registration-interpreter-check{background:#1b3552;color:#e3edff;border-color:#456180}
+.registration-page[data-theme=dark] .registration-interpreter-check input[type=checkbox]{accent-color:#75b8ff}
+.registration-page[data-theme=dark] .registration-form label.registration-interpreter-check:has(input:checked){background:#234566;border-color:#75b8ff}
