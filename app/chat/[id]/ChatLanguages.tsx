@@ -11,7 +11,7 @@ function validLanguage(value: unknown): value is Language {
   return languages.some((language) => language.code === value);
 }
 
-export default function ChatLanguages({ chatId, onMineChange }: { chatId: string; onMineChange: (language: Language) => void }) {
+export default function ChatLanguages({ chatId, value, onMineChange }: { chatId: string; value?: Language | null; onMineChange: (language: Language) => void }) {
   const [mine, setMine] = useState<Language>("en");
   const pickerRef = useRef<HTMLDetailsElement>(null);
   const summaryRef = useRef<HTMLElement>(null);
@@ -33,6 +33,13 @@ export default function ChatLanguages({ chatId, onMineChange }: { chatId: string
     setMine(restored);
     onMineChange(restored);
   }, [storageKey, onMineChange]);
+  useEffect(() => {
+    if (value) {
+      // Keep the header in sync with the language menu in the bottom toolbar.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setMine(value);
+    }
+  }, [value]);
   function save(nextMine: Language) {
     setMine(nextMine);
     onMineChange(nextMine);

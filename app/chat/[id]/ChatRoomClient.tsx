@@ -261,7 +261,7 @@ export default function ChatRoomClient({
   return (
     <main ref={chatRoot} lang={language} data-chat-background={background ?? undefined} className="chat-theme has-conversations flex min-h-screen flex-col">
 
-        <div className="esx-site chat-site-header"><SiteHeader language={language} actions={<div className="chat-header-actions"><ChatLanguages key={chatId} chatId={chatId} onMineChange={setTranslationLanguage} /><ChatQrCode chatId={chatId} language={language} /><ChatMenu language={language} background={background} onBackgroundChange={setBackground} /></div>} /></div>
+        <div className="esx-site chat-site-header"><SiteHeader language={language} actions={<div className="chat-header-actions"><ChatLanguages key={chatId} chatId={chatId} value={translationLanguage} onMineChange={setTranslationLanguage} /><ChatQrCode chatId={chatId} language={language} /><ChatMenu language={language} background={background} onBackgroundChange={setBackground} /></div>} /></div>
 
       <div className="chat-shell mx-auto flex w-full max-w-2xl flex-1 flex-col">
 
@@ -297,7 +297,7 @@ export default function ChatRoomClient({
 
         </section>
 
-        <div className="chat-navigation-row"><ChatShortcuts language={language} /></div>
+        <div className="chat-navigation-row"><ChatShortcuts language={language} onLanguageChange={next => { setTranslationLanguage(next); try { localStorage.setItem(`esx-chat-languages:${chatId}`, JSON.stringify({ mine: next })); } catch {} }} /></div>
         {/* Input */}
         <div className="chat-composer border-t p-4">
           <div className="flex gap-3">
