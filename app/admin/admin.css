@@ -69,7 +69,7 @@
 .admin-page .services-main>.admin-summary{width:100%;max-width:1408px;margin-inline:auto}
 .admin-page .admin-summary>button{min-width:0;overflow-wrap:anywhere}
 
-.admin-page .services-main>.admin-columns{max-width:1539px;margin-inline:auto;grid-template-columns:repeat(3,minmax(0,497px));justify-content:center}
+.admin-page .services-main>.admin-columns{max-width:none;margin-inline:0;grid-template-columns:repeat(3,minmax(0,497px));justify-content:space-between}
 .admin-columns>section,.admin-columns>form{min-width:0}
 @media(max-width:1150px){.admin-page .services-main>.admin-columns{max-width:1018px;grid-template-columns:repeat(2,minmax(0,497px))}}
 @media(max-width:750px){.admin-page .services-main>.admin-columns{max-width:497px;grid-template-columns:minmax(0,1fr)}}
