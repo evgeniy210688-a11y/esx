@@ -63,3 +63,5 @@
 .admin-page .admin-category-toggle[aria-expanded=true]{background:#173f57;border-color:#75d6ce}
 .admin-category-toggle>span:first-child{font-size:inherit;color:inherit}
 .admin-list[hidden]{display:none}
+
+.admin-category:has(.admin-category-toggle){margin-left:12px;margin-right:12px}
