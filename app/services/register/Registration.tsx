@@ -28,10 +28,20 @@ const statusLabels: Record<string, string> = { pending: 'На проверке',
 export default function Registration() {
   const { user, ready } = useAccount();
   const [language,setLanguage] = useState<InterfaceLanguage>('ru');
+  const languageMenu = useRef<HTMLDetailsElement>(null);
+  useEffect(() => {
+    const closeOutside = (event: PointerEvent) => {
+      const menu = languageMenu.current;
+      if (menu?.open && event.target instanceof Node && !menu.contains(event.target)) menu.open = false;
+    };
+    document.addEventListener('pointerdown', closeOutside, true);
+    return () => document.removeEventListener('pointerdown', closeOutside, true);
+  }, []);
+
   useEffect(() => { try { const saved=localStorage.getItem('esx-services-language'); if(interfaceLanguages.some(item=>item.code===saved)) queueMicrotask(()=>setLanguage(saved as InterfaceLanguage)); } catch {} },[]);
   function chooseLanguage(value:InterfaceLanguage) { setLanguage(value); try { localStorage.setItem('esx-services-language',value); } catch {} }
   return registrationTree(<div className="services-page services-directory registration-page" lang={language}>
-    <header className="services-top"><Link className="services-brand" href="/"><Image src="/esx-wordmark-color.png" alt="ESX" width={140} height={48} unoptimized /></Link><nav><Link href="/services">Справочник</Link><Link href="/account">Мой аккаунт</Link></nav><DirectoryThemeToggle language={language} /><div className="registration-interface-language"><details className="services-language-picker" onKeyDown={event=>{if(event.key==='Escape'){event.currentTarget.open=false;event.currentTarget.querySelector('summary')?.focus();}}}><summary aria-label="Interface language"><Image src={'/flags/'+flags[language]+'.svg'} alt="" width={24} height={16} unoptimized/><span>{interfaceLanguages.find(item=>item.code===language)?.name}</span><span aria-hidden="true">▾</span></summary><ul>{interfaceLanguages.map(item=><li key={item.code}><button type="button" lang={item.code} aria-pressed={language===item.code} onClick={event=>{chooseLanguage(item.code);const picker=event.currentTarget.closest('details');if(picker){picker.open=false;picker.querySelector('summary')?.focus();}}}><Image src={'/flags/'+flags[item.code]+'.svg'} alt="" width={24} height={16} unoptimized/><span>{item.name}</span>{language===item.code&&<span aria-hidden="true">✓</span>}</button></li>)}</ul></details></div></header>
+    <header className="services-top"><Link className="services-brand" href="/"><Image src="/esx-wordmark-color.png" alt="ESX" width={140} height={48} unoptimized /></Link><nav><Link href="/services">Справочник</Link><Link href="/account">Мой аккаунт</Link></nav><DirectoryThemeToggle language={language} /><div className="registration-interface-language"><details ref={languageMenu} className="services-language-picker" onKeyDown={event=>{if(event.key==='Escape'){event.currentTarget.open=false;event.currentTarget.querySelector('summary')?.focus();}}}><summary aria-label="Interface language"><Image src={'/flags/'+flags[language]+'.svg'} alt="" width={24} height={16} unoptimized/><span>{interfaceLanguages.find(item=>item.code===language)?.name}</span><span aria-hidden="true">▾</span></summary><ul>{interfaceLanguages.map(item=><li key={item.code}><button type="button" lang={item.code} aria-pressed={language===item.code} onClick={event=>{chooseLanguage(item.code);const picker=event.currentTarget.closest('details');if(picker){picker.open=false;picker.querySelector('summary')?.focus();}}}><Image src={'/flags/'+flags[item.code]+'.svg'} alt="" width={24} height={16} unoptimized/><span>{item.name}</span>{language===item.code&&<span aria-hidden="true">✓</span>}</button></li>)}</ul></details></div></header>
     <main className="services-main"><Link className="registration-back" href="/services"><span aria-hidden="true">←</span><span>Назад</span></Link><h1>Регистрация в справочнике</h1><p>Добавьте компанию или специалиста. Карточка появится на сайте только после проверки и одобрения администратором.</p>
       {!ready ? <p role="status">Проверяем вход…</p> : !user || user.is_anonymous ? <><p>Войдите или создайте аккаунт, чтобы отправить заявку.</p><EmailSignIn key={language} language={language === "uz" ? "en" : language} /></> : <SubmissionForm key={user.id} userId={user.id} language={language} />}
     </main>
