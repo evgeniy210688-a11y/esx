@@ -44,4 +44,4 @@ body {
 #qr-language-dialog::backdrop{opacity:0;transition:opacity .35s ease,display .35s allow-discrete,overlay .35s allow-discrete}
 #qr-language-dialog[open]::backdrop{opacity:1}
 @starting-style{#qr-language-dialog[open]{opacity:0;scale:.96}#qr-language-dialog[open]::backdrop{opacity:0}}
-@media(prefers-reduced-motion:reduce){:is(.services-language-picker,.chat-language-picker,.header-language,.private-language details)::details-content,#qr-language-dialog,#qr-language-dialog::backdrop{transition:none}}
+@starting-style{:is(.services-language-picker,.chat-language-picker,.header-language,.private-language details)[open]::details-content{opacity:0;translate:0 -8px}}
