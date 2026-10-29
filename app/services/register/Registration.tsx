@@ -1,6 +1,7 @@
 'use client';
 import { interfaceLanguages, type InterfaceLanguage } from '../serviceLabels';
 import { registrationTree } from './registrationCopy';
+import ServicesBackToTop from '../ServicesBackToTop';
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import Link from 'next/link';
@@ -33,6 +34,7 @@ export default function Registration() {
     <main className="services-main"><Link className="registration-back" href="/services"><span aria-hidden="true">←</span><span>Назад</span></Link><h1>Регистрация в справочнике</h1><p>Добавьте компанию или специалиста. Карточка появится на сайте только после проверки и одобрения администратором.</p>
       {!ready ? <p role="status">Проверяем вход…</p> : !user || user.is_anonymous ? <><p>Войдите или создайте аккаунт, чтобы отправить заявку.</p><EmailSignIn key={language} language={language === "uz" ? "en" : language} /></> : <SubmissionForm key={user.id} userId={user.id} language={language} />}
     </main>
+    <ServicesBackToTop language={language} />
   </div>,language);
 }
 
