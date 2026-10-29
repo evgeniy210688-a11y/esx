@@ -58,6 +58,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
   const [category, setCategory] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [openTypes, setOpenTypes] = useState({ specialists: false, companies: false });
+  const [openCompanyCategory, setOpenCompanyCategory] = useState<string | null>(null);
   const listingTypes = [{ key: 'specialists', label: 'Специалисты', personal: true }, { key: 'companies', label: 'Компании', personal: false }] as const;
   const categoryOf = (row: Listing) => serviceCategory(row).trim() || 'Без категории';
   const categories = [...new Set(rows.flatMap(listingCategories))].sort((a, b) => a.localeCompare(b, 'ru'));
@@ -221,8 +222,8 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
         <div id={'admin-type-' + type.key} hidden={!openTypes[type.key]}>
           {!filteredRows.some(row => isPersonalListing(row) === type.personal) && <p>Карточек не найдено.</p>}
       {groups.map(group => ({ ...group, rows: group.rows.filter(row => isPersonalListing(row) === type.personal) })).filter(group => group.rows.length).map(group => <section className="admin-category" key={group.name} aria-label={group.name}>
-        <h3>{group.name} <span>{group.rows.length}</span></h3>
-        <ul className="admin-list">{group.rows.map(row => <li key={row.id}><button disabled={busy} aria-pressed={draft.id === row.id} onClick={() => { if (draft.name && !window.confirm('Открыть другую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...row, ...editableDescription(row.description) }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}><strong>{row.name}</strong><span>{[row.city, statuses[row.status]].filter(Boolean).join(' · ')}</span></button></li>)}</ul>
+        {type.personal ? <h3>{group.name} <span>{group.rows.length}</span></h3> : <h3><button type="button" className="admin-category-toggle" aria-expanded={openCompanyCategory === group.name} aria-controls={'admin-company-category-' + encodeURIComponent(group.name)} onClick={() => setOpenCompanyCategory(current => current === group.name ? null : group.name)}><span>{group.name}</span><span>{group.rows.length} <span aria-hidden="true">{openCompanyCategory === group.name ? '▴' : '▾'}</span></span></button></h3>}
+        <ul id={type.personal ? undefined : 'admin-company-category-' + encodeURIComponent(group.name)} hidden={!type.personal && openCompanyCategory !== group.name} className="admin-list">{group.rows.map(row => <li key={row.id}><button disabled={busy} aria-pressed={draft.id === row.id} onClick={() => { if (draft.name && !window.confirm('Открыть другую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...row, ...editableDescription(row.description) }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}><strong>{row.name}</strong><span>{[row.city, statuses[row.status]].filter(Boolean).join(' · ')}</span></button></li>)}</ul>
       </section>)}
         </div>
       </section>)}

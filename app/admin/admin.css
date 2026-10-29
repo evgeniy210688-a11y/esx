@@ -58,3 +58,8 @@
 .admin-page .admin-type-toggle[aria-expanded=true]{border-color:#75d6ce;background:#173f57}
 @media(max-width:1000px){.admin-summary{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:600px){.admin-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.admin-page .admin-category-toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:14px;text-align:left;font:inherit}
+.admin-page .admin-category-toggle[aria-expanded=true]{background:#173f57;border-color:#75d6ce}
+.admin-category-toggle>span:first-child{font-size:inherit;color:inherit}
+.admin-list[hidden]{display:none}
