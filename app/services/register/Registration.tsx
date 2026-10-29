@@ -41,6 +41,8 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
   const [cities,setCities]=useState(['']);
   const [nationwide,setNationwide]=useState(false);
   const [categories, setCategories] = useState<string[]>(['']);
+  const [educationOffline, setEducationOffline] = useState(false);
+  const [educationOnline, setEducationOnline] = useState(false);
   const [customCategories,setCustomCategories] = useState<Record<number,string>>({});
   const [interpreterLanguages,setInterpreterLanguages] = useState<ServiceLanguage[]>([]);
   const [interpreter, setInterpreter] = useState(false);
@@ -92,7 +94,8 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
     if (!languages.length) { setMessage('Выберите хотя бы один язык общения.'); return; }
     const phoneNumbers = phones.map(phone => ({ ...phone, number: phone.number.trim() }));
     if (!phoneNumbers.length || !validCompanyPhones(phoneNumbers)) { setMessage('Укажите от 1 до 5 корректных номеров телефона.'); return; }
-    const description = joinServiceDescription((kind === 'specialist' && get('role') ? 'Должность: ' + get('role') + '\n\n' : '') + get('description'), get('services'));
+    const educationFormats = selectedCategories.includes('Образование') ? [educationOffline ? 'Офлайн' : '', educationOnline ? 'Онлайн' : ''].filter(Boolean) : [];
+    const description = joinServiceDescription((kind === 'specialist' && get('role') ? 'Должность: ' + get('role') + '\n\n' : '') + get('description') + (educationFormats.length ? '\n\nФормат обучения: ' + educationFormats.join(', ') : ''), get('services'));
     if (description.length > 5000) { setMessage('Описание и список услуг вместе должны содержать не более 5000 символов.'); return; }
     if (get('website')) {
       try { const url = new URL(get('website')); if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) throw new Error(); }
@@ -159,6 +162,7 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
           {categories.map((category,index)=><div key={index} className="registration-category-row"><label>Категория<select required value={category} onChange={event=>setCategories(items=>items.map((item,i)=>i===index?event.target.value:item))}><option value="" disabled>Выберите категорию</option>{serviceCategories.filter(item=>item!=='Другие услуги').map(item=><option key={item} value={item}>{item}</option>)}<option value="__other__">Другая</option></select></label>{category==='__other__' && <label>Укажите категорию<input required maxLength={100} value={customCategories[index]??''} onChange={event=>setCustomCategories(items=>({...items,[index]:event.target.value}))}/></label>}{categories.length>1 && <button type="button" onClick={()=>{setCategories(items=>items.filter((_,i)=>i!==index));setCustomCategories(items=>Object.fromEntries(Object.entries(items).filter(([key])=>Number(key)!==index).map(([key,value])=>[Number(key)>index?Number(key)-1:Number(key),value])));}}>Убрать</button>}</div>)}
           <button type="button" disabled={categories.length>=10} onClick={()=>setCategories(items=>[...items,''])}>+ Добавить категорию</button>
         </fieldset>
+        {categories.some((value,index) => (value === '__other__' ? customCategories[index]?.trim() : value) === 'Образование') && <fieldset><legend>Формат обучения</legend><label className="registration-check"><input type="checkbox" checked={educationOffline} onChange={e => setEducationOffline(e.target.checked)} />Офлайн</label><label className="registration-check"><input type="checkbox" checked={educationOnline} onChange={e => setEducationOnline(e.target.checked)} />Онлайн</label><small>Можно выбрать оба варианта.</small></fieldset>}
         {kind === 'specialist' && <label>Должность<input name="role" maxLength={100} placeholder="Введите должность" /></label>}
         {kind === 'specialist' && <label>Компания, которую представляете (необязательно)<input name="represented_company" maxLength={200} placeholder="Название компании" /></label>}
         <fieldset className="registration-cities"><legend>Города обслуживания</legend>
@@ -197,7 +201,7 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
       </fieldset>
       {photoBusy && <p role="status">Подготавливаем фото…</p>}
       <p ref={messageRef} tabIndex={-1} className={success ? "registration-success" : ""} role="status" aria-live="polite">{message}</p>
-      {success && <button type="button" onClick={() => { formRef.current?.reset(); setRulesAccepted(false); setPublicationAccepted(false); setLanguages([]); setSocials([]); setPhones([{ type: 'mobile', number: '' }]); setPhoto(null); setKind('company'); setCategories(['']); setCities(['']); setNationwide(false); setCustomCategories({}); setInterpreterLanguages([]); setInterpreter(false); requestId.current = null; setSuccess(false); setMessage(''); }}>Подать ещё одну заявку</button>}
+      {success && <button type="button" onClick={() => { formRef.current?.reset(); setRulesAccepted(false); setPublicationAccepted(false); setLanguages([]); setSocials([]); setPhones([{ type: 'mobile', number: '' }]); setPhoto(null); setKind('company'); setCategories(['']); setEducationOffline(false); setEducationOnline(false); setCities(['']); setNationwide(false); setCustomCategories({}); setInterpreterLanguages([]); setInterpreter(false); requestId.current = null; setSuccess(false); setMessage(''); }}>Подать ещё одну заявку</button>}
     </form>
   </>,language);
 }

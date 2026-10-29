@@ -2,6 +2,11 @@ import { Children, cloneElement, isValidElement, type ReactNode } from 'react';
 import type { InterfaceLanguage } from '../serviceLabels';
 import { categoryTranslation } from '@/lib/service-category-labels';
 const rows = [
+'Формат обучения|Learning format|수업 방식|Ta’lim shakli|授课方式|Hình thức học|Eğitim biçimi',
+'Офлайн|In person|대면|Oflayn|线下|Trực tiếp|Yüz yüze',
+'Онлайн|Online|온라인|Onlayn|线上|Trực tuyến|Çevrim içi',
+'Можно выбрать оба варианта.|You can select both options.|두 가지 모두 선택할 수 있습니다.|Ikkala variantni ham tanlash mumkin.|可以同时选择两项。|Bạn có thể chọn cả hai.|Her iki seçeneği de seçebilirsiniz.',
+
 'Города обслуживания|Service cities|서비스 지역|Xizmat ko‘rsatiladigan shaharlar|服务城市|Thành phố phục vụ|Hizmet şehirleri',
 'Вся Южная Корея|All of South Korea|대한민국 전역|Butun Janubiy Koreya|韩国全境|Toàn Hàn Quốc|Güney Kore geneli',
 '+ Добавить город|+ Add city|+ 도시 추가|+ Shahar qo‘shish|+ 添加城市|+ Thêm thành phố|+ Şehir ekle',
