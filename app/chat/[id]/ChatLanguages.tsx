@@ -15,7 +15,6 @@ export default function ChatLanguages({ chatId, onMineChange }: { chatId: string
   const [mine, setMine] = useState<Language>("en");
   const pickerRef = useRef<HTMLDetailsElement>(null);
   const summaryRef = useRef<HTMLElement>(null);
-  const labelId = useId();
   const selectedId = useId();
   const storageKey = `esx-chat-languages:${chatId}`;
 
@@ -45,12 +44,7 @@ export default function ChatLanguages({ chatId, onMineChange }: { chatId: string
   const selectedLanguage = languages.find((language) => language.code === mine)!;
 
   return (
-    <fieldset className="mx-4 mb-3 rounded-2xl border border-blue-100 bg-blue-50/50 p-4 sm:mx-6">
-      <legend className="px-2 text-sm font-semibold text-zinc-900">{chatLabels[mine][0]}</legend>
-      <div className="grid grid-cols-1 gap-4">
-        <div className="min-w-0 text-sm font-medium text-zinc-700">
-          <span id={labelId}>{chatLabels[mine][1]}</span>
-          <details ref={pickerRef} className="chat-language-picker" onBlur={(event) => {
+          <details ref={pickerRef} id="chat-language-panel" className="chat-language-picker chat-header-picker" onBlur={(event) => {
             // Touch browsers can blur the summary without focusing the tapped option.
             // Keep options mounted until their click handler applies the language.
             if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) event.currentTarget.open = false;
@@ -62,12 +56,12 @@ export default function ChatLanguages({ chatId, onMineChange }: { chatId: string
               summaryRef.current?.focus();
             }
           }}>
-            <summary ref={summaryRef} aria-labelledby={`${labelId} ${selectedId}`}>
+            <summary ref={summaryRef} aria-label={`${chatLabels[mine][0]}: ${selectedLanguage.name}`}>
               <Image src={`/flags/${languageFlags[mine]}.svg`} width={24} height={16} alt="" />
               <span id={selectedId}>{selectedLanguage.name}</span>
               <span className="chat-language-chevron" aria-hidden="true">⌄</span>
             </summary>
-            <ul aria-labelledby={labelId}>
+            <ul aria-label={chatLabels[mine][0]}>
               {languages.map((language) => <li key={language.code}>
                 <button type="button" aria-pressed={mine === language.code} onClick={() => {
                   save(language.code);
@@ -81,9 +75,5 @@ export default function ChatLanguages({ chatId, onMineChange }: { chatId: string
               </li>)}
             </ul>
           </details>
-        </div>
-
-      </div>
-    </fieldset>
   );
 }

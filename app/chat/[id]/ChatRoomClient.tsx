@@ -15,7 +15,6 @@ import SiteHeader from "@/app/design/SiteHeader";
 
 import ChatLanguages from "./ChatLanguages";
 import GuestExpiryNotice from "./GuestExpiryNotice";
-import { chatLabels } from "./chatLabels";
 import MessageTranslation from "./MessageTranslation";
 import type { Language } from "@/app/design/content";
 import ChatQrCode from "./ChatQrCode";
@@ -262,7 +261,7 @@ export default function ChatRoomClient({
   return (
     <main ref={chatRoot} lang={language} data-chat-background={background ?? undefined} className="chat-theme has-conversations flex min-h-screen flex-col">
 
-        <div className="esx-site chat-site-header"><SiteHeader language={language} actions={<div className="chat-header-actions"><details id="chat-language-panel" className="chat-language-panel chat-header-language"><summary aria-label={chatLabels[language][0]} title={chatLabels[language][0]}><svg className="chat-language-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" /><ellipse cx="12" cy="12" rx="4" ry="9" /><path d="M3 12h18M5 6.5h14M5 17.5h14" /></svg><span className="chat-header-language-label">{chatLabels[language][0]}</span></summary><ChatLanguages key={chatId} chatId={chatId} onMineChange={setTranslationLanguage} /></details><ChatQrCode chatId={chatId} language={language} /><ChatMenu language={language} background={background} onBackgroundChange={setBackground} /></div>} /></div>
+        <div className="esx-site chat-site-header"><SiteHeader language={language} actions={<div className="chat-header-actions"><ChatLanguages key={chatId} chatId={chatId} onMineChange={setTranslationLanguage} /><ChatQrCode chatId={chatId} language={language} /><ChatMenu language={language} background={background} onBackgroundChange={setBackground} /></div>} /></div>
 
       <div className="chat-shell mx-auto flex w-full max-w-2xl flex-1 flex-col">
 
