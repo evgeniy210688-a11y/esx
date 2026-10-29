@@ -527,14 +527,14 @@ export default function ServicesDirectory() {
       <button type="button" className="services-filter-toggle" aria-expanded={filtersOpen} aria-controls="services-filter-options" onClick={() => setFiltersOpen(value => !value)}>{filterButtonLabels[language]}{activeFilterCount > 0 && <span className="services-filter-count">{activeFilterCount}</span>}<span aria-hidden="true">{filtersOpen ? '▴' : '▾'}</span></button>
       <button type="button" className="services-filter-reset" aria-label={t[16]} onClick={() => { setFilters(empty); setCompanyCategories([]); setSpecialistCategories([]); }}>{resetButtonLabels[language]}</button>
       </div>
-      <div id="services-filter-options" className="services-filter-options" hidden={!filtersOpen}>
+      <div id="services-filter-options" className="services-filter-reveal" data-open={filtersOpen} inert={!filtersOpen} aria-hidden={!filtersOpen} onTransitionRun={event => { if (event.target === event.currentTarget && event.propertyName === 'grid-template-rows') (event.currentTarget.firstElementChild as HTMLElement).style.overflow = 'hidden'; }} onTransitionEnd={event => { if (event.target === event.currentTarget && event.propertyName === 'grid-template-rows') (event.currentTarget.firstElementChild as HTMLElement).style.overflow = filtersOpen ? 'visible' : 'hidden'; }}><div className="services-filter-clip"><div className="services-filter-options">
       <ServiceFilterPicker label={t[8]} value={filters.city} onChange={value => update('city', value)} options={[{value: '', label: t[9]}, ...cities.map(city => ({value: city, label: city === 'Хвасонг, Паран' ? (language === 'ko' ? '화성, 발안' : city) : listings.map(s => s.city === city ? translatedCard(s)?.city : undefined).find(Boolean) ?? city}))]} />
       <ServiceFilterPicker label={t[10]} value={filters.category} onChange={value => update('category', value)} options={[{value: '', label: t[11]}, ...categories.map(category => ({value: category, label: categoryLabel(category)}))]} />
       <ServiceFilterPicker label={t[12]} value={filters.language} onChange={value => update('language', value)} options={[{value: '', label: t[13]}, ...languageOptions]} />
       <ServiceFilterPicker label={t[14]} value={filters.interpreterLanguage} onChange={value => update('interpreterLanguage', value)} options={[{value: '', label: t[13]}, ...languageOptions]} />
       <label className="services-check"><input type="checkbox" checked={filters.interpreter} onChange={e => update('interpreter', e.target.checked)} />{t[15]}</label>
       <p className="services-note">{t[17]}</p>
-      </div>
+      </div></div></div>
     </section>
     {translationStatus && <p role="status">{translationLabels[language][translationStatus === 'error' ? 1 : 0]} {translationStatus === 'error' && <button type="button" onClick={() => setTranslationRetry(n=>n+1)}>{t[21]}</button>}</p>}
     <div aria-live="polite" role="status">{status === 'loading' ? <p className="services-loading"><span className="services-loading-spinner" aria-hidden="true" /><span>{t[18]}</span></p> : status === 'error' ? <div className="services-empty"><h2>{t[19]}</h2><p>{t[20]}</p><button onClick={() => { setStatus('loading'); setAttempt(a => a + 1); }}>{t[21]}</button></div> : null}</div>
