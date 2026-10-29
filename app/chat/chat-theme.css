@@ -194,3 +194,11 @@
 .chat-theme .chat-shell, .chat-theme .chat-composer { min-width: 0; max-width: 100%; }
 /* Anchor to the visible viewport when Safari pans for the keyboard. */
 .chat-theme { position: fixed; inset: 0 0 auto; width: 100%; }
+
+.chat-theme .chat-header-language{position:relative;margin:0;max-height:none;overflow:visible;flex-shrink:0;border:0;background:transparent}
+.chat-theme .chat-header-language>summary{display:flex;align-items:center;gap:8px;list-style:none;min-height:44px;padding:10px;border:1px solid #456482;border-radius:12px;background:#101b30;color:#dce9fa;cursor:pointer}
+.chat-header-language>summary::-webkit-details-marker{display:none}
+.chat-header-language>fieldset{position:absolute;right:0;top:calc(100% + 8px);width:260px;max-width:calc(100vw - 24px);margin:0;padding:16px;z-index:100;box-shadow:0 12px 30px #0008}
+.chat-theme .chat-header-language>fieldset{background:#101b30}
+.chat-header-language .chat-language-picker ul{max-height:45dvh;overflow-y:auto}
+@media(max-width:760px){.chat-header-language-label{display:none}.chat-header-language>fieldset{right:auto;left:50%;transform:translateX(-50%)}}
