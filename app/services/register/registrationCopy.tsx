@@ -2,6 +2,7 @@ import { Children, cloneElement, isValidElement, type ReactNode } from 'react';
 import type { InterfaceLanguage } from '../serviceLabels';
 import { categoryTranslation } from '@/lib/service-category-labels';
 const rows = [
+'Назад|Back|뒤로|Orqaga|返回|Quay lại|Geri',
 'Формат обучения|Learning format|수업 방식|Ta’lim shakli|授课方式|Hình thức học|Eğitim biçimi',
 'Офлайн|In person|대면|Oflayn|线下|Trực tiếp|Yüz yüze',
 'Онлайн|Online|온라인|Onlayn|线上|Trực tuyến|Çevrim içi',
