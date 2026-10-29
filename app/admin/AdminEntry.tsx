@@ -33,7 +33,7 @@ export default function AdminEntry({ language = 'ru', account = false }: { langu
     <h2>{t[0]}</h2>
     <p>{status === 'allowed' ? t[1] : status === 'loading' ? t[4] : status === 'error' ? t[5] : t[6]}</p>
     <div className="admin-entry-actions">
-      {status === 'allowed' ? <><Link href="/admin#company-form">+ {t[2]}</Link><Link href="/admin">{t[3]} →</Link></> : status !== 'loading' && <Link href="/admin">{t[7]} →</Link>}
+      {status === 'allowed' ? <><Link href="/admin#company-form" target="_blank" rel="noopener noreferrer">+ {t[2]}</Link><Link href="/admin" target="_blank" rel="noopener noreferrer">{t[3]} →</Link></> : status !== 'loading' && <Link href="/admin">{t[7]} →</Link>}
     </div>
   </section>;
 }
