@@ -64,7 +64,7 @@
 .admin-category-toggle>span:first-child{font-size:inherit;color:inherit}
 .admin-list[hidden]{display:none}
 
-.admin-category:has(.admin-category-toggle){margin-left:12px;margin-right:12px}
+.admin-category:has(.admin-category-toggle){margin-left:0;margin-right:24px}
 
 .admin-page .services-main>.admin-summary{width:100%;max-width:1408px;margin-inline:auto}
 .admin-page .admin-summary>button{min-width:0;overflow-wrap:anywhere}
