@@ -197,3 +197,23 @@
 @keyframes services-loading-spin{to{transform:rotate(360deg)}}
 
 .services-directory .services-footer-slogan{margin:0 0 16px;color:#234e8b;font-size:clamp(18px,2.4vw,24px);font-weight:600;line-height:1.4}
+
+.services-directory .directory-theme-toggle{position:relative;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;width:88px;height:42px;padding:4px 10px;border:1px solid #6986ad;border-radius:24px;background:linear-gradient(120deg,#38445b,#101b31);box-shadow:inset 0 2px 6px #0008;color:#ffda68;font-size:24px;isolation:isolate}
+.directory-theme-toggle .theme-moon{color:#a9dcff}
+.services-directory .directory-theme-toggle>span{display:block;color:inherit;font-size:24px;line-height:1;z-index:1}
+.services-directory .directory-theme-toggle .theme-knob{position:absolute;left:4px;top:4px;width:32px;height:32px;border-radius:50%;background:#ffba322e;box-shadow:0 0 12px #ffc44d80;border:1px solid #ffc44d;z-index:0;transition:transform .2s}
+.services-directory .directory-theme-toggle[aria-pressed=true] .theme-knob{transform:translateX(46px);background:#1871ca55;border-color:#64caff;box-shadow:0 0 12px #299aff}
+.services-directory[data-theme=dark]{color-scheme:dark;--soft-ink:#e3ecfa;--soft-muted:#b0c1da;--soft-shadow:0 8px 24px #0004;background:#091525;background-image:radial-gradient(ellipse at top,#17304b,transparent 65%);color:#e3ecfa}
+.services-directory[data-theme=dark] :is(.services-top,.services-filters,.services-card,.services-business,.admin-entry,.services-language-picker ul,.services-header-menu){background:#13263d;border-color:#37516e;box-shadow:0 8px 24px #0003;color:#e3ecfa}
+.services-directory[data-theme=dark] :is(h1,h2,h3,h4,p,label,address,.services-top span,.services-top nav a,.services-footer,.services-footer-slogan,.services-intro>p:last-child,.services-card>p,.services-interpreter,.services-interface-language){color:#dce8f8}
+.services-directory[data-theme=dark] :is(input,select,textarea,.services-language-picker summary,.services-category-arrows button,.services-category-tile,.services-details-toggle,.services-tags span,.services-back-to-top,.services-company-categories button,.services-specialist-categories button){background:#1b3552;color:#e3edff;border-color:#456180;box-shadow:none}
+.services-directory[data-theme=dark] :is(.services-language-picker li button,.services-card a,.services-contacts,.services-group-title){color:#b8dcff}
+.services-directory[data-theme=dark] .services-language-picker li button:hover,.services-directory[data-theme=dark] button[aria-pressed=true]:not(.directory-theme-toggle){background:#285991;color:#fff;border-color:#75b8ff}
+.services-directory[data-theme=dark] .services-intro:before,.services-directory[data-theme=dark] .services-intro:after{background:#19334e;border-color:#31516f;box-shadow:none}
+.services-directory[data-theme=dark] .services-intro>.services-eyebrow{background:#19334e;color:#b8d7f7;box-shadow:none;border-color:#31516f}
+@media(prefers-reduced-motion:reduce){.directory-theme-toggle .theme-knob{transition:none}}
+
+.services-directory[data-theme=dark] .services-top.services-glass-header,.services-directory[data-theme=dark] .services-glass-header .services-header-menu{background:#13263df5;border-color:#37516e;box-shadow:0 6px 24px #0004}
+.services-directory[data-theme=dark] .services-card .services-profile-link,.services-directory[data-theme=dark] .services-glass-header .services-menu-toggle{background:#1b3552;border-color:#456180;color:#d5e9ff;box-shadow:none}
+.services-directory[data-theme=dark] .services-glass-header .services-header-menu nav a,.services-directory[data-theme=dark] .services-glass-header .services-header-menu nav .services-auth-action{color:#d5e9ff;background:#ffffff08}
+@media(max-width:600px){.services-directory .directory-theme-toggle{order:2}.services-directory .services-top{flex-wrap:wrap}}
