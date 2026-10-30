@@ -216,7 +216,7 @@
 .services-directory[data-theme=dark] .services-top.services-glass-header,.services-directory[data-theme=dark] .services-glass-header .services-header-menu{background:#13263df5;border-color:#37516e;box-shadow:0 6px 24px #0004}
 .services-directory[data-theme=dark] .services-card .services-profile-link,.services-directory[data-theme=dark] .services-glass-header .services-menu-toggle{background:#1b3552;border-color:#456180;color:#d5e9ff;box-shadow:none}
 .services-directory[data-theme=dark] .services-glass-header .services-header-menu nav a,.services-directory[data-theme=dark] .services-glass-header .services-header-menu nav .services-auth-action{color:#d5e9ff;background:#ffffff08}
-@media(max-width:600px){.services-directory .directory-theme-toggle{order:2}.services-directory .services-top{flex-wrap:wrap}}
+@media(max-width:760px){.services-directory .services-header-menu .directory-theme-toggle{align-self:flex-start;margin-left:14px}}
 
 .services-filter-reveal{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows 1400ms cubic-bezier(.45,0,.2,1),opacity 1000ms ease-in-out}
 .services-filter-reveal[data-open=true]{grid-template-rows:1fr;opacity:1}
