@@ -40,6 +40,17 @@ export default function ChatLanguages({ chatId, value, onMineChange }: { chatId:
       setMine(value);
     }
   }, [value]);
+  useEffect(() => {
+    const closeOutside = (event: PointerEvent) => {
+      const picker = pickerRef.current;
+      if (picker?.open && event.target instanceof Node && !picker.contains(event.target)) {
+        picker.open = false;
+      }
+    };
+    document.addEventListener("pointerdown", closeOutside, true);
+    return () => document.removeEventListener("pointerdown", closeOutside, true);
+  }, []);
+
   function save(nextMine: Language) {
     setMine(nextMine);
     onMineChange(nextMine);
