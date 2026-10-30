@@ -47,5 +47,6 @@ export default function SiteHeader({ language, actions }: { language: Language; 
         </nav>
       </div>
     </header>
+    {open && <div className="mobile-menu-backdrop" aria-hidden="true" onClick={() => { setOpen(false); toggle.current?.focus(); }} />}
   </>;
 }
