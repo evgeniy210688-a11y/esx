@@ -11,7 +11,7 @@ import Image from 'next/image';
 import useAccount from '@/app/account/useAccount';
 import EmailSignIn from '@/app/account/EmailSignIn';
 import { supabase } from '@/lib/supabase';
-import { serviceLanguages, type ServiceLanguage } from '@/lib/service-directory';
+import { serviceLanguages, interpreterLanguageOptions, type ServiceLanguage } from '@/lib/service-directory';
 import { prepareCompanyPhoto, validCompanyPhones, type CompanyPhone } from '@/lib/service-media';
 import { socialNetworks, validSocialLinks, type SocialLink } from '@/lib/service-socials';
 import { joinServiceDescription } from '@/lib/service-description';
@@ -22,7 +22,7 @@ import '../services-soft.css';
 import './registration.css';
 
 type Application = { id: string; name: string; status: string };
-const flags: Record<string,string> = {ru:'ru',uz:'uz',zh:'cn',vi:'vn',en:'gb',ko:'kr',tr:'tr'};
+const flags: Record<string,string> = {ru:'ru',uz:'uz',zh:'cn',vi:'vn',en:'gb',ko:'kr',tr:'tr',th:'th',mn:'mn',kk:'kz'};
 const statusLabels: Record<string, string> = { pending: 'На проверке', published: 'Опубликовано', archived: 'Не опубликовано', draft: 'На рассмотрении' };
 
 export default function Registration() {
@@ -63,6 +63,7 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
   const [phones, setPhones] = useState<CompanyPhone[]>([{ type: 'mobile', number: '' }]);
   const [socials, setSocials] = useState<SocialLink[]>([]);
   const [photo, setPhoto] = useState<string | null>(null);
+  const [gallery, setGallery] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [photoBusy, setPhotoBusy] = useState(false);
   const [message, setMessage] = useState('');
@@ -124,13 +125,14 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
         p_input: {
           listing_kind: kind === 'company' ? 'company' : selectedCategories.includes('Переводчики') ? 'interpreter' : 'manager',
           represented_company: kind === 'specialist' ? get('represented_company') : null, name: get('name'), city: serviceCity, category: selectedCategories[0], categories: selectedCategories, has_interpreter: kind === 'company' && interpreter, interpreter_languages: interpreterLanguages, address: get('address'),
-          phone: phoneNumbers[0].number, phones: phoneNumbers, website: get('website'), social_links: socialLinks, description, photo, service_languages: languages,
+          phone: phoneNumbers[0].number, phones: phoneNumbers, website: get('website'), social_links: socialLinks, description, photo, photos: gallery.length ? [photo ?? gallery[0], ...gallery] : photo ? [photo] : [], service_languages: languages,
         },
       };
-      let { error } = await supabase.rpc('esx_submit_service_v2', submission);
+      let { error } = await supabase.rpc(gallery.length ? 'esx_submit_service_v3' : 'esx_submit_service_v2', submission);
       // The legacy server must retain every requested field until migration.
+      if (error?.code === 'PGRST202' && gallery.length) { setMessage('Галерея пока недоступна. Фотографии сохранены в форме — попробуйте позже.'); return; }
       if (error?.code === 'PGRST202') {
-        const details = [selectedCategories.length > 1 ? 'Категории заявки: ' + selectedCategories.join('; ') : '', kind === 'company' && interpreter ? 'Есть переводчик. Языки переводчика: ' + interpreterLanguages.map(code=>serviceLanguages[code]).join(', ') : ''].filter(Boolean).join('\n');
+        const details = [selectedCategories.length > 1 ? 'Категории заявки: ' + selectedCategories.join('; ') : '', kind === 'company' && interpreter ? 'Есть переводчик. Языки переводчика: ' + interpreterLanguages.map(code=>interpreterLanguageOptions[code]).join(', ') : ''].filter(Boolean).join('\n');
         const legacyDescription = description + (details ? '\n\n' + details : '');
         if (legacyDescription.length > 5000) { setMessage('Описание и список услуг вместе должны содержать не более 5000 символов.'); return; }
         ({error} = await supabase.rpc('esx_submit_service', {...submission,p_input:{...submission.p_input,description:legacyDescription}}));
@@ -161,13 +163,23 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
           {photo ? <Image src={photo} alt="Фото для заявки" width={120} height={120} unoptimized /> : <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="3"/><circle cx="9" cy="10" r="2"/><path d="m3 17 5-4 4 3 4-5 5 6M12 2v5M9.5 4.5h5"/></svg>}
           <span>{photoBusy ? 'Подготавливаем фото…' : photo ? 'Заменить фото' : 'Добавить фото'}</span>
         </label>
-        <div className="registration-avatar-fields"><label>Аватарка или логотип (необязательно)<input id="registration-avatar-file" type="file" accept="image/jpeg,image/png,image/webp" onChange={async e => {
+        <div className="registration-avatar-fields"><label className="registration-avatar-file-label">Аватарка или логотип (необязательно)<input id="registration-avatar-file" type="file" accept="image/jpeg,image/png,image/webp" onChange={async e => {
           const file = e.target.files?.[0]; e.target.value = ''; if (!file) return;
           setPhotoBusy(true); setMessage('');
           try { setPhoto(await prepareCompanyPhoto(file)); } catch { setMessage('Не удалось добавить фото. Выберите JPG, PNG или WebP до 10 МБ.'); }
           finally { setPhotoBusy(false); }
         }} /></label>
         {photo && <button type="button" onClick={() => setPhoto(null)}>Убрать фото</button>}
+        <label>Дополнительные фотографии для галереи<input type="file" multiple accept="image/jpeg,image/png,image/webp" disabled={gallery.length >= 20} onChange={async e => {
+          const files = Array.from(e.target.files ?? []); e.target.value = ''; if (!files.length) return;
+          if (files.length + gallery.length > 20) { setMessage('Можно загрузить до 20 дополнительных фотографий.'); return; }
+          setPhotoBusy(true); setMessage('');
+          try { const added: string[] = []; for (const file of files) added.push(await prepareCompanyPhoto(file)); setGallery(items => [...items, ...added]); }
+          catch { setMessage('Не удалось добавить фото. Выберите JPG, PNG или WebP до 10 МБ.'); }
+          finally { setPhotoBusy(false); }
+        }} /></label><small>До 20 фото. JPG, PNG или WebP, до 10 МБ каждое.</small>
+        <div className="registration-gallery">{gallery.map((src,index) => <div key={index}><Image src={src} alt={'Фото галереи ' + (index + 1)} width={120} height={90} unoptimized /><button type="button" aria-label={'Убрать фото ' + (index + 1)} onClick={() => setGallery(items => items.filter((_,i) => i !== index))}>Убрать</button></div>)}</div>
+
         </div>
         </div>
         <label>{kind === 'company' ? 'Название компании' : 'Имя специалиста'}<input name="name" required maxLength={200} /></label>
@@ -205,7 +217,7 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
         <label>Услуги — по одной на строку<textarea name="services" maxLength={2000} rows={4} /></label>
         <fieldset><legend>Языки общения</legend><div className="registration-languages">{Object.entries(serviceLanguages).map(([code, name]) => <label className="registration-check" key={code}><span className="registration-language-controls"><input type="checkbox" checked={languages.includes(code as ServiceLanguage)} onChange={() => setLanguages(current => current.includes(code as ServiceLanguage) ? current.filter(value => value !== code) : [...current, code as ServiceLanguage])} /><Image className="registration-language-flag" src={'/flags/'+flags[code]+'.svg'} alt="" width={24} height={16} unoptimized/></span><span className="registration-language-name">{new Intl.DisplayNames([language],{type:"language"}).of(code) ?? name}</span></label>)}</div></fieldset>
         {kind === 'company' && <label className="registration-check registration-interpreter-check"><input type="checkbox" name="has_interpreter" checked={interpreter} onChange={e => setInterpreter(e.target.checked)} />Есть переводчик</label>}
-        {kind==='company' && interpreter && <fieldset><legend>Языки переводчика</legend><div className="registration-languages">{Object.entries(serviceLanguages).map(([code,name])=><label className="registration-check" key={code}><span className="registration-language-controls"><input type="checkbox" checked={interpreterLanguages.includes(code as ServiceLanguage)} onChange={()=>setInterpreterLanguages(items=>items.includes(code as ServiceLanguage)?items.filter(item=>item!==code):[...items,code as ServiceLanguage])}/><Image className="registration-language-flag" src={'/flags/'+flags[code]+'.svg'} alt="" width={24} height={16} unoptimized/></span><span className="registration-language-name">{new Intl.DisplayNames([language],{type:'language'}).of(code)??name}</span></label>)}</div></fieldset>}
+        {kind==='company' && interpreter && <fieldset><legend>Языки переводчика</legend><div className="registration-languages">{Object.entries(interpreterLanguageOptions).map(([code,name])=><label className="registration-check" key={code}><span className="registration-language-controls"><input type="checkbox" checked={interpreterLanguages.includes(code as ServiceLanguage)} onChange={()=>setInterpreterLanguages(items=>items.includes(code as ServiceLanguage)?items.filter(item=>item!==code):[...items,code as ServiceLanguage])}/><Image className="registration-language-flag" src={'/flags/'+flags[code]+'.svg'} alt="" width={24} height={16} unoptimized/></span><span className="registration-language-name">{new Intl.DisplayNames([language],{type:'language'}).of(code)??name}</span></label>)}</div></fieldset>}
         <LegalLinks language={language} />
         <label className="registration-check registration-consent"><input type="checkbox" name="accept_rules" required checked={rulesAccepted} onChange={e=>setRulesAccepted(e.target.checked)} />Я принимаю правила размещения и подтверждаю право представлять компанию или специалиста и использовать переданные материалы.</label>
         <label className="registration-check registration-consent"><input type="checkbox" name="accept_publication" required checked={publicationAccepted} onChange={e=>setPublicationAccepted(e.target.checked)} />Я разрешаю публичное размещение сведений карточки, контактов и добавленного фото после одобрения заявки, включая их перевод.</label>
@@ -214,7 +226,7 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
       </fieldset>
       {photoBusy && <p role="status">Подготавливаем фото…</p>}
       <p ref={messageRef} tabIndex={-1} className={success ? "registration-success" : ""} role="status" aria-live="polite">{message}</p>
-      {success && <button type="button" onClick={() => { formRef.current?.reset(); setRulesAccepted(false); setPublicationAccepted(false); setLanguages([]); setSocials([]); setPhones([{ type: 'mobile', number: '' }]); setPhoto(null); setKind('company'); setCategories(['']); setEducationOffline(false); setEducationOnline(false); setCities(['']); setNationwide(false); setCustomCategories({}); setInterpreterLanguages([]); setInterpreter(false); requestId.current = null; setSuccess(false); setMessage(''); }}>Подать ещё одну заявку</button>}
+      {success && <button type="button" onClick={() => { formRef.current?.reset(); setRulesAccepted(false); setPublicationAccepted(false); setLanguages([]); setSocials([]); setPhones([{ type: 'mobile', number: '' }]); setPhoto(null); setGallery([]); setKind('company'); setCategories(['']); setEducationOffline(false); setEducationOnline(false); setCities(['']); setNationwide(false); setCustomCategories({}); setInterpreterLanguages([]); setInterpreter(false); requestId.current = null; setSuccess(false); setMessage(''); }}>Подать ещё одну заявку</button>}
     </form>
   </>,language);
 }

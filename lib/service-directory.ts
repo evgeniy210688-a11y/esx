@@ -2,7 +2,8 @@ import type { BusinessHours } from './service-hours';
 import type { CompanyPhone } from './service-media';
 import type { SocialLink } from './service-socials';
 export const serviceLanguages = { ru: 'Русский', uz: 'Узбекский', zh: 'Китайский', vi: 'Вьетнамский', en: 'Английский', ko: 'Корейский' } as const;
-export type ServiceLanguage = keyof typeof serviceLanguages;
+export const interpreterLanguageOptions = { ...serviceLanguages, th: 'Тайский', mn: 'Монгольский', kk: 'Казахский', tr: 'Турецкий' } as const;
+export type ServiceLanguage = keyof typeof interpreterLanguageOptions;
 export type ServiceBranch = { id: string; name: string; city: string; address: string; phone: string };
 export function validServiceBranches(branches: ServiceBranch[]) {
   return new Set(branches.map(b => b.id)).size === branches.length && branches.every(b =>

@@ -33,6 +33,6 @@ export const phoneLabels: Record<string, Record<CompanyPhone['type'], string>> =
 };
 
 export function companyPhotos(value: { photos?: string[]; photo?: string | null }): string[] {
-  const photos = (value.photos ?? []).filter((photo): photo is string => !!safeCompanyPhoto(photo)).slice(0, 3);
+  const photos = (value.photos ?? []).filter((photo): photo is string => !!safeCompanyPhoto(photo)).slice(0, 21);
   return photos.length ? photos : safeCompanyPhoto(value.photo) ? [value.photo!] : [];
 }

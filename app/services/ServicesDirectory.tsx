@@ -12,7 +12,7 @@ import { serviceItems, splitServiceDescription, specialistRole } from '@/lib/ser
 import BusinessHoursDisplay from './BusinessHoursDisplay';
 import AdminEntry from '@/app/admin/AdminEntry';
 import { supabase } from '@/lib/supabase';
-import { listingCategories, serviceCategory, isPersonalListing, normalizeServiceCity, serviceCities, matchesService, safeServiceWebsite, serviceLanguages, type ServiceListing, type ServiceFilters } from '@/lib/service-directory';
+import { listingCategories, serviceCategory, isPersonalListing, normalizeServiceCity, serviceCities, matchesService, safeServiceWebsite, serviceLanguages, interpreterLanguageOptions, type ServiceListing, type ServiceFilters } from '@/lib/service-directory';
 import './services.css';
 import ServicesHeader from './ServicesHeader';
 import RegistrationLink from './RegistrationLink';
@@ -79,7 +79,7 @@ type CardTranslation = {description:string;city:string;category:string};
 const personRoleLabels: Record<InterfaceLanguage, { manager: string; interpreter: string }> = { ru: { manager: 'Специалист', interpreter: 'Переводчик' }, en: { manager: 'Specialist', interpreter: 'Interpreter' }, ko: { manager: '전문가', interpreter: '통역사' }, uz: { manager: 'Mutaxassis', interpreter: 'Tarjimon' }, zh: { manager: '专业人士', interpreter: '口译员' }, vi: { manager: 'Chuyên gia', interpreter: 'Phiên dịch viên' }, tr: { manager: 'Uzman', interpreter: 'Tercüman' } };
 const managerLabels: Record<InterfaceLanguage,string> = {ru:"Есть менеджер",en:"Manager available",ko:"매니저 있음",uz:"Menejer bor",zh:"有经理",vi:"Có quản lý",tr:"Yönetici mevcut"};
 const directoryGroupLabels: Record<InterfaceLanguage, [string, string]> = { ru: ['Специалисты', 'Компании'], en: ['Specialists', 'Companies'], ko: ['전문가', '업체'], uz: ['Mutaxassislar', 'Kompaniyalar'], zh: ['专业人士', '公司'], vi: ['Chuyên gia', 'Công ty'], tr: ['Uzmanlar', 'Şirketler'] };
-const flags = { ru: 'ru', uz: 'uz', zh: 'cn', vi: 'vn', en: 'gb', ko: 'kr', tr: 'tr' } as const;
+const flags = { ru: 'ru', uz: 'uz', zh: 'cn', vi: 'vn', en: 'gb', ko: 'kr', tr: 'tr', th: 'th', mn: 'mn', kk: 'kz' } as const;
 const searchLabels: Record<InterfaceLanguage, string> = { ru: 'Поиск', en: 'Search', ko: '검색', uz: 'Qidirish', zh: '搜索', vi: 'Tìm kiếm', tr: 'Ara' };
 function isShoppingCategory(category: string): boolean {
   return /магазин|продукт|shop|grocer/i.test(category);
@@ -131,6 +131,7 @@ export default function ServicesDirectory() {
   function chooseLanguage(value: InterfaceLanguage) { setLanguage(value); try { localStorage.setItem('esx-services-language', value); } catch {} }
   const languageName = (code: string) => new Intl.DisplayNames([language], { type: 'language' }).of(code) ?? code;
   const languageOptions = Object.keys(serviceLanguages).map(code => ({value: code, label: languageName(code), flag: '/flags/' + flags[code as keyof typeof flags] + '.svg'}));
+  const interpreterOptions = Object.keys(interpreterLanguageOptions).map(code => ({value: code, label: languageName(code), flag: '/flags/' + flags[code as keyof typeof flags] + '.svg'}));
 
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
   const expandedCard = useRef<HTMLElement>(null);
@@ -531,7 +532,7 @@ export default function ServicesDirectory() {
       <ServiceFilterPicker label={t[8]} value={filters.city} onChange={value => update('city', value)} options={[{value: '', label: t[9]}, ...cities.map(city => ({value: city, label: city === 'Хвасонг, Паран' ? (language === 'ko' ? '화성, 발안' : city) : listings.map(s => s.city === city ? translatedCard(s)?.city : undefined).find(Boolean) ?? city}))]} />
       <ServiceFilterPicker label={t[10]} value={filters.category} onChange={value => update('category', value)} options={[{value: '', label: t[11]}, ...categories.map(category => ({value: category, label: categoryLabel(category)}))]} />
       <ServiceFilterPicker label={t[12]} value={filters.language} onChange={value => update('language', value)} options={[{value: '', label: t[13]}, ...languageOptions]} />
-      <ServiceFilterPicker label={t[14]} value={filters.interpreterLanguage} onChange={value => update('interpreterLanguage', value)} options={[{value: '', label: t[13]}, ...languageOptions]} />
+      <ServiceFilterPicker label={t[14]} value={filters.interpreterLanguage} onChange={value => update('interpreterLanguage', value)} options={[{value: '', label: t[13]}, ...interpreterOptions]} />
       <label className="services-check"><input type="checkbox" checked={filters.interpreter} onChange={e => update('interpreter', e.target.checked)} />{t[15]}</label>
       <p className="services-note">{t[17]}</p>
       </div></div></div>

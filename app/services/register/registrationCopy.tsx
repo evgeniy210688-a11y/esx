@@ -2,6 +2,11 @@ import { Children, cloneElement, isValidElement, type ReactNode } from 'react';
 import type { InterfaceLanguage } from '../serviceLabels';
 import { categoryTranslation } from '@/lib/service-category-labels';
 const rows = [
+'Дополнительные фотографии для галереи|Additional gallery photos|추가 갤러리 사진|Galereya uchun qo‘shimcha suratlar|其他图库照片|Ảnh bổ sung cho thư viện|Ek galeri fotoğrafları',
+'До 20 фото. JPG, PNG или WebP, до 10 МБ каждое.|Up to 20 photos. JPG, PNG or WebP, up to 10 MB each.|최대 20장. JPG, PNG 또는 WebP, 각 10MB 이하.|20 tagacha surat. JPG, PNG yoki WebP, har biri 10 MB gacha.|最多20张。JPG、PNG或WebP，每张不超过10MB。|Tối đa 20 ảnh. JPG, PNG hoặc WebP, mỗi ảnh tối đa 10 MB.|En fazla 20 fotoğraf. JPG, PNG veya WebP, her biri en fazla 10 MB.',
+'Можно загрузить до 20 дополнительных фотографий.|You can upload up to 20 additional photos.|추가 사진은 최대 20장까지 업로드할 수 있습니다.|20 tagacha qo‘shimcha surat yuklash mumkin.|最多可上传20张其他照片。|Bạn có thể tải lên tối đa 20 ảnh bổ sung.|En fazla 20 ek fotoğraf yükleyebilirsiniz.',
+'Галерея пока недоступна. Фотографии сохранены в форме — попробуйте позже.|The gallery is not available yet. Your photos remain in the form; try again later.|갤러리를 아직 사용할 수 없습니다. 사진은 양식에 유지됩니다. 나중에 다시 시도하세요.|Galereya hozircha mavjud emas. Suratlar shaklda saqlanib turibdi, keyinroq urinib ko‘ring.|图库暂不可用。照片仍保留在表单中，请稍后重试。|Thư viện chưa khả dụng. Ảnh vẫn còn trong biểu mẫu; hãy thử lại sau.|Galeri henüz kullanılamıyor. Fotoğraflar formda duruyor; daha sonra tekrar deneyin.',
+
 'Назад|Back|뒤로|Orqaga|返回|Quay lại|Geri',
 'Формат обучения|Learning format|수업 방식|Ta’lim shakli|授课方式|Hình thức học|Eğitim biçimi',
 'Офлайн|In person|대면|Oflayn|线下|Trực tiếp|Yüz yüze',
