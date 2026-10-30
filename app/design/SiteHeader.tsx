@@ -8,7 +8,7 @@ import { copy, type Language } from './content';
 import './design.css';
 import { scanLabels } from '@/app/scan/labels';
 
-const sections = ['/', '/korea', '/about', '/advertising', '/contact'];
+const sections = [{ href: '/', index: 0 }, { href: '/korea', index: 1 }, { href: '/about', index: 2 }, { href: '/contact', index: 4 }];
 
 export default function SiteHeader({ language, actions }: { language: Language; actions?: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -41,7 +41,7 @@ export default function SiteHeader({ language, actions }: { language: Language; 
         {actions && <div className="site-header-actions">{actions}</div>}
         <button ref={toggle} type="button" className="menu-toggle" aria-label={t[44]} aria-expanded={open} aria-controls="account-site-navigation" onClick={() => setOpen(!open)}><span /><span /><span /></button>
         <nav id="account-site-navigation" aria-label={t[44]}>
-          {sections.map((href, index) => <Fragment key={href}><Link key={href} href={href} className={index === 4 ? 'nav-contact' : ''} style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }} onClick={() => setOpen(false)}>{t[index]}{index === 4 && <span>↗</span>}</Link>{index === 0 && <Link href="/services" onClick={() => setOpen(false)}>{language === 'ru' ? 'Справочник' : 'Directory'}</Link>}</Fragment>)}
+          {sections.map(({ href, index }) => <Fragment key={href}><Link key={href} href={href} className={index === 4 ? 'nav-contact' : ''} style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }} onClick={() => setOpen(false)}>{t[index]}{index === 4 && <span>↗</span>}</Link>{index === 0 && <Link href="/services" onClick={() => setOpen(false)}>{language === 'ru' ? 'Справочник' : 'Directory'}</Link>}</Fragment>)}
           <Link href="/scan" onClick={() => setOpen(false)}>{scanLabels[language][0]}</Link>
           <AccountLink language={language} onClick={() => setOpen(false)} />
         </nav>

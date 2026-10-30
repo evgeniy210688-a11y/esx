@@ -29,7 +29,7 @@ const languageFlags: Record<Language, string> = { ru: 'ru', ko: 'kr', en: 'gb', 
 const quickLinkLabels: Record<Language, readonly [string,string]> = {
   ru:['Справочник','Чат-переводчик'], en:['Directory','Translation chat'], ko:['업체 안내','번역 채팅'], zh:['服务目录','翻译聊天'], tr:['Rehber','Çeviri sohbeti'], vi:['Danh bạ','Trò chuyện có phiên dịch'], km:['បញ្ជីសេវាកម្ម','ជជែកបកប្រែ'], kk:['Анықтамалық','Аудармашы чат'],
 };
-const navigation = [{ id: 'home', label: 0 }, { id: 'korea', label: 1 }, { id: 'about', label: 2 }, { id: 'advertising', label: 3 }, { id: 'contact', label: 4 }];
+const navigation = [{ id: 'home', label: 0 }, { id: 'korea', label: 1 }, { id: 'about', label: 2 }, { id: 'contact', label: 4 }];
 export default function SitePage({ section = 'home' }: { section?: 'home' | 'korea' | 'about' | 'advertising' | 'contact' }) {
   const siteRef = useRef<HTMLDivElement>(null);
   const inviteRef = useRef<HTMLElement>(null);
