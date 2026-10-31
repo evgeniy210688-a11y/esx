@@ -43,3 +43,21 @@ test('legacy schedule is exposed as one group and retains overnight lunch',()=>{
  assert.equal(v(c.exports.withBusinessHoursPeriods(h,periods)),true);
  assert.equal(v({...n(),closedOnHolidays:true}),true);
 });
+test('until last customer survives saving independently for each group',()=>{
+ const h=c.exports.withBusinessHoursPeriods(n(),[{...n(),days:[0],untilLastClient:true,closes:''},{...n(),days:[1]}]);
+ const saved=JSON.parse(JSON.stringify(h));
+ assert.equal(v(saved),true);
+ assert.equal(c.exports.businessHoursPeriods(saved)[0].untilLastClient,true);
+ assert.equal(c.exports.businessHoursPeriods(saved)[1].untilLastClient,undefined);
+ assert.equal(c.exports.businessHoursPeriods({...n(),untilLastClient:true})[0].untilLastClient,true);
+ assert.equal(v({...n(),closes:'',untilLastClient:false}),false);
+ assert.equal(v({...n(),untilLastClient:'true'}),false);
+ assert.equal(v({...c.exports.roundTheClockHours(),untilLastClient:true}),false);
+});
+test('open-ended hours still validate opening time and lunch',()=>{
+ assert.equal(v({...n(),untilLastClient:true,opens:'25:00'}),false);
+ assert.equal(v({...n(),untilLastClient:true,lunchStart:'12:00',lunchEnd:''}),false);
+ assert.equal(v({...n(),untilLastClient:true,lunchStart:'19:00',lunchEnd:'20:00'}),true);
+ assert.equal(v({...n(),untilLastClient:true,lunchStart:'13:00',lunchEnd:'12:00'}),false);
+ assert.equal(v({...n(),untilLastClient:true,opens:'20:00',lunchStart:'01:00',lunchEnd:'02:00'}),true);
+});

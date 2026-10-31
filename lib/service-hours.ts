@@ -1,7 +1,7 @@
-export type HoursPeriod = { days: number[]; opens: string; closes: string; lunchStart: string; lunchEnd: string };
+export type HoursPeriod = { untilLastClient?: boolean; days: number[]; opens: string; closes: string; lunchStart: string; lunchEnd: string };
 export type BusinessHours = HoursPeriod & { alwaysOpen?: boolean; periods?: HoursPeriod[]; closedOnHolidays?: boolean };
 export function businessHoursPeriods(h: BusinessHours): HoursPeriod[] {
- return h.periods ?? [{ days: h.days, opens: h.opens, closes: h.closes, lunchStart: h.lunchStart, lunchEnd: h.lunchEnd }];
+ return h.periods ?? [{ days: h.days, opens: h.opens, closes: h.closes, untilLastClient: h.untilLastClient, lunchStart: h.lunchStart, lunchEnd: h.lunchEnd }];
 }
 export function withBusinessHoursPeriods(h: BusinessHours, periods: HoursPeriod[]): BusinessHours {
  const first = periods[0] ?? newBusinessHours();
@@ -26,14 +26,16 @@ export function validBusinessHours(h: BusinessHours | null | undefined): boolean
 }
 function validPeriod(h: HoursPeriod, alwaysOpen = false): boolean {
  if(!Array.isArray(h.days)||!h.days.length||h.days.length>7||new Set(h.days).size!==h.days.length||!h.days.every(d=>Number.isInteger(d)&&d>=0&&d<7))return false;
+ if(h.untilLastClient !== undefined && typeof h.untilLastClient !== 'boolean')return false;
+ if(alwaysOpen && h.untilLastClient)return false;
  if(alwaysOpen === true)return h.days.length===7 && h.opens==='00:00' && h.closes==='00:00' && h.lunchStart==='' && h.lunchEnd==='';
- if(!time.test(h.opens)||!time.test(h.closes)||h.opens===h.closes)return false;
+ if(!time.test(h.opens)||(!h.untilLastClient && (!time.test(h.closes)||h.opens===h.closes)))return false;
  if(h.lunchStart===''&&h.lunchEnd==='')return true;
  if(!time.test(h.lunchStart)||!time.test(h.lunchEnd))return false;
  const duration=(minutes(h.closes)-minutes(h.opens)+1440)%1440;
  const start=(minutes(h.lunchStart)-minutes(h.opens)+1440)%1440;
  const end=(minutes(h.lunchEnd)-minutes(h.opens)+1440)%1440;
- return start<end&&end<=duration&&(end-start)<duration;
+ return h.untilLastClient ? start<end : start<end&&end<=duration&&(end-start)<duration;
 }
 export const hoursLabels: Record<string,[string,string,string,string,string]>={
  ru:['Режим работы','Рабочие дни','Обед','Без обеда','следующий день'],en:['Opening hours','Working days','Lunch break','No lunch break','next day'],
@@ -50,3 +52,4 @@ export const closedHoursLabels: Record<string, [string, string]> = {
  vi: ['Ngày nghỉ', 'Nghỉ vào ngày lễ'],
  tr: ['Kapalı', 'Resmî tatillerde kapalı'],
 };
+export const untilLastClientLabels: Record<string,string> = {ru:'До последнего клиента',en:'Until the last customer',ko:'마지막 손님까지',uz:'Oxirgi mijozgacha',zh:'直到最后一位顾客',vi:'Đến khách cuối cùng',tr:'Son müşteriye kadar'};
