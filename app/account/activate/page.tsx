@@ -1,4 +1,5 @@
 'use client';
+import BackButton from '@/app/components/BackButton';
 import { useEffect,useRef,useState,type FormEvent } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
@@ -35,7 +36,7 @@ export default function ActivateAccount() {
     }catch(error){setMessage(error instanceof Error?error.message:'Не удалось завершить активацию.');}
     finally{lock.current=false;setBusy(false);}
   }
-  return <div className="services-page services-directory registration-page activation-page" lang="ru"><header className="services-top"><Link href="/services">Справочник</Link><Link href="/account">Мой аккаунт</Link></header><main className="services-main"><h1>Активация личного кабинета</h1>{name&&<h2>{name}</h2>}
+  return <div className="services-page services-directory registration-page activation-page" lang="ru"><header className="services-top"><Link href="/services">Справочник</Link><Link href="/account">Мой аккаунт</Link></header><main className="services-main"><BackButton language="ru" /><h1>Активация личного кабинета</h1>{name&&<h2>{name}</h2>}
     {loading||!ready?<p role="status">Проверяем доступ…</p>:complete?<section className="services-card"><h2>Кабинет подключён</h2><p>Теперь входите со своей почтой и паролем. Одноразовые данные больше не действуют.</p><Link href="/account">Открыть личный кабинет</Link></section>:!active?<form onSubmit={redeem} className="services-card account-form"><p>Введите одноразовые данные, которые выдал администратор.</p><label>Одноразовый логин<input required value={login} maxLength={40} autoComplete="username" autoCapitalize="none" spellCheck={false} disabled={busy} onChange={event=>setLogin(event.target.value)}/></label><label>Одноразовый пароль<input required type="password" value={password} maxLength={100} autoComplete="current-password" disabled={busy} onChange={event=>setPassword(event.target.value)}/></label><button disabled={busy}>{busy?'Проверяем…':'Войти и настроить кабинет'}</button></form>:<><p>Временные данные уже использованы. Завершите настройку в этом браузере в течение 24 часов: укажите свою почту, задайте новый пароль и подтвердите почту.</p>{!user||user.is_anonymous?<EmailSignIn language="ru" activation/>:<section className="services-card"><p>Подключить карточку к аккаунту <strong>{user.email}</strong>?</p><button disabled={busy||!user.email_confirmed_at} onClick={claim}>{busy?'Подключаем…':'Завершить настройку кабинета'}</button><button disabled={busy} onClick={async()=>{await supabase.auth.signOut();}}>Использовать другую почту</button></section>}</>}
     <p role="status" aria-live="polite">{message}</p></main></div>;
 }

@@ -45,3 +45,11 @@ body {
 #qr-language-dialog[open]::backdrop{opacity:1}
 @starting-style{#qr-language-dialog[open]{opacity:0;scale:.96}#qr-language-dialog[open]::backdrop{opacity:0}}
 @starting-style{:is(.services-language-picker,.chat-language-picker,.header-language,.private-language details)[open]::details-content{opacity:0;translate:0 -8px}}
+
+.esx-back-row{display:flex;margin:0 0 18px}
+.esx-back-row .esx-back-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 16px;border:1px solid #b8cce5;border-radius:14px;background:#eef5ff;color:#173b70;font:600 14px/1.4 Arial,Helvetica,sans-serif;cursor:pointer;box-shadow:0 2px 8px #173b7010}
+.esx-back-row .esx-back-button:hover{background:#dceaff}
+.esx-back-row .esx-back-button:focus-visible{outline:3px solid #3987de;outline-offset:3px}
+.esx-back-button svg{flex-shrink:0}
+.account-page .esx-back-button,[data-theme=dark] .esx-back-button{background:#173450;color:#e4f0ff;border-color:#547294}
+.account-page .esx-back-button:hover,[data-theme=dark] .esx-back-button:hover{background:#24496d}

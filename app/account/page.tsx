@@ -1,4 +1,5 @@
 "use client";
+import BackButton from '@/app/components/BackButton';
 import { accountLabels, type AccountMessage } from './accountLabels';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -111,7 +112,7 @@ function AccountContent({ user, ready }: ReturnType<typeof useAccount>) {
       }}><Image src={'/flags/'+accountLanguageFlags[item.code]+'.svg'} alt="" width={24} height={16} unoptimized/><span>{item.name}</span></button>)}
     </div>
   </div>;
-  return <div className="esx-site account-site" lang={language}><SiteHeader language={language} /><main className="account-page"><div className="account-shell">
+  return <div className="esx-site account-site" lang={language}><SiteHeader language={language} /><main className="account-page"><div className="account-shell"><BackButton language={language} />
     {user && <div className="account-nav">{ready && !user.is_anonymous && <h1>{t.title}</h1>}<button className="account-secondary" onClick={async () => { try { if ('serviceWorker' in navigator) { const reg = await navigator.serviceWorker.getRegistration('/'); const sub = await reg?.pushManager?.getSubscription(); if (sub) { await sub.unsubscribe(); await supabase.from('esx_push_subscriptions').delete().eq('endpoint', sub.endpoint); } } } catch {} const { error } = await supabase.auth.signOut(); if (error) setStatus('signOutError'); }}>{t.signOut}</button></div>}
     {(!ready || !user || user.is_anonymous) && languagePicker}
     {!ready ? <p role="status">{registrationLabels[language].loading}</p> : !user || user.is_anonymous ? <><p className="account-muted">{t.registrationHelp}</p><EmailSignIn language={language} />{user && <section className="account-card"><h2>{t.guestConversations}</h2><p className="account-muted">{t.guestHelp}</p><ul className="account-chats">{chats.map(chat => <li key={chat.id}><Link href={'/messages/' + chat.id}><span dir="auto">{contactNames[chat.id] === undefined ? registrationLabels[language].loading : contactNames[chat.id] === null ? t.loadError : contactNames[chat.id] || `${t.conversation} ${chat.id.slice(0, 8)}`}</span> →</Link></li>)}</ul></section>}</> : <>

@@ -1,5 +1,6 @@
 "use client";
 
+import BackButton from '@/app/components/BackButton';
 import HeaderLanguage from './HeaderLanguage';
 import LegalLinks from '@/app/LegalLinks';
 import { trademarkNotice } from '@/lib/trademark-notice';
@@ -173,7 +174,7 @@ export default function SitePage({ section = 'home' }: { section?: 'home' | 'kor
       <nav id="main-navigation" aria-label={t[44]}>{navigation.map(({id,label:i})=><Fragment key={id}><Link style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }} onClick={() => setMenuOpen(false)} className={i===4?'nav-contact':''} href={navigationHref(id)} key={id}>{t[i]}{i===4&&<span>↗</span>}</Link>{i===0&&<Link href="/services" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>{language === 'ru' ? 'Справочник' : 'Directory'}</Link>}</Fragment>)}<AccountLink language={language} onClick={() => setMenuOpen(false)} /></nav>
     </div></header>
     {menuOpen && <div className="mobile-menu-backdrop" style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }} aria-hidden="true" onClick={() => setMenuOpen(false)} />}
-    <main key={section} className="site-main page-enter">
+    <main key={section} className="site-main page-enter"><BackButton language={language} />
       <section className="language-panel" aria-label={t[10]}><div className="language-label"><span>◎</span><div><strong>{t[10]}</strong><small>{t[11]}</small></div></div><div className="language-row">{languages.map(l=><button lang={l.code} key={l.code} onClick={()=>choose(l.code)} aria-pressed={language===l.code} className={language===l.code?'selected':''}><Image src={'/flags/' + languageFlags[l.code] + '.svg'} alt="" width={24} height={16} unoptimized /><span>{l.name}</span></button>)}</div></section>
       <div className="home-quick-links"><Link href="/services" target="_blank" rel="noopener noreferrer">{quickLinkLabels[language][0]}</Link><Link href="/chat">{quickLinkLabels[language][1]}</Link></div>
       {section === 'korea' && <KoreaSection language={language} />}

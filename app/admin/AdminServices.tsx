@@ -1,4 +1,5 @@
 "use client";
+import BackButton from '@/app/components/BackButton';
 import ServiceAccess from './ServiceAccess';
 import SearchableSelect from '@/app/services/SearchableSelect';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
@@ -27,7 +28,7 @@ function editableDescription(description: string) {
 }
 export default function AdminServices() {
   const { user, ready } = useAccount();
-  return <div className="services-page admin-page" lang="ru"><header className="services-top"><Link className="services-brand" href="/" aria-label="ESX — Главная"><Image src="/esx-logo.png" alt="ESX" width={80} height={80} sizes="(max-width: 540px) 64px, 80px" preload /><span> / Администратор</span></Link><nav aria-label="Навигация"><Link href="/services">Услуги</Link><Link href="/account">Мой аккаунт</Link></nav></header><main className="services-main">
+  return <div className="services-page admin-page" lang="ru"><header className="services-top"><Link className="services-brand" href="/" aria-label="ESX — Главная"><Image src="/esx-logo.png" alt="ESX" width={80} height={80} sizes="(max-width: 540px) 64px, 80px" preload /><span> / Администратор</span></Link><nav aria-label="Навигация"><Link href="/services">Услуги</Link><Link href="/account">Мой аккаунт</Link></nav></header><main className="services-main"><BackButton language="ru" />
     {!ready ? <p role="status">Проверяем вход…</p> : !user || user.is_anonymous ? <AdminLogin /> : <AdminPanel key={user.id} userId={user.id} email={user.email ?? ''} />}
   </main><ServicesBackToTop language="ru" /></div>;
 }
