@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import Link from 'next/link';
+import { recoveryLabels } from './recoveryLabels';
 import { signupLegalCopy } from './signupLegalCopy';
 import './signup-legal.css';
 import { supabase } from '@/lib/supabase';
@@ -129,6 +131,7 @@ export default function EmailSignIn({ language, activation = false }: { language
         </div>}
         <button type="submit" disabled={busy || (register && (!rulesAccepted || !dataRead))}>{busy ? t.wait : register ? t.createAccount : t.signIn}</button>
       </form>
+      {!register && <p><Link className="account-link" href="/account/reset-password">{recoveryLabels[language].forgot}</Link></p>}
     </>}
     <p role="status" className="account-status">{status ? t[status] : ''}</p>
   </section>;

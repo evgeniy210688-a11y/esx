@@ -5,7 +5,8 @@ import { safeAccountNext } from '@/lib/account-path';
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get('code');
   const next = request.nextUrl.searchParams.get('next');
-  const destination = safeAccountNext(next);
+  const recovery = next === '/account/reset-password';
+  const destination = recovery ? '/account/reset-password?verified=1' : safeAccountNext(next);
   const response = NextResponse.redirect(new URL(destination, request.url));
   response.headers.set('Cache-Control', 'no-store');
   if (code) {
@@ -15,7 +16,7 @@ export async function GET(request: NextRequest) {
     const { error } = await db.auth.exchangeCodeForSession(code);
     if (!error) return response;
   }
-  const failure = NextResponse.redirect(new URL('/account?auth_error=1', request.url));
+  const failure = NextResponse.redirect(new URL(recovery ? '/account/reset-password?auth_error=1' : '/account?auth_error=1', request.url));
   failure.headers.set('Cache-Control', 'no-store');
   return failure;
 }
