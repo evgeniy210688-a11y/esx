@@ -170,14 +170,21 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
           finally { setPhotoBusy(false); }
         }} /></label>
         {photo && <button type="button" onClick={() => setPhoto(null)}>Убрать фото</button>}
-        <label>Дополнительные фотографии для галереи<input type="file" multiple accept="image/jpeg,image/png,image/webp" disabled={gallery.length >= 20} onChange={async e => {
+        </div></div>
+        <div className="registration-avatar-upload registration-gallery-upload">
+          <button className="registration-gallery-add" type="button" disabled={gallery.length >= 20} onClick={() => document.getElementById('registration-gallery-file')?.click()}>
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="3"/><circle cx="9" cy="10" r="2"/><path d="m3 17 5-4 4 3 4-5 5 6M12 2v5M9.5 4.5h5"/></svg>
+            <span>{photoBusy ? 'Подготавливаем фото…' : 'Добавить фото'}</span>
+          </button>
+        <div className="registration-avatar-fields">
+        <label htmlFor="registration-gallery-file">Дополнительные фотографии для галереи</label><input id="registration-gallery-file" className="registration-gallery-file" type="file" multiple accept="image/jpeg,image/png,image/webp" disabled={gallery.length >= 20} onChange={async e => {
           const files = Array.from(e.target.files ?? []); e.target.value = ''; if (!files.length) return;
           if (files.length + gallery.length > 20) { setMessage('Можно загрузить до 20 дополнительных фотографий.'); return; }
           setPhotoBusy(true); setMessage('');
           try { const added: string[] = []; for (const file of files) added.push(await prepareCompanyPhoto(file)); setGallery(items => [...items, ...added]); }
           catch { setMessage('Не удалось добавить фото. Выберите JPG, PNG или WebP до 10 МБ.'); }
           finally { setPhotoBusy(false); }
-        }} /></label><small>До 20 фото. JPG, PNG или WebP, до 10 МБ каждое.</small>
+        }} /><small>До 20 фото. JPG, PNG или WebP, до 10 МБ каждое.</small>
         <div className="registration-gallery">{gallery.map((src,index) => <div key={index}><Image src={src} alt={'Фото галереи ' + (index + 1)} width={120} height={90} unoptimized /><button type="button" aria-label={'Убрать фото ' + (index + 1)} onClick={() => setGallery(items => items.filter((_,i) => i !== index))}>Убрать</button></div>)}</div>
 
         </div>
