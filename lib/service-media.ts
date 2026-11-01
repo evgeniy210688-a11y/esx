@@ -1,9 +1,9 @@
-export type CompanyPhone = { type: 'office' | 'mobile' | 'other'; number: string };
+export type CompanyPhone = { type: 'office' | 'mobile' | 'fax' | 'other'; number: string };
 export function companyPhones(value: { phones?: CompanyPhone[]; phone: string | null }): CompanyPhone[] {
   return value.phones?.length ? value.phones : value.phone ? [{ type: 'other', number: value.phone }] : [];
 }
 export function validCompanyPhones(phones: CompanyPhone[]) {
-  return phones.length <= 5 && phones.every(p => ['office', 'mobile', 'other'].includes(p.type) && /^\+?[0-9 ()-]{3,30}$/.test(p.number.trim()) && p.number.replace(/\D/g, '').length >= 3);
+  return phones.length <= 5 && phones.every(p => ['office', 'mobile', 'fax', 'other'].includes(p.type) && /^\+?[0-9 ()-]{3,30}$/.test(p.number.trim()) && p.number.replace(/\D/g, '').length >= 3);
 }
 export function safeCompanyPhoto(photo: string | null | undefined) {
   return photo && photo.length <= 200000 && /^data:image\/jpeg;base64,[A-Za-z0-9+/]+={0,2}$/.test(photo) ? photo : null;
@@ -23,13 +23,13 @@ export async function prepareCompanyPhoto(file: File): Promise<string> {
   } finally { bitmap.close(); }
 }
 export const phoneLabels: Record<string, Record<CompanyPhone['type'], string>> = {
-  ru: { office: 'Офисный', mobile: 'Мобильный', other: 'Телефон' },
-  en: { office: 'Office', mobile: 'Mobile', other: 'Phone' },
-  ko: { office: '사무실', mobile: '휴대전화', other: '전화' },
-  zh: { office: '办公室', mobile: '手机', other: '电话' },
-  uz: { office: 'Ofis', mobile: 'Mobil', other: 'Telefon' },
-  vi: { office: 'Văn phòng', mobile: 'Di động', other: 'Điện thoại' },
-  tr: { office: 'Ofis', mobile: 'Cep telefonu', other: 'Telefon' },
+  ru: { fax: 'Факс', office: 'Офисный', mobile: 'Мобильный', other: 'Телефон' },
+  en: { fax: 'Fax', office: 'Office', mobile: 'Mobile', other: 'Phone' },
+  ko: { fax: '팩스', office: '사무실', mobile: '휴대전화', other: '전화' },
+  zh: { fax: '传真', office: '办公室', mobile: '手机', other: '电话' },
+  uz: { fax: 'Faks', office: 'Ofis', mobile: 'Mobil', other: 'Telefon' },
+  vi: { fax: 'Fax', office: 'Văn phòng', mobile: 'Di động', other: 'Điện thoại' },
+  tr: { fax: 'Faks', office: 'Ofis', mobile: 'Cep telefonu', other: 'Telefon' },
 };
 
 export function companyPhotos(value: { photos?: string[]; photo?: string | null }): string[] {
