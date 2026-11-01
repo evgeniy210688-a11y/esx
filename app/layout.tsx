@@ -15,10 +15,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ESX",
+  metadataBase: new URL("https://www.88esx.com"),
+  title: "ESX — услуги и общение в Южной Корее",
   appleWebApp: { capable: true, title: "ESX", statusBarStyle: "default" },
   icons: { apple: "/esx-icon-192.png" },
-  description: "ESX — multilingual conversations",
+  description: "Услуги, компании и специалисты в Южной Корее. Поиск по городу и языку обслуживания, общение с переводом в ESX.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
