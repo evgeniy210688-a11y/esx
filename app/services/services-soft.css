@@ -222,3 +222,5 @@
 .services-filter-reveal[data-open=true]{grid-template-rows:1fr;opacity:1}
 .services-filter-clip{min-height:0;overflow:hidden}
 
+
+.services-filters .services-filter-options .services-filter-collapse{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;justify-self:stretch}

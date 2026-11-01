@@ -536,6 +536,7 @@ export default function ServicesDirectory() {
       <ServiceFilterPicker label={t[14]} value={filters.interpreterLanguage} onChange={value => update('interpreterLanguage', value)} options={[{value: '', label: t[13]}, ...interpreterOptions]} />
       <label className="services-check"><input type="checkbox" checked={filters.interpreter} onChange={e => update('interpreter', e.target.checked)} />{t[15]}</label>
       <p className="services-note">{t[17]}</p>
+      <button type="button" className="services-filter-collapse" aria-expanded={filtersOpen} aria-controls="services-filter-options" onClick={() => { setFiltersOpen(false); filtersRoot.current?.querySelector<HTMLButtonElement>('.services-filter-toggle')?.focus({ preventScroll: true }); }}>{detailLabels[language][1]} <span aria-hidden="true">▴</span></button>
       </div></div></div>
     </section>
     {translationStatus && <p role="status">{translationLabels[language][translationStatus === 'error' ? 1 : 0]} {translationStatus === 'error' && <button type="button" onClick={() => setTranslationRetry(n=>n+1)}>{t[21]}</button>}</p>}
