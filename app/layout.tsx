@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SiteAnalytics from "./SiteAnalytics";
+import GoogleAnalytics from "./GoogleAnalytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </Script>
         {children}
         <SiteAnalytics />
+        <GoogleAnalytics />
       </body>
     </html>
   );
