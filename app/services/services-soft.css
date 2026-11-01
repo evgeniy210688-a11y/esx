@@ -224,3 +224,4 @@
 
 
 .services-filters .services-filter-options .services-filter-collapse{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;justify-self:stretch}
+@media(min-width:851px){.services-filters .services-search-toolbar .services-filter-toggle,.services-filters .services-filter-options .services-filter-collapse{width:150px;min-height:50px;gap:10px;justify-self:end}}
