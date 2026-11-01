@@ -32,7 +32,7 @@ const rows = [
 'Отели и проживание|Hotels and accommodation|호텔 및 숙박|Mehmonxonalar va turar joy|酒店与住宿|Khách sạn và lưu trú|Oteller ve konaklama',
 'Спорт и фитнес|Sports and fitness|스포츠 및 피트니스|Sport va fitnes|运动与健身|Thể thao và thể hình|Spor ve fitness',
 'Фото и видео|Photography and video|사진 및 영상|Foto va video|摄影与视频|Ảnh và video|Fotoğraf ve video',
-'Праздники и мероприятия|Celebrations and events|축제 및 행사|Bayramlar va tadbirlar|庆典与活动|Lễ hội và sự kiện|Kutlamalar ve etkinlikler',
+'Ведущий мероприятий|Event host|행사 진행자|Tadbir boshlovchisi|活动主持人|Người dẫn chương trình|Etkinlik sunucusu',
 'Услуги для животных|Pet services|반려동물 서비스|Hayvonlar uchun xizmatlar|宠物服务|Dịch vụ thú cưng|Evcil hayvan hizmetleri',
 'Услуги для бизнеса|Business services|비즈니스 서비스|Biznes xizmatlari|企业服务|Dịch vụ doanh nghiệp|İşletme hizmetleri',
 'Другие услуги|Other services|기타 서비스|Boshqa xizmatlar|其他服务|Dịch vụ khác|Diğer hizmetler',

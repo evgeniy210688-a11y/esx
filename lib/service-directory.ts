@@ -32,6 +32,7 @@ export function validListingIdentity(listing: Pick<ServiceListing, 'listing_kind
 }
 export function serviceCategory(listing: Pick<ServiceListing, 'category'>) {
   const category = listing.category.normalize('NFKC').trim().replace(/\s+/g, ' ');
+  if (/^(?:праздники и мероприятия|ведущий мероприятий|ведущая мероприятий|тамада|event host|master of ceremonies|emcee)$/i.test(category)) return 'Ведущий мероприятий';
   if (/^переводчик(?:и)?$/i.test(category)) return 'Переводчики';
   if (/^страховой агент$/i.test(category)) return 'Страхование';
   if (/^(?:специалист по красоте|мастер красоты|парикмахер|hair stylist)$/i.test(category)) return 'Красота и уход';
