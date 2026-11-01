@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  verification: { google: "h3W7OgtraEE4D4XDPv3IHXXD2ONBxWx98qf3wHYqOFM" },
   metadataBase: new URL("https://www.88esx.com"),
   title: "ESX — услуги и общение в Южной Корее",
   appleWebApp: { capable: true, title: "ESX", statusBarStyle: "default" },
