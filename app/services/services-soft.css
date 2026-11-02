@@ -241,6 +241,6 @@
 .services-directory .services-intro h1{font-size:clamp(22px,5.8vw,28px);line-height:1.2;margin:0}
 .services-title-line{display:block;white-space:nowrap}
 
-.services-directory .services-header-title{font-size:16px;line-height:1.25;font-weight:600;letter-spacing:-.025em;margin:0;color:#243f64;max-width:250px}
+.services-directory .services-header-title{font-size:14px;line-height:1.4;font-weight:400;letter-spacing:normal;margin:0;color:#56677e;max-width:250px}
 .services-directory[data-theme=dark] .services-header-title{color:#dce8f8}
-@media(max-width:760px){.services-directory .services-glass-header[data-directory-heading=true]{flex-wrap:wrap}.services-directory .services-glass-header[data-directory-heading=true] .services-brand{width:100%;gap:12px}.services-directory .services-header-title{font-size:clamp(13px,3.5vw,16px);max-width:none}.services-directory .services-glass-header[data-directory-heading=true] .services-brand img{width:86px;height:auto}}
+@media(max-width:760px){.services-directory .services-glass-header[data-directory-heading=true]{flex-wrap:wrap}.services-directory .services-glass-header[data-directory-heading=true] .services-brand{width:100%;gap:12px}.services-directory .services-header-title{font-size:14px;max-width:none}.services-directory .services-glass-header[data-directory-heading=true] .services-brand img{width:86px;height:auto}}
