@@ -235,3 +235,5 @@
 .services-directory .services-search-toolbar{grid-template-columns:1fr auto}
 
 .services-directory[data-theme=dark] .services-top-search input[type=search]{background:#1b3552;color:#e3edff;border-color:#456180}
+
+.services-footer-description{max-width:680px;margin:24px auto 0;line-height:1.8;font-size:14px;text-align:center}
