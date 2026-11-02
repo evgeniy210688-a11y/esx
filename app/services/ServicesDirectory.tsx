@@ -363,6 +363,7 @@ export default function ServicesDirectory() {
     let active = true;
     const controller = new AbortController();
     async function load() {
+      for (let retry = 0; retry < 3 && active; retry++) {
       try {
         const rows: ServiceListing[] = [];
         // Fetch every page: Supabase's default row limit must not silently hide listings.
@@ -381,7 +382,18 @@ export default function ServicesDirectory() {
           if (data.length < 500) break;
         }
         if (active) { setListings(rows); setStatus('ready'); }
-      } catch { if (active) setStatus('error'); }
+        return;
+      } catch (error) {
+        if (!active) return;
+        console.warn('Directory loading attempt failed', error);
+        if (retry === 2) { setStatus('error'); return; }
+        await new Promise<void>(resolve => {
+          const finish = () => { window.clearTimeout(timer); controller.signal.removeEventListener('abort', finish); resolve(); };
+          const timer = window.setTimeout(finish, 1000 * (retry + 1));
+          controller.signal.addEventListener('abort', finish, { once: true });
+        });
+      }
+      }
     }
     void load();
     return () => { active = false; controller.abort(); };
