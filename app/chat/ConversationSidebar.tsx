@@ -22,7 +22,7 @@ export default function ConversationSidebar({ chatId, language, temporary = fals
   const { user, ready } = useAccount();
   const router = useRouter();
   const panel = useRef<HTMLDetailsElement>(null);
-  const [panelOpen, setPanelOpen] = useState(true);
+  const [panelOpen, setPanelOpen] = useState(false);
   function closePanel() {
     if (panel.current) { panel.current.open = false; panel.current.querySelector('summary')?.focus(); }
     setPanelOpen(false);
