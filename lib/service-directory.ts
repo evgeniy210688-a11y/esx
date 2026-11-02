@@ -26,7 +26,7 @@ export const listingKindLabels = { company: 'Компания', manager: 'Спе
 export function isPersonalListing(listing: { listing_kind?: ListingKind }) {
   return listing.listing_kind === 'manager' || listing.listing_kind === 'interpreter';
 }
-export type ServiceListing = { categories?: string[]; represented_company?: string | null; listing_kind?: ListingKind; branches?: ServiceBranch[]; has_manager?: boolean; business_hours?: BusinessHours | null; id: string; name: string; description: string; city: string; category: string; address: string; phone: string | null; phones?: CompanyPhone[]; photo?: string | null; photos?: string[]; website: string | null; social_links?: SocialLink[]; service_languages: ServiceLanguage[]; has_interpreter: boolean; interpreter_languages: ServiceLanguage[] };
+export type ServiceListing = { email?: string | null; categories?: string[]; represented_company?: string | null; listing_kind?: ListingKind; branches?: ServiceBranch[]; has_manager?: boolean; business_hours?: BusinessHours | null; id: string; name: string; description: string; city: string; category: string; address: string; phone: string | null; phones?: CompanyPhone[]; photo?: string | null; photos?: string[]; website: string | null; social_links?: SocialLink[]; service_languages: ServiceLanguage[]; has_interpreter: boolean; interpreter_languages: ServiceLanguage[] };
 export function validListingIdentity(listing: Pick<ServiceListing, 'listing_kind' | 'name' | 'city' | 'category' | 'address'>) {
   return (isPersonalListing(listing) ? [listing.name] : [listing.name, listing.city, listing.category, listing.address]).every(value => value.trim().length > 0);
 }

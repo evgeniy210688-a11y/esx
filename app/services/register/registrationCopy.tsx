@@ -2,6 +2,9 @@ import { Children, cloneElement, isValidElement, type ReactNode } from 'react';
 import type { InterfaceLanguage } from '../serviceLabels';
 import { categoryTranslation } from '@/lib/service-category-labels';
 const rows = [
+'Электронная почта (необязательно)|Email (optional)|이메일 (선택)|Elektron pochta (ixtiyoriy)|电子邮箱（选填）|Email (không bắt buộc)|E-posta (isteğe bağlı)',
+'Будет видна в контактах после публикации.|Shown in contacts after publication.|게시 후 연락처에 표시됩니다.|E’lon qilingach kontaktlarda ko‘rinadi.|发布后将显示在联系方式中。|Hiển thị trong liên hệ sau khi đăng.|Yayınlandıktan sonra iletişim bilgilerinde görünür.',
+
 'Дополнительные фотографии для галереи|Additional gallery photos|추가 갤러리 사진|Galereya uchun qo‘shimcha suratlar|其他图库照片|Ảnh bổ sung cho thư viện|Ek galeri fotoğrafları',
 'До 20 фото. JPG, PNG или WebP, до 10 МБ каждое.|Up to 20 photos. JPG, PNG or WebP, up to 10 MB each.|최대 20장. JPG, PNG 또는 WebP, 각 10MB 이하.|20 tagacha surat. JPG, PNG yoki WebP, har biri 10 MB gacha.|最多20张。JPG、PNG或WebP，每张不超过10MB。|Tối đa 20 ảnh. JPG, PNG hoặc WebP, mỗi ảnh tối đa 10 MB.|En fazla 20 fotoğraf. JPG, PNG veya WebP, her biri en fazla 10 MB.',
 'Можно загрузить до 20 дополнительных фотографий.|You can upload up to 20 additional photos.|추가 사진은 최대 20장까지 업로드할 수 있습니다.|20 tagacha qo‘shimcha surat yuklash mumkin.|最多可上传20张其他照片。|Bạn có thể tải lên tối đa 20 ảnh bổ sung.|En fazla 20 ek fotoğraf yükleyebilirsiniz.',

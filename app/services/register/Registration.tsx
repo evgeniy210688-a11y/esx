@@ -111,6 +111,7 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
     const educationFormats = selectedCategories.includes('Образование') ? [educationOffline ? 'Офлайн' : '', educationOnline ? 'Онлайн' : ''].filter(Boolean) : [];
     const description = joinServiceDescription((kind === 'specialist' && get('role') ? 'Должность: ' + get('role') + '\n\n' : '') + get('description') + (educationFormats.length ? '\n\nФормат обучения: ' + educationFormats.join(', ') : ''), get('services'));
     if (description.length > 5000) { setMessage('Описание и список услуг вместе должны содержать не более 5000 символов.'); return; }
+    if (get('email') && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(get('email'))) { setMessage('Укажите корректный адрес электронной почты.'); return; }
     if (get('website')) {
       try { const url = new URL(get('website')); if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) throw new Error(); }
       catch { setMessage('Укажите ссылку на сайт, начинающуюся с https:// или http://.'); return; }
@@ -125,11 +126,12 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
         p_input: {
           listing_kind: kind === 'company' ? 'company' : selectedCategories.includes('Переводчики') ? 'interpreter' : 'manager',
           represented_company: kind === 'specialist' ? get('represented_company') : null, name: get('name'), city: serviceCity, category: selectedCategories[0], categories: selectedCategories, has_interpreter: kind === 'company' && interpreter, interpreter_languages: interpreterLanguages, address: get('address'),
-          phone: phoneNumbers[0].number, phones: phoneNumbers, website: get('website'), social_links: socialLinks, description, photo, photos: gallery.length ? [photo ?? gallery[0], ...gallery] : photo ? [photo] : [], service_languages: languages,
+          phone: phoneNumbers[0].number, phones: phoneNumbers, email: get('email') || null, website: get('website'), social_links: socialLinks, description, photo, photos: gallery.length ? [photo ?? gallery[0], ...gallery] : photo ? [photo] : [], service_languages: languages,
         },
       };
-      let { error } = await supabase.rpc(gallery.length ? 'esx_submit_service_v3' : 'esx_submit_service_v2', submission);
+      let { error } = await supabase.rpc('esx_submit_service_v4', submission);
       // The legacy server must retain every requested field until migration.
+      if (error?.code === 'PGRST202' && get('email')) { setMessage('Сохранение почты пока недоступно. Адрес сохранён в форме — попробуйте позже.'); return; }
       if (error?.code === 'PGRST202' && gallery.length) { setMessage('Галерея пока недоступна. Фотографии сохранены в форме — попробуйте позже.'); return; }
       if (error?.code === 'PGRST202') {
         const details = [selectedCategories.length > 1 ? 'Категории заявки: ' + selectedCategories.join('; ') : '', kind === 'company' && interpreter ? 'Есть переводчик. Языки переводчика: ' + interpreterLanguages.map(code=>interpreterLanguageOptions[code]).join(', ') : ''].filter(Boolean).join('\n');
@@ -210,6 +212,7 @@ function SubmissionForm({ userId, language }: { userId: string; language: Interf
           </div>)}
           <button type="button" disabled={phones.length >= 5} onClick={() => setPhones(items => [...items, { type: 'mobile', number: '' }])}>+ Добавить телефон</button>
         </fieldset>
+        <label>Электронная почта (необязательно)<input name="email" type="email" maxLength={254} autoComplete="email" placeholder="name@example.com" /><small>Будет видна в контактах после публикации.</small></label>
         <label>Сайт (необязательно)<input name="website" type="url" maxLength={500} placeholder="https://" /></label>
         <fieldset className="registration-socials"><legend>Социальные сети и мессенджеры (необязательно)</legend>
           <p>Добавьте ссылки на страницы или чаты. До 12 ссылок.</p>
