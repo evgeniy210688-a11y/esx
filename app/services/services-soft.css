@@ -252,3 +252,10 @@
 .services-directory .services-search-filters[hidden]{display:none}
 .services-directory .services-search-filters{margin:0 0 18px}
 .services-directory[data-theme=dark] .services-top-search .services-search-settings{color:#dce8f8}
+
+@media(max-width:600px){
+.services-directory .services-category-track{container-type:inline-size;gap:8px;padding:8px 4px 16px}
+.services-directory .services-category-group{gap:8px;grid-auto-columns:calc((100cqw - 24px)/4)}
+.services-directory .services-category-track .services-category-tile{min-width:0;border-radius:14px}
+.services-directory .services-category-tile .services-category-name{font-size:10px;line-height:1.3;padding:7px 4px;min-height:52px;overflow-wrap:anywhere}
+}
