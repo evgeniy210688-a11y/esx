@@ -262,3 +262,5 @@
 .services-page.services-directory{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
 .services-directory>.services-main{flex:1 0 auto;margin:0 auto}
 .services-directory>.services-footer{flex:0 0 auto;margin-top:auto;width:100%}
+
+@media(max-width:760px){.services-directory .services-glass-header[data-directory-heading=true]{flex-wrap:nowrap}.services-directory .services-glass-header[data-directory-heading=true] .services-brand{width:auto}}
