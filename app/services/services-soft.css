@@ -40,7 +40,7 @@
 @media(max-width:600px){.services-directory .services-filters{padding:22px;gap:20px}.services-directory .services-card{padding:24px}.services-directory .services-category-group{gap:14px}.services-directory .services-intro h1{font-size:36px}}
 /* Fill the available screen width with responsive company columns. */
 .services-directory .services-main{max-width:none;width:100%}
-.services-directory .services-main>.services-intro{margin-left:auto;margin-right:auto}
+.services-directory .services-main>.services-intro{margin-left:auto;margin-right:auto;padding:8px;margin-bottom:10px}
 .services-directory .services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:22px;max-width:none;width:100%;margin:24px auto;align-items:start}
 .services-directory .services-grid>.services-card{width:100%;min-width:0}
 .services-directory .services-city-picker{position:relative;display:flex;flex-direction:column;gap:9px;min-width:0;font-size:13px;color:#445d7f}
@@ -238,5 +238,5 @@
 
 .services-footer-description{max-width:680px;margin:24px auto 0;line-height:1.8;font-size:14px;text-align:center}
 
-.services-directory .services-intro h1{font-size:clamp(22px,5.8vw,28px);line-height:1.2;margin:8px 0 12px}
+.services-directory .services-intro h1{font-size:clamp(22px,5.8vw,28px);line-height:1.2;margin:0}
 .services-title-line{display:block;white-space:nowrap}
