@@ -244,3 +244,11 @@
 .services-directory .services-header-title{font-size:14px;line-height:1.4;font-weight:400;letter-spacing:normal;margin:0;color:#56677e;max-width:250px}
 .services-directory[data-theme=dark] .services-header-title{color:#dce8f8}
 @media(max-width:760px){.services-directory .services-glass-header[data-directory-heading=true]{flex-wrap:wrap}.services-directory .services-glass-header[data-directory-heading=true] .services-brand{width:100%;gap:12px}.services-directory .services-header-title{font-size:14px;max-width:none}.services-directory .services-glass-header[data-directory-heading=true] .services-brand img{width:86px;height:auto}}
+
+.services-top-search .services-company-search{position:relative}
+.services-directory .services-top-search input[type=search]{padding-right:64px}
+.services-directory .services-top-search .services-search-settings{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:40px;height:36px;min-height:0;padding:7px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;box-shadow:none;color:#315782;border-radius:10px}
+.services-search-settings .services-filter-count{position:absolute;right:0;top:-3px;font-size:10px;min-width:15px}
+.services-directory .services-search-filters[hidden]{display:none}
+.services-directory .services-search-filters{margin:0 0 18px}
+.services-directory[data-theme=dark] .services-top-search .services-search-settings{color:#dce8f8}
