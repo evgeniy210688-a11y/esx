@@ -515,8 +515,8 @@ export default function ServicesDirectory() {
   const cities = [...new Set(listings.flatMap(s => serviceCities(s)))].sort((a,b) => a.localeCompare(b, 'ru'));
   const categories = [...new Set(listings.flatMap(listingCategories))].sort((a,b) => a.localeCompare(b, 'ru'));
   return <div className="services-page services-directory" lang={language}>
-    <ServicesHeader language={language} chooseLanguage={chooseLanguage} />
-    <main className="services-main"><div className="services-top-search"><BackButton language={language} iconOnly /><label className="services-company-search"><input aria-label={searchLabels[language]} type="search" value={filters.query ?? ''} onChange={e => update('query', e.target.value)} placeholder={searchLabels[language]} /></label></div><section className="services-intro"><h1>{language === 'ru' ? <><span className="services-title-line">Справочник компаний,</span><span className="services-title-line">услуг и специалистов</span></> : t[5]}</h1></section>
+    <ServicesHeader language={language} chooseLanguage={chooseLanguage} directoryHeading />
+    <main className="services-main"><div className="services-top-search"><BackButton language={language} iconOnly /><label className="services-company-search"><input aria-label={searchLabels[language]} type="search" value={filters.query ?? ''} onChange={e => update('query', e.target.value)} placeholder={searchLabels[language]} /></label></div>
     <AdminEntry language={language} />
     {categories.length > 0 && <section className="services-category-carousel" aria-label={t[10]}>
       <div className="services-category-heading"><h2>{t[10]}</h2><div className="services-category-arrows"><button type="button" aria-label={t[10] + ' ←'} onClick={() => categoryCarousel.current?.scrollBy({ left: -360, behavior: 'smooth' })}>←</button><button type="button" aria-label={t[10] + ' →'} onClick={() => categoryCarousel.current?.scrollBy({ left: 360, behavior: 'smooth' })}>→</button></div></div>
