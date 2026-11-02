@@ -225,3 +225,13 @@
 
 .services-filters .services-filter-options .services-filter-collapse{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;justify-self:stretch}
 @media(min-width:851px){.services-filters .services-search-toolbar .services-filter-toggle,.services-filters .services-filter-options .services-filter-collapse{width:150px;min-height:50px;gap:10px;justify-self:end}}
+
+.services-top-search{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.services-top-search .esx-back-row{margin:0;flex:0 0 auto}
+.services-top-search .esx-back-button{width:44px;height:44px;padding:10px}
+.services-top-search .services-company-search{flex:1;min-width:0}
+.services-directory .services-top-search input[type=search]{min-height:44px;background:linear-gradient(140deg,#e8f0fe,#e0e9f8);border:1px solid #b8cce5;border-radius:14px;color:#243f64;font-size:16px}
+.services-top-search input::placeholder{color:#607595}
+.services-directory .services-search-toolbar{grid-template-columns:1fr auto}
+
+.services-directory[data-theme=dark] .services-top-search input[type=search]{background:#1b3552;color:#e3edff;border-color:#456180}

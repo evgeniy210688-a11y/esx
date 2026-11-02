@@ -516,7 +516,7 @@ export default function ServicesDirectory() {
   const categories = [...new Set(listings.flatMap(listingCategories))].sort((a,b) => a.localeCompare(b, 'ru'));
   return <div className="services-page services-directory" lang={language}>
     <ServicesHeader language={language} chooseLanguage={chooseLanguage} />
-    <main className="services-main"><BackButton language={language} /><section className="services-intro"><h1>{t[5]}</h1><p>{t[6]}</p></section>
+    <main className="services-main"><div className="services-top-search"><BackButton language={language} iconOnly /><label className="services-company-search"><input aria-label={searchLabels[language]} type="search" value={filters.query ?? ''} onChange={e => update('query', e.target.value)} placeholder={searchLabels[language]} /></label></div><section className="services-intro"><h1>{t[5]}</h1><p>{t[6]}</p></section>
     <AdminEntry language={language} />
     {categories.length > 0 && <section className="services-category-carousel" aria-label={t[10]}>
       <div className="services-category-heading"><h2>{t[10]}</h2><div className="services-category-arrows"><button type="button" aria-label={t[10] + ' ←'} onClick={() => categoryCarousel.current?.scrollBy({ left: -360, behavior: 'smooth' })}>←</button><button type="button" aria-label={t[10] + ' →'} onClick={() => categoryCarousel.current?.scrollBy({ left: 360, behavior: 'smooth' })}>→</button></div></div>
@@ -526,7 +526,7 @@ export default function ServicesDirectory() {
     </section>}
     <section ref={filtersRoot} className="services-filters services-compact-filters" aria-label={t[7]}>
       <div className="services-search-toolbar">
-      <label className="services-company-search"><input aria-label={searchLabels[language]} type="search" value={filters.query ?? ''} onChange={e => update('query', e.target.value)} placeholder={searchLabels[language]} /></label>
+
       <button type="button" className="services-filter-toggle" aria-expanded={filtersOpen} aria-controls="services-filter-options" onClick={() => setFiltersOpen(value => !value)}>{filterButtonLabels[language]}{activeFilterCount > 0 && <span className="services-filter-count">{activeFilterCount}</span>}<span aria-hidden="true">{filtersOpen ? '▴' : '▾'}</span></button>
       <button type="button" className="services-filter-reset" aria-label={t[16]} onClick={() => { setFilters(empty); setCompanyCategories([]); setSpecialistCategories([]); }}>{resetButtonLabels[language]}</button>
       </div>
