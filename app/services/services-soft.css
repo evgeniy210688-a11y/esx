@@ -264,3 +264,4 @@
 .services-directory>.services-footer{flex:0 0 auto;margin-top:auto;width:100%}
 
 @media(max-width:760px){.services-directory .services-glass-header[data-directory-heading=true]{flex-wrap:nowrap}.services-directory .services-glass-header[data-directory-heading=true] .services-brand{width:auto}}
+.services-directory .services-category-tile .services-category-name{display:flex;align-items:center;justify-content:center;text-align:center}
