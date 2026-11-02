@@ -265,3 +265,9 @@
 
 @media(max-width:760px){.services-directory .services-glass-header[data-directory-heading=true]{flex-wrap:nowrap}.services-directory .services-glass-header[data-directory-heading=true] .services-brand{width:auto}}
 .services-directory .services-category-tile .services-category-name{display:flex;align-items:center;justify-content:center;text-align:center}
+
+.services-directory .services-top .services-header-search-toggle{display:flex;align-items:center;justify-content:center;flex:0 0 36px;width:36px;height:40px;padding:7px;border:1px solid #b8cce5;border-radius:12px;background:#eef5ff;color:#315782}
+.services-header-search-panel{position:absolute;top:100%;left:0;right:0;padding:12px 18px;background:#e7effcf5;border-bottom:1px solid #b8cce5;box-shadow:0 8px 18px #20375720}
+.services-header-search-panel[hidden]{display:none}
+.services-header-search-panel input{width:100%;min-height:44px;padding:10px 14px;border:1px solid #b8cce5;border-radius:14px;background:#eef5ff;color:#243f64;font:inherit;font-size:16px}
+.services-directory[data-theme=dark] .services-header-search-panel,.services-directory[data-theme=dark] .services-header-search-panel input,.services-directory[data-theme=dark] .services-top .services-header-search-toggle{background:#1b3552;color:#e3edff;border-color:#456180}
