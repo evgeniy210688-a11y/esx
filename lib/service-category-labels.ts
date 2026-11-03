@@ -28,6 +28,7 @@ const rows = [
 'Связь и интернет|Telecom and internet|통신 및 인터넷|Aloqa va internet|通信与互联网|Viễn thông và internet|İletişim ve internet',
 'Рестораны и кафе|Restaurants and cafés|음식점 및 카페|Restoran va kafelar|餐厅与咖啡馆|Nhà hàng và quán cà phê|Restoranlar ve kafeler',
 'Магазины и продукты|Shops and groceries|상점 및 식료품|Do‘konlar va oziq-ovqat|商店与食品|Cửa hàng và thực phẩm|Mağazalar ve gıda',
+'Цветы|Flowers|꽃|Gullar|鲜花|Hoa|Çiçekler',
 'Туризм и экскурсии|Tourism and tours|관광 및 투어|Turizm va ekskursiyalar|旅游与观光|Du lịch và tham quan|Turizm ve turlar',
 'Отели и проживание|Hotels and accommodation|호텔 및 숙박|Mehmonxonalar va turar joy|酒店与住宿|Khách sạn và lưu trú|Oteller ve konaklama',
 'Спорт и фитнес|Sports and fitness|스포츠 및 피트니스|Sport va fitnes|运动与健身|Thể thao và thể hình|Spor ve fitness',
