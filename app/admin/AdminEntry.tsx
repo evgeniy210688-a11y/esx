@@ -29,7 +29,7 @@ export default function AdminEntry({ language = 'ru', account = false, compact =
   }, [id]);
   if (!ready || !id) return null;
   const status = result?.id === id ? result.status : 'loading';
-  if (compact) return status === 'allowed' ? <Link href="/admin" target="_blank" rel="noopener noreferrer">{managementLabels[language] ?? managementLabels.en}</Link> : null;
+  if (compact) return status === 'allowed' ? <Link className="services-admin-link" href="/admin" target="_blank" rel="noopener noreferrer">{managementLabels[language] ?? managementLabels.en}</Link> : null;
   if (!account && status !== 'allowed') return null;
   return <section className="admin-entry" aria-label={t[0]}>
     <h2>{t[0]}</h2>
