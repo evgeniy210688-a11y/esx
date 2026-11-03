@@ -98,7 +98,7 @@ function categoryImage(category: string): string | null {
   if (/ювелир|jewel/i.test(category)) return '/services/category-jewelry.webp';
   if (/стомат|dent|медицин|клиник|medic|clinic|связ|интернет|internet|communicat|красот|уход|космет|beauty|cosmetic|salon|массаж|спа|massage|\bspa\b/i.test(category)) return null;
   if (/образован|обучен|education|school/i.test(category)) return '/services/category-education.webp';
-  if (/мототехник|мотодилер|автодилер|автомобил|автосервис|car rental|car dealer|auto repair/i.test(category)) return '/services/category-cars.webp';
+  if (/мототехник|мотодилер|автодилер|автомобил|автосервис|car rental|car dealer|auto repair/i.test(category)) return '/services/category-auto-moto.png';
   if (/недвижим|риелтор|риэлтор|real estate|realtor/i.test(category)) return '/services/category-homes.webp';
   if (/спорт|фитнес|\bsports?\b|fitness/i.test(category)) return '/services/category-fitness.webp';
   if (/переводчик|устный перевод|письменный перевод|translator|interpreter|translation/i.test(category)) return '/services/category-interpreters.webp';
