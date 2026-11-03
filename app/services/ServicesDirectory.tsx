@@ -12,7 +12,6 @@ import Image from 'next/image';
 import { companyPhones, companyPhotos, phoneLabels } from '@/lib/service-media';
 import { serviceItems, splitServiceDescription, specialistRole } from '@/lib/service-description';
 import BusinessHoursDisplay from './BusinessHoursDisplay';
-import AdminEntry from '@/app/admin/AdminEntry';
 import { supabase } from '@/lib/supabase';
 import { listingCategories, serviceCategory, isPersonalListing, normalizeServiceCity, serviceCities, matchesService, safeServiceWebsite, serviceLanguages, interpreterLanguageOptions, type ServiceListing, type ServiceFilters } from '@/lib/service-directory';
 import './services.css';
@@ -547,7 +546,6 @@ export default function ServicesDirectory() {
       </div></div></div>
     </section>
 </section>
-    <AdminEntry language={language} />
     {categories.length > 0 && <section className="services-category-carousel" aria-label={t[10]}>
       <div className="services-category-heading"><h2>{t[10]}</h2><div className="services-category-arrows"><CarouselArrow track={categoryCarousel} direction={1} label={t[10] + ' ←'} onStep={() => categoryCarousel.current?.scrollBy({ left: 360, behavior: 'smooth' })}>←</CarouselArrow><CarouselArrow track={categoryCarousel} direction={-1} label={t[10] + ' →'} onStep={() => categoryCarousel.current?.scrollBy({ left: -360, behavior: 'smooth' })}>→</CarouselArrow></div></div>
       <div className="services-category-track" ref={categoryCarousel}>

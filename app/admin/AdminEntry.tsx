@@ -9,7 +9,8 @@ const labels: Record<string, string[]> = {
   ru: ['Панель управления', 'Добавляйте компании, меняйте контакты, языки обслуживания и публикацию карточек.', 'Добавить компанию', 'Управлять компаниями', 'Проверяем права администратора…', 'Не удалось проверить права. Откройте панель для повторной проверки.', 'Для управления компаниями аккаунту нужны права администратора.', 'Открыть панель'],
   en: ['Admin control panel', 'Add companies and manage contacts, service languages and publication.', 'Add company', 'Manage companies', 'Checking administrator access…', 'Could not check access. Open the panel to retry.', 'This account needs administrator access to manage companies.', 'Open control panel'],
 };
-export default function AdminEntry({ language = 'ru', account = false }: { language?: string; account?: boolean }) {
+const managementLabels: Record<string, string> = { ru: 'Управление', en: 'Management', ko: '관리', uz: 'Boshqaruv', zh: '管理', vi: 'Quản lý', tr: 'Yönetim' };
+export default function AdminEntry({ language = 'ru', account = false, compact = false }: { language?: string; account?: boolean; compact?: boolean }) {
   const { user, ready } = useAccount();
   const id = user && !user.is_anonymous ? user.id : null;
   const [result, setResult] = useState<{ id: string; status: 'allowed' | 'denied' | 'error' } | null>(null);
@@ -28,6 +29,7 @@ export default function AdminEntry({ language = 'ru', account = false }: { langu
   }, [id]);
   if (!ready || !id) return null;
   const status = result?.id === id ? result.status : 'loading';
+  if (compact) return status === 'allowed' ? <Link href="/admin" target="_blank" rel="noopener noreferrer">{managementLabels[language] ?? managementLabels.en}</Link> : null;
   if (!account && status !== 'allowed') return null;
   return <section className="admin-entry" aria-label={t[0]}>
     <h2>{t[0]}</h2>
