@@ -277,3 +277,7 @@
 .services-directory .services-header-search-row .services-search-settings{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:40px;height:36px;min-height:0;padding:7px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;box-shadow:none;color:#315782;border-radius:10px}
 .services-directory .services-header-filters{margin:12px 0 0;max-height:calc(100dvh - 180px);overflow-y:auto;overscroll-behavior:contain}
 .services-directory[data-theme=dark] .services-header-search-row .services-search-settings{color:#dce8f8}
+.services-directory .services-category-carousel>.services-category-heading{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:12px}
+.services-directory .services-category-carousel>.services-category-heading>h2{grid-column:2;text-align:center}
+.services-directory .services-category-carousel>.services-category-heading>.services-category-arrows{grid-column:3;justify-self:end}
+@media(max-width:420px){.services-directory .services-category-carousel>.services-category-heading{grid-template-columns:minmax(0,1fr)}.services-directory .services-category-carousel>.services-category-heading>h2{grid-column:1}.services-directory .services-category-carousel>.services-category-heading>.services-category-arrows{grid-column:1;justify-self:end}}
