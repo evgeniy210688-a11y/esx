@@ -562,14 +562,11 @@ export default function ServicesDirectory() {
       const title = directoryGroupLabels[language][personalGroup ? 0 : 1];
       const headingId = personalGroup ? 'specialists-heading' : 'companies-heading';
       return <section key={headingId} className="services-listing-group" aria-labelledby={headingId}>
-        <div className="services-category-heading"><h2 id={headingId}>{title}</h2>{personalGroup && group.length > 1 && <div className="services-category-arrows"><button type="button" aria-label={title + ' ←'} aria-controls="specialists-track" onClick={() => scrollSpecialists(-1)}>←</button><button type="button" aria-label={title + ' →'} aria-controls="specialists-track" onClick={() => scrollSpecialists(1)}>→</button></div>}</div>
+        <div className="services-category-heading"><h2 id={headingId}>{title}</h2></div>
         {personalGroup && <div className="services-company-category-carousel"><div id="specialist-category-filters" ref={specialistCategoryCarousel} className="services-company-categories" role="group" aria-labelledby={headingId}>
           <button type="button" aria-pressed={!specialistCategories.length} onClick={() => setSpecialistCategories([])}>{t[11]}</button>
           {specialistCategoryOptions.map(category => <button type="button" key={category} aria-pressed={specialistCategories.includes(category)} onClick={() => { setFilters(current => ({ ...current, category: '' })); setCompanyCategories([]); setSpecialistCategories(current => current.includes(category) ? [] : [category]); }}>{categoryLabel(category)}</button>)}
-        </div><div className="services-category-arrows services-company-category-arrows">
-          <button type="button" aria-label={t[10] + ' ←'} aria-controls="specialist-category-filters" onClick={() => { const track = specialistCategoryCarousel.current; track?.scrollBy({ left: track.clientWidth * 0.8, behavior: 'smooth' }); }}>←</button>
-          <button type="button" aria-label={t[10] + ' →'} aria-controls="specialist-category-filters" onClick={() => { const track = specialistCategoryCarousel.current; track?.scrollBy({ left: -track.clientWidth * 0.8, behavior: 'smooth' }); }}>→</button>
-        </div></div>}
+        </div>{group.length > 1 && <div className="services-category-arrows services-company-category-arrows"><button type="button" aria-label={title + ' ←'} aria-controls="specialists-track" onClick={() => scrollSpecialists(-1)}>←</button><button type="button" aria-label={title + ' →'} aria-controls="specialists-track" onClick={() => scrollSpecialists(1)}>→</button></div>}</div>}
         {!personalGroup && <div className="services-company-category-carousel"><div id="company-category-filters" ref={companyCategoryCarousel} className="services-company-categories" role="group" aria-labelledby={headingId}>
           <button type="button" aria-pressed={!companyCategories.length} onClick={() => setCompanyCategories([])}>{t[11]}</button>
           {companyCategoryOptions.map(category => <button type="button" key={category} aria-pressed={companyCategories.includes(category)} onClick={() => { setFilters(current => ({ ...current, category: '' })); setSpecialistCategories([]); setCompanyCategories(current => current.includes(category) ? [] : [category]); }}>{categoryLabel(category)}</button>)}
