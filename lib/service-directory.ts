@@ -37,7 +37,7 @@ export function serviceCategory(listing: Pick<ServiceListing, 'category'>) {
   if (/^страховой агент$/i.test(category)) return 'Страхование';
   if (/^(?:специалист по красоте|мастер красоты|парикмахер|hair stylist)$/i.test(category)) return 'Красота и уход';
   if (/академи|academy|образован|обучен|автошкол|школ|курсы|курс |репетитор|учеб|университет|колледж|детский сад|education|training|school|tutor|courses|university|college/i.test(category)) return 'Образование';
-  if (/мотодилер|мотосалон|продажа мотоциклов|продажа мототехники|покупка и аренда авто и мототехники|motorcycle dealer|motorcycle sales|автодилер|автосалон|продажа автомобилей|покупка и аренда автомобилей|car dealer|car rental/i.test(category)) return 'Покупка и аренда авто и мототехники';
+  if (/мотодилер|мотосалон|продажа мотоциклов|продажа мототехники|авто и мототехника|покупка и аренда авто и мототехники|motorcycle dealer|motorcycle sales|автодилер|автосалон|продажа автомобилей|покупка и аренда автомобилей|car dealer|car rental/i.test(category)) return 'Авто и мототехника';
   if (/недвижим|риелтор|риэлтор|аренда квартир|продажа квартир|аренда домов|продажа домов|аренда офис|real estate|realtor|property rental/i.test(category)) return 'Недвижимость';
   if (/^(?:специалист по массажу(?: лица и тела)?|массажист(?:ка)?|массаж и спа)$/i.test(category)) return 'Массаж и спа';
   if (/^консультант по визовым вопросам$/i.test(category)) return 'Визы и иммиграция';

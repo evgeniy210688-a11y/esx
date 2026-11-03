@@ -17,7 +17,7 @@ const rows = [
 'Образование|Education|교육|Ta’lim|教育|Giáo dục|Eğitim',
 'Детские услуги|Services for children|아동 서비스|Bolalar uchun xizmatlar|儿童服务|Dịch vụ cho trẻ em|Çocuk hizmetleri',
 'Автосервисы и ремонт|Auto service and repair|자동차 정비 및 수리|Avtoservis va ta’mirlash|汽车保养与维修|Bảo dưỡng và sửa chữa ô tô|Oto servis ve tamir',
-'Покупка и аренда авто и мототехники|Car and motorcycle sales and rentals|자동차·오토바이 구매 및 렌트|Avtomobil va mototexnika sotib olish va ijarasi|汽车及摩托车购买与租赁|Mua và thuê ô tô, xe máy|Otomobil ve motosiklet satın alma ve kiralama',
+'Авто и мототехника|Cars and motorcycles|자동차 및 오토바이|Avtomobillar va mototexnika|汽车与摩托车|Ô tô và xe máy|Otomobil ve motosiklet',
 'Такси и трансфер|Taxi and transfers|택시 및 픽업|Taksi va transfer|出租车与接送|Taxi và đưa đón|Taksi ve transfer',
 'Доставка и грузоперевозки|Delivery and freight|배송 및 화물 운송|Yetkazib berish va yuk tashish|配送与货运|Giao hàng và vận tải|Teslimat ve yük taşımacılığı',
 'Переезды|Moving services|이사|Ko‘chish xizmatlari|搬家服务|Dịch vụ chuyển nhà|Taşınma hizmetleri',
@@ -40,6 +40,6 @@ const rows = [
 ];
 const labels = new Map(rows.map(row => { const values = row.split('|'); return [values[0].normalize('NFKC').trim().toLowerCase(), values]; }));
 export function categoryTranslation(category: string, language: string): string | undefined {
-  if (category === 'Покупка и аренда автомобилей') category = 'Покупка и аренда авто и мототехники';
+  if (category === 'Покупка и аренда автомобилей') category = 'Авто и мототехника';
   return labels.get(category.normalize('NFKC').trim().toLowerCase())?.[languages.indexOf(language)];
 }
