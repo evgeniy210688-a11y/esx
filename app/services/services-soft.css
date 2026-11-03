@@ -284,3 +284,6 @@
 @media(max-width:760px){.services-directory .services-company-categories{gap:7px;padding-bottom:7px}.services-directory .services-company-categories button{min-height:34px;padding:6px 12px;font-size:13px;line-height:20px}}
 
 @media(max-width:420px){.services-directory .services-listing-group>.services-category-heading{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:4px}.services-directory .services-listing-group>.services-category-heading>h2{grid-column:2;grid-row:1;font-size:22px}.services-directory .services-listing-group>.services-category-heading>.services-category-arrows{grid-column:3;grid-row:1;justify-self:end;gap:5px}.services-directory .services-listing-group>.services-category-heading>.services-category-arrows button{width:34px;height:34px}}
+.services-directory .services-company-category-carousel{margin-bottom:0}
+.services-directory .services-company-category-carousel+.services-specialist-track{padding-top:4px}
+.services-directory .services-company-category-carousel+.services-grid{margin-top:4px}
