@@ -271,3 +271,9 @@
 .services-header-search-panel[hidden]{display:none}
 .services-header-search-panel input{width:100%;min-height:44px;padding:10px 14px;border:1px solid #b8cce5;border-radius:14px;background:#eef5ff;color:#243f64;font:inherit;font-size:16px}
 .services-directory[data-theme=dark] .services-header-search-panel,.services-directory[data-theme=dark] .services-header-search-panel input,.services-directory[data-theme=dark] .services-top .services-header-search-toggle{background:#1b3552;color:#e3edff;border-color:#456180}
+
+.services-header-search-row{position:relative}
+.services-header-search-row>input{padding-right:54px}
+.services-directory .services-header-search-row .services-search-settings{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:40px;height:36px;min-height:0;padding:7px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;box-shadow:none;color:#315782;border-radius:10px}
+.services-directory .services-header-filters{margin:12px 0 0;max-height:calc(100dvh - 180px);overflow-y:auto;overscroll-behavior:contain}
+.services-directory[data-theme=dark] .services-header-search-row .services-search-settings{color:#dce8f8}
