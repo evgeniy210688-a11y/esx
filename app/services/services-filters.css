@@ -1,0 +1,143 @@
+/* Shared by the directory and the sticky header search. */
+.services-directory .services-compact-filters {
+  padding: 20px;
+  border-radius: 22px;
+}
+
+.services-directory .services-compact-filters .services-filter-options {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.services-directory .services-compact-filters .services-city-picker {
+  gap: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.services-directory .services-compact-filters .services-city-trigger {
+  min-height: 48px;
+  height: 100%;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 14px;
+}
+
+.services-directory .services-compact-filters .services-city-trigger > span:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.services-directory .services-filter-footer {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+  padding-top: 12px;
+  border-top: 1px solid #b8cce580;
+}
+
+.services-directory .services-filter-help { min-width: 0; }
+
+.services-directory .services-compact-filters label.services-check {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: fit-content;
+  min-height: 44px;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+/* Do not let full-width input rules stretch the native checkbox. */
+.services-directory .services-compact-filters .services-check input[type=checkbox] {
+  appearance: auto;
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  margin: 0;
+  padding: 0;
+  box-shadow: none;
+  accent-color: #1554e9;
+}
+
+.services-directory .services-filter-help .services-note {
+  max-width: 800px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #566d8b;
+}
+
+.services-directory .services-filter-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.services-directory .services-compact-filters .services-filter-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: auto;
+  min-height: 44px;
+  margin: 0;
+  padding: 10px 18px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.services-directory .services-compact-filters .services-filter-actions .services-filter-reset {
+  background: #edf4ff;
+  border-color: #b8cce5;
+  color: #254e82;
+  box-shadow: none;
+}
+
+.services-directory[data-theme=dark] .services-compact-filters :is(.services-city-picker, label.services-check) { color: #dce8f8; }
+.services-directory[data-theme=dark] .services-compact-filters :is(.services-city-trigger, .services-city-menu) {
+  background: #1b3552;
+  border-color: #456180;
+  color: #e3edff;
+  box-shadow: none;
+}
+.services-directory[data-theme=dark] .services-compact-filters .services-city-menu button { color: #e3edff; }
+.services-directory[data-theme=dark] .services-compact-filters .services-city-menu button:is(:hover, :focus-visible) { background: #285991; }
+.services-directory[data-theme=dark] .services-filter-footer { border-color: #456180; }
+.services-directory[data-theme=dark] .services-filter-help .services-note { color: #adc2dc; }
+.services-directory[data-theme=dark] .services-compact-filters .services-check input[type=checkbox] { accent-color: #75b8ff; color-scheme: dark; }
+.services-directory[data-theme=dark] .services-compact-filters .services-filter-actions .services-filter-reset {
+  background: #1b3552;
+  border-color: #456180;
+  color: #dce8f8;
+}
+
+@media (max-width: 1000px) {
+  .services-directory .services-compact-filters .services-filter-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .services-directory .services-filter-footer { align-items: flex-start; }
+}
+
+@media (max-width: 600px) {
+  .services-directory .services-compact-filters { padding: 16px; border-radius: 18px; }
+  .services-directory .services-compact-filters .services-filter-options { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .services-directory .services-filter-footer { flex-direction: column; gap: 16px; padding-top: 8px; }
+  .services-directory .services-filter-actions { width: 100%; }
+  .services-directory .services-filter-actions button { flex: 1; }
+  .services-directory .services-compact-filters .services-city-menu input[type=search] { font-size: 16px; }
+}

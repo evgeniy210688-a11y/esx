@@ -19,6 +19,7 @@ import ServicesHeader from './ServicesHeader';
 import RegistrationLink from './RegistrationLink';
 import './services-light.css';
 import './services-soft.css';
+import './services-filters.css';
 import ServiceFilterPicker from './ServiceFilterPicker';
 import ServicesBackToTop from './ServicesBackToTop';
 import { interfaceLanguages, serviceLabels, type InterfaceLanguage } from './serviceLabels';
@@ -532,18 +533,24 @@ export default function ServicesDirectory() {
       <ServiceFilterPicker label={t[10]} value={filters.category} onChange={value => update('category', value)} options={[{value: '', label: t[11]}, ...categories.map(category => ({value: category, label: categoryLabel(category)}))]} />
       <ServiceFilterPicker label={t[12]} value={filters.language} onChange={value => update('language', value)} options={[{value: '', label: t[13]}, ...languageOptions]} />
       <ServiceFilterPicker label={t[14]} value={filters.interpreterLanguage} onChange={value => update('interpreterLanguage', value)} options={[{value: '', label: t[13]}, ...interpreterOptions]} />
-      <label className="services-check"><input type="checkbox" checked={filters.interpreter} onChange={e => update('interpreter', e.target.checked)} />{t[15]}</label>
+      <div className="services-filter-footer">
+      <div className="services-filter-help">
+      <label className="services-check"><input type="checkbox" checked={filters.interpreter} onChange={e => update('interpreter', e.target.checked)} /><span>{t[15]}</span></label>
       <p className="services-note">{t[17]}</p>
+      </div>
+      <div className="services-filter-actions">
       <button type="button" className="services-filter-reset" aria-label={t[16]} onClick={() => { setFilters(empty); setCompanyCategories([]); setSpecialistCategories([]); }}>{resetButtonLabels[language]}</button>
       <button type="button" className="services-filter-collapse" aria-expanded={true} onClick={close}>{detailLabels[language][1]} <span aria-hidden="true">▴</span></button>
+      </div>
+      </div>
   </>;
   return <div className="services-page services-directory" lang={language}>
     <ServicesHeader language={language} chooseLanguage={chooseLanguage} directoryHeading search={{ anchor: topSearch, value: filters.query ?? '', onChange: value => update('query', value), label: searchLabels[language], filterLabel: filterButtonLabels[language], filterCount: activeFilterCount, renderFilters: renderFilterFields }} />
     <main className="services-main"><section ref={filtersRoot} className="services-search-area"><div ref={topSearch} className="services-top-search"><BackButton language={language} iconOnly /><div className="services-company-search"><input aria-label={searchLabels[language]} type="search" value={filters.query ?? ''} onChange={e => update('query', e.target.value)} placeholder={searchLabels[language]} />      <button type="button" className="services-filter-toggle services-search-settings" aria-label={filterButtonLabels[language]} title={filterButtonLabels[language]} aria-expanded={filtersOpen} aria-controls="services-filter-options" onClick={() => setFiltersOpen(value => !value)}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3" fill="currentColor"/><circle cx="15" cy="17" r="3" fill="currentColor"/></svg>{activeFilterCount > 0 && <span className="services-filter-count">{activeFilterCount}</span>}</button></div></div>    <section className="services-filters services-compact-filters services-search-filters" hidden={!filtersOpen} aria-label={t[7]}>
 
-      <div id="services-filter-options" className="services-filter-reveal" data-open={filtersOpen} inert={!filtersOpen} aria-hidden={!filtersOpen} onTransitionRun={event => { if (event.target === event.currentTarget && event.propertyName === 'grid-template-rows') (event.currentTarget.firstElementChild as HTMLElement).style.overflow = 'hidden'; }} onTransitionEnd={event => { if (event.target === event.currentTarget && event.propertyName === 'grid-template-rows') (event.currentTarget.firstElementChild as HTMLElement).style.overflow = filtersOpen ? 'visible' : 'hidden'; }}><div className="services-filter-clip"><div className="services-filter-options">
+      <div id="services-filter-options" className="services-filter-options">
       {renderFilterFields(() => { setFiltersOpen(false); filtersRoot.current?.querySelector<HTMLButtonElement>('.services-filter-toggle')?.focus({ preventScroll: true }); })}
-      </div></div></div>
+      </div>
     </section>
 </section>
     {categories.length > 0 && <section className="services-category-carousel" aria-label={t[10]}>
