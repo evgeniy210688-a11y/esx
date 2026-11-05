@@ -87,6 +87,7 @@ function isShoppingCategory(category: string): boolean {
   return /магазин|продукт|shop|grocer/i.test(category);
 }
 function categoryImage(category: string): string | null {
+  if (/цветоч|цветы|флорист|flower|florist/i.test(category)) return '/services/category-flowers.png';
   if (/банки|банков|денежн.*перевод|bank|money transfer|remittance/i.test(category)) return '/services/category-banking.png';
   if (/полиграф|реклам|графическ.*дизайн|printing|advertising|graphic design/i.test(category)) return '/services/category-print-design.png';
   if (/ведущ.*мероприят|тамада|event host|master of ceremonies|emcee/i.test(category)) return '/services/category-event-host.png';

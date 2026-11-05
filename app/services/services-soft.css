@@ -287,3 +287,19 @@
 .services-directory .services-company-category-carousel{margin-bottom:0}
 .services-directory .services-company-category-carousel+.services-specialist-track{padding-top:4px}
 .services-directory .services-company-category-carousel+.services-grid{margin-top:4px}
+
+/* Keep the scrolled-page search accessible outside the mobile menu. */
+.services-glass-header > .services-header-search-toggle{margin-left:auto}
+@media(min-width:761px){
+  .services-glass-header:has(> .services-header-search-toggle) .services-header-menu{flex:0 1 auto}
+}
+@media(max-width:760px){
+  .services-directory .services-glass-header > .services-header-search-toggle{order:3;flex:0 0 44px;width:44px;height:44px;margin-left:0}
+  .services-directory .services-glass-header .services-interface-language{order:2}
+  .services-directory .services-glass-header > .services-menu-toggle{order:4}
+  .services-directory .services-glass-header:has(> .services-header-search-toggle){gap:8px}
+  .services-directory .services-glass-header:has(> .services-header-search-toggle) .services-brand-controls{flex-shrink:1;flex-wrap:wrap;row-gap:2px}
+}
+@media(max-width:420px){
+  .services-glass-header:has(> .services-header-search-toggle) #services-language-value{display:none}
+}
