@@ -10,7 +10,7 @@ import { categoryTranslation } from '@/lib/service-category-labels';
 import Link from 'next/link';
 import Image from 'next/image';
 import { companyPhones, companyPhotos, phoneLabels } from '@/lib/service-media';
-import { serviceItems, splitServiceDescription, specialistRole } from '@/lib/service-description';
+import { serviceItems, splitServiceDescription, specialistRole, cardContent } from '@/lib/service-description';
 import BusinessHoursDisplay from './BusinessHoursDisplay';
 import { supabase } from '@/lib/supabase';
 import { listingCategories, serviceCategory, isPersonalListing, normalizeServiceCity, serviceCities, matchesService, safeServiceWebsite, serviceLanguages, interpreterLanguageOptions, type ServiceListing, type ServiceFilters } from '@/lib/service-directory';
@@ -60,15 +60,6 @@ const sectionLabels: Record<InterfaceLanguage, [string, string, string]> = {
   zh: ['介绍', '服务', '我们的地址：'], vi: ['Mô tả', 'Dịch vụ', 'Địa chỉ:'],
   tr: ['Açıklama', 'Hizmetler', 'Adresimiz:'],
 };
-function cardContent(description: string) {
-  const content = splitServiceDescription(description);
-  if (content.services) return content;
-  // Display legacy descriptions with a trailing bullet list as separate sections.
-  const lines = content.description.split(/\r?\n/);
-  const start = lines.findIndex(line => /^\s*[-•●*]\s+\S/.test(line));
-  if (start < 0 || !lines.slice(start).every(line => !line.trim() || /^\s*[-•●*]\s+\S/.test(line))) return content;
-  return { description: lines.slice(0, start).join('\n'), services: lines.slice(start).join('\n') };
-}
 const openPageLabels: Record<InterfaceLanguage, string> = { ru: 'Открыть страницу', en: 'Open page', ko: '페이지 열기', uz: 'Sahifani ochish', zh: '打开页面', vi: 'Mở trang', tr: 'Sayfayı aç' };
 const branchLabels: Record<InterfaceLanguage, string> = { ru: 'Филиалы', en: 'Branches', ko: '지점', uz: 'Filiallar', zh: '分店', vi: 'Chi nhánh', tr: 'Şubeler' };
 const detailLabels: Record<InterfaceLanguage, [string, string]> = {

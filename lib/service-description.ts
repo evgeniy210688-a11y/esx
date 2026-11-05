@@ -24,3 +24,13 @@ export function specialistRole(description: string, translated?: string) {
   const localized = text.match(/^[^:\n：]{1,60}[:：]\s*([^\n]+)\n\n/);
   return {role: localized?.[1].trim() || source[1].trim(), description: localized ? text.slice(localized[0].length) : text};
 }
+
+export function cardContent(description: string) {
+  const content = splitServiceDescription(description);
+  if (content.services) return content;
+  // Display legacy descriptions with a trailing bullet list as separate sections.
+  const lines = content.description.split(/\r?\n/);
+  const start = lines.findIndex(line => /^\s*[-•●*]\s+\S/.test(line));
+  if (start < 0 || !lines.slice(start).every(line => !line.trim() || /^\s*[-•●*]\s+\S/.test(line))) return content;
+  return { description: lines.slice(0, start).join('\n'), services: lines.slice(start).join('\n') };
+}
