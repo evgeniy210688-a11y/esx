@@ -12,7 +12,7 @@ import BusinessHoursEditor from './BusinessHoursEditor';
 import useAccount from '@/app/account/useAccount';
 import { supabase } from '@/lib/supabase';
 import BranchEditor from './BranchEditor';
-import ServicesBackToTop from '../services/ServicesBackToTop';
+import AdminPageScrollControls from './AdminPageScrollControls';
 import { listingCategories, matchesService, serviceCategory, isPersonalListing, validListingIdentity, listingKindLabels, normalizeServiceCity, validServiceBranches, serviceLanguages, interpreterLanguageOptions, type ServiceListing, type ServiceLanguage } from '@/lib/service-directory';
 import '../services/services.css';
 import './admin.css';
@@ -30,7 +30,7 @@ export default function AdminServices() {
   const { user, ready } = useAccount();
   return <div className="services-page admin-page" lang="ru"><header className="services-top"><Link className="services-brand" href="/" aria-label="ESX — Главная"><Image src="/esx-logo.png" alt="ESX" width={80} height={80} sizes="(max-width: 540px) 64px, 80px" preload /><span> / Администратор</span></Link><nav aria-label="Навигация"><Link href="/services">Услуги</Link><Link href="/account">Мой аккаунт</Link></nav></header><main className="services-main"><BackButton language="ru" />
     {!ready ? <p role="status">Проверяем вход…</p> : !user || user.is_anonymous ? <AdminLogin /> : <AdminPanel key={user.id} userId={user.id} email={user.email ?? ''} />}
-  </main><ServicesBackToTop language="ru" /></div>;
+  </main></div>;
 }
 function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -202,7 +202,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     {access === 'loading' && <p role="status">Проверяем права…</p>}
     {access === 'denied' && <section className="services-empty"><h1>Нет доступа администратора</h1><p>Этому аккаунту не назначены права управления услугами. Войдите в аккаунт администратора.</p></section>}
     {access === 'error' && <section className="services-empty"><h1>Не удалось проверить доступ</h1><button onClick={() => { setAccess('loading'); setAttempt(n => n + 1); }}>Повторить</button></section>}
-    {access === 'allowed' && <><h1>Панель управления</h1><div className="admin-summary">{Object.entries(statuses).map(([status, label]) => <button type="button" key={status} aria-pressed={statusFilter === status} aria-controls="admin-listings" onClick={() => { setStatusFilter(status); setQuery(''); setCategory(''); setOpenTypes({ specialists: true, companies: true }); document.getElementById('admin-listings')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}><strong>{rows.filter(row => row.status === status).length}</strong><span>{label}</span></button>)}{listingTypes.map(type => <button type="button" key={type.key} aria-expanded={openTypes[type.key]} aria-controls={'admin-type-' + type.key} onClick={() => { setStatusFilter(''); setQuery(''); setCategory(''); setOpenTypes({ specialists: type.personal, companies: !type.personal }); document.getElementById('admin-listings')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}><strong>{rows.filter(row => isPersonalListing(row) === type.personal).length}</strong><span>{type.label}</span></button>)}</div><h2>Компании и специалисты</h2><p>Добавляйте компании, специалистов и переводчиков, редактируйте карточки и выбирайте, что показывать в справочнике.</p><div className="admin-columns"><section id="admin-listings" aria-label="Компании и специалисты" className="services-card"><button disabled={busy} onClick={() => { if (draft.name && !window.confirm('Открыть новую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...blank }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}>+ Добавить карточку</button>
+    {access === 'allowed' && <><h1>Панель управления</h1><div className="admin-summary">{Object.entries(statuses).map(([status, label]) => <button type="button" key={status} aria-pressed={statusFilter === status} aria-controls="admin-listings" onClick={() => { setStatusFilter(status); setQuery(''); setCategory(''); setOpenTypes({ specialists: true, companies: true }); document.getElementById('admin-listings')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}><strong>{rows.filter(row => row.status === status).length}</strong><span>{label}</span></button>)}{listingTypes.map(type => <button type="button" key={type.key} aria-expanded={openTypes[type.key]} aria-controls={'admin-type-' + type.key} onClick={() => { setStatusFilter(''); setQuery(''); setCategory(''); setOpenTypes({ specialists: type.personal, companies: !type.personal }); document.getElementById('admin-listings')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}><strong>{rows.filter(row => isPersonalListing(row) === type.personal).length}</strong><span>{type.label}</span></button>)}</div><h2>Компании и специалисты</h2><p>Добавляйте компании, специалистов и переводчиков, редактируйте карточки и выбирайте, что показывать в справочнике.</p><div className="admin-columns"><div className="admin-listings-dock"><section id="admin-listings" aria-label="Компании и специалисты" className="services-card"><button disabled={busy} onClick={() => { if (draft.name && !window.confirm('Открыть новую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...blank }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}>+ Добавить карточку</button>
       {!personal && <div style={{ marginTop: 12 }}><button type="button" disabled={busy || !draft.name.trim()} onClick={addBranchCard}>+ Добавить филиал</button></div>}
       <div className="admin-list-filters">
         <label htmlFor="admin-list-status">Статус заявки</label>
@@ -231,7 +231,7 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
       </section>)}
         </div>
       </section>)}
-    </section>
+    </section><AdminPageScrollControls /></div>
     <form id="company-form" ref={form} onSubmit={save} className="services-card admin-form"><h2>{draft.id ? 'Редактирование карточки' : 'Новая карточка'}</h2>{!personal && <nav aria-label="Разделы настроек компании"><a href="#company-branches">Адреса филиалов</a></nav>}<fieldset disabled={busy} className="admin-fields">
       {draft.categories && draft.categories.length > 1 && <p>Категории заявки: {draft.categories.join(', ')}</p>}
           <div className="admin-card-kind"><span id="admin-card-kind-label">Тип карточки</span><div className="admin-card-kind-buttons" role="group" aria-labelledby="admin-card-kind-label">
