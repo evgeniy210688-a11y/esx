@@ -99,8 +99,10 @@
 .admin-page .admin-page-scroll button{display:grid;place-items:center;width:44px;height:44px;padding:0;border-radius:12px;border:1px solid #75d6ce;background:#17334c;color:#75d6ce;box-shadow:0 4px 12px #0003}
 .admin-page .admin-page-scroll button:hover{background:#24465e}
 .admin-page .admin-page-scroll button:focus-visible{outline:3px solid #75d6ce;outline-offset:3px}
+.admin-mobile-back-to-top{display:none}
 @media(max-width:750px){
-  .admin-page .admin-listings-dock{top:8px}
-  .admin-page #admin-listings{max-height:45vh;max-height:45dvh;padding:16px}
-  .admin-page #company-form{scroll-margin-top:calc(45vh + 24px);scroll-margin-top:calc(45dvh + 24px)}
+  .admin-page .admin-listings-dock{position:static;display:block;z-index:auto}
+  .admin-page #admin-listings{max-height:none;overflow:visible;overscroll-behavior-y:auto;scrollbar-gutter:auto}
+  .admin-page .admin-page-scroll{display:none}
+  .admin-mobile-back-to-top{display:block}
 }
