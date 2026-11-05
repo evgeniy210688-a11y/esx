@@ -106,3 +106,12 @@
   .admin-page .admin-page-scroll{display:none}
   .admin-mobile-back-to-top{display:block}
 }
+
+.admin-page .admin-summary{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.admin-duplicates{margin:24px 0;min-width:0}
+.admin-duplicate-pair{padding:18px 0;border-top:1px solid #49677b}
+.admin-duplicate-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.admin-duplicate-cards article{padding:16px;border:1px solid #49677b;border-radius:14px;min-width:0;overflow-wrap:anywhere}
+.admin-duplicate-cards h4{margin:0;font-size:18px}
+.admin-duplicate-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+@media(max-width:600px){.admin-duplicate-cards{grid-template-columns:1fr}}
