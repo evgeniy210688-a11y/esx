@@ -1,6 +1,6 @@
-.listing-animated-panel{display:grid;grid-template-rows:0fr;opacity:0;visibility:hidden;transition:grid-template-rows .5s ease,opacity .4s ease,visibility 0s .5s;overflow-anchor:none}
-.listing-animated-panel[data-open=true]{grid-template-rows:1fr;opacity:1;visibility:visible;transition:grid-template-rows .5s ease,opacity .4s ease,visibility 0s}
+.listing-animated-panel{display:grid;grid-template-rows:0fr;opacity:0;visibility:hidden;transition:grid-template-rows 1s cubic-bezier(.4,0,.2,1),opacity .8s ease .2s,visibility 0s 1s;overflow-anchor:none}
+.listing-animated-panel[data-open=true]{grid-template-rows:1fr;opacity:1;visibility:visible;transition:grid-template-rows 1s cubic-bezier(.4,0,.2,1),opacity .8s ease,visibility 0s}
 .listing-panel-clip{min-height:0;overflow:hidden}
-.listing-animated-panel .profile-section-content{transform:translateY(-6px);transition:transform .5s ease}
+.listing-animated-panel .profile-section-content{transform:translateY(-6px);transition:transform 1s cubic-bezier(.4,0,.2,1)}
 .listing-animated-panel[data-open=true] .profile-section-content{transform:translateY(0)}
 @media(prefers-reduced-motion:reduce){.listing-animated-panel,.listing-animated-panel .profile-section-content{transition:none}}

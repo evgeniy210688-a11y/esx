@@ -9,7 +9,7 @@ export default function AnimatedPanel({ index, open, children }: { index: number
       if (element && element.getBoundingClientRect().bottom > window.innerHeight) {
         element.scrollIntoView({ block: 'nearest', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
       }
-    }, 520);
+    }, 1020);
     return () => window.clearTimeout(timer);
   }, [open]);
   return <section ref={panel} id={`listing-panel-${index}`} role="region" aria-labelledby={`listing-button-${index}`} className="listing-animated-panel" data-open={open} aria-hidden={!open} inert={!open}>
