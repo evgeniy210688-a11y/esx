@@ -303,3 +303,6 @@
 @media(max-width:420px){
   .services-glass-header:has(> .services-header-search-toggle) #services-language-value{display:none}
 }
+
+.services-contact-icon,.services-contacts .specialist-social-icon{display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:7px;width:20px;height:20px}
+.services-contacts a{display:inline-flex;align-items:center;overflow-wrap:anywhere}

@@ -1,4 +1,5 @@
 'use client';
+import ContactIcon from '../ContactIcon';
 import Link from 'next/link';
 import SocialIcon from './SocialIcon';
 import Image from 'next/image';
@@ -41,7 +42,7 @@ export default function ProfilePage({data}:{data:ServiceListing & {profile_conte
       {specialist.service_languages.length > 0 && <section className="services-card-section"><h2>{t('Языки общения')}</h2><div className="services-tags">{specialist.service_languages.map(code => <span key={code}>{new Intl.DisplayNames([language],{type:'language'}).of(code) ?? interpreterLanguageOptions[code]}</span>)}</div></section>}
       <ProfileSections>
         <div>{services.length > 0 ? <ul className="services-item-list">{services.map((item, index) => <li key={index}>{t(item)}</li>)}</ul> : <p>{t('Уточните услуги у специалиста.')}</p>}</div>
-        <div><div className="services-contacts specialist-contact-list">{specialist.email && <a href={'mailto:' + specialist.email}>{specialist.email}</a>}{phones.map((phone, index) => <a key={index} href={'tel:' + phone.number.replace(/[^+0-9]/g, '')}>{phone.number}</a>)}{socials.map(link => <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer"><SocialIcon network={link.network} /><span>{socialNetworks[link.network]} ↗</span></a>)}{!specialist.email && phones.length === 0 && socials.length === 0 && <p>{t('Контакты пока не указаны.')}</p>}</div></div>
+        <div><div className="services-contacts specialist-contact-list">{specialist.email && <a href={'mailto:' + specialist.email}><ContactIcon kind="email" />{specialist.email}</a>}{phones.map((phone, index) => <a key={index} href={'tel:' + phone.number.replace(/[^+0-9]/g, '')}><ContactIcon kind="phone" />{phone.number}</a>)}{socials.map(link => <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer"><SocialIcon network={link.network} /><span>{socialNetworks[link.network]} ↗</span></a>)}{!specialist.email && phones.length === 0 && socials.length === 0 && <p>{t('Контакты пока не указаны.')}</p>}</div></div>
         <ProfileAddresses paranAddress={specialist.address ?? ''} />
       </ProfileSections>
       

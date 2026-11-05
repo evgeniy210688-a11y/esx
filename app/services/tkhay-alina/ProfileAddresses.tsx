@@ -1,4 +1,5 @@
 'use client';
+import ContactIcon from '../ContactIcon';
 
 import { useState } from 'react';
 import { useProfileLanguage } from './ProfileLanguage';
@@ -15,7 +16,7 @@ export default function ProfileAddresses({ paranAddress }: { paranAddress: strin
       <button type="button" aria-pressed={selected === 'incheon'} aria-controls="profile-office-address" onClick={() => setSelected('incheon')}>{t('Инчхон')}</button>
     </div>
     <div id="profile-office-address" aria-live="polite" aria-atomic="true">
-      <p>{address || t('Адрес пока не указан. Уточните его у специалиста.')}</p>
+      <p><ContactIcon kind="address" />{address || t('Адрес пока не указан. Уточните его у специалиста.')}</p>
       {address && <div className="services-map-links">
         <a href={'https://map.kakao.com/link/search/' + encodeURIComponent(address)} target="_blank" rel="noopener noreferrer">Kakao Map ↗</a>
         <a href={'https://map.naver.com/p/search/' + encodeURIComponent(address)} target="_blank" rel="noopener noreferrer">Naver Map ↗</a>
