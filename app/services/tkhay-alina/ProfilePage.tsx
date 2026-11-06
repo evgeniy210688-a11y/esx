@@ -1,4 +1,7 @@
 'use client';
+import { specialistDisplayRole } from '@/lib/specialist-role';
+import { specialistRole } from '@/lib/service-description';
+import { displayTranslation, preparedTranslations, translationKey } from '@/lib/service-translations';
 import ContactIcon from '../ContactIcon';
 import Link from 'next/link';
 import SocialIcon from './SocialIcon';
@@ -25,7 +28,8 @@ export default function ProfilePage({data}:{data:ServiceListing & {profile_conte
   const {language,t} = useProfileLanguage();
   const specialist = data;
   const photos = companyPhotos(specialist);
-  const content = splitServiceDescription(specialist.description);
+  const translated = displayTranslation(language, preparedTranslations[translationKey(language, specialist)]);
+  const content = splitServiceDescription(specialistRole(specialist.description).description);
   const services = serviceItems(content.services);
   const phones = companyPhones(specialist);
   const socials = validSocialLinks(specialist.social_links);
@@ -34,7 +38,7 @@ export default function ProfilePage({data}:{data:ServiceListing & {profile_conte
     <main className="services-main"><Link className="profile-back" href="/services">← {t('Назад')}</Link><article className="services-card"><ProfileEditor />
       <div className="specialist-heading">
         {photos[0] && <Image src={photos[0]} alt={specialist.name} width={160} height={160} unoptimized className="specialist-portrait" />}
-        <div><p className="services-eyebrow">{normalizeServiceCity(specialist.city) === 'Хвасонг, Паран' ? profileCity[language] : t(specialist.city)}</p><h1>{specialist.name}</h1><p>{t(specialist.category)}</p>{specialist.represented_company && <p>{specialist.represented_company}</p>}</div>
+        <div><p className="services-eyebrow">{normalizeServiceCity(specialist.city) === 'Хвасонг, Паран' ? profileCity[language] : t(specialist.city)}</p><h1>{specialist.name}</h1><p className="services-person-role">{specialistDisplayRole(specialist, language, translated)}</p>{specialist.represented_company && <p>{specialist.represented_company}</p>}</div>
       </div>
 
       <section className="services-card-section"><h2>{t('Описание')}</h2><p className="specialist-description">{t(content.description)}</p></section>
