@@ -373,13 +373,23 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
     async function load() {
       for (let retry = 0; retry < 2 && active; retry++) {
       try {
-        const response = await fetch('/api/services/directory', {
-          signal: AbortSignal.any([controller.signal, AbortSignal.timeout(22000)]),
-        });
-        if (!response.ok) throw new Error('Directory request failed');
-        const rows: ServiceListing[] = await response.json();
-        if (!Array.isArray(rows)) throw new Error('Invalid directory response');
-        if (active) { setListings(rows); setStatus('ready'); }
+        const rows: ServiceListing[] = [];
+        let cursor = '';
+        for (;;) {
+          const response = await fetch('/api/services/directory' + (cursor ? '?after=' + cursor : ''), {
+            signal: AbortSignal.any([controller.signal, AbortSignal.timeout(22000)]),
+          });
+          if (!response.ok) throw new Error('Directory request failed');
+          const page: ServiceListing[] = await response.json();
+          if (!Array.isArray(page)) throw new Error('Invalid directory response');
+          rows.push(...page);
+          if (active) {
+            setListings([...rows].sort((a,b) => a.name.localeCompare(b.name, 'ru') || a.id.localeCompare(b.id)));
+            setStatus('ready');
+          }
+          if (page.length < 25) break;
+          cursor = page[page.length - 1].id;
+        }
         return;
       } catch (error) {
         if (!active) return;
