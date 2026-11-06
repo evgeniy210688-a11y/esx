@@ -10,6 +10,7 @@ import { preparedTranslations, translationKey, validTranslation, displayTranslat
 import { specialistDisplayRole } from '@/lib/specialist-role';
 import { categoryTranslation } from '@/lib/service-category-labels';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { companyPhones, companyPhotos, phoneLabels } from '@/lib/service-media';
 import { serviceItems, splitServiceDescription, specialistRole, cardContent } from '@/lib/service-description';
@@ -115,17 +116,28 @@ function categoryArt(category: string): number {
   return 0;
 }
 const empty: ServiceFilters = { query: '', city: '', category: '', language: '', interpreter: false, interpreterLanguage: '' };
-export default function ServicesDirectory() {
-  const [language, setLanguage] = useState<InterfaceLanguage>('ru');
+export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: 'ru' | 'ko' | 'en' }) {
+  const router = useRouter();
+  const [preferredLanguage, setLanguage] = useState<InterfaceLanguage>('ru');
+  const language = routeLanguage ?? preferredLanguage;
   const t = serviceLabels[language];
   useEffect(() => {
+    if (routeLanguage) {
+      try { localStorage.setItem('esx-services-language', routeLanguage); } catch {}
+      return;
+    }
     try { const saved = localStorage.getItem('esx-services-language'); if (interfaceLanguages.some(l => l.code === saved)) {
       // Restore this page's saved preference after hydration.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setLanguage(saved as InterfaceLanguage);
     } } catch {}
-  }, []);
-  function chooseLanguage(value: InterfaceLanguage) { setLanguage(value); try { localStorage.setItem('esx-services-language', value); } catch {} }
+  }, [routeLanguage]);
+  function chooseLanguage(value: InterfaceLanguage) {
+    setLanguage(value);
+    try { localStorage.setItem('esx-services-language', value); } catch {}
+    if (value === 'ru' || value === 'ko' || value === 'en') router.push(`/${value}/services`, { scroll: false });
+    else if (routeLanguage) router.push('/services', { scroll: false });
+  }
   const languageName = (code: string) => new Intl.DisplayNames([language], { type: 'language' }).of(code) ?? code;
   const languageOptions = Object.keys(serviceLanguages).map(code => ({value: code, label: languageName(code), flag: '/flags/' + flags[code as keyof typeof flags] + '.svg'}));
   const interpreterOptions = Object.keys(interpreterLanguageOptions).map(code => ({value: code, label: languageName(code), flag: '/flags/' + flags[code as keyof typeof flags] + '.svg'}));
