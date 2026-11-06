@@ -374,7 +374,7 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
       for (let retry = 0; retry < 2 && active; retry++) {
       try {
         const response = await fetch('/api/services/directory', {
-          signal: AbortSignal.any([controller.signal, AbortSignal.timeout(12000)]),
+          signal: AbortSignal.any([controller.signal, AbortSignal.timeout(22000)]),
         });
         if (!response.ok) throw new Error('Directory request failed');
         const rows: ServiceListing[] = await response.json();
