@@ -12,3 +12,13 @@ export function specialistDisplayRole(listing: Pick<ServiceListing, 'description
   const role = explicit || legacy || fallback;
   return role.charAt(0).toLocaleUpperCase(language) + role.slice(1);
 }
+
+export const specialistFieldLabels: Record<InterfaceLanguage, {specialty: string; category: string}> = {
+  ru: {specialty: 'Специальность', category: 'Категория'},
+  en: {specialty: 'Specialty', category: 'Category'},
+  ko: {specialty: '전문 분야', category: '카테고리'},
+  uz: {specialty: 'Mutaxassislik', category: 'Toifa'},
+  zh: {specialty: '专业', category: '类别'},
+  vi: {specialty: 'Chuyên môn', category: 'Danh mục'},
+  tr: {specialty: 'Uzmanlık', category: 'Kategori'},
+};
