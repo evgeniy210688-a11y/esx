@@ -107,7 +107,7 @@
 
 .specialist-profile .specialist-heading-with-company{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,30%);align-items:center}
 .specialist-profile .specialist-heading-with-company>div{min-width:0;overflow-wrap:anywhere}
-.specialist-profile .specialist-represented-company{grid-column:3;align-self:start;justify-self:end;max-width:100%;margin:0;text-align:right;font-weight:600;color:#526889;overflow-wrap:anywhere}
+.specialist-profile .specialist-represented-company{grid-column:3;align-self:start;justify-self:end;max-width:100%;margin:0;text-align:right;font-weight:600;color:#526889;overflow-wrap:normal;word-break:keep-all;hyphens:none}
 .specialist-profile .specialist-heading-with-company:not(:has(.specialist-portrait)){grid-template-columns:minmax(0,1fr) minmax(0,30%)}
 .specialist-profile .specialist-heading-with-company:not(:has(.specialist-portrait)) .specialist-represented-company{grid-column:2}
 @media(max-width:540px){

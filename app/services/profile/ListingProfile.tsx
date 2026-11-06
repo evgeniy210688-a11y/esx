@@ -5,11 +5,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { companyPhotos, companyPhones } from '@/lib/service-media';
 import { cardContent, serviceItems, specialistRole } from '@/lib/service-description';
-import { safeServiceWebsite, isPersonalListing, type ServiceListing } from '@/lib/service-directory';
+import { safeServiceWebsite, isPersonalListing, serviceCategory, type ServiceListing } from '@/lib/service-directory';
 import { validSocialLinks, socialNetworks } from '@/lib/service-socials';
 import { displayTranslation, preparedTranslations, translationKey } from '@/lib/service-translations';
 import { interfaceLanguages, type InterfaceLanguage } from '../serviceLabels';
 import { profileLabel } from '../tkhay-alina/profileCopy';
+import { categoryTranslation } from '@/lib/service-category-labels';
 import { specialistDisplayRole } from '@/lib/specialist-role';
 import AnimatedPanel from './AnimatedPanel';
 import useDismissOutside from '../tkhay-alina/useDismissOutside';
@@ -55,7 +56,7 @@ export default function ListingProfile({ data }: { data: ServiceListing }) {
       <article className="services-card">
         <div className={data.represented_company?.trim() ? "specialist-heading specialist-heading-with-company" : "specialist-heading"}>
           {photos[0] && <Image className="specialist-portrait" src={photos[0]} alt={data.name} width={160} height={160} unoptimized />}
-          <div style={{ minWidth: 0, overflowWrap: 'anywhere' }}><p className="services-eyebrow">{translated?.city ?? data.city}</p><h1>{data.name}</h1>{personal && <p className="services-person-role">{specialistDisplayRole(data, language, translated)}</p>}<p>{translated?.category ?? data.category}</p></div>
+          <div style={{ minWidth: 0, overflowWrap: 'anywhere' }}><p className="services-eyebrow">{translated?.city ?? data.city}</p><h1>{data.name}</h1>{personal && <p className="services-person-role">{specialistDisplayRole(data, language, translated)}</p>}<p>{serviceCategory(data) === 'Авто и мототехника' ? categoryTranslation('Авто и мототехника', language) : translated?.category ?? data.category}</p></div>
           {data.represented_company?.trim() && <p className="specialist-represented-company">{data.represented_company.trim()}</p>}
         </div>
         {content.description.trim() && <section className="services-card-section"><h2>{t('Описание')}</h2><p className="specialist-description">{content.description}</p></section>}
