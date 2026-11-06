@@ -12,19 +12,19 @@ export async function GET() {
   try {
     const rows: ServiceListing[] = [];
         // Fetch every page: Supabase's default row limit must not silently hide listings.
-        for (let from = 0; ; from += 100) {
+        for (let from = 0; ; from += 25) {
           let { data, error } = await supabase.from('esx_service_listings')
             .select('categories,listing_kind,id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,email,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages')
-            .eq('status', 'published').order('id').range(from, from + 99).abortSignal(signal).returns<ServiceListing[]>();
+            .eq('status', 'published').order('id').range(from, from + 24).abortSignal(signal).returns<ServiceListing[]>();
           if (error?.code === '42703') {
-            ({ data, error } = await supabase.from('esx_service_listings').select('listing_kind,id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,email,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages').eq('status', 'published').order('id').range(from, from + 99).abortSignal(signal).returns<ServiceListing[]>());
+            ({ data, error } = await supabase.from('esx_service_listings').select('listing_kind,id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,email,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages').eq('status', 'published').order('id').range(from, from + 24).abortSignal(signal).returns<ServiceListing[]>());
           }
           if (error?.code === '42703') {
-            ({ data, error } = await supabase.from('esx_service_listings').select('id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,email,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages').eq('status', 'published').order('id').range(from, from + 99).abortSignal(signal).returns<ServiceListing[]>());
+            ({ data, error } = await supabase.from('esx_service_listings').select('id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,email,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages').eq('status', 'published').order('id').range(from, from + 24).abortSignal(signal).returns<ServiceListing[]>());
           }
           if (error || !data) throw error ?? new Error('No listings returned');
           rows.push(...(data as ServiceListing[]));
-          if (data.length < 100) break;
+          if (data.length < 25) break;
         }
 
     rows.sort((a, b) => a.name.localeCompare(b.name, 'ru') || a.id.localeCompare(b.id));
