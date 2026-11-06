@@ -116,3 +116,5 @@
 .specialist-profile .specialist-heading-with-company .specialist-represented-company{grid-column:2;grid-row:1}
 .specialist-profile .specialist-heading-with-company:not(:has(.specialist-portrait))>div{grid-column:1;grid-row:1}
 }
+
+.specialist-profile .specialist-field-label{font-weight:600}

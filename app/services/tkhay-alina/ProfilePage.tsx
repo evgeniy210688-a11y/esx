@@ -39,7 +39,7 @@ export default function ProfilePage({data}:{data:ServiceListing & {profile_conte
     <main className="services-main"><Link className="profile-back" href="/services">← {t('Назад')}</Link><article className="services-card"><ProfileEditor />
       <div className={specialist.represented_company?.trim() ? "specialist-heading specialist-heading-with-company" : "specialist-heading"}>
         {photos[0] && <Image src={photos[0]} alt={specialist.name} width={160} height={160} unoptimized className="specialist-portrait" />}
-        <div><p className="services-eyebrow">{normalizeServiceCity(specialist.city) === 'Хвасонг, Паран' ? profileCity[language] : t(specialist.city)}</p><h1>{specialist.name}</h1><p className="services-person-role">{specialistFieldLabels[language].specialty}: {specialistDisplayRole(specialist, language, translated)}</p><p>{specialistFieldLabels[language].category}: {categoryTranslation(serviceCategory(specialist), language) ?? translated?.category ?? specialist.category}</p></div>
+        <div><p className="services-eyebrow">{normalizeServiceCity(specialist.city) === 'Хвасонг, Паран' ? profileCity[language] : t(specialist.city)}</p><h1>{specialist.name}</h1><p className="services-person-role"><span className="specialist-field-label">{specialistFieldLabels[language].specialty}:</span> {specialistDisplayRole(specialist, language, translated)}</p><p><span className="specialist-field-label">{specialistFieldLabels[language].category}:</span> {categoryTranslation(serviceCategory(specialist), language) ?? translated?.category ?? specialist.category}</p></div>
           {specialist.represented_company?.trim() && <p className="specialist-represented-company">{specialist.represented_company.trim()}</p>}
       </div>
 
