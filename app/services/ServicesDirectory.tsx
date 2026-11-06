@@ -575,7 +575,7 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
       const title = directoryGroupLabels[language][personalGroup ? 0 : 1];
       const headingId = personalGroup ? 'specialists-heading' : 'companies-heading';
       if (!personalGroup && !companiesOpen) return <section key={headingId} className="services-listing-group" aria-labelledby={headingId}>
-        <h2 id={headingId}><button type="button" className="services-companies-toggle" aria-expanded={false} aria-controls="companies-content" onClick={() => setCompaniesOpen(true)}>{title}<span aria-hidden="true">▾</span></button></h2>
+        <div className="services-category-heading"><h2 id={headingId}><button type="button" className="services-companies-toggle" aria-expanded={false} aria-controls="companies-content" onClick={() => setCompaniesOpen(true)}>{title}<span aria-hidden="true">▾</span></button></h2></div>
         <div id="companies-content" hidden />
       </section>;
       return <section key={headingId} className="services-listing-group" aria-labelledby={headingId}>
