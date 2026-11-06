@@ -53,9 +53,10 @@ export default function ListingProfile({ data }: { data: ServiceListing }) {
     <ServicesHeader showDirectory language={language} chooseLanguage={chooseLanguage} />
     <main className="services-main"><Link className="profile-back" href="/services">← {t('Назад')}</Link>
       <article className="services-card">
-        <div className="specialist-heading">
+        <div className={data.represented_company?.trim() ? "specialist-heading specialist-heading-with-company" : "specialist-heading"}>
           {photos[0] && <Image className="specialist-portrait" src={photos[0]} alt={data.name} width={160} height={160} unoptimized />}
           <div style={{ minWidth: 0, overflowWrap: 'anywhere' }}><p className="services-eyebrow">{translated?.city ?? data.city}</p><h1>{data.name}</h1>{personal && <p className="services-person-role">{specialistDisplayRole(data, language, translated)}</p>}<p>{translated?.category ?? data.category}</p></div>
+          {data.represented_company?.trim() && <p className="specialist-represented-company">{data.represented_company.trim()}</p>}
         </div>
         {content.description.trim() && <section className="services-card-section"><h2>{t('Описание')}</h2><p className="specialist-description">{content.description}</p></section>}
         <div ref={sections}><div className="specialist-actions" style={{ gridTemplateColumns: `repeat(${labels.length}, minmax(0, 1fr))` }}>{labels.map((label, index) => <button key={index} id={`listing-button-${index}`} type="button" aria-expanded={active === index} aria-controls={`listing-panel-${index}`} onClick={() => setActive(current => current === index ? null : index)}>{label}<span aria-hidden="true">▾</span></button>)}</div>

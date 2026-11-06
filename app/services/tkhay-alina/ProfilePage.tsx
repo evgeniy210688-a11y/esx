@@ -36,9 +36,10 @@ export default function ProfilePage({data}:{data:ServiceListing & {profile_conte
   return <div className="services-page services-directory specialist-profile">
     <ProfileHeader />
     <main className="services-main"><Link className="profile-back" href="/services">← {t('Назад')}</Link><article className="services-card"><ProfileEditor />
-      <div className="specialist-heading">
+      <div className={specialist.represented_company?.trim() ? "specialist-heading specialist-heading-with-company" : "specialist-heading"}>
         {photos[0] && <Image src={photos[0]} alt={specialist.name} width={160} height={160} unoptimized className="specialist-portrait" />}
-        <div><p className="services-eyebrow">{normalizeServiceCity(specialist.city) === 'Хвасонг, Паран' ? profileCity[language] : t(specialist.city)}</p><h1>{specialist.name}</h1><p className="services-person-role">{specialistDisplayRole(specialist, language, translated)}</p>{specialist.represented_company && <p>{specialist.represented_company}</p>}</div>
+        <div><p className="services-eyebrow">{normalizeServiceCity(specialist.city) === 'Хвасонг, Паран' ? profileCity[language] : t(specialist.city)}</p><h1>{specialist.name}</h1><p className="services-person-role">{specialistDisplayRole(specialist, language, translated)}</p></div>
+          {specialist.represented_company?.trim() && <p className="specialist-represented-company">{specialist.represented_company.trim()}</p>}
       </div>
 
       <section className="services-card-section"><h2>{t('Описание')}</h2><p className="specialist-description">{t(content.description)}</p></section>
