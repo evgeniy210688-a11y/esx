@@ -22,7 +22,8 @@ export function specialistRole(description: string, translated?: string) {
   if (!source) return {role: '', description: translated ?? description};
   const text = translated ?? description;
   const localized = text.match(/^[^:\n：]{1,60}[:：]\s*([^\n]+)\n\n/);
-  return {role: localized?.[1].trim() || source[1].trim(), description: localized ? text.slice(localized[0].length) : text};
+  const role = localized?.[1].trim() || source[1].trim();
+  return {role: role.charAt(0).toUpperCase() + role.slice(1), description: localized ? text.slice(localized[0].length) : text};
 }
 
 export function cardContent(description: string) {

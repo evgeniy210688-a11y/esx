@@ -38,7 +38,8 @@ export default function ListingProfile({ data }: { data: ServiceListing }) {
   const t = (text: string) => profileLabel(language, text);
   const translated = displayTranslation(language, preparedTranslations[translationKey(language, data)]);
   const personal = isPersonalListing(data);
-  const content = cardContent(personal ? specialistRole(data.description, translated?.description).description : translated?.description ?? data.description);
+  const roleContent = specialistRole(data.description, translated?.description);
+  const content = cardContent(personal ? roleContent.description : translated?.description ?? data.description);
   const items = serviceItems(content.services);
   const photos = companyPhotos(data);
   const phones = companyPhones(data);
@@ -53,7 +54,7 @@ export default function ListingProfile({ data }: { data: ServiceListing }) {
       <article className="services-card">
         <div className="specialist-heading">
           {photos[0] && <Image className="specialist-portrait" src={photos[0]} alt={data.name} width={160} height={160} unoptimized />}
-          <div style={{ minWidth: 0, overflowWrap: 'anywhere' }}><p className="services-eyebrow">{translated?.city ?? data.city}</p><h1>{data.name}</h1><p>{translated?.category ?? data.category}</p></div>
+          <div style={{ minWidth: 0, overflowWrap: 'anywhere' }}><p className="services-eyebrow">{translated?.city ?? data.city}</p><h1>{data.name}</h1>{personal && roleContent.role && <p className="services-person-role">{roleContent.role}</p>}<p>{translated?.category ?? data.category}</p></div>
         </div>
         {content.description.trim() && <section className="services-card-section"><h2>{t('Описание')}</h2><p className="specialist-description">{content.description}</p></section>}
         <div ref={sections}><div className="specialist-actions" style={{ gridTemplateColumns: `repeat(${labels.length}, minmax(0, 1fr))` }}>{labels.map((label, index) => <button key={index} id={`listing-button-${index}`} type="button" aria-expanded={active === index} aria-controls={`listing-panel-${index}`} onClick={() => setActive(current => current === index ? null : index)}>{label}<span aria-hidden="true">▾</span></button>)}</div>
