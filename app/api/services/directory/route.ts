@@ -11,21 +11,19 @@ export async function GET() {
   const signal = AbortSignal.timeout(20000);
   try {
     const rows: ServiceListing[] = [];
-        // Fetch every page: Supabase's default row limit must not silently hide listings.
-        for (let from = 0; ; from += 25) {
-          let { data, error } = await supabase.from('esx_service_listings')
-            .select('categories,listing_kind,id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,email,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages')
-            .eq('status', 'published').order('id').range(from, from + 24).abortSignal(signal).returns<ServiceListing[]>();
-          if (error?.code === '42703') {
-            ({ data, error } = await supabase.from('esx_service_listings').select('listing_kind,id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,email,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages').eq('status', 'published').order('id').range(from, from + 24).abortSignal(signal).returns<ServiceListing[]>());
-          }
-          if (error?.code === '42703') {
-            ({ data, error } = await supabase.from('esx_service_listings').select('id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,email,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages').eq('status', 'published').order('id').range(from, from + 24).abortSignal(signal).returns<ServiceListing[]>());
-          }
-          if (error || !data) throw error ?? new Error('No listings returned');
-          rows.push(...(data as ServiceListing[]));
-          if (data.length < 25) break;
-        }
+    // Cursor pagination avoids repeatedly scanning earlier rows through RLS.
+    let cursor: string | undefined;
+    for (;;) {
+      let query = supabase.from('esx_service_listings')
+        .select('categories,listing_kind,id,name,represented_company,description,city,category,address,branches,phone,phones,photo,photos,business_hours,email,website,social_links,service_languages,has_manager,has_interpreter,interpreter_languages')
+        .eq('status', 'published').order('id').limit(25);
+      if (cursor) query = query.gt('id', cursor);
+      const { data, error } = await query.abortSignal(signal).returns<ServiceListing[]>();
+      if (error || !data) throw error ?? new Error('No listings returned');
+      rows.push(...data);
+      if (data.length < 25) break;
+      cursor = data[data.length - 1].id;
+    }
 
     rows.sort((a, b) => a.name.localeCompare(b.name, 'ru') || a.id.localeCompare(b.id));
     return Response.json(rows, { headers: {
