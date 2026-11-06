@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import type { ServiceListing } from '@/lib/service-directory';
+import { serviceProfilePath } from '@/lib/service-profile-path';
 import ListingProfile from '../ListingProfile';
 
 export const dynamic = 'force-dynamic';
@@ -17,5 +18,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     .eq('id', id).eq('status', 'published').maybeSingle();
   if (error) return <main><Link href="/services">← Назад</Link><p role="alert">Не удалось загрузить страницу. Попробуйте обновить её позже.</p></main>;
   if (!data) notFound();
+  const path = serviceProfilePath(id);
+  if (!path.startsWith('/services/profile/')) redirect(path);
   return <ListingProfile data={data as ServiceListing} />;
 }
