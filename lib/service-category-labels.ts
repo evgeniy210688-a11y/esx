@@ -1,3 +1,4 @@
+import { serviceCategory } from './service-directory';
 // Canonical category labels are UI text and never require a translation request.
 const languages = ['ru', 'en', 'ko', 'uz', 'zh', 'vi', 'tr'];
 const rows = [
@@ -43,4 +44,9 @@ const labels = new Map(rows.map(row => { const values = row.split('|'); return [
 export function categoryTranslation(category: string, language: string): string | undefined {
   if (category === 'Покупка и аренда автомобилей') category = 'Авто и мототехника';
   return labels.get(category.normalize('NFKC').trim().toLowerCase())?.[languages.indexOf(language)];
+}
+
+export function displayServiceCategory(listing: {category: string}, language: string, translatedCategory?: string): string {
+  const category = serviceCategory(listing);
+  return categoryTranslation(category, language) ?? (category !== listing.category ? category : translatedCategory ?? category);
 }

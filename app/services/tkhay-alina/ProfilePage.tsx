@@ -2,13 +2,13 @@
 import { specialistDisplayRole, specialistFieldLabels } from '@/lib/specialist-role';
 import { specialistRole } from '@/lib/service-description';
 import { displayTranslation, preparedTranslations, translationKey } from '@/lib/service-translations';
-import { categoryTranslation } from '@/lib/service-category-labels';
+import { displayServiceCategory } from '@/lib/service-category-labels';
 import ContactIcon from '../ContactIcon';
 import Link from 'next/link';
 import SocialIcon from './SocialIcon';
 import Image from 'next/image';
 import { companyPhotos, companyPhones } from '@/lib/service-media';
-import { normalizeServiceCity, serviceCategory, interpreterLanguageOptions, type ServiceListing } from '@/lib/service-directory';
+import { normalizeServiceCity, interpreterLanguageOptions, type ServiceListing } from '@/lib/service-directory';
 import { splitServiceDescription, serviceItems } from '@/lib/service-description';
 import { validSocialLinks, socialNetworks } from '@/lib/service-socials';
 import '../services.css';
@@ -39,7 +39,7 @@ export default function ProfilePage({data}:{data:ServiceListing & {profile_conte
     <main className="services-main"><Link className="profile-back" href="/services">← {t('Назад')}</Link><article className="services-card"><ProfileEditor />
       <div className={specialist.represented_company?.trim() ? "specialist-heading specialist-heading-with-company" : "specialist-heading"}>
         {photos[0] && <Image src={photos[0]} alt={specialist.name} width={160} height={160} unoptimized className="specialist-portrait" />}
-        <div><p className="services-eyebrow">{normalizeServiceCity(specialist.city) === 'Хвасонг, Паран' ? profileCity[language] : t(specialist.city)}</p><h1>{specialist.name}</h1><p className="services-person-role"><span className="specialist-field-label">{specialistFieldLabels[language].specialty}:</span> {specialistDisplayRole(specialist, language, translated)}</p><p><span className="specialist-field-label">{specialistFieldLabels[language].category}:</span> {categoryTranslation(serviceCategory(specialist), language) ?? translated?.category ?? specialist.category}</p></div>
+        <div><p className="services-eyebrow">{normalizeServiceCity(specialist.city) === 'Хвасонг, Паран' ? profileCity[language] : t(specialist.city)}</p><h1>{specialist.name}</h1><p className="services-person-role"><span className="specialist-field-label">{specialistFieldLabels[language].specialty}:</span> {specialistDisplayRole(specialist, language, translated)}</p><p><span className="specialist-field-label">{specialistFieldLabels[language].category}:</span> {displayServiceCategory(specialist, language, translated?.category)}</p></div>
           {specialist.represented_company?.trim() && <p className="specialist-represented-company">{specialist.represented_company.trim()}</p>}
       </div>
 
