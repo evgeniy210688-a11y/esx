@@ -99,8 +99,8 @@
 .services-directory .services-listing-group>.services-category-heading:has(>#specialists-heading){display:flex;align-items:center;justify-content:flex-start;flex-wrap:wrap;gap:12px}
 .services-directory .services-category-heading>#specialists-heading{margin:0}
 .services-directory .services-specialist-view{display:flex;align-items:center;gap:6px;font-size:14px;white-space:nowrap}
-.services-directory .services-specialist-view select{font:inherit;color:inherit;background:#eef5ff;border:1px solid #b8cce5;border-radius:10px;padding:8px;cursor:pointer}
-.services-directory[data-theme=dark] .services-specialist-view select{background:#1b3552;border-color:#456180;color:#e3edff}
+.services-directory button.services-specialist-view{font:inherit;color:inherit;background:#eef5ff;border:1px solid #b8cce5;border-radius:10px;padding:8px;cursor:pointer}
+.services-directory[data-theme=dark] button.services-specialist-view{background:#1b3552;border-color:#456180;color:#e3edff}
 .services-directory .services-category-heading:has(>#specialists-heading)>.services-category-arrows{margin-left:auto}
 .services-directory .services-card-language-flags{position:absolute;top:9px;right:24px;left:24px;display:flex;justify-content:flex-end;gap:4px;pointer-events:auto}
 .services-directory .services-card-language-flags img{display:block;flex:0 0 18px;width:18px;height:12px;object-fit:cover;border-radius:2px;box-shadow:0 0 0 1px #20375718}
