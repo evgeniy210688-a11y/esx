@@ -32,7 +32,7 @@ function editableDescription(description: string) {
 export default function AdminServices() {
   const { user, ready } = useAccount();
   return <div className="services-page admin-page" lang="ru"><header className="services-top"><Link className="services-brand" href="/" aria-label="ESX — Главная"><Image src="/esx-logo.png" alt="ESX" width={80} height={80} sizes="(max-width: 540px) 64px, 80px" preload /><span> / Администратор</span></Link><nav aria-label="Навигация"><Link href="/services">Услуги</Link><Link href="/account">Мой аккаунт</Link></nav></header><main className="services-main"><BackButton language="ru" />
-    {!ready ? <p role="status">Проверяем вход…</p> : !user || user.is_anonymous ? <AdminLogin /> : <AdminPanel key={user.id} userId={user.id} email={user.email ?? ''} />}
+    {!ready ? <p role="status">Проверяем вход…</p> : !user || user.is_anonymous ? <AdminLogin /> : <AdminPanel key={user.id} userId={user.id} email={user.email ?? ''} initialExcludedDuplicates={user.user_metadata?.excluded_service_duplicates} />}
   </main><div className="admin-mobile-back-to-top"><ServicesBackToTop language="ru" /></div></div>;
 }
 function AdminLogin() {
@@ -52,11 +52,31 @@ function AdminLogin() {
   }
   return <section className="services-card admin-login"><p className="services-eyebrow">УПРАВЛЕНИЕ УСЛУГАМИ</p><h1>Вход администратора</h1><p>Войдите в аккаунт ESX, которому назначены права администратора.</p><form onSubmit={login} className="admin-form"><label>Email<input type="email" autoComplete="username" required value={email} onChange={e => setEmail(e.target.value)} disabled={busy} /></label><label>Пароль<input type="password" autoComplete="current-password" required value={password} onChange={e => setPassword(e.target.value)} disabled={busy} /></label><button disabled={busy}>{busy ? 'Входим…' : 'Войти'}</button><p role="alert">{error}</p></form></section>;
 }
-function AdminPanel({ userId, email }: { userId: string; email: string }) {
+function AdminPanel({ userId, email, initialExcludedDuplicates }: { userId: string; email: string; initialExcludedDuplicates: unknown }) {
   const [access, setAccess] = useState<'loading' | 'allowed' | 'denied' | 'error'>('loading');
   const [rows, setRows] = useState<Listing[]>([]);
   const [showDuplicates, setShowDuplicates] = useState(false);
-  const duplicatePairs = useMemo(() => findDuplicateListings(rows), [rows]);
+  const [excludedDuplicates, setExcludedDuplicates] = useState<string[]>(() => Array.isArray(initialExcludedDuplicates) ? initialExcludedDuplicates.filter((id): id is string => typeof id === 'string') : []);
+  const [savingDuplicateExclusion, setSavingDuplicateExclusion] = useState(false);
+  const [duplicateExclusionError, setDuplicateExclusionError] = useState('');
+  const duplicateExclusionLock = useRef(false);
+  const duplicatePairs = useMemo(() => findDuplicateListings(rows.filter(row => !excludedDuplicates.includes(row.id))), [rows, excludedDuplicates]);
+  async function saveDuplicateExclusions(ids: string[]) {
+    if (duplicateExclusionLock.current) return;
+    duplicateExclusionLock.current = true;
+    setSavingDuplicateExclusion(true);
+    setDuplicateExclusionError('');
+    try {
+      const { error } = await supabase.auth.updateUser({ data: { excluded_service_duplicates: ids } });
+      if (error) throw error;
+      setExcludedDuplicates(ids);
+    } catch {
+      setDuplicateExclusionError('Не удалось сохранить исключения. Попробуйте ещё раз.');
+    } finally {
+      duplicateExclusionLock.current = false;
+      setSavingDuplicateExclusion(false);
+    }
+  }
   const [draft, setDraft] = useState<Listing>(blank);
   const [newCategory, setNewCategory] = useState(false);
   useEffect(() => { setNewCategory(false); }, [draft.id]);
@@ -209,8 +229,10 @@ function AdminPanel({ userId, email }: { userId: string; email: string }) {
     {access === 'error' && <section className="services-empty"><h1>Не удалось проверить доступ</h1><button onClick={() => { setAccess('loading'); setAttempt(n => n + 1); }}>Повторить</button></section>}
     {access === 'allowed' && <><h1>Панель управления</h1><div className="admin-summary">{Object.entries(statuses).map(([status, label]) => <button type="button" key={status} aria-pressed={statusFilter === status} aria-controls="admin-listings" onClick={() => { setShowDuplicates(false); setStatusFilter(status); setQuery(''); setCategory(''); setOpenTypes({ specialists: true, companies: true }); document.getElementById('admin-listings')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}><strong>{rows.filter(row => row.status === status).length}</strong><span>{label}</span></button>)}{listingTypes.map(type => <button type="button" key={type.key} aria-expanded={openTypes[type.key]} aria-controls={'admin-type-' + type.key} onClick={() => { setShowDuplicates(false); setStatusFilter(''); setQuery(''); setCategory(''); setOpenTypes({ specialists: type.personal, companies: !type.personal }); document.getElementById('admin-listings')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}><strong>{rows.filter(row => isPersonalListing(row) === type.personal).length}</strong><span>{type.label}</span></button>)}<button type="button" aria-expanded={showDuplicates} aria-controls="admin-duplicates" onClick={() => setShowDuplicates(current => !current)}><strong>{duplicatePairs.length}</strong><span>Повторная информация</span></button></div>
       {showDuplicates && <section id="admin-duplicates" className="services-card admin-duplicates"><h2>Повторная информация</h2><p>Совпадения телефона или адреса: {duplicatePairs.length} пар. Общий номер или адрес не обязательно означает дубль — проверьте обе записи перед изменениями.</p>
+        {duplicateExclusionError && <p role="alert">{duplicateExclusionError}</p>}
+        {excludedDuplicates.length > 0 && <button type="button" disabled={savingDuplicateExclusion} onClick={() => void saveDuplicateExclusions([])}>Вернуть исключённые ({excludedDuplicates.length})</button>}
         {!duplicatePairs.length && <p role="status">Повторная информация не найдена.</p>}
-        {duplicatePairs.map(pair => <section className="admin-duplicate-pair" key={pair.first.id + pair.second.id}><h3>Совпадает: {pair.reasons.join(', ')}</h3><div className="admin-duplicate-cards">{[pair.first, pair.second].map(row => <article key={row.id}><h4>{row.name}</h4><p>{isPersonalListing(row) ? 'Специалист' : 'Компания'} · {statuses[row.status]}</p><p>{row.city} · {row.category}</p>{row.address && <p>{row.address}</p>}<p>{companyPhones(row).map(phone => phone.number).join(', ')}</p>{row.email && <p>{row.email}</p>}{validSocialLinks(row.social_links).map(link => <p key={link.url}><a href={link.url} target="_blank" rel="noopener noreferrer">{socialNetworks[link.network]}: {link.url}</a></p>)}<div className="admin-duplicate-actions">{row.status === 'published' && <Link href={serviceProfilePath(row.id)} target="_blank" rel="noopener noreferrer">Открыть страницу ↗</Link>}<button type="button" disabled={busy} onClick={() => { if (draft.name && !window.confirm('Открыть другую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...row, ...editableDescription(row.description) }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}>Редактировать карточку</button></div></article>)}</div></section>)}
+        {duplicatePairs.map(pair => <section className="admin-duplicate-pair" key={pair.first.id + pair.second.id}><h3>Совпадает: {pair.reasons.join(', ')}</h3><div className="admin-duplicate-cards">{[pair.first, pair.second].map(row => <article key={row.id}><h4>{row.name}</h4><p>{isPersonalListing(row) ? 'Специалист' : 'Компания'} · {statuses[row.status]}</p><p>{row.city} · {row.category}</p>{row.address && <p>{row.address}</p>}<p>{companyPhones(row).map(phone => phone.number).join(', ')}</p>{row.email && <p>{row.email}</p>}{validSocialLinks(row.social_links).map(link => <p key={link.url}><a href={link.url} target="_blank" rel="noopener noreferrer">{socialNetworks[link.network]}: {link.url}</a></p>)}<div className="admin-duplicate-actions"><button type="button" disabled={savingDuplicateExclusion} aria-label={"Исключить из повторной информации: " + row.name} onClick={() => void saveDuplicateExclusions([...new Set([...excludedDuplicates, row.id])])}>Исключить</button>{row.status === 'published' && <Link href={serviceProfilePath(row.id)} target="_blank" rel="noopener noreferrer">Открыть страницу ↗</Link>}<button type="button" disabled={busy} onClick={() => { if (draft.name && !window.confirm('Открыть другую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...row, ...editableDescription(row.description) }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}>Редактировать карточку</button></div></article>)}</div></section>)}
       </section>}<h2>Компании и специалисты</h2><p>Добавляйте компании, специалистов и переводчиков, редактируйте карточки и выбирайте, что показывать в справочнике.</p><div className="admin-columns"><div className="admin-listings-dock"><section id="admin-listings" aria-label="Компании и специалисты" className="services-card"><button disabled={busy} onClick={() => { if (draft.name && !window.confirm('Открыть новую карточку? Несохранённые изменения будут потеряны.')) return; setDraft({ ...blank }); setMessage(''); form.current?.scrollIntoView({ behavior: 'smooth' }); }}>+ Добавить карточку</button>
       {!personal && <div style={{ marginTop: 12 }}><button type="button" disabled={busy || !draft.name.trim()} onClick={addBranchCard}>+ Добавить филиал</button></div>}
       <div className="admin-list-filters">
