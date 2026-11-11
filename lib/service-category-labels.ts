@@ -37,7 +37,7 @@ const rows = [
 'Банкетный зал|Banquet hall|연회장|Banket zali|宴会厅|Sảnh tiệc|Ziyafet salonu',
 'Ведущий мероприятий|Event host|행사 진행자|Tadbir boshlovchisi|活动主持人|Người dẫn chương trình|Etkinlik sunucusu',
 'Услуги для животных|Pet services|반려동물 서비스|Hayvonlar uchun xizmatlar|宠物服务|Dịch vụ thú cưng|Evcil hayvan hizmetleri',
-'Услуги для бизнеса|Business services|비즈니스 서비스|Biznes xizmatlari|企业服务|Dịch vụ doanh nghiệp|İşletme hizmetleri',
+'Реклама, дизайн и полиграфия|Advertising, design and printing|광고, 디자인 및 인쇄|Reklama, dizayn va poligrafiya|广告、设计与印刷|Quảng cáo, thiết kế và in ấn|Reklam, tasarım ve baskı',
 'Другие услуги|Other services|기타 서비스|Boshqa xizmatlar|其他服务|Dịch vụ khác|Diğer hizmetler',
 ];
 const labels = new Map(rows.map(row => { const values = row.split('|'); return [values[0].normalize('NFKC').trim().toLowerCase(), values]; }));

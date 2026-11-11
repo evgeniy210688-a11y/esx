@@ -8,6 +8,17 @@ vm.runInNewContext(ts.transpileModule(fs.readFileSync('lib/service-directory.ts'
 const { matchesService, safeServiceWebsite } = context.exports;
 const listing = { city: 'Сеул', category: 'Медицина', service_languages: ['ko', 'en'], has_interpreter: true, interpreter_languages: ['ru', 'uz'] };
 const empty = { city: '', category: '', language: '', interpreter: false, interpreterLanguage: '' };
+
+test('business services join the advertising category in primary and additional categories', () => {
+  const category = 'Реклама, дизайн и полиграфия';
+  const company = { ...listing, category: 'Услуги для бизнеса', categories: [category] };
+  assert.equal(context.exports.serviceCategory(company), category);
+  assert.deepEqual(Array.from(context.exports.listingCategories(company)), [category]);
+  assert.equal(matchesService(company, { ...empty, category }), true);
+  assert.equal(matchesService({ ...listing, categories: ['Услуги для бизнеса'] }, { ...empty, category }), true);
+  assert.equal(matchesService(company, { ...empty, query: 'полиграфия' }), true);
+  assert.equal(matchesService(company, { ...empty, category: 'Страхование' }), false);
+});
 test('service language is independent of interpreter language', () => {
   assert.equal(matchesService(listing, { ...empty, language: 'ru' }), false);
   assert.equal(matchesService(listing, { ...empty, interpreterLanguage: 'ru' }), true);
