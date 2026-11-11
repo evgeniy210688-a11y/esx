@@ -19,6 +19,7 @@ import BusinessHoursDisplay from './BusinessHoursDisplay';
 import { listingCategories, serviceCategory, isPersonalListing, normalizeServiceCity, serviceCities, matchesService, safeServiceWebsite, serviceLanguages, interpreterLanguageOptions, type ServiceListing, type ServiceFilters } from '@/lib/service-directory';
 import './services.css';
 import ServicesHeader from './ServicesHeader';
+import DirectoryLoadingProgress from './DirectoryLoadingProgress';
 import RegistrationLink from './RegistrationLink';
 import './services-light.css';
 import './services-soft.css';
@@ -368,6 +369,7 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
   }, [listings.length, categoryCopies]);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [attempt, setAttempt] = useState(0);
+  const [loadProgress, setLoadProgress] = useState(0);
   useEffect(() => {
     let active = true;
     const controller = new AbortController();
@@ -375,22 +377,27 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
       for (let retry = 0; retry < 2 && active; retry++) {
       try {
         const rows: ServiceListing[] = [];
+        let total: number | null = null;
+        if (active) setLoadProgress(0);
         let cursor = '';
         for (;;) {
           const response = await fetch('/api/services/directory' + (cursor ? '?after=' + cursor : ''), {
             signal: AbortSignal.any([controller.signal, AbortSignal.timeout(22000)]),
           });
           if (!response.ok) throw new Error('Directory request failed');
+          const count = response.headers.get('X-Total-Count');
+          if (count !== null && /^\d+$/.test(count)) total = Number(count);
           const page: ServiceListing[] = await response.json();
           if (!Array.isArray(page)) throw new Error('Invalid directory response');
           rows.push(...page);
           if (active) {
             setListings([...rows].sort((a,b) => a.name.localeCompare(b.name, 'ru') || a.id.localeCompare(b.id)));
-            setStatus('ready');
+            setLoadProgress(total && total > 0 ? Math.min(99, Math.floor(rows.length / total * 100)) : 0);
           }
           if (page.length < 25) break;
           cursor = page[page.length - 1].id;
         }
+        if (active) { setLoadProgress(100); setStatus('ready'); }
         return;
       } catch (error) {
         if (!active) return;
@@ -552,6 +559,7 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
       </div>
   </>;
   return <div className="services-page services-directory" lang={language}>
+    <DirectoryLoadingProgress status={status} progress={loadProgress} />
     <ServicesHeader language={language} chooseLanguage={chooseLanguage} directoryHeading search={{ anchor: topSearch, value: filters.query ?? '', onChange: value => update('query', value), label: searchLabels[language], filterLabel: filterButtonLabels[language], filterCount: activeFilterCount, renderFilters: renderFilterFields }} />
     <main className="services-main"><section ref={filtersRoot} className="services-search-area"><div ref={topSearch} className="services-top-search"><BackButton language={language} iconOnly /><div className="services-company-search"><input aria-label={searchLabels[language]} type="search" value={filters.query ?? ''} onChange={e => update('query', e.target.value)} placeholder={searchLabels[language]} />      <button type="button" className="services-filter-toggle services-search-settings" aria-label={filterButtonLabels[language]} title={filterButtonLabels[language]} aria-expanded={filtersOpen} aria-controls="services-filter-options" onClick={() => setFiltersOpen(value => !value)}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3" fill="currentColor"/><circle cx="15" cy="17" r="3" fill="currentColor"/></svg>{activeFilterCount > 0 && <span className="services-filter-count">{activeFilterCount}</span>}</button></div></div>    <section className="services-filters services-compact-filters services-search-filters" hidden={!filtersOpen} aria-label={t[7]}>
 
