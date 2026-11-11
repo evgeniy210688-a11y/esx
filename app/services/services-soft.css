@@ -96,12 +96,13 @@
 /* Keep language flags inside the existing top padding of specialist cards. */
 .services-directory .services-specialist-track>.services-card{position:relative}
 .services-directory .services-specialist-grid>.services-card{position:relative}
-.services-directory .services-listing-group>.services-category-heading:has(>#specialists-heading){display:flex;align-items:center;justify-content:flex-start;flex-wrap:wrap;gap:12px}
+.services-directory .services-listing-group>.services-category-heading:has(>#specialists-heading){position:relative;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px}
 .services-directory .services-category-heading>#specialists-heading{margin:0}
 .services-directory .services-specialist-view{display:flex;align-items:center;gap:6px;font-size:14px;white-space:nowrap}
 .services-directory button.services-specialist-view{justify-content:center;flex:0 0 44px;width:44px;height:44px;font:inherit;color:inherit;background:#eef5ff;border:1px solid #b8cce5;border-radius:10px;padding:8px;cursor:pointer}
 .services-directory[data-theme=dark] button.services-specialist-view{background:#1b3552;border-color:#456180;color:#e3edff}
-.services-directory .services-category-heading:has(>#specialists-heading)>.services-category-arrows{margin-left:auto}
+.services-directory .services-category-heading:has(>#specialists-heading)>.services-category-arrows{position:absolute;right:0;margin-left:0}
+@media(max-width:600px){.services-directory .services-category-heading:has(>#specialists-heading)>.services-category-arrows{position:static;flex-basis:100%;justify-content:flex-end}}
 .services-directory .services-card-language-flags{position:absolute;top:9px;right:24px;left:24px;display:flex;justify-content:flex-end;gap:4px;pointer-events:auto}
 .services-directory .services-card-language-flags img{display:block;flex:0 0 18px;width:18px;height:12px;object-fit:cover;border-radius:2px;box-shadow:0 0 0 1px #20375718}
 .services-directory .services-back-to-top{position:fixed;right:max(24px,env(safe-area-inset-right));bottom:max(24px,env(safe-area-inset-bottom));z-index:1100;display:grid;place-items:center;width:50px;height:50px;padding:0;border-radius:50%;border:1px solid #b9cde7;background:#fff;color:#365c8c;box-shadow:0 6px 24px #20375726}
