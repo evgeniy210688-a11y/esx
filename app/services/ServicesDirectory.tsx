@@ -559,7 +559,6 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
       </div>
   </>;
   return <div className="services-page services-directory" lang={language}>
-    <DirectoryLoadingProgress status={status} progress={loadProgress} />
     <ServicesHeader language={language} chooseLanguage={chooseLanguage} directoryHeading search={{ anchor: topSearch, value: filters.query ?? '', onChange: value => update('query', value), label: searchLabels[language], filterLabel: filterButtonLabels[language], filterCount: activeFilterCount, renderFilters: renderFilterFields }} />
     <main className="services-main"><section ref={filtersRoot} className="services-search-area"><div ref={topSearch} className="services-top-search"><BackButton language={language} iconOnly /><div className="services-company-search"><input aria-label={searchLabels[language]} type="search" value={filters.query ?? ''} onChange={e => update('query', e.target.value)} placeholder={searchLabels[language]} />      <button type="button" className="services-filter-toggle services-search-settings" aria-label={filterButtonLabels[language]} title={filterButtonLabels[language]} aria-expanded={filtersOpen} aria-controls="services-filter-options" onClick={() => setFiltersOpen(value => !value)}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3" fill="currentColor"/><circle cx="15" cy="17" r="3" fill="currentColor"/></svg>{activeFilterCount > 0 && <span className="services-filter-count">{activeFilterCount}</span>}</button></div></div>    <section className="services-filters services-compact-filters services-search-filters" hidden={!filtersOpen} aria-label={t[7]}>
 
@@ -568,6 +567,7 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
       </div>
     </section>
 </section>
+    <DirectoryLoadingProgress status={status} progress={loadProgress} />
     {categories.length > 0 && <section className="services-category-carousel" aria-label={t[10]}>
       <div className="services-category-heading"><h2>{t[10]}</h2><div className="services-category-arrows"><CarouselArrow track={categoryCarousel} direction={1} label={t[10] + ' ←'} onStep={() => categoryCarousel.current?.scrollBy({ left: 360, behavior: 'smooth' })}>←</CarouselArrow><CarouselArrow track={categoryCarousel} direction={-1} label={t[10] + ' →'} onStep={() => categoryCarousel.current?.scrollBy({ left: -360, behavior: 'smooth' })}>→</CarouselArrow></div></div>
       <div className="services-category-track" ref={categoryCarousel}>
@@ -575,7 +575,7 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
       </div>
     </section>}
     {translationStatus && <p role="status">{translationLabels[language][translationStatus === 'error' ? 1 : 0]} {translationStatus === 'error' && <button type="button" onClick={() => setTranslationRetry(n=>n+1)}>{t[21]}</button>}</p>}
-    <div aria-live="polite" role="status">{status === 'loading' ? <p className="services-loading"><span className="services-loading-spinner" aria-hidden="true" /><span>{t[18]}</span></p> : status === 'error' ? <div className="services-empty"><h2>{t[19]}</h2><p>{t[20]}</p><button onClick={() => { setStatus('loading'); setAttempt(a => a + 1); }}>{t[21]}</button></div> : null}</div>
+    <div aria-live="polite" role="status">{status === 'error' ? <div className="services-empty"><h2>{t[19]}</h2><p>{t[20]}</p><button onClick={() => { setStatus('loading'); setAttempt(a => a + 1); }}>{t[21]}</button></div> : null}</div>
     {status === 'ready' && !visible.length && <div className="services-empty"><h2>{listings.length ? t[23] : t[24]}</h2><p>{listings.length ? t[25] : t[26]}</p></div>}
     {status === 'ready' && [true, false].map(personalGroup => {
       const group = visible.filter(listing => isPersonalListing(listing) === personalGroup);

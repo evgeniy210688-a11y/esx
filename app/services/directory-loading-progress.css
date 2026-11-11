@@ -1,11 +1,9 @@
 .directory-loading-progress {
-  position: sticky;
-  top: 0;
-  z-index: 10000;
+  position: relative;
   width: 100%;
-  background: #fff;
-  color: #17212b;
-  box-shadow: 0 3px 16px #17212b12;
+  background: transparent;
+  color: inherit;
+  margin: 0 0 16px;
   animation: directory-progress-enter .2s ease-out;
 }
 .directory-loading-progress-copy {
