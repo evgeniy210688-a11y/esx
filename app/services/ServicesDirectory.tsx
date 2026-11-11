@@ -75,7 +75,7 @@ type CardTranslation = {description:string;city:string;category:string};
 const managerLabels: Record<InterfaceLanguage,string> = {ru:"Есть менеджер",en:"Manager available",ko:"매니저 있음",uz:"Menejer bor",zh:"有经理",vi:"Có quản lý",tr:"Yönetici mevcut"};
 const directoryGroupLabels: Record<InterfaceLanguage, [string, string]> = { ru: ['Специалисты', 'Компании'], en: ['Specialists', 'Companies'], ko: ['전문가', '업체'], uz: ['Mutaxassislar', 'Kompaniyalar'], zh: ['专业人士', '公司'], vi: ['Chuyên gia', 'Công ty'], tr: ['Uzmanlar', 'Şirketler'] };
 const flags = { ru: 'ru', uz: 'uz', zh: 'cn', vi: 'vn', en: 'gb', ko: 'kr', tr: 'tr', th: 'th', mn: 'mn', kk: 'kz' } as const;
-const searchLabels: Record<InterfaceLanguage, string> = { ru: 'Что вам найти', en: 'Search', ko: '검색', uz: 'Qidirish', zh: '搜索', vi: 'Tìm kiếm', tr: 'Ara' };
+const searchLabels: Record<InterfaceLanguage, string> = { ru: 'Что вам найти?', en: 'Search', ko: '검색', uz: 'Qidirish', zh: '搜索', vi: 'Tìm kiếm', tr: 'Ara' };
 function isShoppingCategory(category: string): boolean {
   return /магазин|продукт|shop|grocer/i.test(category);
 }

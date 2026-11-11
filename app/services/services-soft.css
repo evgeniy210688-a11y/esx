@@ -274,6 +274,7 @@
 
 .services-header-search-row{position:relative}
 .services-header-search-row>input{padding-right:54px}
+.services-header-search-row>input:placeholder-shown{padding-left:54px;text-align:center}
 .services-directory .services-header-search-row .services-search-settings{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:40px;height:36px;min-height:0;padding:7px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;box-shadow:none;color:#315782;border-radius:10px}
 .services-directory .services-header-filters{margin:12px 0 0;max-height:calc(100dvh - 180px);overflow-y:auto;overscroll-behavior:contain}
 .services-directory[data-theme=dark] .services-header-search-row .services-search-settings{color:#dce8f8}
