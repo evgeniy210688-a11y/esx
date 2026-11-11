@@ -304,13 +304,6 @@
   .services-glass-header:has(> .services-header-search-toggle) #services-language-value{display:none}
 }
 
-.services-directory .services-glass-header:has(.services-header-search-permanent){flex-wrap:wrap}
-.services-header-search-panel.services-header-search-permanent{position:relative;inset:auto;flex:0 0 100%;order:10;width:100%;padding:0;background:transparent;border:0;box-shadow:none}
-.services-header-search-permanent .services-header-search-row{display:flex;align-items:center;gap:12px}
-.services-header-search-permanent .esx-back-row{margin:0;flex:0 0 auto}
-.services-header-search-permanent .esx-back-button{width:44px;height:44px;padding:10px}
-.services-header-search-permanent .services-header-search-row>input{flex:1;width:0;min-width:0;padding-right:54px}
-.services-header-search-permanent .services-header-filters{max-height:55dvh;overflow-y:auto;overscroll-behavior:contain}
 .services-contact-icon,.services-contacts .specialist-social-icon{display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:7px;width:20px;height:20px}
 .services-contacts a{display:inline-flex;align-items:center;overflow-wrap:anywhere}
 
