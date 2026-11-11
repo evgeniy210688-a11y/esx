@@ -551,7 +551,7 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
   return <div className="services-page services-directory" lang={language}>
     <ServicesHeader language={language} chooseLanguage={chooseLanguage} directoryHeading search={{ value: filters.query ?? '', onChange: value => update('query', value), label: searchLabels[language], filterLabel: filterButtonLabels[language], filterCount: activeFilterCount, renderFilters: renderFilterFields }} />
     <main className="services-main">
-    <DirectoryLoadingProgress status={status} progress={loadProgress} />
+    <DirectoryLoadingProgress status={status} progress={loadProgress} language={language} />
     {categories.length > 0 && <section className="services-category-carousel" aria-label={t[10]}>
       <div className="services-category-heading"><h2>{t[10]}</h2><div className="services-category-arrows"><CarouselArrow track={categoryCarousel} direction={1} label={t[10] + ' ←'} onStep={() => categoryCarousel.current?.scrollBy({ left: 360, behavior: 'smooth' })}>←</CarouselArrow><CarouselArrow track={categoryCarousel} direction={-1} label={t[10] + ' →'} onStep={() => categoryCarousel.current?.scrollBy({ left: -360, behavior: 'smooth' })}>→</CarouselArrow></div></div>
       <div className="services-category-track" ref={categoryCarousel}>
