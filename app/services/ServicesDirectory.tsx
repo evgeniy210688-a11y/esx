@@ -3,7 +3,6 @@ import { serviceProfilePath } from '@/lib/service-profile-path';
 import SocialIcon from './tkhay-alina/SocialIcon';
 import ContactIcon from './ContactIcon';
 import CarouselArrow from './CarouselArrow';
-import BackButton from '@/app/components/BackButton';
 import LegalLinks from '@/app/LegalLinks';
 import { trademarkNotice } from '@/lib/trademark-notice';
 import { useEffect, useRef, useState } from 'react';
@@ -206,22 +205,6 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
   }, [language, listings, translationRetry]);
   const translatedCard = (s: ServiceListing) => displayTranslation(language, preparedTranslations[translationKey(language, s)] ?? translations[translationKey(language, s)]);
   const [filters, setFilters] = useState(empty);
-  const [filtersOpen, setFiltersOpen] = useState(false);
-  const filtersRoot = useRef<HTMLElement>(null);
-  const topSearch = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!filtersOpen) return;
-    const dismissOutside = (event: PointerEvent) => {
-      const root = filtersRoot.current;
-      if (!root || !(event.target instanceof Element)) return;
-      const bounds = root.getBoundingClientRect();
-      const pickerBackdrop = event.target.closest('.services-city-dismiss');
-      const outsideBounds = event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom;
-      if (!root.contains(event.target) || (pickerBackdrop && outsideBounds)) setFiltersOpen(false);
-    };
-    document.addEventListener('pointerdown', dismissOutside, true);
-    return () => document.removeEventListener('pointerdown', dismissOutside, true);
-  }, [filtersOpen]);
   const resetButtonLabels: Record<InterfaceLanguage,string> = {ru:'Сброс',en:'Reset',ko:'초기화',uz:'Tozalash',zh:'重置',vi:'Đặt lại',tr:'Sıfırla'};
   const filterButtonLabels: Record<InterfaceLanguage,string> = {ru:'Фильтр',en:'Filter',ko:'필터',uz:'Filtr',zh:'筛选',vi:'Bộ lọc',tr:'Filtre'};
   const activeFilterCount = [filters.city,filters.category,filters.language,filters.interpreterLanguage,filters.interpreter].filter(Boolean).length;
@@ -559,14 +542,8 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
       </div>
   </>;
   return <div className="services-page services-directory" lang={language}>
-    <ServicesHeader language={language} chooseLanguage={chooseLanguage} directoryHeading search={{ anchor: topSearch, value: filters.query ?? '', onChange: value => update('query', value), label: searchLabels[language], filterLabel: filterButtonLabels[language], filterCount: activeFilterCount, renderFilters: renderFilterFields }} />
-    <main className="services-main"><section ref={filtersRoot} className="services-search-area"><div ref={topSearch} className="services-top-search"><BackButton language={language} iconOnly /><div className="services-company-search"><input aria-label={searchLabels[language]} type="search" value={filters.query ?? ''} onChange={e => update('query', e.target.value)} placeholder={searchLabels[language]} />      <button type="button" className="services-filter-toggle services-search-settings" aria-label={filterButtonLabels[language]} title={filterButtonLabels[language]} aria-expanded={filtersOpen} aria-controls="services-filter-options" onClick={() => setFiltersOpen(value => !value)}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3" fill="currentColor"/><circle cx="15" cy="17" r="3" fill="currentColor"/></svg>{activeFilterCount > 0 && <span className="services-filter-count">{activeFilterCount}</span>}</button></div></div>    <section className="services-filters services-compact-filters services-search-filters" hidden={!filtersOpen} aria-label={t[7]}>
-
-      <div id="services-filter-options" className="services-filter-options">
-      {renderFilterFields(() => { setFiltersOpen(false); filtersRoot.current?.querySelector<HTMLButtonElement>('.services-filter-toggle')?.focus({ preventScroll: true }); })}
-      </div>
-    </section>
-</section>
+    <ServicesHeader language={language} chooseLanguage={chooseLanguage} directoryHeading search={{ value: filters.query ?? '', onChange: value => update('query', value), label: searchLabels[language], filterLabel: filterButtonLabels[language], filterCount: activeFilterCount, renderFilters: renderFilterFields }} />
+    <main className="services-main">
     <DirectoryLoadingProgress status={status} progress={loadProgress} />
     {categories.length > 0 && <section className="services-category-carousel" aria-label={t[10]}>
       <div className="services-category-heading"><h2>{t[10]}</h2><div className="services-category-arrows"><CarouselArrow track={categoryCarousel} direction={1} label={t[10] + ' ←'} onStep={() => categoryCarousel.current?.scrollBy({ left: 360, behavior: 'smooth' })}>←</CarouselArrow><CarouselArrow track={categoryCarousel} direction={-1} label={t[10] + ' →'} onStep={() => categoryCarousel.current?.scrollBy({ left: -360, behavior: 'smooth' })}>→</CarouselArrow></div></div>
@@ -582,12 +559,12 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
       if (!group.length && !(personalGroup ? specialistCategoryOptions : companyCategoryOptions).length) return null;
       const title = directoryGroupLabels[language][personalGroup ? 0 : 1];
       const headingId = personalGroup ? 'specialists-heading' : 'companies-heading';
-      if (!personalGroup && !companiesOpen) return <section key={headingId} className="services-listing-group" aria-labelledby={headingId}>
+      if (!personalGroup && !companiesOpen && !filters.query?.trim()) return <section key={headingId} className="services-listing-group" aria-labelledby={headingId}>
         <div className="services-category-heading"><h2 id={headingId}><button type="button" className="services-companies-toggle" aria-expanded={false} aria-controls="companies-content" onClick={() => setCompaniesOpen(true)}>{title}<span aria-hidden="true">▾</span></button></h2></div>
         <div id="companies-content" hidden />
       </section>;
       return <section key={headingId} className="services-listing-group" aria-labelledby={headingId}>
-        <div className="services-category-heading"><h2 id={headingId}>{personalGroup ? title : <button type="button" className="services-companies-toggle" aria-expanded={true} aria-controls="companies-content" onClick={() => { setCompaniesOpen(false); setExpandedCardId(null); }}>{title}<span aria-hidden="true">▴</span></button>}</h2>{personalGroup && group.length > 1 && <div className="services-category-arrows"><CarouselArrow track={specialistCarousel} direction={1} label={title + ' ←'} controls="specialists-track" onStep={() => scrollSpecialists(-1)}>←</CarouselArrow><CarouselArrow track={specialistCarousel} direction={-1} label={title + ' →'} controls="specialists-track" onStep={() => scrollSpecialists(1)}>→</CarouselArrow></div>}{!personalGroup && <div className="services-category-arrows">
+        <div className="services-category-heading"><h2 id={headingId}>{personalGroup || filters.query?.trim() ? title : <button type="button" className="services-companies-toggle" aria-expanded={true} aria-controls="companies-content" onClick={() => { setCompaniesOpen(false); setExpandedCardId(null); }}>{title}<span aria-hidden="true">▴</span></button>}</h2>{personalGroup && group.length > 1 && <div className="services-category-arrows"><CarouselArrow track={specialistCarousel} direction={1} label={title + ' ←'} controls="specialists-track" onStep={() => scrollSpecialists(-1)}>←</CarouselArrow><CarouselArrow track={specialistCarousel} direction={-1} label={title + ' →'} controls="specialists-track" onStep={() => scrollSpecialists(1)}>→</CarouselArrow></div>}{!personalGroup && <div className="services-category-arrows">
           <CarouselArrow track={companyCategoryCarousel} direction={1} label={t[10] + ' ←'} controls="company-category-filters" onStep={() => { const track = companyCategoryCarousel.current; track?.scrollBy({ left: track.clientWidth * 0.8, behavior: 'smooth' }); }}>←</CarouselArrow>
           <CarouselArrow track={companyCategoryCarousel} direction={-1} label={t[10] + ' →'} controls="company-category-filters" onStep={() => { const track = companyCategoryCarousel.current; track?.scrollBy({ left: -track.clientWidth * 0.8, behavior: 'smooth' }); }}>→</CarouselArrow>
         </div>}</div>
