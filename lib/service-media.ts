@@ -6,6 +6,7 @@ export function validCompanyPhones(phones: CompanyPhone[]) {
   return phones.length <= 5 && phones.every(p => ['office', 'mobile', 'fax', 'other'].includes(p.type) && /^\+?[0-9 ()-]{3,30}$/.test(p.number.trim()) && p.number.replace(/\D/g, '').length >= 3);
 }
 export function safeCompanyPhoto(photo: string | null | undefined) {
+  if (photo && /^\/service-snapshot\/[a-f0-9]{64}\.(jpg|png|webp)$/.test(photo)) return photo;
   return photo && photo.length <= 200000 && /^data:image\/jpeg;base64,[A-Za-z0-9+/]+={0,2}$/.test(photo) ? photo : null;
 }
 export async function prepareCompanyPhoto(file: File): Promise<string> {

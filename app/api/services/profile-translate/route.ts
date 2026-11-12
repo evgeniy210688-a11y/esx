@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { createClient } from '@supabase/supabase-js';
+import { getServiceProfile } from '@/lib/service-profile-data';
 import { ALINA_ID } from '@/lib/specialist-content';
 import { profileTexts, profileBatches } from '@/lib/profile-translation';
 export const runtime = 'nodejs';
@@ -20,9 +20,8 @@ export async function POST(request: Request) {
     const limit = limits.get(ip) ?? {count:0,expires:now+60000};
     if (limit.count >= 60 || limits.size >= 2000) return reply({error:'rate_limit'},429);
     limit.count++; limits.set(ip,limit);
-    const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!,process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,{auth:{persistSession:false}});
-    const {data,error} = await db.from('esx_service_listings').select('description,city,category,profile_content').eq('id',ALINA_ID).eq('status','published').maybeSingle();
-    if (error || !data) return reply({error:'unavailable'},502);
+    const data = await getServiceProfile(ALINA_ID);
+    if (!data) return reply({error:'not_found'},404);
     const batches = profileBatches(profileTexts(data));
     const source = batches[body.batch]; if (!source) return reply({error:'batch'},400);
     const revision = createHash('sha256').update(JSON.stringify(batches)).digest('hex');

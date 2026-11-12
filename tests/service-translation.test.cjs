@@ -9,8 +9,8 @@ vm.runInNewContext(compile('lib/service-description.ts'), helpers);
 function setup(services = ['Стрижки и укладки', 'Окрашивание волос']) {
   const calls = [];
   const data = {description:helpers.exports.joinServiceDescription('Салон красоты', 'Haircuts and styling\nHair coloring'),city:'Hwaseong, Paran',category:'Beauty and care'};
-  const query = {select:()=>query,eq:()=>query,maybeSingle:async()=>({data,error:null})};
-  const context = {exports:{},require:name=>name.includes('service-description')?helpers.exports:{createClient:()=>({from:()=>query})},process:{env:{OPENAI_API_KEY:'test'}},Request,Response,URL,AbortSignal,fetch:async (_url, options)=>{
+
+  const context = {exports:{},require:name=>name.includes('service-description')?helpers.exports:{getServiceProfile:async()=>data},process:{env:{OPENAI_API_KEY:'test'}},Request,Response,URL,AbortSignal,fetch:async (_url, options)=>{
     calls.push(JSON.parse(options.body));
     return Response.json({status:'completed',output:[{content:[{type:'output_text',text:JSON.stringify({description:'Салон красоты',services,city:'Хвасонг, Паран',category:'Красота и уход'})}]}]});
   }};

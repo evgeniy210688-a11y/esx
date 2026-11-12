@@ -3,33 +3,42 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 const ts = require('typescript');
-
-function route(result) {
-  const calls = [];
-  const query = {};
-  for (const method of ['select', 'eq', 'order', 'limit', 'gt', 'abortSignal']) query[method] = (...args) => { calls.push([method, ...args]); return query; };
-  query.returns = async () => result;
-  const context = { exports: {}, URL, Response, AbortSignal, process: { env: {} }, require: () => ({ createClient: () => ({ from: () => query }) }) };
+const rows = require('../lib/service-listings.snapshot.json');
+function route(publishedServices = rows) {
+  const context = { exports: {}, URL, Response, require: name => {
+    assert.equal(name, '@/lib/service-snapshot');
+    return { publishedServices };
+  }};
   vm.runInNewContext(ts.transpileModule(fs.readFileSync('app/api/services/directory/route.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText, context);
-  return { GET: context.exports.GET, calls };
+  return context.exports.GET;
 }
-
-test('first page exposes total count without changing the array response', async () => {
-  const { GET, calls } = route({ data: [{ id: 'one' }], error: null, count: 75 });
-  const response = await GET({ url: 'https://example.com/api/services/directory' });
-  assert.equal(response.headers.get('X-Total-Count'), '75');
-  assert.deepEqual(await response.json(), [{ id: 'one' }]);
-  assert.equal(calls.find(call => call[0] === 'select')[2].count, 'exact');
+test('cursor traversal returns all 216 published records once without database access', async () => {
+  const GET = route(); let cursor = ''; const ids = [];
+  for (let n = 0; n < 20; n++) {
+    const response = await GET(new Request('https://example.com/api/services/directory' + (cursor ? '?after='+cursor : '')));
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('X-Total-Count'), '216');
+    const page = await response.json(); assert.ok(page.length <= 25);
+    assert.ok(page.every(row => !Object.hasOwn(row, 'profile_content')));
+    ids.push(...page.map(row => row.id));
+    if (page.length < 25) break;
+    cursor = page.at(-1).id;
+  }
+  assert.deepEqual(ids, rows.map(row => row.id));
+  assert.equal(new Set(ids).size, 216);
 });
-test('subsequent pages do not count the remaining subset as the full total', async () => {
-  const { GET, calls } = route({ data: [], error: null, count: null });
-  const response = await GET({ url: 'https://example.com/api/services/directory?after=12345678-1234-1234-1234-123456789abc' });
-  assert.equal(response.headers.get('X-Total-Count'), null);
-  assert.equal(calls.find(call => call[0] === 'select')[2], undefined);
+test('invalid cursors fail and empty exports remain valid', async () => {
+  assert.equal((await route()(new Request('https://example.com?after=bad'))).status, 400);
+  const empty = await route([])(new Request('https://example.com'));
+  assert.equal(empty.headers.get('X-Total-Count'), '0');
+  assert.deepEqual(await empty.json(), []);
 });
-test('an empty directory reports zero and failures remain retryable', async () => {
-  const empty = route({ data: [], error: null, count: 0 });
-  assert.equal((await empty.GET({ url: 'https://example.com/api/services/directory' })).headers.get('X-Total-Count'), '0');
-  const failed = route({ data: null, error: new Error('offline'), count: null });
-  assert.equal((await failed.GET({ url: 'https://example.com/api/services/directory' })).status, 503);
+test('all exported media exist and match their content hashes', () => {
+  const crypto = require('node:crypto');
+  const paths = new Set(JSON.stringify(rows).match(/\/service-snapshot\/[a-f0-9]{64}\.(?:jpg|png|webp)/g));
+  assert.equal(paths.size, 177);
+  for (const path of paths) {
+    const bytes = fs.readFileSync('public'+path);
+    assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'), path.split('/').at(-1).split('.')[0]);
+  }
 });

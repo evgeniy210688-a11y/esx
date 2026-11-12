@@ -11,3 +11,5 @@ test('gallery preserves twenty additional photos plus cover and bounds excess',(
 });
 
 test('fax numbers are accepted and labeled in every interface language',()=>{assert.ok(m.validCompanyPhones([{type:'fax',number:'+82 2 1234 5678'}]));assert.equal(m.companyPhones({phones:[{type:'fax',number:'0212345678'}],phone:null})[0].type,'fax');for(const labels of Object.values(m.phoneLabels))assert.ok(labels.fax);});
+
+test('snapshot photos allow only content-addressed local paths',()=>{ const p='/service-snapshot/'+'a'.repeat(64)+'.jpg'; assert.equal(m.safeCompanyPhoto(p),p); for(const bad of ['/service-snapshot/../../secret.jpg',p+'?x=1','https://evil.test'+p,'//evil.test/a.jpg']) assert.equal(m.safeCompanyPhoto(bad),null); });
