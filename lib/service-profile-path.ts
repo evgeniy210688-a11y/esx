@@ -8,5 +8,9 @@ export function serviceProfilePath(id: string): string {
 }
 
 export function serviceProfileId(slug: string): string | undefined {
-  return Object.entries(slugs).find(([, value]) => value === slug)?.[0];
+  // Route params can retain percent escapes; Hangul can also arrive in NFC or NFD.
+  let decoded: string;
+  try { decoded = decodeURIComponent(slug).normalize('NFC'); }
+  catch { return undefined; }
+  return Object.entries(slugs).find(([, value]) => value.normalize('NFC') === decoded)?.[0];
 }

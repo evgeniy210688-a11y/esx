@@ -14,6 +14,18 @@ function load(file) {
   vm.runInNewContext(ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText, context);
   return context.exports;
 }
+test('profile routing accepts encoded and normalized Korean URLs', () => {
+  const slugs = load('lib/service-profile-slugs.json');
+  const { serviceProfileId } = load('lib/service-profile-path.ts');
+  for (const [id, slug] of Object.entries(slugs)) {
+    for (const form of ['NFC', 'NFD']) {
+      assert.equal(serviceProfileId(slug.normalize(form)), id);
+      assert.equal(serviceProfileId(encodeURIComponent(slug.normalize(form))), id);
+    }
+  }
+  assert.equal(serviceProfileId('%ZZ'), undefined);
+  assert.equal(serviceProfileId('missing-profile'), undefined);
+});
 test('every published profile has one canonical URL in the sitemap and unique metadata', () => {
   const rows = load('lib/service-listings.snapshot.json');
   const sitemap = load('app/sitemap.ts').default();
