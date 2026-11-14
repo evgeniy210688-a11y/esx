@@ -24,3 +24,7 @@ This manually added record must be retained when restoring live database reads.
 Natalya (Samsung Life Insurance) was added from user-provided advertisements
 and Facebook URL, with a text-free portrait avatar. Retain this manual entry
 when restoring live database reads (218 listings total).
+
+Three separate GRAND FOOD store cards were added from the supplied Facebook
+screenshot at the user’s request: two in Ansan and one in Incheon (221 total).
+Retain these manual records when restoring live database reads.
