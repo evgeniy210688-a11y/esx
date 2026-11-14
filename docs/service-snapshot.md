@@ -16,3 +16,7 @@ unique IDs and the total count, replace lib/service-listings.snapshot.json and
 its images, test and deploy. Remove withdrawn listings from the export promptly.
 To restore live reads, revert the snapshot reader change after database service
 is restored. Login, chat, submissions and admin writes still require Supabase.
+
+On November 14, 2026, DELICATESSO was added from owner-provided screenshots and
+Facebook URL (217 listings total). Its supplied avatar is preserved unchanged.
+This manually added record must be retained when restoring live database reads.

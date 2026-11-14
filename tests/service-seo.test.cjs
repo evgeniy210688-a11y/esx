@@ -32,7 +32,7 @@ test('every published profile has one canonical URL in the sitemap and unique me
   const { serviceProfilePath } = load('lib/service-profile-path.ts');
   const { serviceProfileMetadata } = load('lib/service-profile-metadata.ts');
   const urls = sitemap.map(entry => entry.url);
-  assert.equal(urls.length, 226);
+  assert.equal(urls.length, rows.length + 10);
   assert.equal(new Set(urls).size, urls.length);
   for (const row of rows) {
     const canonical = 'https://www.88esx.com' + serviceProfilePath(row.id);
