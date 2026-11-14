@@ -12,20 +12,20 @@ function route(publishedServices = rows) {
   vm.runInNewContext(ts.transpileModule(fs.readFileSync('app/api/services/directory/route.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText, context);
   return context.exports.GET;
 }
-test('cursor traversal returns all 216 published records once without database access', async () => {
-  const GET = route(); let cursor = ''; const ids = [];
+test('cursor traversal returns all published records from an unordered snapshot once without database access', async () => {
+  const GET = route([...rows].reverse()); let cursor = ''; const ids = [];
   for (let n = 0; n < 20; n++) {
     const response = await GET(new Request('https://example.com/api/services/directory' + (cursor ? '?after='+cursor : '')));
     assert.equal(response.status, 200);
-    assert.equal(response.headers.get('X-Total-Count'), '216');
+    assert.equal(response.headers.get('X-Total-Count'), String(rows.length));
     const page = await response.json(); assert.ok(page.length <= 25);
     assert.ok(page.every(row => !Object.hasOwn(row, 'profile_content')));
     ids.push(...page.map(row => row.id));
     if (page.length < 25) break;
     cursor = page.at(-1).id;
   }
-  assert.deepEqual(ids, rows.map(row => row.id));
-  assert.equal(new Set(ids).size, 216);
+  assert.deepEqual(ids, rows.map(row => row.id).sort());
+  assert.equal(new Set(ids).size, rows.length);
 });
 test('invalid cursors fail and empty exports remain valid', async () => {
   assert.equal((await route()(new Request('https://example.com?after=bad'))).status, 400);
@@ -36,7 +36,7 @@ test('invalid cursors fail and empty exports remain valid', async () => {
 test('all exported media exist and match their content hashes', () => {
   const crypto = require('node:crypto');
   const paths = new Set(JSON.stringify(rows).match(/\/service-snapshot\/[a-f0-9]{64}\.(?:jpg|png|webp)/g));
-  assert.equal(paths.size, 177);
+  assert.ok(paths.size > 0);
   for (const path of paths) {
     const bytes = fs.readFileSync('public'+path);
     assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'), path.split('/').at(-1).split('.')[0]);

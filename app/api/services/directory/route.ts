@@ -6,7 +6,9 @@ export async function GET(request: Request) {
   if (cursor && !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cursor)) {
     return Response.json({ error: 'Invalid cursor' }, { status: 400 });
   }
-  const rows = publishedServices.filter(row => !cursor || row.id > cursor.toLowerCase()).slice(0, 25)
+  // Cursor pagination requires ID order, including manually appended listings.
+  const rows = publishedServices.filter(row => !cursor || row.id > cursor.toLowerCase())
+    .sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0).slice(0, 25)
     .map(({ profile_content, ...listing }) => { void profile_content; return listing; });
   return Response.json(rows, { headers: {
     'Cache-Control': 'public, max-age=0, s-maxage=60, stale-while-revalidate=60',
