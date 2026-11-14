@@ -28,3 +28,7 @@ when restoring live database reads (218 listings total).
 Three separate GRAND FOOD store cards were added from the supplied Facebook
 screenshot at the user’s request: two in Ansan and one in Incheon (221 total).
 Retain these manual records when restoring live database reads.
+
+TATA MART was added from a supplied screenshot and original logo. The user
+confirmed relocation to 여술3길 3-2; the old address is excluded (222 total).
+Retain this manual record when restoring live database reads.
