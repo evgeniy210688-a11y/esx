@@ -20,3 +20,7 @@ is restored. Login, chat, submissions and admin writes still require Supabase.
 On November 14, 2026, DELICATESSO was added from owner-provided screenshots and
 Facebook URL (217 listings total). Its supplied avatar is preserved unchanged.
 This manually added record must be retained when restoring live database reads.
+
+Natalya (Samsung Life Insurance) was added from user-provided advertisements
+and Facebook URL, with a text-free portrait avatar. Retain this manual entry
+when restoring live database reads (218 listings total).
