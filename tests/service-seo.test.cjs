@@ -32,7 +32,7 @@ test('every published profile has one canonical URL in the sitemap and unique me
   const { serviceProfilePath } = load('lib/service-profile-path.ts');
   const { serviceProfileMetadata } = load('lib/service-profile-metadata.ts');
   const urls = sitemap.map(entry => entry.url);
-  assert.equal(urls.length, rows.length + 10);
+  assert.equal(urls.length, rows.length + 10 + load('lib/directory-topics.ts').directoryTopics.length);
   assert.equal(new Set(urls).size, urls.length);
   for (const row of rows) {
     const canonical = 'https://www.88esx.com' + serviceProfilePath(row.id);
@@ -44,4 +44,22 @@ test('every published profile has one canonical URL in the sitemap and unique me
   }
   assert.ok(!urls.some(url => /\/admin|\/account|\/api\/|\/register/.test(url)));
   assert.equal(serviceProfilePath('7dab9a53-66c5-409c-ab50-9f6a5c8b48cf'), '/services/tkhay-alina');
+});
+
+test('topic pages contain distinct relevant listings and appear in the sitemap', () => {
+  const { directoryTopics, topicListings } = load('lib/directory-topics.ts');
+  const sitemap = load('app/sitemap.ts').default().map(entry => entry.url);
+  assert.equal(new Set(directoryTopics.map(t => t.slug)).size, directoryTopics.length);
+  const signatures = new Set();
+  for (const topic of directoryTopics) {
+    const rows = topicListings(topic);
+    assert.ok(rows.length > 0, topic.slug);
+    assert.equal(new Set(rows.map(r => r.id)).size, rows.length);
+    assert.ok(rows.every(r => [r.category, ...(r.categories || [])].some(c => topic.categories.includes(c))));
+    assert.ok(sitemap.includes('https://www.88esx.com/services/category/' + topic.slug));
+    signatures.add(rows.map(r => r.id).sort().join(','));
+  }
+  assert.equal(signatures.size, directoryTopics.length);
+  assert.ok(topicListings(directoryTopics.find(t => t.slug === 'medicine')).some(r => /психолог/i.test(r.description)));
+  assert.ok(topicListings(directoryTopics.find(t => t.slug === 'auto-moto')).some(r => /мотодилер/i.test(r.description)));
 });

@@ -1,3 +1,4 @@
+import { directoryTopics } from '@/lib/directory-topics';
 import type { MetadataRoute } from 'next';
 import { siteOrigin } from '@/lib/site-seo';
 import { publishedServices } from '@/lib/service-snapshot';
@@ -7,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const pages = ['/', '/services', '/ru/services', '/ko/services', '/en/services', '/about', '/contact', '/advertising', '/korea', '/legal'];
   return [
     ...pages.map(path => ({ url: siteOrigin + path })),
+    ...directoryTopics.map(topic => ({ url: siteOrigin + '/services/category/' + topic.slug })),
     ...publishedServices.map(listing => ({ url: siteOrigin + serviceProfilePath(listing.id) })),
   ];
 }
