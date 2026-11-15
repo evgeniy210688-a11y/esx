@@ -9,6 +9,33 @@ const { matchesService, safeServiceWebsite } = context.exports;
 const listing = { city: 'Сеул', category: 'Медицина', service_languages: ['ko', 'en'], has_interpreter: true, interpreter_languages: ['ru', 'uz'] };
 const empty = { city: '', category: '', language: '', interpreter: false, interpreterLanguage: '' };
 
+test('synonyms cover every published category and preserve all filters', () => {
+  const examples = {
+    'Авто и мототехника': 'автосалон', 'Автосервисы и ремонт': 'автомастерская',
+    'Банкетный зал': 'зал торжеств', 'Банки и денежные переводы': 'перевести деньги',
+    'Бильярд': 'бильярдная', 'Ведущий мероприятий': 'тамада', 'Визы и иммиграция': 'визовая помощь',
+    'Доставка и грузоперевозки': 'логистика', 'Красота и уход': 'бьюти',
+    'Магазины и продукты': 'продовольствие', 'Массаж и спа': 'массажист',
+    'Медицина и клиники': 'медцентр', 'Недвижимость': 'риэлтор', 'Образование': 'учеба',
+    'Переводчики': 'переводчица', 'Реклама, дизайн и полиграфия': 'типография',
+    'Рестораны и кафе': 'поесть', 'Связь и интернет': 'провайдер', 'Спорт и фитнес': 'спортзал',
+    'Стоматология': 'дантист', 'Страхование': 'страховка', 'Фото и видео': 'фотограф',
+    'Цветы': 'флорист', 'Ювелирные мастерские': 'ювелир', 'Юридические услуги': 'адвокат',
+  };
+  const rows = JSON.parse(fs.readFileSync('lib/service-listings.snapshot.json', 'utf8'));
+  for (const category of new Set(rows.flatMap(context.exports.listingCategories))) assert.ok(examples[category], category);
+  for (const [category, query] of Object.entries(examples)) {
+    const company = { ...listing, category };
+    assert.equal(matchesService(company, { ...empty, query }), true, query);
+    assert.equal(matchesService(company, { ...empty, query: `${query} Сеул` }), true);
+    assert.equal(matchesService(company, { ...empty, query, city: 'Пусан' }), false);
+    assert.equal(matchesService(company, { ...empty, query, language: 'ru' }), false);
+    assert.equal(matchesService(company, { ...empty, query, interpreterLanguage: 'zh' }), false);
+  }
+  assert.equal(matchesService({ ...listing, category: 'Стоматология' }, { ...empty, query: 'СТО' }), false);
+  assert.equal(matchesService({ ...listing, category: 'Красота и уход' }, { ...empty, query: 'маникюр' }), false, 'category aliases must not invent a specialist service');
+});
+
 test('repair shop synonyms find published companies without bypassing filters', () => {
   const rows = JSON.parse(fs.readFileSync('lib/service-listings.snapshot.json', 'utf8'));
   const repairShops = rows.filter(s => context.exports.listingCategories(s).includes('Автосервисы и ремонт'));

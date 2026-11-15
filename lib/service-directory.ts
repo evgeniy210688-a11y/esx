@@ -53,6 +53,30 @@ function normalizeSearch(value: string) {
 }
 const categorySearchAliases: Record<string, string> = {
   'Автосервисы и ремонт': 'автомастерская автомастерские автомастерскую автомастерской автосервис автосервисы автосервиса авторемонт СТО ремонт авто ремонт автомобилей',
+  'Авто и мототехника': 'автосалон автодилер мотосалон мотодилер автомобили машины мотоциклы купить авто покупка автомобиля',
+  'Банкетный зал': 'банкеты банкетный зал торжеств площадка для праздника',
+  'Банки и денежные переводы': 'банк банки банковские услуги денежный перевод перевести деньги',
+  'Бильярд': 'бильярдная бильярдный клуб billiards',
+  'Ведущий мероприятий': 'тамада ведущая ведущие организация праздников ведущий праздника',
+  'Визы и иммиграция': 'виза визы визовый консультант иммиграция миграция визовая помощь',
+  'Доставка и грузоперевозки': 'доставки грузоперевозчик перевозки перевозчик логистика транспортировка грузов',
+  'Красота и уход': 'салон красоты бьюти beauty мастер красоты',
+  'Магазины и продукты': 'магазин продуктовый магазин продукты продовольствие супермаркет groceries',
+  'Массаж и спа': 'массажист массажистка массажный салон спа spa',
+  'Медицина и клиники': 'клиника больница медцентр медицинский центр врач доктора медицинская помощь',
+  'Недвижимость': 'риелтор риэлтор агентство недвижимости жилье жилищные услуги',
+  'Образование': 'учеба обучение учебный центр образовательный центр преподаватель education',
+  'Переводчики': 'переводчик переводчица переводчики переводы языковой перевод interpreter translator',
+  'Реклама, дизайн и полиграфия': 'рекламное агентство рекламные услуги полиграфические услуги типография печатная продукция',
+  'Рестораны и кафе': 'ресторан рестораны кафе кафетерий общепит заведение поесть покушать',
+  'Связь и интернет': 'телеком мобильная связь сотовая связь интернет провайдер оператор связи',
+  'Спорт и фитнес': 'спортзал спортивный зал тренажерный зал фитнес клуб фитнес центр fitness',
+  'Стоматология': 'стоматолог дантист зубной врач зубная клиника стоматологическая клиника',
+  'Страхование': 'страховка страховки страховку страховщик страховой агент страховой консультант insurance',
+  'Фото и видео': 'фотограф фотография фотосъемка видеограф видеосъемка фотоуслуги видеоуслуги',
+  'Цветы': 'цветочный магазин флорист флористика букеты букет flowers',
+  'Ювелирные мастерские': 'ювелир ювелирная мастерская ювелирные изделия украшения jewelry',
+  'Юридические услуги': 'юрист адвокат юридическая помощь юридическая консультация правовая помощь lawyer',
 };
 export function matchesService(s: ServiceListing, f: ServiceFilters, translated?: { description?: string; category?: string; city?: string }) {
   const terms = normalizeSearch(f.query ?? '').split(/\s+/).filter(Boolean);
@@ -63,7 +87,8 @@ export function matchesService(s: ServiceListing, f: ServiceFilters, translated?
     ...(s.branches ?? []).flatMap(branch => [branch.name, branch.city, branch.address]),
     translated?.description ?? '', translated?.category ?? '', translated?.city ?? '',
   ].join(' '));
-  return terms.every(term => searchable.includes(term)) && (!f.city || serviceCities(s).includes('Вся Южная Корея') || serviceCities(s).includes(normalizeServiceCity(f.city))) && (!f.category || listingCategories(s).includes(f.category))
+  // Short abbreviations must not match unrelated words (СТО / стоматология).
+  return terms.every(term => term === 'сто' ? searchable.split(' ').includes(term) : searchable.includes(term)) && (!f.city || serviceCities(s).includes('Вся Южная Корея') || serviceCities(s).includes(normalizeServiceCity(f.city))) && (!f.category || listingCategories(s).includes(f.category))
     && (!f.language || s.service_languages.some(l => l === f.language))
     && (!f.interpreter || s.has_interpreter)
     && (!f.interpreterLanguage || (s.has_interpreter && s.interpreter_languages.some(l => l === f.interpreterLanguage)));

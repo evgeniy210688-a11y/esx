@@ -1,5 +1,6 @@
 "use client";
 import { serviceProfilePath } from '@/lib/service-profile-path';
+import { guardCarouselTouch } from '@/lib/carousel-touch';
 import SocialIcon from './tkhay-alina/SocialIcon';
 import ContactIcon from './ContactIcon';
 import CarouselArrow from './CarouselArrow';
@@ -245,11 +246,13 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
     let previous = 0;
     let autoPosition: number | null = null;
     let frame = 0;
+    const pause = () => { resumeAt = performance.now() + 1000; };
+    const nativeTouch = guardCarouselTouch(track, pause);
     const wrapPosition = (value: number) => cycleWidth > 0
       ? cycleWidth + ((value - cycleWidth) % cycleWidth + cycleWidth) % cycleWidth
       : value;
     const normalizeScroll = () => {
-      if (cycleWidth <= 0) return;
+      if (cycleWidth <= 0 || nativeTouch.isActive()) return;
       const offset = wrapPosition(track.scrollLeft) - track.scrollLeft;
       if (Math.abs(offset) < 0.5) return;
       track.scrollLeft += offset;
@@ -274,7 +277,6 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
     const firstGroup = track.querySelector('.services-category-group');
     if (firstGroup) observer.observe(firstGroup);
     measure();
-    const pause = () => { resumeAt = performance.now() + 1000; };
 
     const leave = () => { pause(); };
 
@@ -315,7 +317,7 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
       const elapsed = previous ? Math.min(now - previous, 50) : 0;
       previous = now;
       normalizeScroll();
-      if (!track.dataset.arrowHeld && !document.hidden && !region.matches(':hover') && !region.querySelector(':focus-visible') && pointer === null && now > resumeAt && cycleWidth > 0) {
+      if (!nativeTouch.isActive() && !track.dataset.arrowHeld && !document.hidden && !region.matches(':hover') && !region.querySelector(':focus-visible') && pointer === null && now > resumeAt && cycleWidth > 0) {
 
 
         autoPosition = wrapPosition((autoPosition ?? track.scrollLeft) + elapsed * 0.035);
@@ -340,6 +342,7 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
     frame = requestAnimationFrame(animate);
     return () => {
       cancelAnimationFrame(frame);
+      nativeTouch.dispose();
       observer.disconnect();
       track.removeEventListener('scroll', normalizeScroll);
 
@@ -444,6 +447,7 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
     measure();
     let frame = 0;
     const pause = () => { pauseUntil = performance.now() + 2000; position = null; };
+    const nativeTouch = guardCarouselTouch(track, pause);
     const down = (event: PointerEvent) => {
       touching = true;
       pause();
@@ -484,7 +488,7 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
       const elapsed = previous ? Math.min(now - previous, 50) : 0;
       if (!previous) pauseUntil = now + 1000;
       previous = now;
-      if (cycle > 0 && !track.querySelector('[data-expanded="true"]') && !region.querySelector(':focus-visible')) {
+      if (!nativeTouch.isActive() && cycle > 0 && !track.querySelector('[data-expanded="true"]') && !region.querySelector(':focus-visible')) {
         const offset = track.scrollLeft < cycle ? cycle : track.scrollLeft >= cycle * 2 ? -cycle : 0;
         if (offset) {
           track.scrollLeft += offset;
@@ -492,7 +496,7 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
           if (position !== null) position += offset;
         }
       }
-      if (!track.dataset.arrowHeld && !document.hidden && !touching && !region.matches(':hover') && now >= pauseUntil && !region.querySelector(':focus-visible') && !track.querySelector('[data-expanded="true"]') && cycle > 0) {
+      if (!nativeTouch.isActive() && !track.dataset.arrowHeld && !document.hidden && !touching && !region.matches(':hover') && now >= pauseUntil && !region.querySelector(':focus-visible') && !track.querySelector('[data-expanded="true"]') && cycle > 0) {
         position = (position ?? track.scrollLeft) + elapsed * 0.035;
         track.scrollLeft = position;
       } else { position = null; }
@@ -513,6 +517,7 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
     region.addEventListener('focusout', pause);
     return () => {
       cancelAnimationFrame(frame);
+      nativeTouch.dispose();
       observer.disconnect();
       track.removeEventListener('pointerdown', down);
       track.removeEventListener('pointermove', move);
