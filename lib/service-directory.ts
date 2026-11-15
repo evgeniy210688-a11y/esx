@@ -51,10 +51,14 @@ export type ServiceFilters = { query?: string; city: string; category: string; l
 function normalizeSearch(value: string) {
   return value.normalize('NFKC').toLowerCase().replace(/ё/g, 'е').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
 }
+const categorySearchAliases: Record<string, string> = {
+  'Автосервисы и ремонт': 'автомастерская автомастерские автомастерскую автомастерской автосервис автосервисы автосервиса авторемонт СТО ремонт авто ремонт автомобилей',
+};
 export function matchesService(s: ServiceListing, f: ServiceFilters, translated?: { description?: string; category?: string; city?: string }) {
   const terms = normalizeSearch(f.query ?? '').split(/\s+/).filter(Boolean);
+  const categories = listingCategories(s);
   const searchable = normalizeSearch([
-    ...listingCategories(s), s.name, s.represented_company, s.category, serviceCategory(s), s.description, s.city, s.address,
+    ...categories, ...categories.map(category => categorySearchAliases[category] ?? ''), s.name, s.represented_company, s.category, serviceCategory(s), s.description, s.city, s.address,
     s.listing_kind ? listingKindLabels[s.listing_kind] : '',
     ...(s.branches ?? []).flatMap(branch => [branch.name, branch.city, branch.address]),
     translated?.description ?? '', translated?.category ?? '', translated?.city ?? '',

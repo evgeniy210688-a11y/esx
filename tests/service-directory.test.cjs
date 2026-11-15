@@ -9,6 +9,22 @@ const { matchesService, safeServiceWebsite } = context.exports;
 const listing = { city: 'Сеул', category: 'Медицина', service_languages: ['ko', 'en'], has_interpreter: true, interpreter_languages: ['ru', 'uz'] };
 const empty = { city: '', category: '', language: '', interpreter: false, interpreterLanguage: '' };
 
+test('repair shop synonyms find published companies without bypassing filters', () => {
+  const rows = JSON.parse(fs.readFileSync('lib/service-listings.snapshot.json', 'utf8'));
+  const repairShops = rows.filter(s => context.exports.listingCategories(s).includes('Автосервисы и ремонт'));
+  assert.ok(repairShops.length > 0);
+  for (const query of ['автомастерская', 'АВТОМАСТЕРСКИЕ', 'автомастерскую', 'авто мастерская', 'СТО']) {
+    for (const shop of repairShops) assert.equal(matchesService(shop, { ...empty, query }), true, `${query}: ${shop.name}`);
+  }
+  const shop = repairShops.find(s => s.name === 'Jeil Auto Repair');
+  assert.ok(shop);
+  assert.equal(matchesService(shop, { ...empty, query: 'автомастерская', city: shop.city }), true);
+  assert.equal(matchesService(shop, { ...empty, query: 'автомастерская', city: 'Несуществующий город' }), false);
+  assert.equal(matchesService(shop, { ...empty, query: 'автомастерская', category: 'Образование' }), false);
+  assert.equal(matchesService(listing, { ...empty, query: 'автомастерская' }), false);
+  assert.equal(matchesService(shop, { ...empty, query: 'несуществующая компания' }), false);
+});
+
 test('business services join the advertising category in primary and additional categories', () => {
   const category = 'Реклама, дизайн и полиграфия';
   const company = { ...listing, category: 'Услуги для бизнеса', categories: [category] };
