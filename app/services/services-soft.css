@@ -329,3 +329,5 @@
 .services-directory .services-category-heading>#companies-heading{grid-column:1}
 .services-directory .services-category-heading:has(>#companies-heading)>.services-category-arrows{grid-column:1}
 }
+
+.services-directory .services-glass-header > .services-header-search-reset{margin-left:0;margin-inline-start:-4px}
