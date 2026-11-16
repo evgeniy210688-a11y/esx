@@ -1,0 +1,14 @@
+.directory-article{max-width:960px;margin:48px auto;padding:clamp(22px,4vw,52px);border:1px solid #dbe8f0;border-radius:28px;background:#ffffffd9;color:#304b5b;line-height:1.85;font-size:16px;overflow-wrap:anywhere}
+.directory-article .directory-article-kicker{margin:0 0 14px;color:#51758a;font-size:12px;font-weight:600;letter-spacing:.09em;text-transform:uppercase}
+.directory-article h2{margin:0 0 22px;font-size:clamp(27px,3.3vw,40px);line-height:1.2;letter-spacing:-.025em;text-wrap:balance;color:#203e50}
+.directory-article .directory-article-lead{font-size:18px;line-height:1.75;color:#486473}
+.directory-article h3{margin:0 0 14px;font-size:clamp(21px,2.4vw,26px);line-height:1.35;color:#203e50}
+.directory-article section{margin-top:34px}
+.directory-article p{margin:0 0 16px}
+.directory-article a{color:#176a98;text-decoration:underline;text-underline-offset:4px}
+.directory-article a:hover{color:#104c70}
+.directory-article figure{margin:30px 0}
+.directory-article figure img{display:block;width:100%;height:auto;border-radius:18px}
+.directory-article figcaption{margin-top:10px;color:#5b7180;font-size:13px;line-height:1.6}
+.directory-article .directory-article-summary{padding-top:26px;border-top:1px solid #dbe8f0}
+@media(max-width:600px){.directory-article{margin:30px 0;border-radius:20px;padding:22px 18px;font-size:15px}.directory-article .directory-article-lead{font-size:16px}.directory-article figure img{border-radius:12px}}
