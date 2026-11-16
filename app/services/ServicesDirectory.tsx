@@ -117,7 +117,7 @@ function categoryArt(category: string): number {
   return 0;
 }
 const empty: ServiceFilters = { query: '', city: '', category: '', language: '', interpreter: false, interpreterLanguage: '' };
-export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: 'ru' | 'ko' | 'en' }) {
+export default function ServicesDirectory({ routeLanguage, initialListings }: { routeLanguage?: 'ru' | 'ko' | 'en'; initialListings?: ServiceListing[] }) {
   const router = useRouter();
   const [preferredLanguage, setLanguage] = useState<InterfaceLanguage>('ru');
   const language = routeLanguage ?? preferredLanguage;
@@ -155,7 +155,7 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
     document.addEventListener('click', closeOutside, true);
     return () => document.removeEventListener('click', closeOutside, true);
   }, [expandedCardId]);
-  const [listings, setListings] = useState<ServiceListing[]>([]);
+  const [listings, setListings] = useState<ServiceListing[]>(initialListings ?? []);
   const [translations, setTranslations] = useState<Record<string,CardTranslation>>({});
   const [translationStatus, setTranslationStatus] = useState('');
   const [translationRetry, setTranslationRetry] = useState(0);
@@ -359,10 +359,11 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
       track.removeEventListener('wheel', pause);
     };
   }, [listings.length, categoryCopies]);
-  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>(initialListings ? 'ready' : 'loading');
   const [attempt, setAttempt] = useState(0);
-  const [loadProgress, setLoadProgress] = useState(0);
+  const [loadProgress, setLoadProgress] = useState(initialListings ? 100 : 0);
   useEffect(() => {
+    if (initialListings) return;
     let active = true;
     const controller = new AbortController();
     async function load() {
@@ -405,7 +406,7 @@ export default function ServicesDirectory({ routeLanguage }: { routeLanguage?: '
     }
     void load();
     return () => { active = false; controller.abort(); };
-  }, [attempt]);
+  }, [attempt, initialListings]);
   function update<K extends keyof ServiceFilters>(key: K, value: ServiceFilters[K]) { if (key === 'category') { setCompanyCategories([]); setSpecialistCategories([]); } setFilters(current => ({ ...current, [key]: value })); }
   const categoryLabel = (category: string) => categoryTranslation(category, language) ?? listings.map(s => s.category === category ? translatedCard(s)?.category : undefined).find(Boolean) ?? category;
   const categoryQuery = filters.category.trim().normalize('NFKC').toLocaleLowerCase();
