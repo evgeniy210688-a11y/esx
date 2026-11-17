@@ -6,6 +6,12 @@
 .directory-article section{margin-top:34px}
 .directory-article p{margin:0 0 16px;text-align:justify;hyphens:auto}
 .directory-article figure{max-width:960px;margin:30px auto}
+.directory-article{display:flow-root}
+@media(min-width:900px){
+  .directory-article figure{float:left;clear:both;width:42%;max-width:560px;margin:8px 32px 20px 0}
+  .directory-article figure:nth-of-type(even){float:right;margin:8px 0 20px 32px}
+  .directory-article .directory-article-summary{clear:both}
+}
 .directory-article figure img{display:block;width:100%;height:auto;border-radius:18px}
 .directory-article figcaption{margin-top:10px;color:#5b7180;font-size:13px;line-height:1.6}
 .directory-article .directory-article-summary{padding-top:26px;border-top:1px solid #dbe8f0}
