@@ -1,0 +1,221 @@
+{
+  "ru": {
+    "intro": "На нашем сайте мы предоставляем информацию о компаниях, услугах и специалистах в Южной Корее: переводчиках, страховых консультантах, медицинских координаторах, автосервисах, салонах красоты, недвижимости, магазинах, кафе и других направлениях. В справочнике вы найдёте описания услуг, контакты, адреса и сведения о доступных языках обслуживания.",
+    "kicker": "Жизнь в Корее · Справочник ESX",
+    "title": "Южная Корея: как найти нужные услуги и специалистов",
+    "lead": "Переезд, повседневные дела и отдых становятся проще, когда под рукой есть нужные контакты. В справочнике ESX собраны компании и специалисты в Южной Корее: от переводчиков и страховых консультантов до автосервисов, салонов красоты и мест для встречи с друзьями.",
+    "opening": "Начните с категории, затем выберите город и язык обслуживания. В карточке посмотрите описание услуг, адрес и способы связи. Если нужен русскоязычный специалист, проверьте языки в его профиле: наличие компании в справочнике само по себе не означает, что каждый сотрудник говорит по-русски.",
+    "images": [
+      {
+        "alt": "Комикс: переводчик помогает на встрече, медицинский координатор встречает посетителя, консультант обсуждает страховку",
+        "caption": "Понятное общение помогает обсудить задачу и заранее согласовать условия."
+      },
+      {
+        "alt": "Комикс о повседневных услугах в Корее: осмотр автомобиля в автосервисе, маникюр и игра в бильярд",
+        "caption": "Автомобиль, уход за собой и отдых — разные задачи в одном справочнике."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Государственная страховка и частная страховка в Корее",
+        "paragraphs": [
+          "Государственная медицинская страховка в Южной Корее связана с системой National Health Insurance, которую администрирует NHIS. Вопросы участия иностранцев, взносов и документов стоит сверять с официальной информацией NHIS для иностранных жителей. Так проще отделить правила государственной системы от предложений отдельных страховых компаний.",
+          "Если вас интересует частная страховка, в разделе страхования в Корее можно найти контакты агентов и консультантов. Перед оформлением попросите объяснить, какие случаи покрывает договор, какие есть исключения, сколько составляют взносы и как подаются документы на выплату. Условия конкретного полиса лучше обсуждать по его тексту, а не только по рекламному описанию."
+        ]
+      },
+      {
+        "title": "Переводчики и медицинские координаторы",
+        "paragraphs": [
+          "Переводчики в Южной Корее помогают в ситуациях, где важно точно понять собеседника: на деловой встрече, при обращении в организацию или при работе с документами. Укажите языковую пару, тему, объём и сроки. Для устного перевода уточните город и формат сопровождения, для письменного — требования получателя к готовому документу.",
+          "Медицинские координаторы, или медкоординаторы, помогают организовать общение с клиникой: согласовать запись, уточнить порядок визита и доступность языкового сопровождения. Объём помощи нужно выяснить у конкретного специалиста. В разделе медицины и клиник также представлены стоматология и другие направления. При выборе уточняйте профиль учреждения, язык приёма и стоимость; медицинские решения обсуждайте с лечащим специалистом."
+        ]
+      },
+      {
+        "title": "Покупка авто, аренда и автосервисы",
+        "paragraphs": [
+          "Покупка авто в Южной Корее начинается с понятной задачи: автомобиль для ежедневных поездок, семейных путешествий или работы. В разделе авто и мототехники ищите автодилеров, специалистов по покупке и аренде автомобилей, а также автосервисы. При обсуждении машины задавайте вопросы о состоянии, истории обслуживания, документах и полной стоимости сделки.",
+          "Для обращения в автосервис подготовьте марку, модель, год выпуска и описание неисправности. Уточните, выполняет ли мастерская нужную диагностику, какие запчасти использует и как согласует дополнительные работы. В справочнике есть и направление автошкол и обучения вождению: программу, язык занятий и условия записи узнавайте у выбранной организации."
+        ]
+      },
+      {
+        "title": "Маникюр, педикюр, салоны красоты и массаж",
+        "paragraphs": [
+          "В категории красоты и ухода можно подобрать мастера для стрижки, окрашивания, маникюра или педикюра. Изучите описание и фотографии работ, уточните адрес, свободное время и состав услуги. При записи на маникюр полезно заранее обсудить снятие старого покрытия, желаемую длину и дизайн, чтобы согласовать время и итоговую цену.",
+          "Массаж и спа представлены отдельным направлением. Уточняйте вид процедуры, продолжительность сеанса и подготовку специалиста. Для любой услуги по уходу за собой выбирайте исполнителя по конкретному опыту и условиям работы, а не только по красивой фотографии."
+        ]
+      },
+      {
+        "title": "Жильё, документы и бытовые задачи",
+        "paragraphs": [
+          "Раздел недвижимости в Корее помогает найти контакты агентств и риелторов. Сообщите район, бюджет и желаемый срок проживания; перед просмотром уточните депозит, ежемесячные расходы и комиссию. Для переезда пригодятся доставка и грузоперевозки: согласуйте объём вещей, этаж, наличие лифта, упаковку и время подачи транспорта.",
+          "В справочнике также есть визы и иммиграция, консультанты по визовым вопросам, юридические услуги, банки и денежные переводы, связь и интернет. Выбирайте направление под свою задачу и заранее уточняйте перечень документов, стоимость и границы услуги. Не передавайте личные документы, пока не убедитесь, кому и для чего они нужны."
+        ]
+      },
+      {
+        "title": "Магазины, кафе, бильярд и свободное время",
+        "paragraphs": [
+          "Ищете привычные продукты или место для ужина? Откройте магазины и продукты либо рестораны и кафе в Южной Корее. Проверьте адрес нужного филиала, часы работы и наличие интересующих товаров или блюд. Для семейного праздника можно посмотреть банкетные залы, ведущих мероприятий, фотографов и видеографов, а также заказать цветы.",
+          "Бильярд, спорт и фитнес помогают разнообразить свободное время. Перед посещением бильярдного клуба уточните тип столов, тариф и возможность бронирования. В образовательных направлениях можно искать занятия для взрослых и детей, включая шахматы. Возрастные группы, язык обучения, расписание и пробные занятия согласуйте с организатором."
+        ]
+      },
+      {
+        "title": "Услуги для бизнеса и особые заказы",
+        "paragraphs": [
+          "Предпринимателям могут понадобиться реклама, дизайн и полиграфия, фото и видео, перевод, доставка и другие услуги для бизнеса. Подготовьте короткое описание задачи: результат, формат, сроки и бюджет. Для печати уточните тираж и требования к макету, для съёмки — количество готовых материалов и условия их использования. Ювелирные мастерские помогут обсудить индивидуальный заказ или ремонт: возможность работы с конкретным изделием выясняйте непосредственно у мастера."
+        ]
+      },
+      {
+        "title": "Как пользоваться справочником ESX",
+        "paragraphs": [
+          "Выберите направление и город, сравните несколько карточек и свяжитесь с подходящим специалистом. Подтвердите актуальность адреса, языка обслуживания, цены и записи. Чем точнее вы опишете задачу, тем проще будет получить предметный ответ — будь то частная страховка, перевод документов, покупка авто, педикюр или вечер за бильярдным столом."
+        ]
+      }
+    ]
+  },
+  "en": {
+    "intro": "Our website provides information about businesses, services and professionals in South Korea, including translators, insurance advisers, medical coordinators, auto repair shops, beauty salons, real estate, shops, cafés and more. The directory includes service descriptions, contact details, addresses and available service languages.",
+    "kicker": "Life in Korea · ESX Directory",
+    "title": "South Korea: finding the services and professionals you need",
+    "lead": "Moving, everyday errands and leisure become easier when you have the right contacts at hand. The ESX directory brings together businesses and professionals in South Korea, from translators and insurance advisers to auto repair shops, beauty salons and places to meet friends.",
+    "opening": "Start with a category, then choose a city and service language. Check each listing for service descriptions, an address and ways to get in touch. If you need a Russian-speaking professional, check the languages in their profile: being listed in the directory does not mean that every employee speaks Russian.",
+    "images": [
+      {
+        "alt": "Comic: an interpreter assists at a meeting, a medical coordinator welcomes a visitor, and an adviser discusses insurance",
+        "caption": "Clear communication helps you explain your needs and agree on terms in advance."
+      },
+      {
+        "alt": "Comic about everyday services in Korea: a vehicle inspection at an auto repair shop, a manicure and a game of billiards",
+        "caption": "Cars, personal care and leisure — different needs in one directory."
+      }
+    ],
+    "sections": [
+      {
+        "title": "National health insurance and private insurance in Korea",
+        "paragraphs": [
+          "South Korea’s national health insurance is part of the National Health Insurance system administered by NHIS. Check official NHIS information for foreign residents about eligibility, contributions and required documents. This helps distinguish the rules of the national system from offers made by individual insurance companies.",
+          "If you are interested in private insurance, the insurance category lists agents and advisers in Korea. Before taking out a policy, ask which events it covers, what exclusions apply, how much the premiums are and how to submit a claim. Discuss the terms of a specific policy using the policy document, rather than relying only on advertising."
+        ]
+      },
+      {
+        "title": "Translators, interpreters and medical coordinators",
+        "paragraphs": [
+          "Translators and interpreters in South Korea help when accurate understanding matters: at a business meeting, when dealing with an organisation or when working with documents. Specify the language pair, subject, scope and deadline. For interpreting, confirm the city and type of assistance; for written translation, check the recipient’s requirements for the completed document.",
+          "Medical coordinators help arrange communication with clinics: making appointments, clarifying visit procedures and checking the availability of language assistance. Ask the individual professional what their assistance includes. The medical and clinic category also covers dentistry and other specialties. When choosing a provider, confirm its specialty, consultation language and fees; discuss medical decisions with your treating clinician."
+        ]
+      },
+      {
+        "title": "Buying and renting cars, and auto repair",
+        "paragraphs": [
+          "Buying a car in South Korea starts with a clear purpose: daily commuting, family trips or work. Look in the cars and motorcycles category for dealers, car purchase and rental professionals, and repair shops. Ask about a vehicle’s condition, service history, documents and the total cost of the transaction.",
+          "Before contacting a repair shop, prepare the make, model, year and a description of the problem. Check whether the shop offers the required diagnostics, which parts it uses and how it obtains approval for additional work. The directory also includes driving schools and driving lessons: ask the organisation about its programme, teaching language and enrolment requirements."
+        ]
+      },
+      {
+        "title": "Manicures, pedicures, beauty salons and massage",
+        "paragraphs": [
+          "The beauty and personal care category helps you find professionals for haircuts, colouring, manicures and pedicures. Review descriptions and photos of their work, and confirm the address, availability and what the service includes. When booking a manicure, discuss removal of the old coating, your preferred nail length and design in advance to agree on the duration and final price.",
+          "Massage and spa services have their own category. Ask about the treatment type, session length and the professional’s training. For any personal care service, choose a provider based on relevant experience and working practices, not just an attractive photo."
+        ]
+      },
+      {
+        "title": "Housing, documents and everyday tasks",
+        "paragraphs": [
+          "The real estate category helps you find agencies and agents in Korea. State your preferred area, budget and length of stay; before a viewing, confirm the deposit, monthly expenses and agency fee. Delivery and moving services can help with relocation: agree on the volume of belongings, floor, lift access, packing and vehicle arrival time.",
+          "The directory also covers visas and immigration, visa advisers, legal services, banks and money transfers, telecommunications and internet. Choose the category that matches your needs and confirm the required documents, fees and scope of service in advance. Do not share personal documents until you know who needs them and why."
+        ]
+      },
+      {
+        "title": "Shops, cafés, billiards and leisure",
+        "paragraphs": [
+          "Looking for familiar groceries or somewhere to have dinner? Browse shops and groceries, or restaurants and cafés in South Korea. Check the address of the specific branch, opening hours and the availability of the products or dishes you want. For a family celebration, you can look for banquet halls, event hosts, photographers and videographers, and order flowers.",
+          "Billiards, sports and fitness offer ways to enjoy your free time. Before visiting a billiards club, ask about the table types, prices and booking options. Education categories can help you find classes for adults and children, including chess. Confirm age groups, teaching language, schedules and trial lessons with the organiser."
+        ]
+      },
+      {
+        "title": "Business services and special orders",
+        "paragraphs": [
+          "Business owners may need advertising, design and printing, photography and video, translation, delivery and other business services. Prepare a short brief describing the result, format, deadline and budget. For printing, confirm quantities and artwork requirements; for photography or video, agree on the number of finished items and usage terms. Jewellery workshops can discuss custom orders or repairs: ask the craftsperson directly whether they can work on your item."
+        ]
+      },
+      {
+        "title": "How to use the ESX directory",
+        "paragraphs": [
+          "Choose a category and city, compare several listings and contact a suitable professional. Confirm that the address, service language, price and appointment details are up to date. The more clearly you describe your needs, the easier it is to get a useful answer, whether you need private insurance, document translation, a car, a pedicure or an evening playing billiards."
+        ]
+      }
+    ]
+  },
+  "ko": {
+    "intro": "저희 사이트는 대한민국의 업체, 서비스 및 전문가 정보를 제공합니다. 통번역사, 보험 상담사, 의료 코디네이터, 자동차 정비소, 미용실, 부동산, 상점, 카페 등 다양한 분야를 다룹니다. 디렉터리에서 서비스 설명, 연락처, 주소와 이용 가능한 서비스 언어를 확인할 수 있습니다.",
+    "kicker": "한국 생활 · ESX 디렉터리",
+    "title": "한국에서 필요한 서비스와 전문가 찾기",
+    "lead": "필요한 연락처를 알고 있으면 이사, 일상 업무, 여가 생활이 한결 편해집니다. ESX 디렉터리에는 통번역사와 보험 상담사부터 자동차 정비소, 미용실, 친구들과 만날 장소까지 대한민국의 다양한 업체와 전문가가 모여 있습니다.",
+    "opening": "먼저 분야를 선택한 뒤 도시와 서비스 언어를 고르세요. 각 카드에서 서비스 설명, 주소, 연락 방법을 확인할 수 있습니다. 러시아어로 소통할 수 있는 전문가가 필요하다면 프로필의 언어 정보를 확인하세요. 디렉터리에 등록된 업체라고 해서 모든 직원이 러시아어를 구사하는 것은 아닙니다.",
+    "images": [
+      {
+        "alt": "통역사가 회의를 돕고, 의료 코디네이터가 방문객을 맞이하며, 상담사가 보험을 설명하는 만화",
+        "caption": "원활한 의사소통은 필요한 서비스를 설명하고 조건을 미리 협의하는 데 도움이 됩니다."
+      },
+      {
+        "alt": "한국의 일상 서비스를 보여 주는 만화: 정비소의 차량 점검, 네일 관리, 당구",
+        "caption": "자동차, 자기 관리, 여가까지 다양한 정보를 하나의 디렉터리에서 찾아보세요."
+      }
+    ],
+    "sections": [
+      {
+        "title": "한국의 국민건강보험과 민간보험",
+        "paragraphs": [
+          "한국의 공적 의료보험은 국민건강보험공단(NHIS)이 운영하는 국민건강보험 제도를 기반으로 합니다. 외국인의 가입 대상 여부, 보험료, 구비 서류는 외국인 주민을 위한 공단의 공식 안내를 확인하세요. 이를 통해 공적 제도의 규정과 개별 보험사의 상품을 구분할 수 있습니다.",
+          "민간보험에 관심이 있다면 보험 분야에서 설계사와 상담사의 연락처를 찾을 수 있습니다. 가입 전 보장 범위, 보장 제외 사항, 보험료, 보험금 청구 절차를 설명해 달라고 요청하세요. 특정 상품의 조건은 광고 설명만이 아니라 실제 약관을 바탕으로 확인하는 것이 좋습니다."
+        ]
+      },
+      {
+        "title": "통번역사와 의료 코디네이터",
+        "paragraphs": [
+          "한국의 통번역사는 비즈니스 미팅, 기관 방문, 문서 업무 등 정확한 이해가 필요한 상황에서 도움을 줍니다. 필요한 언어 조합, 주제, 분량과 기한을 알려 주세요. 통역은 지역과 동행 방식을, 번역은 완성된 문서를 제출할 기관의 요구 사항을 확인하세요.",
+          "의료 코디네이터는 진료 예약, 방문 절차 확인, 언어 지원 가능 여부 안내 등 병원과의 소통을 돕습니다. 구체적인 지원 범위는 해당 전문가에게 확인해야 합니다. 의료·병원 분야에는 치과를 비롯한 여러 진료 분야도 포함되어 있습니다. 기관을 선택할 때는 진료 분야, 상담 언어, 비용을 확인하고, 의학적 결정은 담당 의료진과 상의하세요."
+        ]
+      },
+      {
+        "title": "자동차 구매·대여와 정비",
+        "paragraphs": [
+          "한국에서 자동차를 구입하려면 먼저 출퇴근, 가족 여행, 업무 등 사용 목적을 정하는 것이 좋습니다. 자동차·오토바이 분야에서 판매업체, 차량 구매·대여 전문가, 정비소를 찾아보세요. 차량 상태, 정비 이력, 서류와 거래에 드는 총비용을 문의하세요.",
+          "정비소에 연락하기 전에는 제조사, 모델, 연식과 고장 증상을 정리하세요. 필요한 진단이 가능한지, 어떤 부품을 사용하는지, 추가 작업은 어떻게 사전 동의를 받는지 확인하세요. 디렉터리에는 운전학원과 운전 교육 분야도 있습니다. 교육 과정, 수업 언어, 등록 조건은 해당 기관에 문의하세요."
+        ]
+      },
+      {
+        "title": "네일·페디큐어, 미용실과 마사지",
+        "paragraphs": [
+          "미용·관리 분야에서는 커트, 염색, 네일, 페디큐어 전문가를 찾을 수 있습니다. 서비스 설명과 시술 사진을 살펴보고 주소, 예약 가능한 시간, 서비스에 포함된 항목을 확인하세요. 네일을 예약할 때는 기존 코팅 제거 여부, 원하는 길이와 디자인을 미리 알려 소요 시간과 최종 비용을 협의하는 것이 좋습니다.",
+          "마사지와 스파는 별도 분야로 제공됩니다. 관리 종류, 소요 시간, 전문가의 교육 이력을 확인하세요. 자기 관리 서비스를 선택할 때는 사진만 보지 말고 관련 경험과 서비스 제공 방식도 살펴보세요."
+        ]
+      },
+      {
+        "title": "주거, 서류와 생활 업무",
+        "paragraphs": [
+          "한국 부동산 분야에서는 중개업체와 중개사의 연락처를 찾을 수 있습니다. 원하는 지역, 예산, 거주 기간을 알려 주고, 매물을 보기 전에 보증금, 월 지출과 중개 수수료를 확인하세요. 이사에는 배송·운송 서비스가 도움이 됩니다. 짐의 양, 층수, 엘리베이터 유무, 포장 방식과 차량 도착 시간을 협의하세요.",
+          "디렉터리에는 비자·출입국, 비자 상담, 법률 서비스, 은행·송금, 통신·인터넷 분야도 있습니다. 목적에 맞는 분야를 선택하고 필요한 서류, 비용, 서비스 범위를 미리 확인하세요. 개인 서류는 누가 어떤 목적으로 요구하는지 확인한 뒤 제공하세요."
+        ]
+      },
+      {
+        "title": "상점, 카페, 당구와 여가",
+        "paragraphs": [
+          "익숙한 식료품이나 저녁 식사 장소를 찾고 계신가요? 한국의 상점·식료품 또는 음식점·카페 분야를 살펴보세요. 방문할 지점의 주소, 영업시간, 원하는 상품이나 메뉴의 제공 여부를 확인하세요. 가족 행사를 위해 연회장, 행사 진행자, 사진·영상 전문가를 찾거나 꽃을 주문할 수도 있습니다.",
+          "당구, 스포츠와 피트니스는 여가를 다양하게 즐기는 방법입니다. 당구장을 방문하기 전에는 당구대 종류, 요금, 예약 가능 여부를 확인하세요. 교육 분야에서는 체스를 포함해 성인과 어린이를 위한 수업을 찾을 수 있습니다. 대상 연령, 수업 언어, 일정, 체험 수업은 주최 측과 협의하세요."
+        ]
+      },
+      {
+        "title": "사업자를 위한 서비스와 맞춤 주문",
+        "paragraphs": [
+          "사업자는 광고, 디자인·인쇄, 사진·영상, 통번역, 배송 등 다양한 서비스가 필요할 수 있습니다. 원하는 결과물, 형식, 기한과 예산을 간단히 정리하세요. 인쇄는 수량과 파일 규격을, 촬영은 최종 결과물의 수량과 이용 조건을 확인하세요. 귀금속 공방에서는 맞춤 제작이나 수리를 상담할 수 있습니다. 특정 제품의 작업 가능 여부는 해당 전문가에게 직접 문의하세요."
+        ]
+      },
+      {
+        "title": "ESX 디렉터리 이용 방법",
+        "paragraphs": [
+          "분야와 도시를 선택하고 여러 카드를 비교한 뒤 적합한 전문가에게 연락하세요. 주소, 서비스 언어, 가격과 예약 정보가 최신인지 확인하세요. 민간보험, 문서 번역, 자동차 구매, 페디큐어, 당구장 방문 등 어떤 일이든 필요한 내용을 구체적으로 설명할수록 정확한 답변을 받기 쉽습니다."
+        ]
+      }
+    ]
+  }
+}
