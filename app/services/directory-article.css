@@ -19,3 +19,10 @@
 
 .services-directory .services-main>.directory-article{max-width:none}
 .services-directory .services-main>.directory-article-intro{max-width:none;margin:40px 0 24px;font-size:18px;line-height:1.75;text-align:justify;hyphens:auto}
+
+.directory-article,.directory-article-intro{-webkit-user-select:none;user-select:none}
+
+.services-directory[data-theme=dark] .directory-article{background:#13263d;border-color:#37516e;color:#dce8f8}
+.services-directory[data-theme=dark] .directory-article :is(h2,h3){color:#f1f6ff}
+.services-directory[data-theme=dark] .directory-article :is(.directory-article-kicker,figcaption){color:#b0c1da}
+.services-directory[data-theme=dark] .directory-article .directory-article-summary{border-color:#37516e}

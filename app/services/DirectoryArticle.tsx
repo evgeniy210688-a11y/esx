@@ -13,8 +13,8 @@ export default function DirectoryArticle({ language }: { language: InterfaceLang
   </figure>;
 
   return <>
-    <p className="directory-article-intro" lang={language}>{text.intro}</p>
-    <article className="directory-article" lang={language} aria-labelledby="directory-guide-title">
+    <p className="directory-article-intro" lang={language} onCopy={event => event.preventDefault()} onCut={event => event.preventDefault()}>{text.intro}</p>
+    <article className="directory-article" lang={language} aria-labelledby="directory-guide-title" onCopy={event => event.preventDefault()} onCut={event => event.preventDefault()}>
       <header>
         <p className="directory-article-kicker">{text.kicker}</p>
         <h2 id="directory-guide-title">{text.title}</h2>
