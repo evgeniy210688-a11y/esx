@@ -334,3 +334,16 @@
 
 /* Pearlescent lavender, blush and sky blue inspired by the supplied reference. */
 .services-directory:not([data-theme=dark]){background-color:#eee4f1;background-image:radial-gradient(ellipse at 8% 12%,#f8dfd1 0%,transparent 45%),radial-gradient(ellipse at 84% 18%,#d2c5ef 0%,transparent 48%),radial-gradient(ellipse at 65% 62%,#d3e8fa 0%,transparent 44%),radial-gradient(ellipse at 15% 85%,#f3d2e5 0%,transparent 45%),linear-gradient(135deg,#f5eae3 0%,#e9ddf3 38%,#e1e9f8 65%,#f2dce7 100%)}
+
+/* Let scrolling category and specialist rows reach both viewport edges. */
+.services-directory .services-main{--directory-gutter:24px;padding-inline:var(--directory-gutter)}
+@media(max-width:600px){.services-directory .services-main{--directory-gutter:16px}}
+.services-directory .services-category-track,
+.services-directory .services-company-categories,
+.services-directory .services-specialist-track{
+  width:calc(100% + 2 * var(--directory-gutter));
+  max-width:none;
+  margin-inline:calc(-1 * var(--directory-gutter));
+  padding-inline:0;
+  scroll-padding-inline:0;
+}
