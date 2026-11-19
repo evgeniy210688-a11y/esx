@@ -315,7 +315,7 @@
 
 .services-directory .services-glass-header > .services-header-search-reset{margin-left:0;margin-inline-start:-4px}
 
-.services-directory:not([data-theme=dark]){background:#fff}
+.services-directory:not([data-theme=dark]){background:#f5f5f5}
 
 /* Let scrolling category and specialist rows reach both viewport edges. */
 .services-directory .services-main{--directory-gutter:24px;padding-inline:var(--directory-gutter)}
