@@ -347,14 +347,3 @@
   padding-inline:0;
   scroll-padding-inline:0;
 }
-
-/* Fade the directory's existing background into a solid black footer. */
-.services-directory>.services-footer{
-  border-top:0;
-  padding:220px 28px 36px;
-  background:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.25) 60px,rgba(0,0,0,.75) 140px,#000 200px);
-  color:#dce8f8;
-}
-.services-directory .services-footer :is(p,a,.services-footer-slogan){color:#dce8f8}
-.services-directory .services-footer .services-footer-slogan{color:#fff}
-.services-directory .services-footer .trademark-notice{opacity:1;color:#b0c1da}
