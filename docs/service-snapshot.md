@@ -42,3 +42,7 @@ screenshots and the original supplied logo. Location is neighborhood-level; no
 street address or working weekdays were supplied. Hours are preserved in the
 description without assuming daily opening. Retain this manual entry when
 restoring live database reads.
+
+BLACK CAT street address verified via Diningcode on November 21, 2026:
+https://www.diningcode.com/profile.php?rid=rdYDSFTnnFDR
+부산광역시 동구 중앙대로179번길 12, 3층 (third floor).
