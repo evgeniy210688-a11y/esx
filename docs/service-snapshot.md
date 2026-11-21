@@ -36,3 +36,9 @@ Retain this manual record when restoring live database reads.
 Agent Animator was added on November 21, 2026 from the user-supplied Instagram
 screenshot (@agentanimator_korea). No exact city or street address was supplied.
 Retain this manual entry when restoring live database reads.
+
+BLACK CAT (Busan) was added on November 21, 2026 from user-supplied Instagram
+screenshots and the original supplied logo. Location is neighborhood-level; no
+street address or working weekdays were supplied. Hours are preserved in the
+description without assuming daily opening. Retain this manual entry when
+restoring live database reads.
