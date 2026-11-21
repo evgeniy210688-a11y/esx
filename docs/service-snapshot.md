@@ -32,3 +32,7 @@ Retain these manual records when restoring live database reads.
 TATA MART was added from a supplied screenshot and original logo. The user
 confirmed relocation to 여술3길 3-2; the old address is excluded (222 total).
 Retain this manual record when restoring live database reads.
+
+Agent Animator was added on November 21, 2026 from the user-supplied Instagram
+screenshot (@agentanimator_korea). No exact city or street address was supplied.
+Retain this manual entry when restoring live database reads.
