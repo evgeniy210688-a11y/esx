@@ -46,3 +46,7 @@ restoring live database reads.
 BLACK CAT street address verified via Diningcode on November 21, 2026:
 https://www.diningcode.com/profile.php?rid=rdYDSFTnnFDR
 부산광역시 동구 중앙대로179번길 12, 3층 (third floor).
+
+Bread Way (Ansan) was refreshed from its published database record on November
+25, 2026 (225 listings total). Its original JPEG logo was decoded without
+re-encoding. All 224 existing snapshot records were retained unchanged.
