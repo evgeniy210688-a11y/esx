@@ -186,9 +186,21 @@ function AdminPanel({ userId, email, initialExcludedDuplicates }: { userId: stri
       if (error || !data) throw error ?? new Error('Not deleted');
       setRows(current => current.filter(row => row.id !== id));
       setDraft({ ...blank });
-      setMessage(`Карточка «${name}» удалена.`);
+      const refreshed = await refreshPublicDirectory();
+      setMessage(`Карточка «${name}» удалена.` + (refreshed ? '' : ' Обновление справочника задерживается примерно на минуту.'));
     } catch { setMessage('Не удалось удалить карточку. Проверьте соединение и права доступа.'); }
     finally { lock.current = false; setBusy(false); }
+  }
+  async function refreshPublicDirectory() {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return false;
+      const response = await fetch('/api/admin/services/revalidate', {
+        method: 'POST', headers: { Authorization: `Bearer ${session.access_token}` },
+        signal: AbortSignal.timeout(10000),
+      });
+      return response.ok;
+    } catch { return false; }
   }
   async function save(event: FormEvent) {
     event.preventDefault(); if (lock.current) return;
@@ -219,7 +231,10 @@ function AdminPanel({ userId, email, initialExcludedDuplicates }: { userId: stri
       if (error) throw error;
       const saved = { ...data, categories:selectedCategories, listing_kind: draft.listing_kind ?? 'company' } as Listing;
       setDraft({ ...saved, ...editableDescription(saved.description) }); setRows(current => [...current.filter(r => r.id !== saved.id), saved].sort((a,b) => a.name.localeCompare(b.name, 'ru')));
-      setMessage(saved.status === 'published' ? 'Карточка сохранена и опубликована в справочнике.' : 'Карточка сохранена. Посетители её не видят.');
+      const refreshed = await refreshPublicDirectory();
+      setMessage(refreshed
+        ? (saved.status === 'published' ? 'Карточка сохранена и опубликована в справочнике.' : 'Карточка сохранена. Посетители её не видят.')
+        : 'Карточка сохранена. Обновление справочника задерживается: обновите страницу примерно через минуту.');
     } catch { setMessage('Сохранить не удалось. Проверьте поля и права доступа. Введённые данные сохранены в форме.'); }
     finally { lock.current = false; setBusy(false); }
   }

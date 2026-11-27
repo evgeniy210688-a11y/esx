@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { connection } from 'next/server';
+import { getPublishedServices } from '@/lib/service-live';
 import { notFound } from 'next/navigation';
 import { directoryTopics, topicListings } from '@/lib/directory-topics';
 import { publicPageMetadata } from '@/lib/site-seo';
@@ -17,7 +19,8 @@ export default async function TopicPage({ params }: Props) {
   const { topic: slug } = await params;
   const topic = directoryTopics.find(item => item.slug === slug);
   if (!topic) notFound();
-  const listings = topicListings(topic);
+  await connection();
+  const listings = topicListings(topic, await getPublishedServices());
   return <main lang="ru" style={{ maxWidth: 1200, width: '100%', margin: '0 auto', padding: '32px 20px', color: '#18365c' }}>
     <nav aria-label="Навигация"><Link href="/">ESX</Link> / <Link href="/services">Справочник</Link></nav>
     <h1 style={{ fontSize: 'clamp(26px, 5vw, 40px)', margin: '24px 0', fontWeight: 700 }}>{topic.title}</h1>

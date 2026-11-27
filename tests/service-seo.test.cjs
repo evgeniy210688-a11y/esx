@@ -7,6 +7,8 @@ const ts = require('typescript');
 function load(file) {
   if (file.endsWith('.json')) return JSON.parse(fs.readFileSync(file, 'utf8'));
   const context = { exports: {}, require: name => {
+    if (name === '@/lib/service-live') return { getPublishedServices: async () => load('lib/service-listings.snapshot.json') };
+    if (name === 'next/server') return { connection: async () => {} };
     let target = name.startsWith('@/') ? name.slice(2) : path.join(path.dirname(file), name);
     if (!path.extname(target)) target += '.ts';
     return load(target);
@@ -26,9 +28,9 @@ test('profile routing accepts encoded and normalized Korean URLs', () => {
   assert.equal(serviceProfileId('%ZZ'), undefined);
   assert.equal(serviceProfileId('missing-profile'), undefined);
 });
-test('every published profile has one canonical URL in the sitemap and unique metadata', () => {
+test('every published profile has one canonical URL in the sitemap and unique metadata', async () => {
   const rows = load('lib/service-listings.snapshot.json');
-  const sitemap = load('app/sitemap.ts').default();
+  const sitemap = await load('app/sitemap.ts').default();
   const { serviceProfilePath } = load('lib/service-profile-path.ts');
   const { serviceProfileMetadata } = load('lib/service-profile-metadata.ts');
   const urls = sitemap.map(entry => entry.url);
@@ -46,9 +48,10 @@ test('every published profile has one canonical URL in the sitemap and unique me
   assert.equal(serviceProfilePath('7dab9a53-66c5-409c-ab50-9f6a5c8b48cf'), '/services/tkhay-alina');
 });
 
-test('topic pages contain distinct relevant listings and appear in the sitemap', () => {
-  const { directoryTopics, topicListings } = load('lib/directory-topics.ts');
-  const sitemap = load('app/sitemap.ts').default().map(entry => entry.url);
+test('topic pages contain distinct relevant listings and appear in the sitemap', async () => {
+  const { directoryTopics, topicListings: filterTopic } = load('lib/directory-topics.ts');
+  const topicListings = topic => filterTopic(topic, load('lib/service-listings.snapshot.json'));
+  const sitemap = (await load('app/sitemap.ts').default()).map(entry => entry.url);
   assert.equal(new Set(directoryTopics.map(t => t.slug)).size, directoryTopics.length);
   const signatures = new Set();
   for (const topic of directoryTopics) {

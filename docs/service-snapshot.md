@@ -1,5 +1,21 @@
 # Published service snapshot
 
+## Live directory restored — November 27, 2026
+
+Public directory, profile, category and sitemap readers now use the published-only
+`esx_public_service_listings` view. Apply `20261125_live_service_directory.sql`
+before `20261125_import_snapshot_cards.sql`, and deploy the application afterward.
+The import preserves existing rows and restores the eight snapshot-only cards.
+The production migration returned 227 published cards, also verified as `anon`.
+
+Admin saves and deletions invalidate the shared cache immediately; other database
+changes use the 30-second revalidation interval. Photos are fetched separately
+through a versioned public endpoint, keeping image bytes out of directory reads.
+Drafts and archived cards are excluded. Database failures do not restore old
+snapshot records. The files below remain historical recovery assets only.
+
+## Snapshot history
+
 The public directory and profile/translation readers use a published-only export
 while Supabase is blocked by its egress quota. The export contains 216 unique
 listings, captured in three ordered batches on November 12–13, 2026 (Korea time).

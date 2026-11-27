@@ -1,4 +1,4 @@
-import { publishedServices } from './service-snapshot';
+import type { ServiceListing } from './service-directory';
 
 export const directoryTopics = [
   { slug: 'auto-moto', title: 'Авто и мото в Корее — покупка, аренда и дилеры', description: 'Где купить авто или мотоцикл в Южной Корее: автодилеры, мотодилеры, аренда автомобилей и автосервисы. Контакты компаний и специалистов ESX.', intro: 'Подберите специалиста, если хотите купить автомобиль или мотоцикл, найти дилера, арендовать авто или обратиться в автосервис. В карточках указаны города, контакты и услуги каждого продавца или мастера.', advice: 'Перед обращением подготовьте бюджет, марку и модель. У дилера уточните состояние техники, документы, условия покупки, аренды или экспорта.', categories: ['Авто и мототехника', 'Покупка и аренда автомобилей', 'Автодилер', 'Автосервисы и ремонт'] },
@@ -11,7 +11,7 @@ export const directoryTopics = [
   { slug: 'russian-groceries', title: 'Русские продукты и магазины СНГ в Корее', description: 'Русские продукты и продукты из стран СНГ в Южной Корее: магазины, адреса, телефоны и информация о доставке в справочнике ESX.', intro: 'Ищете, где купить русские продукты и продукты из стран СНГ в Корее? Здесь собраны продуктовые магазины и продавцы с адресами, контактами и описанием ассортимента.', advice: 'Уточните наличие нужных продуктов, актуальные цены и условия доставки. При выборе филиала проверьте его адрес: у одной сети может быть несколько магазинов.', categories: ['Магазины и продукты'] },
 ];
 
-export function topicListings(topic: typeof directoryTopics[number]) {
+export function topicListings(topic: typeof directoryTopics[number], publishedServices: ServiceListing[]) {
   return publishedServices.filter(row => [row.category, ...(row.categories ?? [])].some(category => topic.categories.includes(category)))
     .sort((a, b) => a.name.localeCompare(b.name, 'ru') || a.id.localeCompare(b.id));
 }

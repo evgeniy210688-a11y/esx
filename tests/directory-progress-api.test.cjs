@@ -4,15 +4,15 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const ts = require('typescript');
 const rows = require('../lib/service-listings.snapshot.json');
-function route(publishedServices = rows) {
+function route(publishedServices = rows, failure = false) {
   const context = { exports: {}, URL, Response, require: name => {
-    assert.equal(name, '@/lib/service-snapshot');
-    return { publishedServices };
+    assert.equal(name, '@/lib/service-live');
+    return { getPublishedServices: async () => { if (failure) throw new Error('Unavailable'); return publishedServices; } };
   }};
   vm.runInNewContext(ts.transpileModule(fs.readFileSync('app/api/services/directory/route.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText, context);
   return context.exports.GET;
 }
-test('cursor traversal returns all published records from an unordered snapshot once without database access', async () => {
+test('cursor traversal returns all published records from unordered live data once', async () => {
   const GET = route([...rows].reverse()); let cursor = ''; const ids = [];
   for (let n = 0; n < 20; n++) {
     const response = await GET(new Request('https://example.com/api/services/directory' + (cursor ? '?after='+cursor : '')));
@@ -26,6 +26,11 @@ test('cursor traversal returns all published records from an unordered snapshot 
   }
   assert.deepEqual(ids, rows.map(row => row.id).sort());
   assert.equal(new Set(ids).size, rows.length);
+});
+test('database failure returns an uncached error instead of snapshot records', async () => {
+  const response = await route(rows, true)(new Request('https://example.com'));
+  assert.equal(response.status, 503);
+  assert.equal(response.headers.get('Cache-Control'), 'no-store');
 });
 test('invalid cursors fail and empty exports remain valid', async () => {
   assert.equal((await route()(new Request('https://example.com?after=bad'))).status, 400);
